@@ -4,7 +4,7 @@
 
 void init_fd(t_env *e)
 {
-    int i;
+    size_t i;
 
     i = 0;
     e->max = 0;
@@ -15,6 +15,8 @@ void init_fd(t_env *e)
         if (e->fds[i].type != FD_FREE)
         {
             FD_SET(i, &e->fd_read);
+
+            // Add the write fd only if write buffer is available
             if (strlen(e->fds[i].buf_write) > 0)
             {
                 FD_SET(i, &e->fd_write);

@@ -1,16 +1,21 @@
 #include "irc.h"
 
+/*
+** Loop over file descriptors
+** 
+*/
+
 void check_fd(t_env *e)
 {
-    int i;
+    size_t i;
 
     i = 0;
     while ((i < e->maxfd) && (e->r > 0))
     {
         if (FD_ISSET(i, &e->fd_read))
-            e->fds[i].fct_read(e, i);
+            e->fds[i].read(e, i);
         if (FD_ISSET(i, &e->fd_write))
-            e->fds[i].fct_write(e, i);
+            e->fds[i].write(e, i);
         if (FD_ISSET(i, &e->fd_read) || FD_ISSET(i, &e->fd_write))
             e->r--;
         i++;

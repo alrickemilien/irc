@@ -4,7 +4,7 @@
 #include <netinet/in.h>
 #include <stdio.h>
 
-void accept_connection(t_env *e, int s)
+void on_connect(t_env *e, size_t s)
 {
   int cs;
   struct sockaddr_in csin;
@@ -18,6 +18,6 @@ void accept_connection(t_env *e, int s)
   
   clear_fd(&e->fds[cs]);
   e->fds[cs].type = FD_CLIENT;
-  e->fds[cs].fct_read = client_read;
-  e->fds[cs].fct_write = client_write;
+  e->fds[cs].read = client_read;
+  e->fds[cs].write = client_write;
 }

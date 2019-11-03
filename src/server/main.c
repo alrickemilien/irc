@@ -4,10 +4,10 @@
 
 void init_env(t_env *e)
 {
-    int           i;
+    size_t        i;
     struct rlimit rlp;
 
-    XSAFE(-1, getrlimit(RLIMIT_NOFILE, &rlp), "getrlimit");
+    XSAFE(-1, getrlimit(RLIMIT_NOFILE, &rlp), "init_env::getrlimit");
 
     e->maxfd = rlp.rlim_cur;
     e->fds = (t_fd *)XPSAFE(NULL, malloc(sizeof(*e->fds) * e->maxfd), "malloc");
@@ -30,6 +30,7 @@ int main(int argc, char **argv)
     init_env(&e);
 
     server_create(&e, 5555);
+    create_server_ipv6(&e, 5556);
 
     serv(&e);
 
