@@ -16,7 +16,7 @@ void accept_connection(t_env *e, int s)
   printf("New client #%d from %s:%d\n", cs, inet_ntoa(csin.sin_addr),
          ntohs(csin.sin_port));
   
-  clearfd(&e->fds[cs]);
+  clear_fd(&e->fds[cs]);
   e->fds[cs].type = FD_CLIENT;
   e->fds[cs].fct_read = client_read;
   e->fds[cs].fct_write = client_write;

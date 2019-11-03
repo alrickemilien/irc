@@ -14,7 +14,7 @@ int xsafe(int err, int res, char *str)
   return (res);
 }
 
-void *psafe(void *err, void *res, char *str)
+void *xpsafe(void *err, void *res, char *str)
 {
   if (res == err) {
     fprintf(stderr, "%s: %s\n", str, strerror(errno));
