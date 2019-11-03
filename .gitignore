@@ -1,0 +1,10 @@
+bircd/
+.vscode
+*.o
+*.swp
+*.DS_STORE
+build/
+*.vscode
+*.a
+*.so
+a.out
