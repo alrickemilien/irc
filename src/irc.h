@@ -52,4 +52,10 @@ void init_fd(t_env *e);
 void check_fd(t_env *e);
 
 void do_select(t_env *e);
+
+// client
+
+void client_ipv4();
+void client_ipv6();
+void ping(int s, char *message);
 #endif

@@ -8,10 +8,14 @@ void server_create(t_env *e, int port)
     int                sock;
     struct sockaddr_in sin;
     struct protoent *  pe;
+    int                reuseaddr;
 
     pe = (struct protoent *)XPSAFE((void *)0, getprotobyname("tcp"),
                                    "getprotobyname");
     sock = XSAFE(-1, socket(PF_INET, SOCK_STREAM, pe->p_proto), "socket");
+
+    reuseaddr = 1;
+    setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &reuseaddr, sizeof(reuseaddr));
 
     sin.sin_family = AF_INET;
     sin.sin_addr.s_addr = INADDR_ANY;
