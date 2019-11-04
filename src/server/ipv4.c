@@ -3,7 +3,7 @@
 
 #include "irc.h"
 
-void server_create(t_env *e, int port)
+void server_ipv4(t_env *e, int port)
 {
     int                sock;
     struct sockaddr_in sin;
@@ -22,8 +22,8 @@ void server_create(t_env *e, int port)
     sin.sin_port = htons(port);
 
     XSAFE(-1, bind(sock, (struct sockaddr *)&sin, sizeof(struct sockaddr_in)),
-          "create_server::ipv4::bind");
-    XSAFE(-1, listen(sock, 42), "create_server::ipv4::listen");
+          "server_ipv4::ipv4::bind");
+    XSAFE(-1, listen(sock, 42), "server_ipv4::ipv4::listen");
 
     e->fds[sock].type = FD_SERV;
     e->fds[sock].read = on_connect;

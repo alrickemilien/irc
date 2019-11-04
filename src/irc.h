@@ -1,8 +1,13 @@
 #ifndef IRC_H
 #define IRC_H
 
-#include <sys/select.h>
 #include <stdlib.h>
+#include <sys/select.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <stdio.h>
+
+# include "irc_options.h"
 
 #define FD_FREE 0
 #define FD_SERV 1
@@ -12,7 +17,7 @@
 
 #define MAX(a, b) ((a > b) ? a : b)
 
-int xsafe(int err, int res, char *str);
+int   xsafe(int err, int res, char *str);
 void *xpsafe(void *err, void *res, char *str);
 
 #define XPSAFE(err, res, str) (xpsafe(err, res, str))
@@ -42,7 +47,8 @@ void serv(t_env *e);
 
 void on_connect(t_env *e, size_t sock);
 void server_create(t_env *e, int port);
-int create_server_ipv6(t_env *e, int port);
+int  server_ipv6(t_env *e, int port);
+void server_ipv4(t_env *e, int port);
 
 void client_write(t_env *e, size_t cs);
 void client_read(t_env *e, size_t cs);

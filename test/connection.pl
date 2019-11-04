@@ -21,7 +21,7 @@ if ($pid != 0)
 
     # This is the child process.
     # exec() the external program.
-    exec("build/server") or die "Could not run server: $!";
+    open my $ret, "| build/server" or die "Could not run server: $!";
 
     exit
 }
@@ -31,7 +31,7 @@ elsif(!defined($pid))
 }
 
 print "Connecting ...\n";
-
+sleep(3);
 
 # create a socket
 socket(TO_SERVER, PF_INET, SOCK_STREAM, getprotobyname('tcp'));
@@ -48,8 +48,17 @@ my $paddr = sockaddr_in($remote_port, $internet_addr);
 connect(TO_SERVER, $paddr)
     or die "Couldn't connect to $remote_host:$remote_port : $!\n";
 
+# my $line;
+# while ($line = <TO_SERVER>) {
+#    print "$line\n";
+# }
+
 # ... do something with the socket
 print TO_SERVER "Why don't you call me anymore?\n";
+
+my $line = <TO_SERVER>;
+print 'out';
+print $line;
 
 # and terminate the connection when we're done
 close(TO_SERVER);

@@ -20,19 +20,24 @@ void init_env(t_env *e)
     }
 }
 
-int main(int argc, char **argv)
+int main(int argc, const char **argv)
 {
-    (void)argc;
-    (void)argv;
-
+	int			exit_code;
+	t_options	options;
     t_env e;
 
+	exit_code = read_options_arguments(argc, argv, &options);
+    if (exit_code != 0)
+		return (exit_code);
+
+    // Set default port
+    if (options.port == 0)
+        options.port = 5555;
+
     init_env(&e);
-
-    server_create(&e, 5555);
-    create_server_ipv6(&e, 5556);
-
+    server_ipv4(&e, options.port);
+    server_ipv6(&e, options.port + 1);
     serv(&e);
 
-    return (0);
+	return (exit_code);
 }
