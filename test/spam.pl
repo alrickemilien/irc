@@ -59,20 +59,9 @@ die "Couldn't connect to $REMOTE_HOST:$REMORT_PORT : $!\n" unless $s2;
 
 sleep(1);
 
-# data to send to a server
-my $req = "Why don't you call me anymore?\n";
-print 'Client 2 send ' . "'$req'" . 'to Client1.';
-$s1->send($req);
-
-sleep(1);
-
-my $response = "";
-$s2->recv($response, 1024);
-
-if (index($response, "Why don't you call me anymore?\n") == -1) {
-    print 'Bad response: ' . $response;
-} else {
-    print 'Reponse' . $response;
+for (my $i = 0; $i <= 250; $i++) {
+    $s1->send("Why don't you call me anymore?\n");
+    $s2->send("No");
 }
 
 #
@@ -83,10 +72,14 @@ print "Closing client 1\n";
 $s1->close();
 
 print "Closing client 2\n";
+
 $s2->close();
 
 # Wait for any othe behavior from server
 sleep(1);
+
+
+    print('yayaya');
 
 #
 # End
@@ -95,6 +88,7 @@ sleep(1);
     open(my $pidfd, 'ircserver.pid') or die "Can't read server pid file: $!\n";  
     my $pidserver = <$pidfd>;
     close($pidfd);
+    print('yayaya');
     # If the pid is not here, it means something wring happened
     if (kill(0, -$pidserver) != 0) {
         print "Closing server\n";
@@ -107,5 +101,6 @@ sleep(1);
 
     # Killing self
     kill 9, -$pid;
+    print 'ici';
     waitpid $pid, 0;
 }

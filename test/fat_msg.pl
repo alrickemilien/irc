@@ -59,20 +59,20 @@ die "Couldn't connect to $REMOTE_HOST:$REMORT_PORT : $!\n" unless $s2;
 
 sleep(1);
 
-# data to send to a server
-my $req = "Why don't you call me anymore?\n";
-print 'Client 2 send ' . "'$req'" . 'to Client1.';
-$s1->send($req);
+my $msg = "";
+for (my $i = 0; $i <= 800000; $i++) {
+    $msg = $msg . $i;
+}
+$s1->send($msg);
 
+# Allow time to handle it
 sleep(1);
 
 my $response = "";
-$s2->recv($response, 1024);
+$s2->recv($response, length($msg));
 
-if (index($response, "Why don't you call me anymore?\n") == -1) {
+if (index($response, $msg) == -1) {
     print 'Bad response: ' . $response;
-} else {
-    print 'Reponse' . $response;
 }
 
 #
@@ -81,7 +81,6 @@ if (index($response, "Why don't you call me anymore?\n") == -1) {
 
 print "Closing client 1\n";
 $s1->close();
-
 print "Closing client 2\n";
 $s2->close();
 
