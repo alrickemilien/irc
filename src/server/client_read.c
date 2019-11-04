@@ -33,6 +33,7 @@ void client_read(t_env *e, size_t cs)
         }
     }
 
+    // roatate buffer
     memcpy(e->fds[cs].buf_read, e->fds[cs].buf_read + r, sizeof(char) * r);
     memset(e->fds[cs].buf_read + r, 0, sizeof(char) * BUF_SIZE - r);
 }
