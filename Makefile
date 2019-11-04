@@ -21,12 +21,10 @@ INCLUDE=-I src -I libft
 all: $(SERVER) $(CLIENT)
 
 $(SERVER): $(SERVER_OBJ)
-	#@make -C $(DIR_LIBFT)
 	@mkdir -p $(BUILD_DIR)
 	@gcc $(DEBUG) $^ -o $(BUILD_DIR)$@ $(LINK_LIBFT) $(CFLAGS)
 
 $(CLIENT): $(CLIENT_OBJ)
-	#@make -C $(DIR_LIBFT)
 	@mkdir -p $(BUILD_DIR)
 	@gcc $(DEBUG) $^ -o $(BUILD_DIR)$@ $(LINK_LIBFT) $(CFLAGS)
 
@@ -34,11 +32,9 @@ $(CLIENT): $(CLIENT_OBJ)
 	@gcc $(DEBUG) -o $@ -c $< $(INCLUDE) $(CFLAGS)
 
 clean:
-	#@make clean -C $(DIR_LIBFT)
 	@rm -rf $(SERVER_OBJ) $(CLIENT_OBJ)
 
 fclean: clean
-	#@make fclean -C $(DIR_LIBFT)
 	@rm -rf $(SERVER) $(CLIENT)
 
 re: fclean all

@@ -16,7 +16,7 @@ void client_read(t_env *e, size_t cs)
     {
         close(cs);
         clear_fd(&e->fds[cs]);
-        printf("client #%ld gone away\n", cs);
+        printf("Client #%ld gone away\n", cs);
     }
     else
     {
@@ -33,7 +33,10 @@ void client_read(t_env *e, size_t cs)
         }
     }
 
-    // rotate buffer
-    memcpy(e->fds[cs].buf_read, e->fds[cs].buf_read + r, sizeof(char) * r);
-    memset(e->fds[cs].buf_read + r, 0, sizeof(char) * BUF_SIZE - r);
+    if (r > 0)
+    {
+        // rotate buffer
+        memcpy(e->fds[cs].buf_read, e->fds[cs].buf_read + r, sizeof(char) * r);
+        memset(e->fds[cs].buf_read + r, 0, sizeof(char) * BUF_SIZE - r);
+    }
 }

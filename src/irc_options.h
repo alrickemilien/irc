@@ -11,7 +11,7 @@
 enum {
 	SERVER_PORT = 0U,
 	SERVER_BACKLOG,
-	SERVER_HOST,
+	SERVER_BIND,
 	SERVER_IPV6,
 	OPTIONS_NUMBER,
 };
@@ -38,7 +38,7 @@ enum {
 typedef struct	s_options {
 	uint64_t	port;
 	uint64_t	backlog;
-	char		host[MAX_ALLOWED_VALUE_SIZE];
+	char		bind[MAX_ALLOWED_VALUE_SIZE];
 	bool		ipv6;
 }				t_options;
 
@@ -79,6 +79,6 @@ int				read_port_option(
 	t_options *options, const char *value);
 int				read_backlog_option(
 	t_options *options, const char *value);
-int				read_host_option(
+int				read_bind_option(
 	t_options *options, const char *value);
 #endif

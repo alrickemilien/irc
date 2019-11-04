@@ -38,10 +38,11 @@ int main(int argc, const char **argv)
     if (options.backlog == 0)
         options.backlog = 42;
 
-
     // Set default backlog
-    if (options.host[0] == 0)
-        memcpy(options.host, "127.0.0.1", sizeof(char) * 9);
+    if (options.bind[0] == 0)
+        memcpy(options.bind, "127.0.0.1", sizeof(char) * 9);
+
+    printf("Running at %s:%ld\n", options.bind, options.port);
 
     init_env(&e);
 

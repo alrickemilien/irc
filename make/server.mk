@@ -17,16 +17,16 @@ SERVER_SRC=src/server/main.c \
 SERVER_SRC+=src/utils/safe.c
 
 # fd
-SERVER_SRC+=src/server/init_fd.c \
-			src/server/check_fd.c \
-			src/server/clear_fd.c
+SERVER_SRC+=src/server/fd/init_fd.c \
+			src/server/fd/check_fd.c \
+			src/server/fd/clear_fd.c
 
 # options
 SERVER_SRC+=src/server/options/utils.c \
 			src/server/options/ato64.c \
 			src/server/options/read_port_option.c \
 			src/server/options/read_backlog_option.c \
-			src/server/options/read_host_option.c \
+			src/server/options/read_bind_option.c \
 			src/server/options/read_options_arguments.c
 
 SERVER_OBJ=$(SERVER_SRC:.c=.o)
