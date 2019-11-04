@@ -10,6 +10,9 @@
 
 enum {
 	SERVER_PORT = 0U,
+	SERVER_BACKLOG,
+	SERVER_HOST,
+	SERVER_IPV6,
 	OPTIONS_NUMBER,
 };
 
@@ -34,6 +37,9 @@ enum {
 
 typedef struct	s_options {
 	uint64_t	port;
+	uint64_t	backlog;
+	char		host[MAX_ALLOWED_VALUE_SIZE];
+	bool		ipv6;
 }				t_options;
 
 # pragma pack(pop)
@@ -69,12 +75,10 @@ int             ato64(const char *str, uint64_t *nbr);
 ** Options with specifc values to handle
 */
 
-typedef struct	s_port_option {
-	char		*name;
-	int			value;
-}				t_port_option;
-
 int				read_port_option(
 	t_options *options, const char *value);
-
+int				read_backlog_option(
+	t_options *options, const char *value);
+int				read_host_option(
+	t_options *options, const char *value);
 #endif

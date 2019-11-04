@@ -34,9 +34,22 @@ int main(int argc, const char **argv)
     if (options.port == 0)
         options.port = 5555;
 
+    // Set default backlog
+    if (options.backlog == 0)
+        options.backlog = 42;
+
+
+    // Set default backlog
+    if (options.host[0] == 0)
+        memcpy(options.host, "127.0.0.1", sizeof(char) * 9);
+
     init_env(&e);
-    server_ipv4(&e, options.port);
-    server_ipv6(&e, options.port + 1);
+
+    if (options.ipv6 == 1)
+        server_ipv6(&options, &e);
+    else
+        server_ipv4(&options, &e);
+
     serv(&e);
 
 	return (exit_code);

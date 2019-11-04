@@ -3,21 +3,22 @@
 
 #include "irc.h"
 
-int server_ipv6(t_env *e, int port)
+int server_ipv6(const t_options *options, t_env *e)
 {
     int                 sock;
     int                 reuseaddr;
     struct sockaddr_in6 sin;
-    struct protoent *   pe;
+    struct protoent     *pe;
+    struct hostent      *hp;
 
     pe = (struct protoent *)XPSAFE((void *)0, getprotobyname("tcp"),
-                                   "getprotobyname");
+                                   "server_ipv6::getprotobyname");
     /********************************************************************/
     /* The socket() function returns a socket descriptor, which represents   */
     /* an endpoint.  Get a socket for address family AF_INET6 to        */
     /* prepare to accept incoming connections on.                       */
     /********************************************************************/
-    sock = socket(AF_INET6, SOCK_STREAM, pe->p_proto);
+    sock = XSAFE(-1, socket(AF_INET6, SOCK_STREAM, pe->p_proto), "server_ipv6::socket");
 
     /********************************************************************/
     /* The setsockopt() function is used to allow the local address to  */
@@ -44,10 +45,11 @@ int server_ipv6(t_env *e, int port)
     /* exists but can only be used to initialize an in6_addr structure  */
     /* at declaration time (not during an assignment).                  */
     /********************************************************************/
-    sin.sin6_addr = in6addr_any;
-    sin.sin6_port = htons(port);
+    hp = (struct hostent *)XPSAFE((void*)0, gethostbyname(options->host), "server_ipv6::gethostbyname");
+    memcpy(&sin.sin6_addr, hp->h_addr_list[0], hp->h_length);
+    sin.sin6_port = htons(options->port);
     XSAFE(-1, bind(sock, (struct sockaddr *)&sin, sizeof(struct sockaddr_in6)),
-          "server_ipv6::ipv6::bind");
+          "server_ipv6::bind");
 
     /********************************************************************/
     /* The listen() function allows the server to accept incoming       */
@@ -56,7 +58,7 @@ int server_ipv6(t_env *e, int port)
     /* requests before the system starts rejecting the incoming         */
     /* requests.                                                        */
     /********************************************************************/
-    XSAFE(-1, listen(sock, 42), "server_ipv6::ipv6::listen");
+    XSAFE(-1, listen(sock, options->backlog), "server_ipv6::listen");
 
     e->fds[sock].type = FD_SERV;
     e->fds[sock].read = on_connect;

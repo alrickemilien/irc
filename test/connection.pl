@@ -21,7 +21,7 @@ if ($pid != 0)
 
     # This is the child process.
     # exec() the external program.
-    open my $ret, "| build/server" or die "Could not run server: $!";
+    exec("build/server > /dev/null") or die "Could not run server: $!";
 
     exit
 }
@@ -30,11 +30,12 @@ elsif(!defined($pid))
         die "could not fork";
 }
 
-print "Connecting ...\n";
+print "Wait ...\n";
 sleep(3);
+print "Connecting ...\n";
 
 # create a socket
-socket(TO_SERVER, PF_INET, SOCK_STREAM, getprotobyname('tcp'));
+socket(SOCKET_1, PF_INET, SOCK_STREAM, getprotobyname('tcp'));
 
 my $remote_host = '127.0.0.1';
 my $remote_port = '5555';
@@ -45,35 +46,28 @@ my $internet_addr = inet_aton($remote_host)
 my $paddr = sockaddr_in($remote_port, $internet_addr);
 
 # connect
-connect(TO_SERVER, $paddr)
+connect(SOCKET_1, $paddr)
     or die "Couldn't connect to $remote_host:$remote_port : $!\n";
 
-# my $line;
-# while ($line = <TO_SERVER>) {
-#    print "$line\n";
-# }
-
 # ... do something with the socket
-print TO_SERVER "Why don't you call me anymore?\n";
+print SOCKET_1 "Why don't you call me anymore?\n";
 
-my $line = <TO_SERVER>;
-print 'out';
-print $line;
+my $response = <SOCKET_1>;
 
 # and terminate the connection when we're done
-close(TO_SERVER);
-
+close(SOCKET_1);
 
 #
 # End
 #
+{
+    open(my $pidfd, 'ircserver.pid') or die "Can't read server pid file: $!\n";  
+    my $pidserver = <$pidfd>;
+    close($pidfd);
+    print "Killing $pidserver\n";
+    kill 9, -$pidserver;
 
-open(my $pidfd, 'ircserver.pid') or die "Can't read server pid file: $!\n";  
-my $pidserver = <$pidfd>;
-close($pidfd);
-print "Killing $pidserver\n";
-kill 9, -$pidserver;
-
-# Killing self
-kill 9, -$pid;
-waitpid $pid, 0;
+    # Killing self
+    kill 9, -$pid;
+    waitpid $pid, 0;
+}
