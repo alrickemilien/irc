@@ -5,12 +5,28 @@
 SERVER=server
 
 SERVER_SRC=src/server/main.c \
-			src/server/server_create.c \
-			src/server/accept_connection.c \
-			src/server/clearfd.c \
+			src/server/serv.c \
+			src/server/ipv4.c \
+			src/server/ipv6.c \
+			src/server/on_connect.c \
+			src/server/do_select.c \
 			src/server/client_read.c \
 			src/server/client_write.c
 
+# Utils
 SERVER_SRC+=src/utils/safe.c
+
+# fd
+SERVER_SRC+=src/server/fd/init_fd.c \
+			src/server/fd/check_fd.c \
+			src/server/fd/clear_fd.c
+
+# options
+SERVER_SRC+=src/server/options/utils.c \
+			src/server/options/ato64.c \
+			src/server/options/read_port_option.c \
+			src/server/options/read_backlog_option.c \
+			src/server/options/read_bind_option.c \
+			src/server/options/read_options_arguments.c
 
 SERVER_OBJ=$(SERVER_SRC:.c=.o)
