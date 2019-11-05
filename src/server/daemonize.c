@@ -43,7 +43,7 @@ void daemonize(void)
 
     /* Success: Let the parent terminate */
     if (pid > 0)
-        exit(EXIT_SUCCESS);
+        exit(0);
 
     /* On success: The child process becomes session leader */
     if (setsid() < 0)
@@ -61,7 +61,7 @@ void daemonize(void)
     if (pid > 0)
     {
         write_pidfile(pid);
-        exit(EXIT_SUCCESS);
+        exit(0);
     }
 
     /* Set new file permissions */

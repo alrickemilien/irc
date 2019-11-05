@@ -9,25 +9,9 @@ use IO::Socket::INET;
 # Test connections on server with many clients  #
 # ############################################# #
 
-#
 # Start server
-#
-
-my $pid = fork();
-if ($pid != 0)
-{
-    # This is the child process.
-
-    open(my $fd, '>', 'ircserver.pid') or die "Could not open pid file for irc server: $!";
-    print $fd $pid;
-    close($fd);
-
-    setpgrp(0, 0);
-    # exec() the external program.
-    exec("build/server > /dev/null") or die "Could not run server: $!";
-    exit
-}
-die "could not fork" unless defined($pid);
+# exec("build/server --daemon") or die "Could not run server: $!";
+`build/server --daemon`;
 
 #
 # Test clients connections
@@ -99,12 +83,8 @@ sleep(1);
         print "Closing server\n";
         kill 9, -$pidserver;
         print "Closed\n";
+
+        # Supress pid file of teh server
+        unlink 'ircserver.pid';
     }
-
-    # Supress pid file of teh server
-    unlink 'ircserver.pid';
-
-    # Killing self
-    kill 9, -$pid;
-    waitpid $pid, 0;
 }
