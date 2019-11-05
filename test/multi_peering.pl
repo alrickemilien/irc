@@ -25,6 +25,9 @@ if ($pid != 0)
     setpgrp(0, 0);
     # exec() the external program.
     exec("build/server > /dev/null") or die "Could not run server: $!";
+
+    unlink 'ircserver.pid';
+
     exit
 }
 die "could not fork" unless defined($pid);
@@ -39,41 +42,40 @@ sleep(1);
 my $REMOTE_HOST = '127.0.0.1';
 my $REMORT_PORT = '5555';
 
-print "Connecting client 1\n";
-# create a connecting socket
-my $s1 = new IO::Socket::INET (
-    PeerHost => $REMOTE_HOST,
-    PeerPort => $REMORT_PORT,
-    Proto => 'tcp',
-);
-die "Couldn't connect to $REMOTE_HOST:$REMORT_PORT : $!\n" unless $s1;
+my @s;
+for (my $i = 0; $i <= 20; $i++) {
+    # create a connecting socket    
+    my $tmp_s = new IO::Socket::INET (
+        PeerHost => $REMOTE_HOST,
+        PeerPort => $REMORT_PORT,
+        Proto => 'tcp',
+    );
 
-print "Connecting client 2\n";
-# create a connecting socket
-my $s2 = new IO::Socket::INET (
-    PeerHost => $REMOTE_HOST,
-    PeerPort => $REMORT_PORT,
-    Proto => 'tcp',
-);
-die "Couldn't connect to $REMOTE_HOST:$REMORT_PORT : $!\n" unless $s2;
+    die "Couldn't connect to $REMOTE_HOST:$REMORT_PORT : $!\n" unless $tmp_s;
 
-sleep(1);
+    push @s, $tmp_s
+}
 
-for (my $i = 0; $i <= 250; $i++) {
-    $s1->send("Why don't you call me anymore?\n");
-    $s2->send("No");
+# Wait client connection
+
+for (my $k = 0; $k <= 5; $k++) {
+    print "Sending data\n";
+    for (my $i = 0; $i <= 20; $i++) {
+        $s[$i]->send("I say: $i");
+    }
+
+    # Wait full messages reception on the server
+    sleep(1);
 }
 
 #
 # Terminate clients
 #
 
-print "Closing client 1\n";
-$s1->close();
-
-print "Closing client 2\n";
-
-$s2->close();
+print "Closing clients\n";
+for (my $i = 0; $i <= 20; $i++) {
+    $s[$i]->close();
+}
 
 # Wait for any othe behavior from server
 sleep(1);
@@ -82,22 +84,19 @@ sleep(1);
 # End
 #
 {
-    open(my $pidfd, 'ircserver.pid') or die "Can't read server pid file: $!\n";  
-    my $pidserver = <$pidfd>;
-    close($pidfd);
-    print('yayaya');
+    open(my $fd, 'ircserver.pid') or die "Can't read server pid file: $!\n";  
+    my $pidserver = <$fd>;
+    close($fd);
+
     # If the pid is not here, it means something wring happened
-    if (kill(0, -$pidserver) != 0) {
+    if (kill(0, $pidserver)) {
         print "Closing server\n";
         kill 9, -$pidserver;
         print "Closed\n";
     }
 
+    print("Unlink\n");
+
     # Supress pid file of teh server
     unlink 'ircserver.pid';
-
-    # Killing self
-    kill 9, -$pid;
-    print 'ici';
-    waitpid $pid, 0;
 }

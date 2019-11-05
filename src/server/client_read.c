@@ -11,7 +11,7 @@ void client_read(t_env *e, size_t cs)
     size_t i;
 
     r = recv(cs, e->fds[cs].buf_read, BUF_SIZE, 0);
-    printf("Received: %s\n", e->fds[cs].buf_read);
+    // printf("Received: %s\n", e->fds[cs].buf_read);
     if (r <= 0)
     {
         close(cs);
@@ -26,7 +26,7 @@ void client_read(t_env *e, size_t cs)
             // Send data to all clients
             if ((e->fds[i].type == FD_CLIENT) && (i != cs))
             {
-                printf("SEND\n");
+                // printf("SEND\n");
                 send(i, e->fds[cs].buf_read, r, 0);
             }
             i++;

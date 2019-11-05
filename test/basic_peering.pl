@@ -57,6 +57,7 @@ my $s2 = new IO::Socket::INET (
 );
 die "Couldn't connect to $REMOTE_HOST:$REMORT_PORT : $!\n" unless $s2;
 
+# Wait client connection
 sleep(1);
 
 # data to send to a server
@@ -64,6 +65,7 @@ my $req = "Why don't you call me anymore?\n";
 print 'Client 2 send ' . "'$req'" . 'to Client1.';
 $s1->send($req);
 
+# Wait message reception on the server
 sleep(1);
 
 my $response = "";
@@ -71,8 +73,6 @@ $s2->recv($response, 1024);
 
 if (index($response, "Why don't you call me anymore?\n") == -1) {
     print 'Bad response: ' . $response;
-} else {
-    print 'Reponse' . $response;
 }
 
 #
