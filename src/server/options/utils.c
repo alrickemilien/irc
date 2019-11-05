@@ -14,6 +14,8 @@
 
 static t_options_map	g_waiting_value_options[] = {
 	{ "port", SERVER_PORT, &read_port_option, },
+	{ "backlog", SERVER_BACKLOG, &read_backlog_option, },
+	{ "bind", SERVER_BIND, &read_bind_option, },
 	{ NULL, 0, NULL },
 };
 

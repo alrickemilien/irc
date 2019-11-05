@@ -76,5 +76,6 @@ void init_fd(t_env *e);
 void check_fd(t_env *e);
 
 void do_select(t_env *e);
+void daemonize(void);
 
 #endif
