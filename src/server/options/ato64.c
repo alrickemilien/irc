@@ -1,4 +1,4 @@
-#include "irc.h"
+#include "server/irc.h"
 
 int		ato64(const char *str, uint64_t *nbr)
 {

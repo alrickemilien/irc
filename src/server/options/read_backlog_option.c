@@ -1,4 +1,4 @@
-#include "irc.h"
+#include "server/irc.h"
 
 int				read_backlog_option(
 		t_options *options, const char *value)

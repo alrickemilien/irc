@@ -1,4 +1,4 @@
-#include "irc.h"
+#include "server/irc.h"
 
 void	clear_fd(t_fd *fd)
 {

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "irc.h"
+#include "server/irc.h"
 
 static t_options_map	g_waiting_value_options[] = {
 	{ "port", SERVER_PORT, &read_port_option, },

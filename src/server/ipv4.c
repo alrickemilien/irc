@@ -1,7 +1,7 @@
 #include <netdb.h>
 #include <netinet/in.h>
 
-#include "irc.h"
+#include "server/irc.h"
 
 void server_ipv4(const t_options *options, t_env *e)
 {

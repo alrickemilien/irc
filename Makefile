@@ -14,7 +14,7 @@ endif
 include make/client.mk
 include make/server.mk
 
-INCLUDE=-I src -I libft
+INCLUDE=-I include -I libft
 
 .PHONY: all clean fclean
 

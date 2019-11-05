@@ -1,5 +1,5 @@
-#ifndef IRC_OPTIONS_H
-# define IRC_OPTIONS_H
+#ifndef SERVER_OPTIONS_H
+# define SERVER_OPTIONS_H
 
 #include <stdint.h>
 #include <string.h>

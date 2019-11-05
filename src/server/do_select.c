@@ -1,4 +1,4 @@
-#include "irc.h"
+#include "server/irc.h"
 
 void do_select(t_env *e)
 {
