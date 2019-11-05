@@ -10,6 +10,7 @@ SERVER_SRC=src/server/main.c \
 			src/server/ipv6.c \
 			src/server/on_connect.c \
 			src/server/broadcast.c \
+			src/server/daemonize.c \
 			src/server/do_select.c \
 			src/server/client_read.c \
 			src/server/client_write.c
