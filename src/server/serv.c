@@ -1,4 +1,4 @@
-#include "irc.h"
+#include "server/irc.h"
 
 void serv(t_env *e)
 {

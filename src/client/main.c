@@ -5,7 +5,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "irc.h"
+#include "client/irc.h"
 
 void ping(int s, char *message)
 {

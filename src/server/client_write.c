@@ -2,7 +2,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
-#include "irc.h"
+#include "server/irc.h"
 
 void client_write(t_env *e, size_t cs)
 {

@@ -1,6 +1,6 @@
 #include <string.h>
 #include <sys/select.h>
-#include "irc.h"
+#include "server/irc.h"
 
 void init_fd(t_env *e)
 {

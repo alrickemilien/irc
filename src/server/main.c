@@ -1,6 +1,6 @@
-#include "irc.h"
 #include <stdlib.h>
 #include <sys/resource.h>
+#include "server/irc.h"
 
 void init_env(t_env *e)
 {
@@ -38,9 +38,14 @@ int main(int argc, const char **argv)
     if (options.backlog == 0)
         options.backlog = 42;
 
+    if (options.daemon)
+        daemonize();
+
     // Set default backlog
     if (options.bind[0] == 0)
         memcpy(options.bind, "127.0.0.1", sizeof(char) * 9);
+
+    e.is_tty = isatty(1);
 
     printf("Running at %s:%ld\n", options.bind, options.port);
 

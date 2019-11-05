@@ -2,7 +2,7 @@
 #include <errno.h>
 #include <arpa/inet.h>
 
-#include "irc.h"
+#include "server/irc.h"
 
 int read_bind_option(t_options *options, const char *value)
 {

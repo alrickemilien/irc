@@ -9,21 +9,30 @@ SERVER_SRC=src/server/main.c \
 			src/server/ipv4.c \
 			src/server/ipv6.c \
 			src/server/on_connect.c \
+			src/server/broadcast.c \
+			src/server/daemonize.c \
 			src/server/do_select.c \
 			src/server/client_read.c \
 			src/server/client_write.c
 
 # Utils
-SERVER_SRC+=src/utils/safe.c
+SERVER_SRC+=src/utils/safe.c \
+			src/utils/ato64.c \
+			src/utils/i64toa.c \
+			src/utils/time2iso.c
+
 
 # fd
 SERVER_SRC+=src/server/fd/init_fd.c \
 			src/server/fd/check_fd.c \
 			src/server/fd/clear_fd.c
 
+# irc
+SERVER_SRC+=src/server/irc/irc_command.c \
+			src/server/irc/irc_join.c
+
 # options
 SERVER_SRC+=src/server/options/utils.c \
-			src/server/options/ato64.c \
 			src/server/options/read_port_option.c \
 			src/server/options/read_backlog_option.c \
 			src/server/options/read_bind_option.c \

@@ -10,9 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "irc.h"
+#include "server/irc.h"
 
 static t_options_map	g_options_map[] = {
+	{ "daemon", SERVER_DAEMON, NULL, },
 	{ "port", SERVER_PORT, &read_port_option, },
 	{ "backlog", SERVER_BACKLOG, &read_backlog_option, },
 	{ "bind", SERVER_BIND, &read_bind_option, },

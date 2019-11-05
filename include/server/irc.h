@@ -1,27 +1,23 @@
-#ifndef IRC_H
-#define IRC_H
+#ifndef SERVER_IRC_H
+#define SERVER_IRC_H
 
 #include <stdlib.h>
 #include <sys/select.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <unistd.h>
 
-# include "irc_options.h"
+#include <irc.h>
+#include <server/options.h>
 
 #define FD_FREE 0
 #define FD_SERV 1
 #define FD_CLIENT 2
 
 #define BUF_SIZE 4096
-
-#define MAX(a, b) ((a > b) ? a : b)
-
-int   xsafe(int err, int res, char *str);
-void *xpsafe(void *err, void *res, char *str);
-
-#define XPSAFE(err, res, str) (xpsafe(err, res, str))
-#define XSAFE(err, res, str) (xsafe(err, res, str))
+#define CHANNELSTRSIZE 140
+#define NICKNAMESTRSIZE 140
 
 typedef struct s_fd
 {
@@ -30,6 +26,10 @@ typedef struct s_fd
     void (*write)();
     char buf_read[BUF_SIZE + 1];
     char buf_write[BUF_SIZE + 1];
+
+    // User data
+    char channel[CHANNELSTRSIZE + 1];
+    char nickname[NICKNAMESTRSIZE + 1];
 } t_fd;
 
 typedef struct s_env
@@ -41,13 +41,31 @@ typedef struct s_env
     int    r;
     fd_set fd_read;
     fd_set fd_write;
+    char   isotime[ISOTIMESTRSIZE];
+    int    is_tty;
 } t_env;
+
+typedef enum e_irc { IRC_JOIN = 0UL, IRC_COMMANDS_NUMBER } t_irc_enum;
+
+typedef struct s_irc_cmd
+{
+    const char *command;
+    void (*f)(t_env *e, int cs, const char **command);
+} t_irc_cmd;
+
+void irc_command(t_env *e, int cs, const char *buffer);
+void irc_join(t_env *e, int cs, const char **buffer);
+
+// Broadcast messages' types
+#define IRC_INFO 42
+
+void broadcast(t_env *e, const char *msg, int type, size_t cs);
 
 void serv(t_env *e);
 
 void on_connect(t_env *e, size_t sock);
 void server_create(t_env *e, int port);
-int  server_ipv6(const t_options *options, t_env *e);
+int server_ipv6(const t_options *options, t_env *e);
 void server_ipv4(const t_options *options, t_env *e);
 
 void client_write(t_env *e, size_t cs);
@@ -58,10 +76,6 @@ void init_fd(t_env *e);
 void check_fd(t_env *e);
 
 void do_select(t_env *e);
+void daemonize(void);
 
-// client
-
-void client_ipv4();
-void client_ipv6();
-void ping(int s, char *message);
 #endif

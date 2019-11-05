@@ -1,5 +1,5 @@
-#ifndef IRC_OPTIONS_H
-# define IRC_OPTIONS_H
+#ifndef SERVER_OPTIONS_H
+# define SERVER_OPTIONS_H
 
 #include <stdint.h>
 #include <string.h>
@@ -9,7 +9,8 @@
 */
 
 enum {
-	SERVER_PORT = 0U,
+	SERVER_DAEMON = 0U,
+	SERVER_PORT,
 	SERVER_BACKLOG,
 	SERVER_BIND,
 	SERVER_IPV6,
@@ -36,6 +37,7 @@ enum {
 # pragma pack(push, 1)
 
 typedef struct	s_options {
+	int			daemon;
 	uint64_t	port;
 	uint64_t	backlog;
 	char		bind[MAX_ALLOWED_VALUE_SIZE];
@@ -69,7 +71,6 @@ bool			is_an_option(const char *name);
 bool			is_a_waiting_value_option(const char *name);
 int				read_options_arguments(
 	                int ac, const char **av, t_options *opt);
-int             ato64(const char *str, uint64_t *nbr);
 
 /*
 ** Options with specifc values to handle
