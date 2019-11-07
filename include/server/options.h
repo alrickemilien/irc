@@ -9,11 +9,11 @@
 */
 
 enum {
-	SERVER_DAEMON = 0U,
-	SERVER_PORT,
+	SERVER_PORT = 0U,
 	SERVER_BACKLOG,
 	SERVER_BIND,
 	SERVER_IPV6,
+	SERVER_DAEMON,	
 	OPTIONS_NUMBER,
 };
 
@@ -37,11 +37,14 @@ enum {
 # pragma pack(push, 1)
 
 typedef struct	s_options {
+	int			port;
+	int			backlog;
+	int			_bind;
+	int			ipv6;
 	int			daemon;
-	uint64_t	port;
-	uint64_t	backlog;
+
+	// Metata data related to options
 	char		bind[MAX_ALLOWED_VALUE_SIZE];
-	bool		ipv6;
 }				t_options;
 
 # pragma pack(pop)
