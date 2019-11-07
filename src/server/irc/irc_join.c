@@ -3,9 +3,9 @@
 
 static bool is_valid_chan(const char *channel)
 {
-	char	*tmp;
+    char *tmp;
 
-	memcpy(&tmp, &channel, sizeof(char*));
+    memcpy(&tmp, &channel, sizeof(char *));
 
     tmp++;
     while (*tmp && *tmp != '\n')
@@ -19,6 +19,8 @@ static bool is_valid_chan(const char *channel)
 
 static int irc_join_check_command(t_env *e, int cs, const char **command)
 {
+    printf("command[0]:%s\n", command[0]);
+
     if (!command[0] || !command[1] || command[2])
     {
         strcpy(e->fds[cs].buf_write,
@@ -48,11 +50,11 @@ static int irc_join_check_command(t_env *e, int cs, const char **command)
     return (-1);
 }
 
-void irc_join(t_env *e, int cs, const char **command)
+void irc_join(t_env *e, int cs, char **command)
 {
     char concat[CHANNELSTRSIZE + NICKNAMESTRSIZE + 11];
 
-    if ((irc_join_check_command(e, cs, command)) != 0)
+    if ((irc_join_check_command(e, cs, (const char**)command)) != 0)
         return;
 
     memset(concat, 0, sizeof(concat));

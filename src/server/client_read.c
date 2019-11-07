@@ -24,7 +24,7 @@ void client_read(t_env *e, size_t cs)
     }
     else
     {
-        // irc_command(e, cs, e->fds[cs].buf_read);
+        irc_command(e, cs, e->fds[cs].buf_read);
 
         i = 0;
         while (i < e->maxfd)

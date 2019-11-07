@@ -17,7 +17,7 @@ SERVER_SRC=src/server/main.c \
 
 # Utils
 SERVER_SRC+=src/utils/safe.c \
-			src/utils/ato64.c \
+			src/utils/ato32.c \
 			src/utils/i64toa.c \
 			src/utils/time2iso.c
 
@@ -29,6 +29,7 @@ SERVER_SRC+=src/server/fd/init_fd.c \
 
 # irc
 SERVER_SRC+=src/server/irc/irc_command.c \
+			src/server/irc/tokenize.c \
 			src/server/irc/irc_join.c
 
 # options

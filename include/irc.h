@@ -15,6 +15,6 @@ void *xpsafe(void *err, void *res, char *str);
 #define ISOTIMESTRSIZE 25
 void time2iso(char *str);
 
-int ato64(const char *str, uint64_t *nbr);
+int ato32(const char *str, uint32_t *nbr);
 int i64toa(uint64_t nbr, char *buffer, size_t buffer_size, uint64_t base);
 #endif

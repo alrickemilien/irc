@@ -49,12 +49,13 @@ typedef enum e_irc { IRC_JOIN = 0UL, IRC_COMMANDS_NUMBER } t_irc_enum;
 
 typedef struct s_irc_cmd
 {
-    const char *command;
-    void (*f)(t_env *e, int cs, const char **command);
+    char *command;
+    void (*f)(t_env *e, int cs, char **command);
 } t_irc_cmd;
 
-void irc_command(t_env *e, int cs, const char *buffer);
-void irc_join(t_env *e, int cs, const char **buffer);
+void irc_command(t_env *e, int cs, char *buffer);
+void irc_join(t_env *e, int cs, char **buffer);
+size_t tokenize(char *str, char **tokens, size_t len);
 
 // Broadcast messages' types
 #define IRC_INFO 42
