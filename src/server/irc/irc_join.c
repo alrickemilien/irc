@@ -35,13 +35,19 @@ static int irc_join_check_command(t_env *e, int cs, const t_token *tokens)
     channel = tokens[1].addr;
     channel_len = tokens[1].len;
 
-    if (channel_len - 1 > CHANNELSTRSIZE)
+    if (strpbrk(channel, "\x07\x2C"))
+    {
+        strcpy(e->fds[cs].buf_write,
+               "\x1b[31mERROR\x1b[0m"
+               " Channel invalid character\n");
+    }
+    else if (channel_len - 1 > CHANNELSTRSIZE)
     {
         strcpy(e->fds[cs].buf_write,
                "\x1b[31mERROR\x1b[0m"
                " Channel name too long\n");
     }
-    else if (channel[0] != '#' || !is_valid_chan(channel))
+    else if (channel[0] != '#' || channel[0] != '&' || !is_valid_chan(channel))
     {
         strcpy(e->fds[cs].buf_write,
                "\x1b[31mERROR\x1b[0m"

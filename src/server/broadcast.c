@@ -10,7 +10,7 @@ void broadcast(t_env *e, const char *msg, int msg_type, size_t cs)
         if (e->fds[i].type == FD_CLIENT &&
             !strcmp(e->fds[i].channel, e->fds[cs].channel))
         {
-            if (msg_type == IRC_INFO)
+            if (msg_type == IRC_INFO && i != cs)
             {
                 strcat(e->fds[i].buf_write, "INFO: ");
                 // strcpy(e->fds[i].buf_write, "\x1b[31mINFO\x1b[0m ");

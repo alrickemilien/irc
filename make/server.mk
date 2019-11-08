@@ -30,7 +30,8 @@ SERVER_SRC+=src/server/fd/init_fd.c \
 # irc
 SERVER_SRC+=src/server/irc/irc_command.c \
 			src/server/irc/tokenize.c \
-			src/server/irc/irc_join.c
+			src/server/irc/irc_join.c \
+			src/server/irc/irc_msg.c
 
 # options
 SERVER_SRC+=src/server/options/utils.c \

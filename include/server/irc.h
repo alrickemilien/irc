@@ -16,8 +16,11 @@
 #define FD_CLIENT 2
 
 #define BUF_SIZE 4096
-#define CHANNELSTRSIZE 140
-#define NICKNAMESTRSIZE 140
+#define CHANNELSTRSIZE 200
+#define NICKNAMESTRSIZE 9
+#define HOSTNAMESTRSIZE 120
+#define USERNAMESTRSIZE 20
+#define MAXMSGSIZE 512
 
 #define DEFAULT_CHANNEL "#hub"
 #define DEFAULT_NICKNAME "Ben_AFK"
@@ -33,6 +36,10 @@ typedef struct s_fd
     // User data
     char channel[CHANNELSTRSIZE + 1];
     char nickname[NICKNAMESTRSIZE + 1];
+    char hostname[HOSTNAMESTRSIZE + 1];  // the real name of the host that the
+                                         // client is running on
+    char username[NICKNAMESTRSIZE + 1];  // the username on that host
+    int  chop;
 } t_fd;
 
 typedef struct s_env
@@ -48,7 +55,7 @@ typedef struct s_env
     int    is_tty;
 } t_env;
 
-typedef enum e_irc { IRC_JOIN = 0UL, IRC_COMMANDS_NUMBER } t_irc_enum;
+typedef enum e_irc { IRC_JOIN = 0UL, IRC_MSG, IRC_COMMANDS_NUMBER } t_irc_enum;
 
 typedef struct s_token
 {
@@ -62,9 +69,9 @@ typedef struct s_irc_cmd
     void (*f)(t_env *e, int cs, t_token *tokens);
 } t_irc_cmd;
 
-
 void irc_command(t_env *e, int cs, char *buffer);
 void irc_join(t_env *e, int cs, t_token *tokens);
+void irc_msg(t_env *e, int cs, t_token *tokens);
 size_t tokenize(char *str, t_token *tokens, size_t len);
 
 // Broadcast messages' types
