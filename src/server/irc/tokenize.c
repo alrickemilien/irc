@@ -1,6 +1,6 @@
 #include "server/irc.h"
 
-size_t tokenize(char *str, char **tokens, size_t len)
+size_t tokenize(char *str, t_token *tokens, size_t len)
 {
     size_t i;
     size_t count;
@@ -10,19 +10,20 @@ size_t tokenize(char *str, char **tokens, size_t len)
     while (str[i] && count < len)
     {
         // Skip whitespaces
-        while ((str[i] == 0x0A || str[i] == 0x09) && str[i])
+        while ((str[i] == 0x20 || str[i] == 0x09) && str[i])
             i++;
 
-        if (!str[i])
+        if (str[i] == 0)
             break;
 
-        memcpy(&tokens[count], &str[i], sizeof(char*));
-        count++;
-        // tokens[count++] = &str[i];
+        tokens[count].addr = str + i;
 
         // Skip printable
-        while (str[i] != 0x0A && str[i] != 0x09 && str[i])
+        while (str[i] != 0x20 && str[i] != 0x09 && str[i])
             i++;
+        tokens[count].len = (size_t)(&str[i] - tokens[count].addr);
+
+        count++;
     }
 
     return i;

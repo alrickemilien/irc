@@ -26,6 +26,8 @@ void on_connect(t_env *e, size_t s)
     e->fds[cs].type = FD_CLIENT;
     e->fds[cs].read = client_read;
     e->fds[cs].write = client_write;
+    memcpy(e->fds[cs].channel, DEFAULT_CHANNEL, sizeof(DEFAULT_CHANNEL));
+    memcpy(e->fds[cs].nickname, DEFAULT_NICKNAME, sizeof(DEFAULT_NICKNAME));
 
     memcpy(e->fds[cs].buf_write, HELLO, strlen(HELLO));
 }

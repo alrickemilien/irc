@@ -19,6 +19,9 @@
 #define CHANNELSTRSIZE 140
 #define NICKNAMESTRSIZE 140
 
+#define DEFAULT_CHANNEL "#hub"
+#define DEFAULT_NICKNAME "Ben_AFK"
+
 typedef struct s_fd
 {
     int type;
@@ -47,15 +50,22 @@ typedef struct s_env
 
 typedef enum e_irc { IRC_JOIN = 0UL, IRC_COMMANDS_NUMBER } t_irc_enum;
 
+typedef struct s_token
+{
+    char * addr;
+    size_t len;
+} t_token;
+
 typedef struct s_irc_cmd
 {
     char *command;
-    void (*f)(t_env *e, int cs, char **command);
+    void (*f)(t_env *e, int cs, t_token *tokens);
 } t_irc_cmd;
 
+
 void irc_command(t_env *e, int cs, char *buffer);
-void irc_join(t_env *e, int cs, char **buffer);
-size_t tokenize(char *str, char **tokens, size_t len);
+void irc_join(t_env *e, int cs, t_token *tokens);
+size_t tokenize(char *str, t_token *tokens, size_t len);
 
 // Broadcast messages' types
 #define IRC_INFO 42

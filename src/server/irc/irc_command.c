@@ -6,9 +6,9 @@ static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
 
 void irc_command(t_env *e, int cs, char *buffer)
 {
-    size_t i;
-    size_t j;
-    char * tokens[30];
+    size_t  i;
+    size_t  j;
+    t_token tokens[30];
 
     if (buffer[0] != '/')
         return;
@@ -18,16 +18,15 @@ void irc_command(t_env *e, int cs, char *buffer)
     {
         if (strncmp(buffer + 1, g_irc_commands[i].command, strlen(buffer + 1)))
         {
-            memset(tokens, 0, sizeof(char *) * 30);
+            memset(tokens, 0, sizeof(t_token) * 30);
 
-            printf("ret:%ld\n", tokenize(buffer, tokens, 30));
+            // printf("ret:%ld\n", tokenize(buffer + 1, tokens, 30));
+            tokenize(buffer + 1, tokens, 30);
             j = 0;
-            while (j < 30 && tokens[j])
-                printf("token:%s\n", tokens[j++]);
+            while (j < 30 && tokens[j].addr)
+                printf("token:%s\n", tokens[j++].addr);
 
-            printf("ici\n");
-
-            g_irc_commands[i].f(e, cs, &buffer);
+            g_irc_commands[i].f(e, cs, tokens);
             return;
         }
         i++;
