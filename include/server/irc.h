@@ -69,9 +69,24 @@ typedef struct s_irc_cmd
     void (*f)(t_env *e, int cs, t_token *tokens);
 } t_irc_cmd;
 
+typedef struct s_irc_reply
+{
+    int   code;
+    char *name;
+    char *fmt;
+} t_irc_reply;
+
+enum e_irc_reply
+{
+    ERR_NOSUCHNICK = 401,
+    ERR_NOSUCHSERVER = 402,
+    ERR_NOSUCHCHANNEL = 403,
+};
+
 void irc_command(t_env *e, int cs, char *buffer);
 void irc_join(t_env *e, int cs, t_token *tokens);
 void irc_msg(t_env *e, int cs, t_token *tokens);
+int irc_reply(t_env *e, int cs, int code, const char *data);
 size_t tokenize(char *str, t_token *tokens, size_t len);
 
 // Broadcast messages' types

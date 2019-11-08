@@ -7,11 +7,14 @@
 
 void client_read(t_env *e, size_t cs)
 {
-    int    r;
+    size_t r;
+    size_t len;
     size_t i;
+    char * ptr;
 
-    r = recv(cs, e->fds[cs].buf_read, BUF_SIZE - 2, 0);
-    // printf("Received: %s\n", e->fds[cs].buf_read);
+    // Receiving data from the client cs
+    r = recv(cs, e->fds[cs].buf_read, BUF_SIZE - 1, 0);
+
     if (r <= 0)
     {
         close(cs);
@@ -22,28 +25,42 @@ void client_read(t_env *e, size_t cs)
                          : "Client #%ld gone away\n",
                cs);
     }
-    else
+
+    ptr = strchr(e->fds[cs].buf_read, "\x0D\x0A");
+    len = strlen(e->fds[cs].buf_read);
+    if (!ptr)
     {
-        irc_command(e, cs, e->fds[cs].buf_read);
-
-        i = 0;
-        while (i < e->maxfd)
-        {
-            // Send data to all clients
-            if ((e->fds[i].type == FD_CLIENT) && (i != cs))
-            {
-                if (e->fds[cs].buf_read[r - 1] != 0x0A)
-                    e->fds[cs].buf_read[r] = 0x0A;
-                else
-                    e->fds[cs].buf_read[r] = 0;
-                e->fds[cs].buf_read[r + 1] = 0;
-
-                // printf("SEND\n");
-                send(i, e->fds[cs].buf_read, r + 2, 0);
-            }
-            i++;
-        }
+        // Drop the message, it is too long
+        if (len == BUF_SIZE)
+            memset(e->fds[cs].buf_read, 0, BUF_SIZE);
+        return;
     }
+
+    len = strlen(e->fds[cs].buf_read);
+    if (e->fds[cs].buf_read[len - 2] && e->fds[cs].buf_read[len - 1])
+
+        else
+        {
+            irc_command(e, cs, e->fds[cs].buf_read);
+
+            i = 0;
+            while (i < e->maxfd)
+            {
+                // Send data to all clients
+                if ((e->fds[i].type == FD_CLIENT) && (i != cs))
+                {
+                    if (e->fds[cs].buf_read[r - 1] != 0x0A)
+                        e->fds[cs].buf_read[r] = 0x0A;
+                    else
+                        e->fds[cs].buf_read[r] = 0;
+                    e->fds[cs].buf_read[r + 1] = 0;
+
+                    // printf("SEND\n");
+                    send(i, e->fds[cs].buf_read, r + 2, 0);
+                }
+                i++;
+            }
+        }
 
     if (r > 0)
     {

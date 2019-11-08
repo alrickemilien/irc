@@ -22,42 +22,34 @@ static int irc_join_check_command(t_env *e, int cs, const t_token *tokens)
     const char *channel;
     size_t      channel_len;
 
-    printf("tokens[0]:%s\n", tokens[0].addr);
-
     if (!tokens[0].addr || !tokens[1].addr || tokens[2].addr)
     {
         strcpy(e->fds[cs].buf_write,
                "\x1b[31mERROR\x1b[0m"
-               " Usage: /join <#channel>\n");
+               " Usage: JOIN <#channel>\n");
         return (-1);
     }
 
     channel = tokens[1].addr;
     channel_len = tokens[1].len;
 
+    printf("channel : %s\n", channel);
+
     if (strpbrk(channel, "\x07\x2C"))
     {
-        strcpy(e->fds[cs].buf_write,
-               "\x1b[31mERROR\x1b[0m"
-               " Channel invalid character\n");
+        irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
     }
     else if (channel_len - 1 > CHANNELSTRSIZE)
     {
-        strcpy(e->fds[cs].buf_write,
-               "\x1b[31mERROR\x1b[0m"
-               " Channel name too long\n");
+        irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
     }
-    else if (channel[0] != '#' || channel[0] != '&' || !is_valid_chan(channel))
+    else if ((channel[0] != '#' && channel[0] != '&') || !is_valid_chan(channel))
     {
-        strcpy(e->fds[cs].buf_write,
-               "\x1b[31mERROR\x1b[0m"
-               " Invalid character(s)\n");
+        irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
     }
     else if (channel_len < 4)
     {
-        strcpy(e->fds[cs].buf_write,
-               "\x1b[31mERROR\x1b[0m"
-               " Channel name too short\n");
+        irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
     }
     else
         return (0);
