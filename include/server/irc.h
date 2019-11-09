@@ -50,8 +50,10 @@ typedef struct s_fd
     char nickname[NICKNAMESTRSIZE + 1];
     char hostname[HOSTNAMESTRSIZE + 1];  // the real name of the host that the
                                          // client is running on
-    char username[NICKNAMESTRSIZE + 1];  // the username on that host
+    char username[USERNAMESTRSIZE + 1];  // the username on that host
+    char realname[USERNAMESTRSIZE + 1];  // the username on that host
     int  chop;
+    int  registered;
 } t_fd;
 
 typedef struct s_env
@@ -71,6 +73,7 @@ typedef enum e_irc {
     IRC_JOIN = 0UL,
     IRC_MSG,
     IRC_NICK,
+    IRC_USER,
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
 
@@ -101,11 +104,14 @@ enum e_irc_reply
     ERR_NICKNAMEINUSE = 433,
     ERR_ERRONEUSNICKNAME = 432,
     ERR_NONICKNAMEGIVEN = 431,
+    ERR_NEEDMOREPARAMS = 461,
+    ERR_ALREADYREGISTRED = 462,
 };
 
 void irc_command(t_env *e, int cs, char *buffer);
 void irc_join(t_env *e, int cs, t_token *tokens);
 void irc_nick(t_env *e, int cs, t_token *tokens);
+void irc_user(t_env *e, int cs, t_token *tokens);
 void irc_msg(t_env *e, int cs, t_token *tokens);
 int irc_reply(t_env *e, int cs, int code, const char *data);
 size_t tokenize(char *str, t_token *tokens, size_t len);

@@ -5,8 +5,10 @@ const t_irc_reply replys[] = {
     {ERR_NOSUCHSERVER, "ERR_NOSUCHSERVER", "<%s> :No such server"},
     {ERR_NOSUCHCHANNEL, "ERR_NOSUCHCHANNEL", "<%s> :No such channel"},
     {ERR_NICKNAMEINUSE, "ERR_NICKNAMEINUSE", "<%s> :Nickname is already in use"},
-    {ERR_ERRONEUSNICKNAME, "ERR_ERRONEUSNICKNAME", "<%s> :Erroneus nickname"},      
-    {ERR_NONICKNAMEGIVEN, "ERR_NONICKNAMEGIVEN", ":No nickname given"},      
+    {ERR_ERRONEUSNICKNAME, "ERR_ERRONEUSNICKNAME", "<%s> :Erroneus nickname"},
+    {ERR_NONICKNAMEGIVEN, "ERR_NONICKNAMEGIVEN", ":No nickname given"},
+    {ERR_NEEDMOREPARAMS, "ERR_NEEDMOREPARAMS", "<%s> :Not enough parameters"},
+    {ERR_ALREADYREGISTRED, "ERR_ALREADYREGISTRED", ":You may not reregister"},
 };
 
 int irc_reply(t_env *e, int cs, int code, const char *data)
