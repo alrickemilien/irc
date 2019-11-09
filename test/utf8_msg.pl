@@ -10,7 +10,7 @@ use IO::Socket::INET;
 # ############################################# #
 
 # Start server
-`build/server --daemon`;
+# `build/server --daemon`;
 
 #
 # Test clients connections

@@ -23,6 +23,7 @@ int cbuffer_flush(t_cbuffer *buffer)
 int cbuffer_nflush(t_cbuffer *buffer, size_t n)
 {
     memcpy(buffer->data, buffer->data + n, (BUF_SIZE - n) * sizeof(char));
+    memset(buffer->data + BUF_SIZE - n, 0, n * sizeof(char));
     buffer->size = buffer->size < n ? 0 : buffer->size - n;
     return (0);
 }

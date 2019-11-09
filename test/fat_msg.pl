@@ -44,9 +44,9 @@ sleep(1);
 
 my $msg = "MSG ";
 for (my $i = 0; $i <= 10000; $i++) {
-    $msg = $msg . $i;
+    $msg .= $i;
 }
-$msg .= "\x0D\x0A";
+$msg .= "\x0D\x0A MSG  non \x0D\x0A";
 $s1->send($msg);
 
 # Allow time to handle it
@@ -55,7 +55,7 @@ sleep(1);
 my $response = "";
 $s2->recv($response, length($msg));
 
-if (index($response, $msg) == -1) {
+if (index($response, "non") == -1) {
     print 'Bad response: ' . $response;
 }
 

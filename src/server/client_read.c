@@ -18,8 +18,6 @@ void client_read(t_env *e, size_t cs)
     // Receiving data from the client cs
     r = cbuffer_recv(&e->fds[cs].buf_read, cs);
 
-    printf("%ld available data for client %ld\n", r, cs);
-
     if (r <= 0)
     {
         close(cs);
@@ -36,8 +34,7 @@ void client_read(t_env *e, size_t cs)
         return;
     }
 
-    ptr = strstr(e->fds[cs].buf_read.data, "\x0D\x0A");
-    if (!ptr)
+    if ((ptr = strstr(e->fds[cs].buf_read.data, "\x0D\x0A")) == (void *)0)
     {
         // Drop the message, it is too long
         if (e->fds[cs].buf_read.size == BUF_SIZE)
@@ -48,7 +45,12 @@ void client_read(t_env *e, size_t cs)
         return;
     }
 
-    irc_command(e, cs, e->fds[cs].buf_read.data);
-    cbuffer_nflush(&e->fds[cs].buf_read,
-                   (size_t)(ptr - e->fds[cs].buf_read.data));
+    // Reading each command oof the buffer
+    while (ptr)
+    {
+        irc_command(e, cs, e->fds[cs].buf_read.data);
+        cbuffer_nflush(&e->fds[cs].buf_read,
+                       (size_t)(ptr - e->fds[cs].buf_read.data) + 2);
+        ptr = strstr(e->fds[cs].buf_read.data, "\x0D\x0A");
+    }
 }
