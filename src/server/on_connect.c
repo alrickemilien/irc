@@ -38,6 +38,8 @@ void on_connect(t_env *e, size_t s)
     XSAFE(-1, gethostname(e->fds[cs].hostname, sizeof(e->fds[cs].hostname)),
           "on_connect::gethostname");
 
+    // memcpy(e->fds[cs].buf_write, HELLO, strlen(HELLO) * sizeof(char));
+
     // Say hello to new user
     // cbuffer_pflush(e->fds[cs].buf_write, HELLO, strlen(HELLO) * sizeof(char));
 }

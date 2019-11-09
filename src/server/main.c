@@ -10,14 +10,11 @@ void init_env(t_env *e)
     XSAFE(-1, getrlimit(RLIMIT_NOFILE, &rlp), "init_env::getrlimit");
 
     e->maxfd = rlp.rlim_cur;
-    e->fds = (t_fd *)XPSAFE(NULL, malloc(sizeof(*e->fds) * e->maxfd), "malloc");
+    e->fds = (t_fd *)XPSAFE(NULL, malloc(sizeof(*e->fds) * e->maxfd), "init_env::malloc");
 
     i = 0;
     while (i < e->maxfd)
-    {
-        clear_fd(&e->fds[i]);
-        i++;
-    }
+        clear_fd(&e->fds[i++]);
 }
 
 static void init_options(t_options *options)
@@ -34,9 +31,8 @@ static void init_options(t_options *options)
         daemonize();
 
     // Set default backlog
-    if (options->bind[0] == 0) {
+    if (options->bind[0] == 0)
         memcpy(options->bind, "127.0.0.1", sizeof(char) * 9);
-    }
 
     if (options->ipv6) {
         printf("Running server ipv6\n");

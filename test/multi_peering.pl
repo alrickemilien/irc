@@ -10,8 +10,7 @@ use IO::Socket::INET;
 # ############################################# #
 
 # Start server
-# exec("build/server --daemon") or die "Could not run server: $!";
-`build/server --daemon`;
+# `build/server --daemon`;
 
 #
 # Test clients connections
@@ -20,29 +19,31 @@ use IO::Socket::INET;
 print "Starting server, wait ...\n";
 sleep(1);
 
-my $REMOTE_HOST = '127.0.0.1';
-my $REMORT_PORT = '5555';
+my $HOST = '127.0.0.1';
+my $PORT = '5555';
+my $CLIENTS_NUMBER = 10;
+my $POOLS_NUMBER = 2;
 
 my @s;
-for (my $i = 0; $i <= 20; $i++) {
+for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
     # create a connecting socket    
     my $tmp_s = new IO::Socket::INET (
-        PeerHost => $REMOTE_HOST,
-        PeerPort => $REMORT_PORT,
+        PeerHost => $HOST,
+        PeerPort => $PORT,
         Proto => 'tcp',
     );
 
-    die "Couldn't connect to $REMOTE_HOST:$REMORT_PORT : $!\n" unless $tmp_s;
+    die "Couldn't connect to $HOST:$PORT : $!\n" unless $tmp_s;
 
     push @s, $tmp_s
 }
 
 # Wait client connection
 
-for (my $k = 0; $k <= 5; $k++) {
+for (my $k = 0; $k <= $POOLS_NUMBER; $k++) {
     print "Sending data\n";
-    for (my $i = 0; $i <= 20; $i++) {
-        $s[$i]->send("I say: $i");
+    for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
+        $s[$i]->send("MSG I say: $i\x0D\x0A");
     }
 
     # Wait full messages reception on the server
@@ -54,7 +55,7 @@ for (my $k = 0; $k <= 5; $k++) {
 #
 
 print "Closing clients\n";
-for (my $i = 0; $i <= 20; $i++) {
+for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
     $s[$i]->close();
 }
 
@@ -73,9 +74,7 @@ sleep(1);
     if (kill(0, $pidserver)) {
         print "Closing server\n";
         kill 9, -$pidserver;
-        print "Closed\n";
 
-        # Supress pid file of teh server
-        unlink 'ircserver.pid';
+        unlink 'ircserver.pid'; # Supress pid file of teh server
     }
 }

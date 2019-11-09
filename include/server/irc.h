@@ -27,7 +27,6 @@
 
 typedef struct s_cbuffer
 {
-    size_t cursor;
     size_t size;
     char data[BUF_SIZE + 1];
 } t_cbuffer;

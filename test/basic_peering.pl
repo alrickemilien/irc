@@ -47,6 +47,8 @@ $s1->send($req);
 # Wait message reception on the server
 sleep(1);
 
+print 'Client 2 waiting from Client 1 message';
+
 my $response = "";
 $s2->recv($response, 1024);
 
