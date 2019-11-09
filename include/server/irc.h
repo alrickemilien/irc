@@ -16,20 +16,42 @@
 #define FD_CLIENT 2
 
 #define BUF_SIZE 4096
-#define CHANNELSTRSIZE 140
-#define NICKNAMESTRSIZE 140
+#define CHANNELSTRSIZE 200
+#define NICKNAMESTRSIZE 9
+#define HOSTNAMESTRSIZE 120
+#define USERNAMESTRSIZE 20
+#define MAXMSGSIZE 512
+
+#define DEFAULT_CHANNEL "#hub"
+#define DEFAULT_NICKNAME "Ben_AFK"
+
+typedef struct s_cbuffer
+{
+    size_t size;
+    char data[BUF_SIZE + 1];
+} t_cbuffer;
+
+int cbuffer_push(t_cbuffer *buffer, char *data, size_t size);
+int cbuffer_flush(t_cbuffer *buffer);
+int cbuffer_nflush(t_cbuffer *buffer, size_t n);
+int cbuffer_recv(t_cbuffer *buffer, int cs);
+int cbuffer_pflush(t_cbuffer *buffer, char *data, size_t size);
 
 typedef struct s_fd
 {
     int type;
     void (*read)();
     void (*write)();
-    char buf_read[BUF_SIZE + 1];
-    char buf_write[BUF_SIZE + 1];
+    t_cbuffer buf_read;
+    char      buf_write[BUF_SIZE + 1];
 
     // User data
     char channel[CHANNELSTRSIZE + 1];
     char nickname[NICKNAMESTRSIZE + 1];
+    char hostname[HOSTNAMESTRSIZE + 1];  // the real name of the host that the
+                                         // client is running on
+    char username[NICKNAMESTRSIZE + 1];  // the username on that host
+    int  chop;
 } t_fd;
 
 typedef struct s_env
@@ -45,16 +67,39 @@ typedef struct s_env
     int    is_tty;
 } t_env;
 
-typedef enum e_irc { IRC_JOIN = 0UL, IRC_COMMANDS_NUMBER } t_irc_enum;
+typedef enum e_irc { IRC_JOIN = 0UL, IRC_MSG, IRC_COMMANDS_NUMBER } t_irc_enum;
+
+typedef struct s_token
+{
+    char * addr;
+    size_t len;
+} t_token;
 
 typedef struct s_irc_cmd
 {
-    const char *command;
-    void (*f)(t_env *e, int cs, const char **command);
+    char *command;
+    void (*f)(t_env *e, int cs, t_token *tokens);
 } t_irc_cmd;
 
-void irc_command(t_env *e, int cs, const char *buffer);
-void irc_join(t_env *e, int cs, const char **buffer);
+typedef struct s_irc_reply
+{
+    int   code;
+    char *name;
+    char *fmt;
+} t_irc_reply;
+
+enum e_irc_reply
+{
+    ERR_NOSUCHNICK = 401,
+    ERR_NOSUCHSERVER = 402,
+    ERR_NOSUCHCHANNEL = 403,
+};
+
+void irc_command(t_env *e, int cs, char *buffer);
+void irc_join(t_env *e, int cs, t_token *tokens);
+void irc_msg(t_env *e, int cs, t_token *tokens);
+int irc_reply(t_env *e, int cs, int code, const char *data);
+size_t tokenize(char *str, t_token *tokens, size_t len);
 
 // Broadcast messages' types
 #define IRC_INFO 42

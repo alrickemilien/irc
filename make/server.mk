@@ -12,12 +12,13 @@ SERVER_SRC=src/server/main.c \
 			src/server/broadcast.c \
 			src/server/daemonize.c \
 			src/server/do_select.c \
+			src/server/cbuffer.c \
 			src/server/client_read.c \
 			src/server/client_write.c
 
 # Utils
 SERVER_SRC+=src/utils/safe.c \
-			src/utils/ato64.c \
+			src/utils/ato32.c \
 			src/utils/i64toa.c \
 			src/utils/time2iso.c
 
@@ -29,7 +30,10 @@ SERVER_SRC+=src/server/fd/init_fd.c \
 
 # irc
 SERVER_SRC+=src/server/irc/irc_command.c \
-			src/server/irc/irc_join.c
+			src/server/irc/tokenize.c \
+			src/server/irc/irc_join.c \
+			src/server/irc/irc_reply.c \
+			src/server/irc/irc_msg.c
 
 # options
 SERVER_SRC+=src/server/options/utils.c \

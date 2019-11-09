@@ -6,10 +6,10 @@ void init_fd(t_env *e)
 {
     size_t i;
 
-    i = 0;
     e->max = 0;
     FD_ZERO(&e->fd_read);
     FD_ZERO(&e->fd_write);
+    i = 0;
     while (i < e->maxfd)
     {
         if (e->fds[i].type != FD_FREE)

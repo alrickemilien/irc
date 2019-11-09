@@ -2,7 +2,6 @@
 
 use strict;
 use warnings;
-
 use IO::Socket::INET;
 
 # ############################################# #
@@ -10,8 +9,7 @@ use IO::Socket::INET;
 # ############################################# #
 
 # Start server
-# exec("build/server --daemon") or die "Could not run server: $!";
-`build/server --daemon`;
+# `build/server --daemon`;
 
 #
 # Test clients connections
@@ -20,42 +18,41 @@ use IO::Socket::INET;
 print "Starting server, wait ...\n";
 sleep(1);
 
-my $REMOTE_HOST = '127.0.0.1';
-my $REMORT_PORT = '5555';
+my $HOST = '127.0.0.1';
+my $PORT = '5555';
 
 print "Connecting client 1\n";
 # create a connecting socket
 my $s1 = new IO::Socket::INET (
-    PeerHost => $REMOTE_HOST,
-    PeerPort => $REMORT_PORT,
+    PeerHost => $HOST,
+    PeerPort => $PORT,
     Proto => 'tcp',
 );
-die "Couldn't connect to $REMOTE_HOST:$REMORT_PORT : $!\n" unless $s1;
+die "Couldn't connect to $HOST:$PORT : $!\n" unless $s1;
 
 print "Connecting client 2\n";
 # create a connecting socket
 my $s2 = new IO::Socket::INET (
-    PeerHost => $REMOTE_HOST,
-    PeerPort => $REMORT_PORT,
+    PeerHost => $HOST,
+    PeerPort => $PORT,
     Proto => 'tcp',
 );
-die "Couldn't connect to $REMOTE_HOST:$REMORT_PORT : $!\n" unless $s2;
-
-# Wait client connection
-sleep(1);
+die "Couldn't connect to $HOST:$PORT : $!\n" unless $s2;
 
 # data to send to a server
-my $req = "Why don't you call me anymore?\n";
+my $req = "MSG Why don't you call me anymore?\x0D\x0A";
 print 'Client 2 send ' . "'$req'" . 'to Client1.';
 $s1->send($req);
 
 # Wait message reception on the server
 sleep(1);
 
+print 'Client 2 waiting from Client 1 message';
+
 my $response = "";
 $s2->recv($response, 1024);
 
-if (index($response, "Why don't you call me anymore?\n") == -1) {
+if (index($response, "Why don't you call me anymore?\x0D\x0A") == -1) {
     print 'Bad response: ' . $response;
 }
 
@@ -83,9 +80,6 @@ sleep(1);
     if (kill(0, $pidserver)) {
         print "Closing server\n";
         kill 9, $pidserver;
-        print "Closed\n";
-
-        # Supress pid file of teh server
-        unlink 'ircserver.pid';
+        unlink 'ircserver.pid'; # Supress pid file of teh server
     }
 }

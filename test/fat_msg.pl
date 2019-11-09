@@ -10,8 +10,7 @@ use IO::Socket::INET;
 # ############################################# #
 
 # Start server
-# exec("build/server --daemon") or die "Could not run server: $!";
-`build/server --daemon`;
+# `build/server --daemon`;
 
 #
 # Test clients connections
@@ -20,33 +19,34 @@ use IO::Socket::INET;
 print "Starting server, wait ...\n";
 sleep(1);
 
-my $REMOTE_HOST = '127.0.0.1';
-my $REMORT_PORT = '5555';
+my $HOST = '127.0.0.1';
+my $PORT = '5555';
 
 print "Connecting client 1\n";
 # create a connecting socket
 my $s1 = new IO::Socket::INET (
-    PeerHost => $REMOTE_HOST,
-    PeerPort => $REMORT_PORT,
+    PeerHost => $HOST,
+    PeerPort => $PORT,
     Proto => 'tcp',
 );
-die "Couldn't connect to $REMOTE_HOST:$REMORT_PORT : $!\n" unless $s1;
+die "Couldn't connect to $HOST:$PORT : $!\n" unless $s1;
 
 print "Connecting client 2\n";
 # create a connecting socket
 my $s2 = new IO::Socket::INET (
-    PeerHost => $REMOTE_HOST,
-    PeerPort => $REMORT_PORT,
+    PeerHost => $HOST,
+    PeerPort => $PORT,
     Proto => 'tcp',
 );
-die "Couldn't connect to $REMOTE_HOST:$REMORT_PORT : $!\n" unless $s2;
+die "Couldn't connect to $HOST:$PORT : $!\n" unless $s2;
 
 sleep(1);
 
-my $msg = "";
-for (my $i = 0; $i <= 800000; $i++) {
-    $msg = $msg . $i;
+my $msg = "MSG ";
+for (my $i = 0; $i <= 10000; $i++) {
+    $msg .= $i;
 }
+$msg .= "\x0D\x0A MSG  non \x0D\x0A";
 $s1->send($msg);
 
 # Allow time to handle it
@@ -55,7 +55,7 @@ sleep(1);
 my $response = "";
 $s2->recv($response, length($msg));
 
-if (index($response, $msg) == -1) {
+if (index($response, "non") == -1) {
     print 'Bad response: ' . $response;
 }
 
@@ -82,9 +82,6 @@ sleep(1);
     if (kill(0, -$pidserver) != 0) {
         print "Closing server\n";
         kill 9, -$pidserver;
-        print "Closed\n";
-
-        # Supress pid file of teh server
-        unlink 'ircserver.pid';
+        unlink 'ircserver.pid'; # Supress pid file of teh server
     }
 }

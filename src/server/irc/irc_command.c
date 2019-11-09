@@ -1,23 +1,30 @@
 #include "server/irc.h"
 
 static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
-    [IRC_JOIN] { "join", &irc_join },
+    [IRC_JOIN]= { "JOIN", &irc_join }, [IRC_MSG]= { "MSG", &irc_msg },
 };
 
-void irc_command(t_env *e, int cs, const char *buffer)
+void irc_command(t_env *e, int cs, char *buffer)
 {
     size_t i;
+    t_token tokens[30];
 
-    if (buffer[0] != '/')
-        return;
+    // Skip zithespaces
+    while (buffer && *buffer == 0x20)
+        buffer++;
 
     i = 0;
     while (i < IRC_COMMANDS_NUMBER)
     {
-        if (strncmp(buffer + 1, g_irc_commands[i].command,
-                    strlen(buffer + 1)))
+        if (strncmp(buffer, g_irc_commands[i].command,
+                    strlen(g_irc_commands[i].command)) == 0)
         {
-            g_irc_commands[i].f(e, cs, &buffer);
+            memset(tokens, 0, sizeof(t_token) * 30);
+
+            // printf("ret:%ld\n", tokenize(buffer + 1, tokens, 30));
+            tokenize(buffer, tokens, 30);
+
+            g_irc_commands[i].f(e, cs, tokens);
             return;
         }
         i++;

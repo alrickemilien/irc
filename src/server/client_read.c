@@ -3,15 +3,21 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+
 #include "server/irc.h"
+
+/*
+** Data available on read on the socket cs
+*/
 
 void client_read(t_env *e, size_t cs)
 {
-    int    r;
-    size_t i;
+    size_t r;
+    char * ptr;
 
-    r = recv(cs, e->fds[cs].buf_read, BUF_SIZE - 2, 0);
-    // printf("Received: %s\n", e->fds[cs].buf_read);
+    // Receiving data from the client cs
+    r = cbuffer_recv(&e->fds[cs].buf_read, cs);
+
     if (r <= 0)
     {
         close(cs);
@@ -21,34 +27,30 @@ void client_read(t_env *e, size_t cs)
                            "\x1B[0m\n"
                          : "Client #%ld gone away\n",
                cs);
-    }
-    else
-    {
-        // irc_command(e, cs, e->fds[cs].buf_read);
 
-        i = 0;
-        while (i < e->maxfd)
+        FD_CLR(cs, &e->fd_read);
+        FD_CLR(cs, &e->fd_write);
+
+        return;
+    }
+
+    if ((ptr = strstr(e->fds[cs].buf_read.data, "\x0D\x0A")) == (void *)0)
+    {
+        // Drop the message, it is too long
+        if (e->fds[cs].buf_read.size == BUF_SIZE)
         {
-            // Send data to all clients
-            if ((e->fds[i].type == FD_CLIENT) && (i != cs))
-            {
-                if (e->fds[cs].buf_read[r - 1] != 0x0A)
-                    e->fds[cs].buf_read[r] = 0x0A;
-                else
-                    e->fds[cs].buf_read[r] = 0;
-                e->fds[cs].buf_read[r + 1] = 0;
-
-                // printf("SEND\n");
-                send(i, e->fds[cs].buf_read, r + 2, 0);
-            }
-            i++;
+            printf("Flushing buffer ...\n");
+            cbuffer_flush(&e->fds[cs].buf_read);
         }
+        return;
     }
 
-    if (r > 0)
+    // Reading each command oof the buffer
+    while (ptr)
     {
-        // rotate buffer
-        memcpy(e->fds[cs].buf_read, e->fds[cs].buf_read + r, sizeof(char) * r);
-        memset(e->fds[cs].buf_read + r, 0, sizeof(char) * BUF_SIZE - r);
+        irc_command(e, cs, e->fds[cs].buf_read.data);
+        cbuffer_nflush(&e->fds[cs].buf_read,
+                       (size_t)(ptr - e->fds[cs].buf_read.data) + 2);
+        ptr = strstr(e->fds[cs].buf_read.data, "\x0D\x0A");
     }
 }
