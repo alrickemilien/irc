@@ -17,4 +17,5 @@ void time2iso(char *str);
 
 int ato32(const char *str, uint32_t *nbr);
 int i64toa(uint64_t nbr, char *buffer, size_t buffer_size, uint64_t base);
+
 #endif

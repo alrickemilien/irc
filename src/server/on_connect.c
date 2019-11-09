@@ -29,7 +29,6 @@ void on_connect(t_env *e, size_t s)
                      : "New client #%d from %s:%d\n",
            cs, inet_ntoa(csin.sin_addr), ntohs(csin.sin_port));
 
-    clear_fd(&e->fds[cs]);
     e->fds[cs].type = FD_CLIENT;
     e->fds[cs].read = client_read;
     e->fds[cs].write = client_write;
@@ -40,5 +39,5 @@ void on_connect(t_env *e, size_t s)
           "on_connect::gethostname");
 
     // Say hello to new user
-    memcpy(e->fds[cs].buf_write, HELLO, strlen(HELLO));
+    // cbuffer_pflush(e->fds[cs].buf_write, HELLO, strlen(HELLO) * sizeof(char));
 }

@@ -6,12 +6,9 @@ static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
 
 void irc_command(t_env *e, int cs, char *buffer)
 {
-    size_t  i;
+    size_t i;
     // size_t  j;
     t_token tokens[30];
-
-    // if (buffer[0] != '/')
-        // return;
 
     i = 0;
     while (i < IRC_COMMANDS_NUMBER)

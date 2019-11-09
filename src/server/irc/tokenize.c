@@ -4,13 +4,16 @@ size_t tokenize(char *str, t_token *tokens, size_t len)
 {
     size_t i;
     size_t count;
+    char * end;
+
+    end = strchr(buffer, "\x0D\x0A");
 
     i = 0;
     count = 0;
-    while (str[i] && count < len)
+    while (str[i] && str + i < end && count < len)
     {
         // Skip whitespaces
-        while ((str[i] == 0x20) && str[i])
+        while (str[i] == 0x20 && str[i])
             i++;
 
         if (str[i] == 0)
@@ -26,5 +29,5 @@ size_t tokenize(char *str, t_token *tokens, size_t len)
         count++;
     }
 
-    return i;
+    return (i);
 }

@@ -25,13 +25,24 @@
 #define DEFAULT_CHANNEL "#hub"
 #define DEFAULT_NICKNAME "Ben_AFK"
 
+typedef struct s_cbuffer
+{
+    size_t cursor;
+    char * data[BUF_SIZE + 1];
+} t_cbuffer;
+
+int cbuffer_push(t_cbuffer *buffer, char *data, size_t size);
+int cbuffer_flush(t_cbuffer *buffer);
+int cbuffer_recv(t_cbuffer *buffer, int cs);
+int cbuffer_pflush(t_cbuffer *buffer, char *data, size_t size);
+
 typedef struct s_fd
 {
     int type;
     void (*read)();
     void (*write)();
-    char buf_read[BUF_SIZE + 1];
-    char buf_write[BUF_SIZE + 1];
+    t_cbuffer buf_read;
+    char      buf_write[BUF_SIZE + 1];
 
     // User data
     char channel[CHANNELSTRSIZE + 1];
