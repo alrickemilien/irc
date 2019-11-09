@@ -1,7 +1,7 @@
 #include "server/irc.h"
 
 static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
-    [IRC_JOIN] { "JOIN", &irc_join }, [IRC_MSG] { "MSG", &irc_msg },
+    [IRC_JOIN]= { "JOIN", &irc_join }, [IRC_MSG]= { "MSG", &irc_msg },
 };
 
 void irc_command(t_env *e, int cs, char *buffer)

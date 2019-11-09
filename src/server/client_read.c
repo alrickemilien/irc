@@ -3,6 +3,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+
 #include "server/irc.h"
 
 /*
@@ -12,11 +13,12 @@
 void client_read(t_env *e, size_t cs)
 {
     size_t r;
-    size_t i;
     char * ptr;
 
     // Receiving data from the client cs
     r = cbuffer_recv(&e->fds[cs].buf_read, cs);
+
+    printf("%ld available data for client %ld\n", r, cs);
 
     if (r <= 0)
     {
@@ -27,39 +29,26 @@ void client_read(t_env *e, size_t cs)
                            "\x1B[0m\n"
                          : "Client #%ld gone away\n",
                cs);
+
+        FD_CLR(cs, &e->fd_read);
+        FD_CLR(cs, &e->fd_write);
+
+        return;
     }
 
-    ptr = strchr(e->fds[cs].buf_read.data, "\x0D\x0A");
+    ptr = strstr(e->fds[cs].buf_read.data, "\x0D\x0A");
     if (!ptr)
     {
         // Drop the message, it is too long
-        if (e->fds[cs].buf_read.cursor + 1 == BUF_SIZE)
+        if (e->fds[cs].buf_read.size == BUF_SIZE)
         {
-            printf("Dropping command ...\n");
+            printf("Flushing buffer ...\n");
             cbuffer_flush(&e->fds[cs].buf_read);
         }
         return;
     }
 
-    irc_command(e, cs, e->fds[cs].buf_read);
-    cbuffer_flush(&e->fds[cs].buf_read);
-
-    // i = 0;
-    // while (i < e->maxfd)
-    // {
-    //     // Send data to all clients
-    //     if ((e->fds[i].type == FD_CLIENT) && (i != cs))
-    //     {
-
-    //         if (e->fds[cs].buf_read[r - 1] != 0x0A)
-    //             e->fds[cs].buf_read[r] = 0x0A;
-    //         else
-    //             e->fds[cs].buf_read[r] = 0;
-    //         e->fds[cs].buf_read[r + 1] = 0;
-
-    //         // printf("SEND\n");
-    //         // send(i, e->fds[cs].buf_read, r + 2, 0);
-    //     }
-    //     i++;
-    // }
+    irc_command(e, cs, e->fds[cs].buf_read.data);
+    cbuffer_nflush(&e->fds[cs].buf_read,
+                   (size_t)(ptr - e->fds[cs].buf_read.data));
 }

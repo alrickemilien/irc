@@ -9,6 +9,7 @@ void server_ipv4(const t_options *options, t_env *e)
     struct sockaddr_in sin;
     struct protoent *  pe;
     int                reuseaddr;
+    int                reuseport;
     // struct hostent *hp;
 
     pe = (struct protoent *)XPSAFE((void *)0, getprotobyname("tcp"),
@@ -27,8 +28,20 @@ void server_ipv4(const t_options *options, t_env *e)
     /* be reused when the server is restarted before the required wait  */
     /* time expires.                                                    */
     /********************************************************************/
+    #ifdef __APPLE__
+    reuseaddr = 0;
+    #else
     reuseaddr = 1;
+    #endif // __APPLE__
     setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &reuseaddr, sizeof(reuseaddr));
+
+    #ifdef __APPLE__
+    reuseport = 1;
+    #else
+    reuseport = 1;
+    #endif // __APPLE__
+    setsockopt(sock, SOL_SOCKET, SO_REUSEPORT, &reuseport, sizeof(reuseport));
+
 
     /*********************************************************************/
     /* After the socket descriptor is created, a bind() function gets a  */

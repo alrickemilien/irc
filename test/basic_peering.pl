@@ -9,7 +9,7 @@ use IO::Socket::INET;
 # ############################################# #
 
 # Start server
-`build/server --daemon`;
+# `build/server --daemon`;
 
 #
 # Test clients connections
@@ -39,11 +39,8 @@ my $s2 = new IO::Socket::INET (
 );
 die "Couldn't connect to $HOST:$PORT : $!\n" unless $s2;
 
-# Wait client connection
-sleep(1);
-
 # data to send to a server
-my $req = "MSG Why don't you call me anymore?\n";
+my $req = "MSG Why don't you call me anymore?\x0D\x0A";
 print 'Client 2 send ' . "'$req'" . 'to Client1.';
 $s1->send($req);
 
@@ -53,7 +50,7 @@ sleep(1);
 my $response = "";
 $s2->recv($response, 1024);
 
-if (index($response, "Why don't you call me anymore?\n") == -1) {
+if (index($response, "Why don't you call me anymore?\x0D\x0A") == -1) {
     print 'Bad response: ' . $response;
 }
 
@@ -81,9 +78,6 @@ sleep(1);
     if (kill(0, $pidserver)) {
         print "Closing server\n";
         kill 9, $pidserver;
-        print "Closed\n";
-
-        # Supress pid file of teh server
-        unlink 'ircserver.pid';
+        unlink 'ircserver.pid'; # Supress pid file of teh server
     }
 }

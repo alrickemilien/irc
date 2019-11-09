@@ -4,6 +4,8 @@ void broadcast(t_env *e, const char *msg, int msg_type, size_t cs)
 {
     size_t i;
 
+    printf("BROADCASTING\n");
+
     i = 0;
     while (i <= e->max)
     {
@@ -11,11 +13,7 @@ void broadcast(t_env *e, const char *msg, int msg_type, size_t cs)
             !strcmp(e->fds[i].channel, e->fds[cs].channel))
         {
             if (msg_type == IRC_INFO && i != cs)
-            {
-                strcat(e->fds[i].buf_write, "INFO: ");
-                // strcpy(e->fds[i].buf_write, "\x1b[31mINFO\x1b[0m ");
                 strcat(e->fds[i].buf_write, msg);
-            }
             else if (i != cs)
             {
                 strcat(e->fds[i].buf_write, "ALERT: ");

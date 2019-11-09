@@ -34,8 +34,13 @@ static void init_options(t_options *options)
         daemonize();
 
     // Set default backlog
-    if (options->bind[0] == 0)
+    if (options->bind[0] == 0) {
         memcpy(options->bind, "127.0.0.1", sizeof(char) * 9);
+    }
+
+    if (options->ipv6) {
+        printf("Running server ipv6\n");
+    }
 }
 
 int main(int argc, const char **argv)

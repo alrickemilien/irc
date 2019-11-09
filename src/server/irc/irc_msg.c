@@ -17,13 +17,6 @@ static int irc_msg_check_command(t_env *e, int cs, const t_token *tokens)
         return (-1);
     }
 
-    if (strlen(msg) > MAXMSGSIZE)
-    {
-        strcpy(e->fds[cs].buf_write,
-               "\x1b[31mERROR\x1b[0m"
-               " Message too long\n");
-        return (-1);
-    }
     return (0);
 }
 
@@ -38,7 +31,7 @@ void irc_msg(t_env *e, int cs, t_token *tokens)
 
     time2iso(e->isotime);
 
-    sprintf(concat, "[%s] %s: %s\n", e->isotime, e->fds[cs].nickname,
+    sprintf(concat, "[%s] %s: %s", e->isotime, e->fds[cs].nickname,
             tokens[1].addr);
     broadcast(e, concat, IRC_INFO, cs);
 }

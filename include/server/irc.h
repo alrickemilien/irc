@@ -28,11 +28,13 @@
 typedef struct s_cbuffer
 {
     size_t cursor;
-    char * data[BUF_SIZE + 1];
+    size_t size;
+    char data[BUF_SIZE + 1];
 } t_cbuffer;
 
 int cbuffer_push(t_cbuffer *buffer, char *data, size_t size);
 int cbuffer_flush(t_cbuffer *buffer);
+int cbuffer_nflush(t_cbuffer *buffer, size_t n);
 int cbuffer_recv(t_cbuffer *buffer, int cs);
 int cbuffer_pflush(t_cbuffer *buffer, char *data, size_t size);
 
