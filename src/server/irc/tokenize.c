@@ -21,7 +21,7 @@ size_t tokenize(char *str, t_token *tokens, size_t len)
         tokens[count].addr = str + i;
 
         // Skip printable
-        while (str[i] != 0x20 && str[i])
+        while (str[i] != 0x20 && str[i] && str + i < end)
             i++;
         tokens[count].len = (size_t)(&str[i] - tokens[count].addr);
 

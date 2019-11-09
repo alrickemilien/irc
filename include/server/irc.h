@@ -28,7 +28,7 @@
 typedef struct s_cbuffer
 {
     size_t size;
-    char data[BUF_SIZE + 1];
+    char   data[BUF_SIZE + 1];
 } t_cbuffer;
 
 int cbuffer_push(t_cbuffer *buffer, char *data, size_t size);
@@ -67,7 +67,12 @@ typedef struct s_env
     int    is_tty;
 } t_env;
 
-typedef enum e_irc { IRC_JOIN = 0UL, IRC_MSG, IRC_COMMANDS_NUMBER } t_irc_enum;
+typedef enum e_irc {
+    IRC_JOIN = 0UL,
+    IRC_MSG,
+    IRC_NICK,
+    IRC_COMMANDS_NUMBER
+} t_irc_enum;
 
 typedef struct s_token
 {
@@ -93,10 +98,14 @@ enum e_irc_reply
     ERR_NOSUCHNICK = 401,
     ERR_NOSUCHSERVER = 402,
     ERR_NOSUCHCHANNEL = 403,
+    ERR_NICKNAMEINUSE = 433,
+    ERR_ERRONEUSNICKNAME = 432,
+    ERR_NONICKNAMEGIVEN = 431,
 };
 
 void irc_command(t_env *e, int cs, char *buffer);
 void irc_join(t_env *e, int cs, t_token *tokens);
+void irc_nick(t_env *e, int cs, t_token *tokens);
 void irc_msg(t_env *e, int cs, t_token *tokens);
 int irc_reply(t_env *e, int cs, int code, const char *data);
 size_t tokenize(char *str, t_token *tokens, size_t len);
