@@ -35,6 +35,9 @@ $s1->send($req);
 # Wait message reception on the server
 sleep(1);
 
+$s1->send("QUIT goodbye !\x0D\x0A");
+sleep(1);
+
 #
 # Terminate clients
 #

@@ -74,6 +74,7 @@ typedef enum e_irc {
     IRC_MSG,
     IRC_NICK,
     IRC_USER,
+    IRC_QUIT,
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
 
@@ -112,6 +113,7 @@ void irc_command(t_env *e, int cs, char *buffer);
 void irc_join(t_env *e, int cs, t_token *tokens);
 void irc_nick(t_env *e, int cs, t_token *tokens);
 void irc_user(t_env *e, int cs, t_token *tokens);
+void irc_quit(t_env *e, int cs, t_token *tokens);
 void irc_msg(t_env *e, int cs, t_token *tokens);
 int irc_reply(t_env *e, int cs, int code, const char *data);
 size_t tokenize(char *str, t_token *tokens, size_t len);
