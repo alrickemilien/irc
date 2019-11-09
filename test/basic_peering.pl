@@ -41,13 +41,13 @@ die "Couldn't connect to $HOST:$PORT : $!\n" unless $s2;
 
 # data to send to a server
 my $req = "MSG Why don't you call me anymore?\x0D\x0A";
-print 'Client 2 send ' . "'$req'" . 'to Client1.';
+print "Client 2 send " . "'$req'" . "to Client1.\n";
 $s1->send($req);
 
 # Wait message reception on the server
 sleep(1);
 
-print 'Client 2 waiting from Client 1 message';
+print "Client 2 waiting from Client 1 message\n";
 
 my $response = "";
 $s2->recv($response, 1024);
