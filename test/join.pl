@@ -47,10 +47,11 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
 for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
     $s[$i]->send("JOIN #meeting\x0D\x0ANICK client_$i\x0D\x0A");
 }
-psleep "Joining the room #meeting\n";
+sleep(2);
 my $response = "";
-$s[0]->recv($response, 1024);
+$s[0]->recv($response, 2048);
 
+sleep(2);
 # Get all connected people to the channel
 $s[0]->send("NAMES #meeting\x0D\x0A");
 $s[0]->recv($response, 1024);
