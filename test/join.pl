@@ -23,7 +23,7 @@ psleep "Starting server, wait ...\n";
 
 my $HOST = '127.0.0.1';
 my $PORT = '5555';
-my $CLIENTS_NUMBER = 10;
+my $CLIENTS_NUMBER = 100;
 my $POOLS_NUMBER = 2;
 
 my @s;
