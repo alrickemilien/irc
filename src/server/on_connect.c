@@ -34,6 +34,7 @@ void on_connect(t_env *e, size_t s)
     e->fds[cs].write = client_write;
     memcpy(e->fds[cs].channel, DEFAULT_CHANNEL, sizeof(DEFAULT_CHANNEL));
     memcpy(e->fds[cs].nickname, DEFAULT_NICKNAME, sizeof(DEFAULT_NICKNAME));
+    memset(e->fds[cs].username, 0, sizeof(USERNAMESTRSIZE + 1));
 
     XSAFE(-1, gethostname(e->fds[cs].hostname, sizeof(e->fds[cs].hostname)),
           "on_connect::gethostname");

@@ -1,16 +1,18 @@
 #include "server/irc.h"
 
 static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
-    [IRC_JOIN]= { "JOIN", &irc_join }, [IRC_MSG]= { "MSG", &irc_msg },
+        [IRC_JOIN] = {"JOIN", &irc_join}, [IRC_MSG] = {"MSG", &irc_msg},
+        [IRC_NICK] = {"NICK", &irc_nick}, [IRC_USER] = {"USER", &irc_user},
+        [IRC_QUIT] = {"QUIT", &irc_quit}, [IRC_NAMES] = {"NAMES", &irc_names},
 };
 
-void irc_command(t_env *e, int cs, char *buffer)
+int irc_command(t_env *e, int cs, char *buffer)
 {
-    size_t i;
+    size_t  i;
     t_token tokens[30];
 
     // Skip zithespaces
-    while (buffer && *buffer == 0x20)
+    while (*buffer == 0x20)
         buffer++;
 
     i = 0;
@@ -24,8 +26,7 @@ void irc_command(t_env *e, int cs, char *buffer)
             // printf("ret:%ld\n", tokenize(buffer + 1, tokens, 30));
             tokenize(buffer, tokens, 30);
 
-            g_irc_commands[i].f(e, cs, tokens);
-            return;
+            return g_irc_commands[i].f(e, cs, tokens);
         }
         i++;
     }
@@ -35,4 +36,5 @@ void irc_command(t_env *e, int cs, char *buffer)
            "ERROR"
            "\x1b[0m"
            " Unknow command\n");
+    return (-1);
 }

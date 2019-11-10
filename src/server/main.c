@@ -14,7 +14,13 @@ void init_env(t_env *e)
 
     i = 0;
     while (i < e->maxfd)
-        clear_fd(&e->fds[i++]);
+    {
+        clear_fd(&e->fds[i]);
+        memset(e->fds[i].buf_write, 0, BUF_SIZE + 1);
+        memset(e->fds[i].buf_read.data, 0, BUF_SIZE + 1);
+        e->fds[i].buf_read.size = 0;
+        i++;
+    }
 }
 
 static void init_options(t_options *options)

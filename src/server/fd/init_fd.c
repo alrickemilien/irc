@@ -14,6 +14,7 @@ void init_fd(t_env *e)
     {
         if (e->fds[i].type != FD_FREE)
         {
+            // printf("i:%ld\n", i);
             FD_SET(i, &e->fd_read);
 
             // Add the write fd only if write buffer is available

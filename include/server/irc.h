@@ -22,13 +22,13 @@
 #define USERNAMESTRSIZE 20
 #define MAXMSGSIZE 512
 
-#define DEFAULT_CHANNEL "#hub"
+#define DEFAULT_CHANNEL "&hub"
 #define DEFAULT_NICKNAME "Ben_AFK"
 
 typedef struct s_cbuffer
 {
     size_t size;
-    char data[BUF_SIZE + 1];
+    char   data[BUF_SIZE + 1];
 } t_cbuffer;
 
 int cbuffer_push(t_cbuffer *buffer, char *data, size_t size);
@@ -50,8 +50,10 @@ typedef struct s_fd
     char nickname[NICKNAMESTRSIZE + 1];
     char hostname[HOSTNAMESTRSIZE + 1];  // the real name of the host that the
                                          // client is running on
-    char username[NICKNAMESTRSIZE + 1];  // the username on that host
+    char username[USERNAMESTRSIZE + 1];  // the username on that host
+    char realname[USERNAMESTRSIZE + 1];  // the username on that host
     int  chop;
+    int  registered;
 } t_fd;
 
 typedef struct s_env
@@ -67,7 +69,15 @@ typedef struct s_env
     int    is_tty;
 } t_env;
 
-typedef enum e_irc { IRC_JOIN = 0UL, IRC_MSG, IRC_COMMANDS_NUMBER } t_irc_enum;
+typedef enum e_irc {
+    IRC_JOIN = 0UL,
+    IRC_MSG,
+    IRC_NICK,
+    IRC_USER,
+    IRC_QUIT,
+    IRC_NAMES,
+    IRC_COMMANDS_NUMBER
+} t_irc_enum;
 
 typedef struct s_token
 {
@@ -78,7 +88,7 @@ typedef struct s_token
 typedef struct s_irc_cmd
 {
     char *command;
-    void (*f)(t_env *e, int cs, t_token *tokens);
+    int (*f)(t_env *e, int cs, t_token *tokens);
 } t_irc_cmd;
 
 typedef struct s_irc_reply
@@ -93,11 +103,20 @@ enum e_irc_reply
     ERR_NOSUCHNICK = 401,
     ERR_NOSUCHSERVER = 402,
     ERR_NOSUCHCHANNEL = 403,
+    ERR_NICKNAMEINUSE = 433,
+    ERR_ERRONEUSNICKNAME = 432,
+    ERR_NONICKNAMEGIVEN = 431,
+    ERR_NEEDMOREPARAMS = 461,
+    ERR_ALREADYREGISTRED = 462,
 };
 
-void irc_command(t_env *e, int cs, char *buffer);
-void irc_join(t_env *e, int cs, t_token *tokens);
-void irc_msg(t_env *e, int cs, t_token *tokens);
+int irc_command(t_env *e, int cs, char *buffer);
+int irc_join(t_env *e, int cs, t_token *tokens);
+int irc_nick(t_env *e, int cs, t_token *tokens);
+int irc_user(t_env *e, int cs, t_token *tokens);
+int irc_quit(t_env *e, int cs, t_token *tokens);
+int irc_msg(t_env *e, int cs, t_token *tokens);
+int irc_names(t_env *e, int cs, t_token *tokens);
 int irc_reply(t_env *e, int cs, int code, const char *data);
 size_t tokenize(char *str, t_token *tokens, size_t len);
 

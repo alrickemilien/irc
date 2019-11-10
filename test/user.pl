@@ -8,6 +8,11 @@ use IO::Socket::INET;
 # Test connections on server with many clients  #
 # ############################################# #
 
+sub psleep {
+    sleep(1);
+    print $_[0];
+}
+
 # Start server
 # `build/server --daemon`;
 
@@ -15,13 +20,11 @@ use IO::Socket::INET;
 # Test clients connections
 #
 
-print "Starting server, wait ...\n";
-sleep(1);
+psleep "Starting server, wait ...\n";
 
 my $HOST = '127.0.0.1';
 my $PORT = '5555';
 
-print "Connecting client 1\n";
 # create a connecting socket
 my $s1 = new IO::Socket::INET (
     PeerHost => $HOST,
@@ -30,31 +33,10 @@ my $s1 = new IO::Socket::INET (
 );
 die "Couldn't connect to $HOST:$PORT : $!\n" unless $s1;
 
-print "Connecting client 2\n";
-# create a connecting socket
-my $s2 = new IO::Socket::INET (
-    PeerHost => $HOST,
-    PeerPort => $PORT,
-    Proto => 'tcp',
-);
-die "Couldn't connect to $HOST:$PORT : $!\n" unless $s2;
-
-# data to send to a server
-my $req = "MSG Why don't you call me anymore?\x0D\x0A";
-print "Client 2 send " . "'$req'" . "to Client1.\n";
+my $req = "USER ".($ARGV[0] || "newuser")." thehostname theservername therealname \x0D\x0A";
 $s1->send($req);
-
 # Wait message reception on the server
 sleep(1);
-
-print "Client 2 waiting from Client 1 message\n";
-
-my $response = "";
-$s2->recv($response, 1024);
-
-if (index($response, "Why don't you call me anymore?\x0D\x0A") == -1) {
-    print 'Bad response: ' . $response;
-}
 
 #
 # Terminate clients
@@ -62,9 +44,6 @@ if (index($response, "Why don't you call me anymore?\x0D\x0A") == -1) {
 
 print "Closing client 1\n";
 $s1->close();
-
-print "Closing client 2\n";
-$s2->close();
 
 # Wait for any othe behavior from server
 sleep(1);
