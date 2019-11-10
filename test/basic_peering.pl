@@ -39,20 +39,24 @@ my $s2 = new IO::Socket::INET (
 );
 die "Couldn't connect to $HOST:$PORT : $!\n" unless $s2;
 
+$s1->send("NICK client_1\x0D\x0A");
+$s2->send("NICK client_2\x0D\x0A");
+
+sleep(2);
+
 # data to send to a server
-my $req = "MSG Why don't you call me anymore?\x0D\x0A";
-print "Client 2 send " . "'$req'" . "to Client1.\n";
+my $req = "PRIVMSG client_2 Why don't you call me anymore?\x0D\x0A";
 $s1->send($req);
 
 # Wait message reception on the server
-sleep(1);
+sleep(2);
 
 print "Client 2 waiting from Client 1 message\n";
 
 my $response = "";
 $s2->recv($response, 1024);
 
-if (index($response, "Why don't you call me anymore?\x0D\x0A") == -1) {
+if (index($response, "Why don't you call me anymore?") == -1) {
     print 'Bad response: ' . $response;
 }
 

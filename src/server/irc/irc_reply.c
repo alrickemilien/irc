@@ -9,6 +9,7 @@ const t_irc_reply replys[] = {
     {ERR_NONICKNAMEGIVEN, "ERR_NONICKNAMEGIVEN", ":No nickname given"},
     {ERR_NEEDMOREPARAMS, "ERR_NEEDMOREPARAMS", "<%s> :Not enough parameters"},
     {ERR_ALREADYREGISTRED, "ERR_ALREADYREGISTRED", ":You may not reregister"},
+    {ERR_NOTEXTTOSEND, "ERR_NOTEXTTOSEND", ":No text to send"},
 };
 
 int irc_reply(t_env *e, int cs, int code, const char *data)

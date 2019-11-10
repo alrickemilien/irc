@@ -76,6 +76,7 @@ typedef enum e_irc {
     IRC_USER,
     IRC_QUIT,
     IRC_NAMES,
+    IRC_PRIVMSG,
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
 
@@ -103,9 +104,10 @@ enum e_irc_reply
     ERR_NOSUCHNICK = 401,
     ERR_NOSUCHSERVER = 402,
     ERR_NOSUCHCHANNEL = 403,
-    ERR_NICKNAMEINUSE = 433,
-    ERR_ERRONEUSNICKNAME = 432,
+    ERR_NOTEXTTOSEND = 412,
     ERR_NONICKNAMEGIVEN = 431,
+    ERR_ERRONEUSNICKNAME = 432,
+    ERR_NICKNAMEINUSE = 433,
     ERR_NEEDMOREPARAMS = 461,
     ERR_ALREADYREGISTRED = 462,
 };
@@ -117,6 +119,7 @@ int irc_user(t_env *e, int cs, t_token *tokens);
 int irc_quit(t_env *e, int cs, t_token *tokens);
 int irc_msg(t_env *e, int cs, t_token *tokens);
 int irc_names(t_env *e, int cs, t_token *tokens);
+int irc_privmsg(t_env *e, int cs, t_token *tokens);
 int irc_reply(t_env *e, int cs, int code, const char *data);
 size_t tokenize(char *str, t_token *tokens, size_t len);
 
