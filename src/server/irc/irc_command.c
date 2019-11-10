@@ -3,7 +3,7 @@
 static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
         [IRC_JOIN] = {"JOIN", &irc_join}, [IRC_MSG] = {"MSG", &irc_msg},
         [IRC_NICK] = {"NICK", &irc_nick}, [IRC_USER] = {"USER", &irc_user},
-        [IRC_QUIT] = {"QUIT", &irc_quit},
+        [IRC_QUIT] = {"QUIT", &irc_quit}, [IRC_NAMES] = {"NAMES", &irc_names},
 };
 
 int irc_command(t_env *e, int cs, char *buffer)

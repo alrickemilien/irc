@@ -8,7 +8,7 @@ use IO::Socket::INET;
 # Test connections on server with many clients  #
 # ############################################# #
 
-sub plseep {
+sub psleep {
     sleep(1);
     print $_[0];
 }
@@ -20,7 +20,7 @@ sub plseep {
 # Test clients connections
 #
 
-plseep "Starting server, wait ...\n";
+psleep "Starting server, wait ...\n";
 
 my $HOST = '127.0.0.1';
 my $PORT = '5555';
@@ -35,11 +35,7 @@ die "Couldn't connect to $HOST:$PORT : $!\n" unless $s1;
 
 my $req = "USER ".($ARGV[0] || "newuser")." thehostname theservername therealname \x0D\x0A";
 $s1->send($req);
-
 # Wait message reception on the server
-sleep(1);
-
-$s1->send("QUIT\x0D\x0A");
 sleep(1);
 
 #

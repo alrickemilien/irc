@@ -49,8 +49,10 @@ int irc_nick(t_env *e, int cs, t_token *tokens)
             tokens[1].addr);
     broadcast(e, concat, IRC_INFO, cs);
 
+    printf("[%s]: %s", e->isotime, concat);
+
     memset(e->fds[cs].nickname, 0, NICKNAMESTRSIZE);
-    memcpy(e->fds[cs].nickname, tokens[1].addr, strlen(tokens[1].addr));
+    memcpy(e->fds[cs].nickname, tokens[1].addr, tokens[1].len);
 
     return (IRC_NICK);
 }

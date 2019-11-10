@@ -22,7 +22,7 @@
 #define USERNAMESTRSIZE 20
 #define MAXMSGSIZE 512
 
-#define DEFAULT_CHANNEL "#hub"
+#define DEFAULT_CHANNEL "&hub"
 #define DEFAULT_NICKNAME "Ben_AFK"
 
 typedef struct s_cbuffer
@@ -75,6 +75,7 @@ typedef enum e_irc {
     IRC_NICK,
     IRC_USER,
     IRC_QUIT,
+    IRC_NAMES,
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
 
@@ -115,6 +116,7 @@ int irc_nick(t_env *e, int cs, t_token *tokens);
 int irc_user(t_env *e, int cs, t_token *tokens);
 int irc_quit(t_env *e, int cs, t_token *tokens);
 int irc_msg(t_env *e, int cs, t_token *tokens);
+int irc_names(t_env *e, int cs, t_token *tokens);
 int irc_reply(t_env *e, int cs, int code, const char *data);
 size_t tokenize(char *str, t_token *tokens, size_t len);
 
