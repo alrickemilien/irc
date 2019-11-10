@@ -87,7 +87,7 @@ typedef struct s_token
 typedef struct s_irc_cmd
 {
     char *command;
-    void (*f)(t_env *e, int cs, t_token *tokens);
+    int (*f)(t_env *e, int cs, t_token *tokens);
 } t_irc_cmd;
 
 typedef struct s_irc_reply
@@ -109,12 +109,12 @@ enum e_irc_reply
     ERR_ALREADYREGISTRED = 462,
 };
 
-void irc_command(t_env *e, int cs, char *buffer);
-void irc_join(t_env *e, int cs, t_token *tokens);
-void irc_nick(t_env *e, int cs, t_token *tokens);
-void irc_user(t_env *e, int cs, t_token *tokens);
-void irc_quit(t_env *e, int cs, t_token *tokens);
-void irc_msg(t_env *e, int cs, t_token *tokens);
+int irc_command(t_env *e, int cs, char *buffer);
+int irc_join(t_env *e, int cs, t_token *tokens);
+int irc_nick(t_env *e, int cs, t_token *tokens);
+int irc_user(t_env *e, int cs, t_token *tokens);
+int irc_quit(t_env *e, int cs, t_token *tokens);
+int irc_msg(t_env *e, int cs, t_token *tokens);
 int irc_reply(t_env *e, int cs, int code, const char *data);
 size_t tokenize(char *str, t_token *tokens, size_t len);
 

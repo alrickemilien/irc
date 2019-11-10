@@ -34,12 +34,12 @@ static int irc_nick_check_command(t_env *e, int cs, const t_token *tokens)
     return (0);
 }
 
-void irc_nick(t_env *e, int cs, t_token *tokens)
+int irc_nick(t_env *e, int cs, t_token *tokens)
 {
     char concat[512];
 
     if ((irc_nick_check_command(e, cs, tokens)) != 0)
-        return;
+        return (-1);
 
     memset(concat, 0, sizeof(concat));
 
@@ -51,4 +51,6 @@ void irc_nick(t_env *e, int cs, t_token *tokens)
 
     memset(e->fds[cs].nickname, 0, NICKNAMESTRSIZE);
     memcpy(e->fds[cs].nickname, tokens[1].addr, strlen(tokens[1].addr));
+
+    return (IRC_NICK);
 }

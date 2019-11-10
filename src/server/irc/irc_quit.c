@@ -1,7 +1,7 @@
 #include <ctype.h>
 #include "server/irc.h"
 
-void irc_quit(t_env *e, int cs, t_token *tokens)
+int irc_quit(t_env *e, int cs, t_token *tokens)
 {
     char concat[512];
 
@@ -16,14 +16,7 @@ void irc_quit(t_env *e, int cs, t_token *tokens)
 
     broadcast(e, concat, IRC_INFO, cs);
 
-    close(cs);
-    clear_fd(&e->fds[cs]);
-    printf(e->is_tty ? "\x1b[31m"
-                       "Client #%d gone away"
-                       "\x1B[0m\n"
-                     : "Client #%d gone away\n",
-           cs);
+    e->fds[cs].registered = 0;
 
-    FD_CLR(cs, &e->fd_read);
-    FD_CLR(cs, &e->fd_write);
+    return (IRC_QUIT);
 }

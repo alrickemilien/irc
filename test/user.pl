@@ -8,6 +8,11 @@ use IO::Socket::INET;
 # Test connections on server with many clients  #
 # ############################################# #
 
+sub plseep {
+    sleep(1);
+    print $_[0];
+}
+
 # Start server
 # `build/server --daemon`;
 
@@ -15,8 +20,7 @@ use IO::Socket::INET;
 # Test clients connections
 #
 
-print "Starting server, wait ...\n";
-sleep(1);
+plseep "Starting server, wait ...\n";
 
 my $HOST = '127.0.0.1';
 my $PORT = '5555';
@@ -35,7 +39,7 @@ $s1->send($req);
 # Wait message reception on the server
 sleep(1);
 
-$s1->send("QUIT goodbye !\x0D\x0A");
+$s1->send("QUIT\x0D\x0A");
 sleep(1);
 
 #

@@ -33,8 +33,6 @@ static int irc_join_check_command(t_env *e, int cs, const t_token *tokens)
     channel = tokens[1].addr;
     channel_len = tokens[1].len;
 
-    printf("channel : %s\n", channel);
-
     if (strpbrk(channel, "\x07\x2C"))
     {
         irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
@@ -43,7 +41,8 @@ static int irc_join_check_command(t_env *e, int cs, const t_token *tokens)
     {
         irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
     }
-    else if ((channel[0] != '#' && channel[0] != '&') || !is_valid_chan(channel))
+    else if ((channel[0] != '#' && channel[0] != '&') ||
+             !is_valid_chan(channel))
     {
         irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
     }
@@ -56,12 +55,12 @@ static int irc_join_check_command(t_env *e, int cs, const t_token *tokens)
     return (-1);
 }
 
-void irc_join(t_env *e, int cs, t_token *tokens)
+int irc_join(t_env *e, int cs, t_token *tokens)
 {
     char concat[CHANNELSTRSIZE + NICKNAMESTRSIZE + 11];
 
     if ((irc_join_check_command(e, cs, tokens)) != 0)
-        return;
+        return (-1);
 
     memset(concat, 0, sizeof(concat));
 
@@ -90,4 +89,5 @@ void irc_join(t_env *e, int cs, t_token *tokens)
         "\x1b[0m"
         " %s joined %s\n",
         e->isotime, e->fds[cs].nickname, e->fds[cs].channel);
+    return (IRC_JOIN);
 }

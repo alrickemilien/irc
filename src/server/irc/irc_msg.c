@@ -20,12 +20,12 @@ static int irc_msg_check_command(t_env *e, int cs, const t_token *tokens)
     return (0);
 }
 
-void irc_msg(t_env *e, int cs, t_token *tokens)
+int irc_msg(t_env *e, int cs, t_token *tokens)
 {
     char concat[MAXMSGSIZE + ISOTIMESTRSIZE + NICKNAMESTRSIZE + 5];
 
     if ((irc_msg_check_command(e, cs, tokens)) != 0)
-        return;
+        return (-1);
 
     memset(concat, 0, sizeof(concat));
 
@@ -34,4 +34,6 @@ void irc_msg(t_env *e, int cs, t_token *tokens)
     sprintf(concat, "[%s] %s: %s", e->isotime, e->fds[cs].nickname,
             tokens[1].addr);
     broadcast(e, concat, IRC_INFO, cs);
+
+    return (IRC_MSG);
 }

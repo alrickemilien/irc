@@ -19,7 +19,7 @@ static int irc_user_check_command(t_env *e, int cs, const t_token *tokens)
     // char *servername;
     // char *realname;
 
-    // size_t username_len;
+    size_t username_len;
     // size_t hostname_len;
     // size_t servername_len;
     // size_t realname_len;
@@ -34,7 +34,7 @@ static int irc_user_check_command(t_env *e, int cs, const t_token *tokens)
     }
 
     username = tokens[1].addr;
-    // username_len = tokens[1].len;
+    username_len = tokens[1].len;
 
     // ignored here
     // hostname = tokens[2].addr;
@@ -49,8 +49,8 @@ static int irc_user_check_command(t_env *e, int cs, const t_token *tokens)
     i = 0;
     while (i <= e->max)
     {
-        if (i != (size_t)cs && e->fds[i].type == FD_CLIENT &&
-            strcmp(e->fds[i].username, username) == 0)
+        if (e->fds[i].type == FD_CLIENT &&
+            strncmp(e->fds[i].username, username, username_len) == 0)
         {
             irc_reply(e, cs, ERR_ALREADYREGISTRED, NULL);
             return (-1);
@@ -61,12 +61,12 @@ static int irc_user_check_command(t_env *e, int cs, const t_token *tokens)
     return (0);
 }
 
-void irc_user(t_env *e, int cs, t_token *tokens)
+int irc_user(t_env *e, int cs, t_token *tokens)
 {
     char concat[512];
 
-    if ((irc_user_check_command(e, cs, tokens)) != 0)
-        return;
+    if ((irc_user_check_command(e, cs, tokens)) < 0)
+        return (-1);
 
     // Set username
     memset(e->fds[cs].username, 0, USERNAMESTRSIZE);
@@ -90,4 +90,6 @@ void irc_user(t_env *e, int cs, t_token *tokens)
     sprintf(concat, "%s from %s registered with real name %s",
             e->fds[cs].username, e->fds[cs].hostname, e->fds[cs].realname);
     broadcast(e, concat, IRC_INFO, cs);
+
+    return (IRC_USER);
 }

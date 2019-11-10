@@ -48,7 +48,24 @@ void client_read(t_env *e, size_t cs)
     // Reading each command oof the buffer
     while (ptr)
     {
-        irc_command(e, cs, e->fds[cs].buf_read.data);
+        if (irc_command(e, cs, e->fds[cs].buf_read.data) == IRC_QUIT)
+        {
+            close(cs);
+            clear_fd(&e->fds[cs]);
+            printf(e->is_tty ? "\x1b[31m"
+                               "Client #%ld gone away"
+                               "\x1B[0m\n"
+                             : "Client #%ld gone away\n",
+                   cs);
+
+            FD_CLR(cs, &e->fd_read);
+            FD_CLR(cs, &e->fd_write);
+
+            cbuffer_nflush(&e->fds[cs].buf_read,
+                           (size_t)(ptr - e->fds[cs].buf_read.data) + 2);
+            return;
+        }
+
         cbuffer_nflush(&e->fds[cs].buf_read,
                        (size_t)(ptr - e->fds[cs].buf_read.data) + 2);
         ptr = strstr(e->fds[cs].buf_read.data, "\x0D\x0A");
