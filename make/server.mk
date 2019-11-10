@@ -48,3 +48,6 @@ SERVER_SRC+=src/server/options/utils.c \
 			src/server/options/read_options_arguments.c
 
 SERVER_OBJ=$(SERVER_SRC:.c=.o)
+
+# %.o: %.c
+# 	@gcc $(DEBUG) -o $@ -c $< $(INCLUDE) $(CFLAGS)

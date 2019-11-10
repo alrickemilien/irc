@@ -3,8 +3,7 @@
 
 #include "irc.h"
 
-void client_ipv4();
+int client_ipv4();
 void client_ipv6();
-void ping(int s, char *message);
 
 #endif

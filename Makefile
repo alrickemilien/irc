@@ -26,10 +26,7 @@ $(SERVER): $(SERVER_OBJ)
 
 $(CLIENT): $(CLIENT_OBJ)
 	@mkdir -p $(BUILD_DIR)
-	@gcc $(DEBUG) $^ -o $(BUILD_DIR)$@ $(LINK_LIBFT) $(CFLAGS)
-
-%.o: %.c
-	@gcc $(DEBUG) -o $@ -c $< $(INCLUDE) $(CFLAGS)
+	@gcc $(DEBUG) $^ -o $(BUILD_DIR)$@ $(LINK_LIBFT) $(GTK_DPKG) $(CFLAGS)
 
 clean:
 	@rm -rf $(SERVER_OBJ) $(CLIENT_OBJ)

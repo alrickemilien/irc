@@ -6,25 +6,21 @@
 #include <unistd.h>
 
 #include "client/irc.h"
+#include "client/ui/ui.h"
+#include "client/ui/login.h"
 
-void ping(int s, char *message)
-{
-    char buf[8192];
 
-    printf("sending: %s\n", message);
+int main(int argc,char *argv[]){
+	
+	gtk_init(&argc, &argv);
+	
+	login_window_init();
 
-    strncpy(buf, message, sizeof(buf));
-    send(s, buf, strlen(buf), 0);
-    recv(s, buf, 8192, 0);
-    strtok(buf, "\n");
-    puts(buf);
-}
+	g_object_unref(G_OBJECT(builder));
 
-int main(int argc, char **argv)
-{
-    (void)argv;
-    (void)argc;
+	gtk_widget_show_all(window);
 
-    client_ipv4();
+	gtk_main();
+	
     return 0;
 }
