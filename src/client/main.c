@@ -5,26 +5,38 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "client/irc.h"
+#include <client/irc.h>
 
-void ping(int s, char *message)
+static void init_options(t_options *options)
 {
-    char buf[8192];
+    // Set default port
+    if (options->port == 0)
+        options->port = 5555;
 
-    printf("sending: %s\n", message);
+    // Set default backlog
+    if (options->host[0] == 0)
+        memcpy(options->host, "127.0.0.1", sizeof(char) * 9);
 
-    strncpy(buf, message, sizeof(buf));
-    send(s, buf, strlen(buf), 0);
-    recv(s, buf, 8192, 0);
-    strtok(buf, "\n");
-    puts(buf);
+    if (options->ipv6)
+    {
+        printf("Running server ipv6\n");
+    }
 }
 
-int main(int argc, char **argv)
+int main(int argc, const char **argv)
 {
-    (void)argv;
-    (void)argc;
+    t_options options;
+    int       exit_code;
 
-    client_ipv4();
-    return 0;
+    exit_code = read_options(argc, argv, &options);
+    if (exit_code != 0)
+        return (exit_code);
+
+    init_options(&options);
+
+    int sock = client_ipv4();
+
+    close(sock);
+
+    return (exit_code);
 }

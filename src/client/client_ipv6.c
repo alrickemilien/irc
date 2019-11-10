@@ -7,7 +7,7 @@
 
 #include "client/irc.h"
 
-void client_ipv6()
+int client_ipv6()
 {
     int                 sock;
     struct sockaddr_in6 sin;
@@ -18,9 +18,5 @@ void client_ipv6()
     inet_pton(AF_INET6, "::1", &sin.sin6_addr);
     connect(sock, (struct sockaddr *)&sin, sizeof(sin));
 
-    ping(sock, "hoge\n");
-    ping(sock, "fuga\n");
-    ping(sock, "piyo\n");
-
-    close(sock);
+    return (sock);
 }
