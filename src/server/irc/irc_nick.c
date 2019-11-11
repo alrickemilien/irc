@@ -43,13 +43,14 @@ int irc_nick(t_env *e, int cs, t_token *tokens)
 
     memset(concat, 0, sizeof(concat));
 
-    time2iso(e->isotime);
+    if (e->fds[cs].registered)
+    {
+        sprintf(concat, "%s changed nickname to %s", e->fds[cs].nickname,
+                tokens[1].addr);
+        broadcast(e, concat, IRC_NOTICE, cs);
 
-    sprintf(concat, "%s changed nickname to %s", e->fds[cs].nickname,
-            tokens[1].addr);
-    broadcast(e, concat, IRC_NOTICE, cs);
-
-    printf("[%s]: %s", e->isotime, concat);
+        loginfo("%s", concat);
+    }
 
     memset(e->fds[cs].nickname, 0, NICKNAMESTRSIZE);
     memcpy(e->fds[cs].nickname, tokens[1].addr, tokens[1].len);

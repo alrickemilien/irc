@@ -13,7 +13,7 @@ use ircunittest;
 # ############################################# #
 
 # Start server
-#ircunittest::start_server();
+ircunittest::start_server();
 
 #
 # Test clients connections
@@ -40,12 +40,12 @@ my $s2 = new IO::Socket::INET (
 );
 die "Couldn't connect to $HOST:$PORT : $!\n" unless $s2;
 
-$s1->send("NICK client_1\x0D\x0A");
-$s2->send("NICK client_2\x0D\x0A");
+$s1->send("NICK client_1\x0D\x0AUSER client1 microsoft.com :Client One\x0D\x0A");
+$s2->send("NICK client_2\x0D\x0AUSER client2 aws.com :Client Two\x0D\x0A");
 
 sleep(2);
 
-# data to send to a server
+# Data to send to a server
 my $req = "PRIVMSG client_2 Why don't you call me anymore?\x0D\x0A";
 $s1->send($req);
 
@@ -65,10 +65,9 @@ if (index($response, "Why don't you call me anymore?") == -1) {
 # Terminate clients
 #
 
-print "Closing client 1\n";
+print "Closing clients\n";
 $s1->close();
-
-print "Closing client 2\n";
 $s2->close();
 
+# End
 ircunittest::stop_server();

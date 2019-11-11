@@ -39,18 +39,22 @@ die "Couldn't connect to $HOST:$PORT : $!\n" unless $s2;
 
 sleep(1);
 
-my $msg = "MSG ";
+$s1->send("NICK client_1\x0D\x0AUSER client1 microsoft.com :Client One\x0D\x0A");
+$s2->send("NICK client_2\x0D\x0AUSER client2 aws.com :Client Two\x0D\x0A");
+
+sleep(1);
+
+my $msg = "PRIVMSG ";
 for (my $i = 0; $i <= 10000; $i++) {
     $msg .= $i;
 }
-$msg .= "\x0D\x0A MSG  non \x0D\x0A";
+$msg .= "\x0D\x0A PRIVMSG client_2 non \x0D\x0A";
 $s1->send($msg);
 
 # Allow time to handle it
 sleep(1);
 
-my $response = "";
-$s2->recv($response, length($msg));
+$s2->recv(my $response, 1024);
 
 if (index($response, "non") == -1) {
     print 'Bad response: ' . $response;
@@ -60,15 +64,9 @@ if (index($response, "non") == -1) {
 # Terminate clients
 #
 
-print "Closing client 1\n";
+print "Closing clients\n";
 $s1->close();
-print "Closing client 2\n";
 $s2->close();
 
-# Wait for any othe behavior from server
-sleep(1);
-
-#
 # End
-#
 ircunittest::stop_server();

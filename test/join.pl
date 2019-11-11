@@ -12,7 +12,7 @@ use ircunittest;
 # ############################################# #
 
 # Start server
-# ircunittest::start_server();
+ircunittest::start_server();
 
 #
 # Test clients connections
@@ -34,17 +34,13 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
 
     die "Couldn't connect to $HOST:$PORT : $!\n" unless $tmp_s;
 
+    # All clients joining specific channel
+    $tmp_s->send("NICK client_$i\x0D\x0AUSER client$i microsoft.com :Client $i\x0D\x0AJOIN #meeting\x0D\x0A");
+
     push @s, $tmp_s
 }
 
-#
-# All clients joining specific channel
-#
-
-for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
-    $s[$i]->send("JOIN #meeting\x0D\x0ANICK client_$i\x0D\x0A");
-}
-sleep(2);
+sleep(3);
 my $response = "";
 $s[0]->recv($response, 2048);
 
@@ -63,11 +59,5 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
     $s[$i]->close();
 }
 
-
-# Wait for any othe behavior from server
-sleep(1);
-
-#
 # End
-#
 ircunittest::stop_server();

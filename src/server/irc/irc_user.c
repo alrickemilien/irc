@@ -89,7 +89,7 @@ int irc_user(t_env *e, int cs, t_token *tokens)
     if (e->fds[cs].nickname[0] == 0)
         return (IRC_USER);
 
-    irc_reply(e, cs, ERR_ALREADYREGISTRED, NULL);
+    e->fds[cs].registered = 1;
 
     irc_reply(e, cs, RPL_WELCOME, e->fds[cs].username, e->fds[cs].host,
               e->fds[cs].realname);

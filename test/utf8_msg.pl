@@ -37,13 +37,18 @@ my $s2 = new IO::Socket::INET (
 );
 die "Couldn't connect to $HOST:$PORT : $!\n" unless $s2;
 
+$s1->send("NICK לקוח_1\x0D\x0AUSER לקוח 1 microsoft.com :One לקוח\x0D\x0A");
+$s2->send("NICK לקוח_2\x0D\x0AUSER לקוח2 aws.com :Two לקוח\x0D\x0A");
+
 # Wait client connection
 sleep(1);
 
 # data to send to a server
-my $req = "JOIN #ערוץ1\x0D\x0A";
-print 'Client 2 send ' . "'$req'" . 'to Client1.';
-$s1->send($req);
+$s1->send("JOIN #ערוץ1\x0D\x0A");
+$s2->send("JOIN #ערוץ1\x0D\x0A");
+
+my $req = "PRIVMSG  איפה הביבליוטקה";
+$s1->send($req . "\x0D\x0A");
 
 # Wait message reception on the server
 sleep(1);
@@ -58,16 +63,9 @@ if (index($response, $req) == -1) {
 # Terminate clients
 #
 
-print "Closing client 1\n";
+print "Closing clients\n";
 $s1->close();
-
-print "Closing client 2\n";
 $s2->close();
 
-# Wait for any othe behavior from server
-sleep(1);
-
-#
 # End
-#
 ircunittest::stop_server();

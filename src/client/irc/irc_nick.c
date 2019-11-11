@@ -3,7 +3,6 @@
 
 static int irc_nick_check_command(t_env *e, int cs, const t_token *tokens)
 {
-    const char *nick;
     size_t      nick_len;
 
     (void)cs;
@@ -12,7 +11,6 @@ static int irc_nick_check_command(t_env *e, int cs, const t_token *tokens)
     if (!tokens[1].addr || tokens[2].addr)
         return (logerror("ERR_NONICKNAMEGIVEN"));
 
-    nick = tokens[1].addr;
     nick_len = tokens[1].len;
 
     if (nick_len > 9 || !nick_len)

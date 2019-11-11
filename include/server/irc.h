@@ -44,7 +44,6 @@ void            check_fd(t_env *e);
 
 typedef enum e_irc {
     IRC_JOIN = 0UL,
-    IRC_MSG,
     IRC_NICK,
     IRC_USER,
     IRC_QUIT,
