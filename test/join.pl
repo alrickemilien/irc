@@ -3,19 +3,16 @@
 use strict;
 use warnings;
 use IO::Socket::INET;
+use File::Basename;
+use lib dirname(__FILE__);
+use ircunittest;
 
 # ############################################# #
 # Test connections on server with many clients  #
 # ############################################# #
 
-sub psleep {
-    sleep(1);
-    print $_[0];
-}
-
 # Start server
-# `build/server --daemon`;
-psleep "Starting server, wait ...\n";
+ircunittest::start_server();
 
 #
 # Test clients connections
@@ -73,14 +70,4 @@ sleep(1);
 #
 # End
 #
-{
-    open(my $pidfd, 'ircserver.pid') or die "Can't read server pid file: $!\n";  
-    my $pidserver = <$pidfd>;
-    close($pidfd);
-    # If the pid is not here, it means something wring happened
-    if (kill(0, $pidserver)) {
-        print "Closing server\n";
-        kill 9, $pidserver;
-        unlink 'ircserver.pid'; # Supress pid file of teh server
-    }
-}
+ircunittest::stop_server();

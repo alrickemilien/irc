@@ -5,19 +5,16 @@ use warnings;
 
 use IO::Socket::INET;
 
+use File::Basename;
+use lib dirname(__FILE__);
+use ircunittest;
+
 # ############################################# #
 # Test connections on server with many clients  #
 # ############################################# #
 
 # Start server
-# `build/server --daemon`;
-
-#
-# Test clients connections
-#
-
-print "Starting server, wait ...\n";
-sleep(1);
+ircunittest::start_server();
 
 my $HOST = '127.0.0.1';
 my $PORT = '5555';
@@ -44,7 +41,7 @@ die "Couldn't connect to $HOST:$PORT : $!\n" unless $s2;
 sleep(1);
 
 # data to send to a server
-my $req = "       למה אתה לא מתקשר אלי יותר?                        \x0D\x0A";
+my $req = "JOIN #ערוץ1\x0D\x0A";
 print 'Client 2 send ' . "'$req'" . 'to Client1.';
 $s1->send($req);
 
@@ -53,7 +50,6 @@ sleep(1);
 
 my $response = "";
 $s2->recv($response, 1024);
-
 if (index($response, $req) == -1) {
     print 'Bad response: ' . $response;
 }
@@ -74,16 +70,4 @@ sleep(1);
 #
 # End
 #
-{
-    open(my $pidfd, 'ircserver.pid') or die "Can't read server pid file: $!\n";  
-    my $pidserver = <$pidfd>;
-    close($pidfd);
-    # If the pid is not here, it means something wring happened
-    if (kill(0, -$pidserver) != 0) {
-        print "Closing server\n";
-        kill 9, -$pidserver;
-
-        # Supress pid file of teh server
-        unlink 'ircserver.pid';
-    }
-}
+ircunittest::stop_server();
