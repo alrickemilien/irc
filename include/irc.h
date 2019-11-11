@@ -16,6 +16,8 @@
 
 #define MAX(a, b) ((a > b) ? a : b)
 
+#define TOSTR(x) #x
+
 int xsafe(int err, int res, char *str);
 #define XSAFE(err, res, str) (xsafe(err, res, str))
 void *xpsafe(void *err, void *res, char *str);

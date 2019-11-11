@@ -74,5 +74,5 @@ int logerrno(const char *str)
                   : "[%s] ERROR: %s: %s\n",
            t, str, strerror(errno));
 
-    return (0);
+    return (-1);
 }

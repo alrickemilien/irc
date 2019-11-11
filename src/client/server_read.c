@@ -25,5 +25,7 @@ void server_read(t_env *e, size_t cs)
         // FD_CLR(cs, &e->fd_write);
     }
 
+    write(1, e->fds[cs].buf_read.data, e->fds[cs].buf_read.size);
+
     cbuffer_flush(&e->fds[cs].buf_read);
 }

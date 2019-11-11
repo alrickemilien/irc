@@ -12,7 +12,7 @@ use ircunittest;
 # ############################################# #
 
 # Start server
-ircunittest::start_server();
+# ircunittest::start_server();
 
 #
 # Test clients connections

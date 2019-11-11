@@ -23,16 +23,7 @@ void client_read(t_env *e, size_t cs)
     printf("data buffer is: %s\n", e->fds[cs].buf_read.data);
 
     if (r <= 0)
-    {
-        close(cs);
-        clear_fd(&e->fds[cs]);
-        loginfo("Client #%ld gone away", cs);
-
-        FD_CLR(cs, &e->fd_read);
-        FD_CLR(cs, &e->fd_write);
-
-        return;
-    }
+        return disconnect(e, cs);
 
     if ((ptr = strstr(e->fds[cs].buf_read.data, "\x0D\x0A")) == (void *)0)
     {
@@ -50,11 +41,7 @@ void client_read(t_env *e, size_t cs)
     {
         if (irc_command(e, cs, e->fds[cs].buf_read.data) == IRC_QUIT)
         {
-            close(cs);
-            clear_fd(&e->fds[cs]);
-            loginfo("Client #%ld gone away", cs);
-            FD_CLR(cs, &e->fd_read);
-            FD_CLR(cs, &e->fd_write);
+            disconnect(e, cs);
 
             cbuffer_nflush(&e->fds[cs].buf_read,
                            (size_t)(ptr - e->fds[cs].buf_read.data) + 2);

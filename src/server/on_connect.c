@@ -15,7 +15,7 @@ const char *HELLO = "Welcome to the irc server !\n";
 //     gid_t gid; /* group ID of the sending process */
 // };
 
-int on_connect(t_env *e, size_t s)
+void on_connect(t_env *e, size_t s)
 {
     int                cs;
     struct sockaddr_in csin;
@@ -33,7 +33,10 @@ int on_connect(t_env *e, size_t s)
 
     if (getnameinfo((struct sockaddr *)&csin, csin_len, e->fds[cs].host,
                     NI_MAXHOST, e->fds[cs].serv, NI_MAXSERV, NI_NAMEREQD) < 0)
-        return (logerrno("on_connect::getnameinfo"));
+    {
+        logerrno("on_connect::getnameinfo");
+        return;
+    }
 
     e->fds[cs].type = FD_CLIENT;
     e->fds[cs].read = client_read;
@@ -42,10 +45,7 @@ int on_connect(t_env *e, size_t s)
     memcpy(e->fds[cs].nickname, DEFAULT_NICKNAME, sizeof(DEFAULT_NICKNAME));
     memset(e->fds[cs].username, 0, USERNAMESTRSIZE + 1);
 
-    return (0);
-    // memcpy(e->fds[cs].buf_write, HELLO, strlen(HELLO) * sizeof(char));
+    memcpy(e->fds[cs].buf_write, HELLO, strlen(HELLO) * sizeof(char));
 
-    // Say hello to new user
-    // cbuffer_pflush(e->fds[cs].buf_write, HELLO, strlen(HELLO) *
-    // sizeof(char));
+    return ;
 }
