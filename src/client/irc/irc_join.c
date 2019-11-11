@@ -78,13 +78,11 @@ int irc_join(t_env *e, int cs, t_token *tokens)
 
     strncat(e->fds[cs].buf_write, tokens[1].addr, tokens[1].len);
 
-    time2iso(e->isotime);
-
     if (!e->fds[cs].channel[0])
-        printf("[%s]: You joined %s.\n", e->isotime, tokens[1].addr);
+        loginfo("You joined %s", tokens[1].addr);
     else
-        printf("[%s]: You leaved %s for %s.\n", e->isotime, e->fds[cs].channel,
-               tokens[1].addr);
+        loginfo("You leaved %s for %s", e->fds[cs].channel, tokens[1].addr);
+    
     memset(e->fds[cs].channel, 0, CHANNELSTRSIZE + 1);
     memcpy(e->fds[cs].channel, tokens[1].addr, tokens[1].len);
 

@@ -27,6 +27,15 @@ int ato32(const char *str, uint32_t *nbr);
 int i64toa(uint64_t nbr, char *buffer, size_t buffer_size, uint64_t base);
 
 /*
+** log
+*/
+
+#include <stdarg.h>
+#include <time.h>
+
+int loginfo(const char *fmt, ...);
+
+/*
 ** IRC specific
 */
 
@@ -73,6 +82,9 @@ int             cbuffer_pflush(t_cbuffer *buffer, char *data, size_t size);
 #define FD_SERV 1
 #define FD_CLIENT 2
 #define FD_TTY 3
+
+#define STDOUT_FD 1
+#define STDERR_FD 2
 
 typedef struct  s_fd
 {
