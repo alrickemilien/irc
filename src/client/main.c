@@ -8,13 +8,15 @@
 
 void init_env(t_env *e)
 {
-    size_t        i;
+    size_t i;
 
     // there are three standard file descriptions, STDIN, STDOUT, and STDERR.
     // They are assigned to 0, 1, and 2 respectively.
     // The last is used for client to server
     e->maxfd = 4;
-    e->fds = (t_fd *)XPSAFE(NULL, malloc(sizeof(*e->fds) * e->maxfd), "init_env::malloc");
+    e->fds = (t_fd *)XPSAFE(NULL, malloc(sizeof(*e->fds) * e->maxfd),
+                            "init_env::malloc");
+    e->sock = -1;
 
     i = 0;
     while (i < e->maxfd)
@@ -60,6 +62,9 @@ int main(int argc, const char **argv)
         client_ipv6(&options, &e);
     else
         client_ipv4(&options, &e);
+
+    if (e.sock == -1)
+        return (logerrno("main:"));
 
     loginfo("options.command: %s\n", options.command);
 

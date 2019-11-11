@@ -19,11 +19,13 @@ void server_read(t_env *e, size_t cs)
     {
         close(cs);
         clear_fd(&e->fds[cs]);
-        logerror("Connection between client hand server has been lost");
+        logerror("Connection between client hand server has been lost\n");
         e->sock = -1;
         // FD_CLR(cs, &e->fd_read);
         // FD_CLR(cs, &e->fd_write);
     }
+
+    write(1, e->fds[cs].buf_read.data, e->fds[cs].buf_read.size);
 
     cbuffer_flush(&e->fds[cs].buf_read);
 }

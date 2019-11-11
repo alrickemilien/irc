@@ -50,6 +50,7 @@ typedef enum e_irc {
     IRC_QUIT,
     IRC_NAMES,
     IRC_PRIVMSG,
+    IRC_NOTICE,
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
 
@@ -64,15 +65,13 @@ int irc_join(t_env *e, int cs, t_token *tokens);
 int irc_nick(t_env *e, int cs, t_token *tokens);
 int irc_user(t_env *e, int cs, t_token *tokens);
 int irc_quit(t_env *e, int cs, t_token *tokens);
-int irc_msg(t_env *e, int cs, t_token *tokens);
 int irc_names(t_env *e, int cs, t_token *tokens);
 int irc_privmsg(t_env *e, int cs, t_token *tokens);
-int irc_reply(t_env *e, int cs, int code, const char *data);
+int irc_reply(t_env *e, int cs, int code, ...);
 
-// Broadcast messages' types
-#define IRC_INFO 42
-
+void unicast(t_env *e, const char *msg, int msg_type, size_t cs);
 void broadcast(t_env *e, const char *msg, int type, size_t cs);
+void disconnect(t_env *e, size_t cs);
 
 void serv(t_env *e);
 

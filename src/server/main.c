@@ -65,7 +65,7 @@ int main(int argc, const char **argv)
     else
         server_ipv4(&options, &e);
 
-    serv(&e);
+    do_select(&e);
 
     return (exit_code);
 }

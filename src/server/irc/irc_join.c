@@ -81,7 +81,7 @@ int irc_join(t_env *e, int cs, t_token *tokens)
     time2iso(e->isotime);
 
     sprintf(concat, "%s leaved %s.\n", e->fds[cs].nickname, e->fds[cs].channel);
-    broadcast(e, concat, IRC_INFO, cs);
+    broadcast(e, concat, IRC_NOTICE, cs);
 
     printf(
         "\x1b[31m"
@@ -95,7 +95,7 @@ int irc_join(t_env *e, int cs, t_token *tokens)
     memset(concat, 0, sizeof(concat));
 
     sprintf(concat, "%s joined %s.\n", e->fds[cs].nickname, e->fds[cs].channel);
-    broadcast(e, concat, IRC_INFO, cs);
+    broadcast(e, concat, IRC_NOTICE, cs);
 
     printf(
         "\x1b[31m"

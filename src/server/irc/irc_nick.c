@@ -47,7 +47,7 @@ int irc_nick(t_env *e, int cs, t_token *tokens)
 
     sprintf(concat, "%s changed nickname to %s", e->fds[cs].nickname,
             tokens[1].addr);
-    broadcast(e, concat, IRC_INFO, cs);
+    broadcast(e, concat, IRC_NOTICE, cs);
 
     printf("[%s]: %s", e->isotime, concat);
 

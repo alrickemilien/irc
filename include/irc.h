@@ -8,12 +8,15 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <netdb.h>
 
 /*
 ** Utils
 */
 
 #define MAX(a, b) ((a > b) ? a : b)
+
+#define TOSTR(x) #x
 
 int xsafe(int err, int res, char *str);
 #define XSAFE(err, res, str) (xsafe(err, res, str))
@@ -35,6 +38,7 @@ int i64toa(uint64_t nbr, char *buffer, size_t buffer_size, uint64_t base);
 
 int loginfo(const char *fmt, ...);
 int logerror(const char *fmt, ...);
+int logerrno(const char *str);
 
 /*
 ** IRC specific
@@ -43,7 +47,7 @@ int logerror(const char *fmt, ...);
 # define BUF_SIZE 4096
 # define CHANNELSTRSIZE 200
 # define NICKNAMESTRSIZE 9
-# define HOSTNAMESTRSIZE 120
+# define HOSTNAMESTRSIZE NI_MAXHOST
 # define USERNAMESTRSIZE 20
 # define MAXMSGSIZE 512
 
@@ -94,8 +98,9 @@ typedef struct  s_fd
     // User data
     char        channel[CHANNELSTRSIZE + 1];
     char        nickname[NICKNAMESTRSIZE + 1];
-    char        hostname[HOSTNAMESTRSIZE + 1];  // the real name of the host that the
+    char        host[NI_MAXHOST + 1];  // the real name of the host that the
                                                 // client is running on
+    char        serv[NI_MAXSERV + 1];  
     char        username[USERNAMESTRSIZE + 1];  // the username on that host
     char        realname[USERNAMESTRSIZE + 1];  // the username on that host
     int         chop;
@@ -108,6 +113,7 @@ typedef struct  s_fd
 
 enum e_irc_reply
 {
+    RPL_WELCOME = 001,
     ERR_NOSUCHNICK = 401,
     ERR_NOSUCHSERVER = 402,
     ERR_NOSUCHCHANNEL = 403,
