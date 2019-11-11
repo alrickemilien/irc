@@ -72,8 +72,9 @@ void client_ipv4(const t_options *options, t_env *e)
     /* requests before the system starts rejecting the incoming         */
     /* requests.                                                        */
     /********************************************************************/
-    XSAFE(-1, connect(cs, (struct sockaddr *)&sin, sizeof(sin)),
-          "ipv4::connect");
+
+    if (connect(cs, (struct sockaddr *)&sin, sizeof(sin)) < 0)
+        return;
 
     e->sock = cs;
     e->fds[cs].type = FD_CLIENT;

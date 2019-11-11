@@ -39,5 +39,5 @@ void            client_ipv6(const t_options *options, t_env *e);
 void            server_read(t_env *e, size_t cs);
 void            server_write(t_env *e, size_t cs);
 
-void            do_select(t_env *e);
+void            do_select(const t_options *options, t_env *e);
 #endif

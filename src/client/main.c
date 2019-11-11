@@ -66,9 +66,10 @@ int main(int argc, const char **argv)
     if (options.command[e.sock])
         strcat(e.fds[e.sock].buf_write, options.command);
 
-    do_select(&e);
+    do_select(&options, &e);
 
-    XSAFE(-1, close(e.sock), "main::close");
+    if (e.sock != -1)
+        XSAFE(-1, close(e.sock), "main::close");
 
     return (exit_code);
 }

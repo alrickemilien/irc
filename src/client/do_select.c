@@ -48,7 +48,7 @@ void check_fd(t_env *e)
     }
 }
 
-void do_select(t_env *e)
+void do_select(const t_options *options, t_env *e)
 {
     struct timeval timeout;
 
@@ -56,7 +56,8 @@ void do_select(t_env *e)
     timeout.tv_usec = 5000;
 
     (void)timeout;
-    while (1)
+    (void)options;
+    while (e->sock != -1)
     {
         init_fd(e);
 
