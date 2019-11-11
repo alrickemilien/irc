@@ -2,6 +2,7 @@
 
 static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
     [IRC_JOIN] = {"/join", &irc_join},
+    [IRC_NICK] = {"/nick", &irc_nick},
 };
 
 int irc_command(t_env *e, int cs, char *buffer)
