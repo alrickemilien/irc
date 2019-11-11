@@ -1,5 +1,13 @@
 #include <ctype.h>
+
 #include "server/irc.h"
+
+/*
+** the only restriction on a
+** channel name is that it may not contain any spaces (' '), a control G
+** (^G or ASCII 7), or a comma (',' which is used as a list item
+** separator by the protocol)
+*/
 
 static bool is_valid_chan(const char *channel)
 {
@@ -8,7 +16,8 @@ static bool is_valid_chan(const char *channel)
     i = 1;
     while (channel[i] && channel[i] != '\x0D')
     {
-        if (!isalnum(channel[i]))
+        if (channel[i] == '\x07' || channel[i] == '\x20' ||
+            channel[i] == '\x2C')
             return (false);
         i++;
     }
@@ -31,19 +40,28 @@ static int irc_join_check_command(t_env *e, int cs, const t_token *tokens)
 
     if (strpbrk(channel, "\x07\x2C"))
     {
+        printf("a\n");
         irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
     }
     else if (channel_len - 1 > CHANNELSTRSIZE)
     {
+        printf("b\n");
         irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
     }
     else if ((channel[0] != '#' && channel[0] != '&') ||
              !is_valid_chan(channel))
     {
+        printf("c\n");
+        printf("channel: %s\n", channel);
+        printf("channel[0] != #:%d\n", channel[0] == '#');
+        printf("channel[0] != &:%d\n", channel[0] == '&');
+        printf("is_valid_chan(channel):%d\n", is_valid_chan(channel));
+
         irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
     }
     else if (channel_len < 1)
     {
+        printf("d\n");
         irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
     }
     else

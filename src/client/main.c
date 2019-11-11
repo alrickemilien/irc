@@ -1,30 +1,78 @@
 #include <arpa/inet.h>
+#include <client/irc.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "client/irc.h"
-
-void ping(int s, char *message)
+void init_env(t_env *e)
 {
-    char buf[8192];
+    size_t        i;
 
-    printf("sending: %s\n", message);
+    // there are three standard file descriptions, STDIN, STDOUT, and STDERR.
+    // They are assigned to 0, 1, and 2 respectively.
+    // The last is used for client to server
+    e->maxfd = 4;
+    e->fds = (t_fd *)XPSAFE(NULL, malloc(sizeof(*e->fds) * e->maxfd), "init_env::malloc");
 
-    strncpy(buf, message, sizeof(buf));
-    send(s, buf, strlen(buf), 0);
-    recv(s, buf, 8192, 0);
-    strtok(buf, "\n");
-    puts(buf);
+    i = 0;
+    while (i < e->maxfd)
+    {
+        clear_fd(&e->fds[i]);
+        memset(e->fds[i].buf_write, 0, BUF_SIZE + 1);
+        memset(e->fds[i].buf_read.data, 0, BUF_SIZE + 1);
+        e->fds[i].buf_read.size = 0;
+        i++;
+    }
 }
 
-int main(int argc, char **argv)
+static void init_options(t_options *options)
 {
-    (void)argv;
-    (void)argc;
+    // Set default port
+    if (options->port == 0)
+        options->port = 5555;
 
-    client_ipv4();
-    return 0;
+    // Set default backlog
+    if (options->host[0] == 0)
+        memcpy(options->host, "127.0.0.1", sizeof(char) * 9);
+
+    if (options->ipv6)
+    {
+        printf("Running server ipv6\n");
+    }
+}
+
+int main(int argc, const char **argv)
+{
+    t_options options;
+    int       exit_code;
+    t_env     e;
+
+    exit_code = read_options(argc, argv, &options);
+    if (exit_code != 0)
+        return (exit_code);
+
+    init_options(&options);
+    init_env(&e);
+
+    if (options.ipv6 == 1)
+        client_ipv6(&options, &e);
+    else
+        client_ipv4(&options, &e);
+
+    loginfo("options.command: %s\n", options.command);
+
+    memset(e.fds[e.sock].nickname, 0, NICKNAMESTRSIZE + 1);
+    memset(e.fds[e.sock].username, 0, USERNAMESTRSIZE + 1);
+
+    if (options.command[e.sock])
+        irc_command(&e, e.sock, options.command);
+
+    do_select(&options, &e);
+
+    if (e.sock != -1)
+        XSAFE(-1, close(e.sock), "main::close");
+
+    return (exit_code);
 }
