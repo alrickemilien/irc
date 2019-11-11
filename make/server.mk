@@ -5,7 +5,6 @@
 SERVER=server
 
 SERVER_SRC=src/server/main.c \
-			src/server/serv.c \
 			src/server/ipv4.c \
 			src/server/ipv6.c \
 			src/server/on_connect.c \

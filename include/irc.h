@@ -113,6 +113,7 @@ typedef struct  s_fd
 
 enum e_irc_reply
 {
+    RPL_WELCOME = 001,
     ERR_NOSUCHNICK = 401,
     ERR_NOSUCHSERVER = 402,
     ERR_NOSUCHCHANNEL = 403,

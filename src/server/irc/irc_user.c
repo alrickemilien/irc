@@ -1,4 +1,5 @@
 #include <ctype.h>
+
 #include "server/irc.h"
 
 /*
@@ -80,10 +81,18 @@ int irc_user(t_env *e, int cs, t_token *tokens)
 
     // Set realname
     memset(e->fds[cs].realname, 0, USERNAMESTRSIZE);
-    memcpy(e->fds[cs].realname, tokens[4].addr,
+    memcpy(e->fds[cs].realname,
+           tokens[4].addr[0] == ':' ? tokens[4].addr + 1 : tokens[4].addr,
            tokens[4].len < USERNAMESTRSIZE ? tokens[4].len : USERNAMESTRSIZE);
 
-    e->fds[cs].registered = 1;
+    // When nickname is not set
+    if (e->fds[cs].nickname[0] == 0)
+        return (IRC_USER);
+
+    irc_reply(e, cs, ERR_ALREADYREGISTRED, NULL);
+
+    irc_reply(e, cs, RPL_WELCOME, e->fds[cs].username, e->fds[cs].host,
+              e->fds[cs].realname);
 
     memset(concat, 0, sizeof(concat));
     time2iso(e->isotime);

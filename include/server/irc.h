@@ -67,7 +67,7 @@ int irc_user(t_env *e, int cs, t_token *tokens);
 int irc_quit(t_env *e, int cs, t_token *tokens);
 int irc_names(t_env *e, int cs, t_token *tokens);
 int irc_privmsg(t_env *e, int cs, t_token *tokens);
-int irc_reply(t_env *e, int cs, int code, const char *data);
+int irc_reply(t_env *e, int cs, int code, ...);
 
 void unicast(t_env *e, const char *msg, int msg_type, size_t cs);
 void broadcast(t_env *e, const char *msg, int type, size_t cs);

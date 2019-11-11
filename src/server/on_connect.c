@@ -28,9 +28,6 @@ void on_connect(t_env *e, size_t s)
     loginfo("New client #%d from %s:%d\n", cs, inet_ntoa(csin.sin_addr),
             ntohs(csin.sin_port));
 
-    // if (gethostname(e->fds[cs].hostname, sizeof(e->fds[cs].hostname) < 0))
-    //   return (logerrno("on_connect::gethostname"));
-
     if (getnameinfo((struct sockaddr *)&csin, csin_len, e->fds[cs].host,
                     NI_MAXHOST, e->fds[cs].serv, NI_MAXSERV, NI_NAMEREQD) < 0)
     {
@@ -38,14 +35,15 @@ void on_connect(t_env *e, size_t s)
         return;
     }
 
+    // init the new client
+
     e->fds[cs].type = FD_CLIENT;
     e->fds[cs].read = client_read;
     e->fds[cs].write = client_write;
+    e->fds[cs].registered = 0;
     memcpy(e->fds[cs].channel, DEFAULT_CHANNEL, sizeof(DEFAULT_CHANNEL));
     memcpy(e->fds[cs].nickname, DEFAULT_NICKNAME, sizeof(DEFAULT_NICKNAME));
     memset(e->fds[cs].username, 0, USERNAMESTRSIZE + 1);
 
-    memcpy(e->fds[cs].buf_write, HELLO, strlen(HELLO) * sizeof(char));
-
-    return ;
+    return;
 }
