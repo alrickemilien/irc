@@ -11,9 +11,10 @@
 */
 
 enum {
-	SERVER_PORT = 0U,
-	SERVER_HOST,
-	SERVER_IPV6,
+	CLIENT_PORT = 0U,
+	CLIENT_HOST,
+	CLIENT_IPV6,
+	CLIENT_COMMAND,
 	OPTIONS_NUMBER,
 };
 
@@ -40,9 +41,11 @@ typedef struct	s_options {
 	int			port;
 	int			_host;
 	int			ipv6;
+	int			_command;
 
 	// Metata data related to options
 	char		host[MAX_ALLOWED_VALUE_SIZE];
+	char		command[BUF_SIZE];
 }				t_options;
 
 # pragma pack(pop)
@@ -80,5 +83,7 @@ int				read_options(
 int				read_port_option(
 	t_options *options, const char *value);
 int				read_host_option(
+	t_options *options, const char *value);
+int				read_command_option(
 	t_options *options, const char *value);
 #endif

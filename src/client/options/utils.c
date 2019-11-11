@@ -1,8 +1,9 @@
 #include <client/irc.h>
 
 static t_options_map	g_waiting_value_options[] = {
-	{ "port", SERVER_PORT, &read_port_option, },
-	{ "host", SERVER_HOST, &read_host_option, },
+	{ "port", CLIENT_PORT, &read_port_option, },
+	{ "host", CLIENT_HOST, &read_host_option, },
+	{ "command", CLIENT_COMMAND, &read_command_option, },
 	{ NULL, 0, NULL },
 };
 

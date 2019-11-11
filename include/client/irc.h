@@ -11,14 +11,12 @@
 #include <irc.h>
 #include <client/options.h>
 
-#define FD_FREE 0
-#define FD_SERV 1
-#define FD_CLIENT 2
-
 typedef struct  s_env
 {
-    t_fd        fd;
+    t_fd        *fds;
     int         port;
+    size_t      maxfd;
+    size_t      max;
     int         r;
     fd_set      fd_read;
     fd_set      fd_write;
@@ -27,7 +25,19 @@ typedef struct  s_env
     int         sock;
 }               t_env;
 
-void             client_ipv4(const t_options *options, t_env *e);
-void             client_ipv6(const t_options *options, t_env *e);
+/*
+** fd 
+*/
 
+void            clear_fd(t_fd *fd);
+void            init_fd(t_env *e);
+void            check_fd(t_env *e);
+
+void            client_ipv4(const t_options *options, t_env *e);
+void            client_ipv6(const t_options *options, t_env *e);
+
+void            server_read(t_env *e, size_t cs);
+void            server_write(t_env *e, size_t cs);
+
+void            do_select(t_env *e);
 #endif

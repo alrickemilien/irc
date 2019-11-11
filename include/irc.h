@@ -47,45 +47,50 @@ typedef struct s_token
     size_t len;
 } t_token;
 
-size_t tokenize(char *str, t_token *tokens, size_t len);
+size_t          tokenize(char *str, t_token *tokens, size_t len);
 
 /*
 ** CBuffer
 */
 
-typedef struct s_cbuffer
+typedef struct  s_cbuffer
 {
-    size_t size;
-    char   data[BUF_SIZE + 1];
-} t_cbuffer;
+    size_t      size;
+    char        data[BUF_SIZE + 1];
+}               t_cbuffer;
 
-int cbuffer_push(t_cbuffer *buffer, char *data, size_t size);
-int cbuffer_flush(t_cbuffer *buffer);
-int cbuffer_nflush(t_cbuffer *buffer, size_t n);
-int cbuffer_recv(t_cbuffer *buffer, int cs);
-int cbuffer_pflush(t_cbuffer *buffer, char *data, size_t size);
+int             cbuffer_push(t_cbuffer *buffer, char *data, size_t size);
+int             cbuffer_flush(t_cbuffer *buffer);
+int             cbuffer_nflush(t_cbuffer *buffer, size_t n);
+int             cbuffer_recv(t_cbuffer *buffer, int cs);
+int             cbuffer_pflush(t_cbuffer *buffer, char *data, size_t size);
 
 /*
 ** File descriptor
 */
 
-typedef struct s_fd
+#define FD_FREE 0
+#define FD_SERV 1
+#define FD_CLIENT 2
+#define FD_TTY 3
+
+typedef struct  s_fd
 {
-    int type;
-    void (*read)();
-    void (*write)();
-    t_cbuffer buf_read;
-    char      buf_write[BUF_SIZE + 1];
+    int         type;
+    void        (*read)();
+    void        (*write)();
+    t_cbuffer   buf_read;
+    char        buf_write[BUF_SIZE + 1];
 
     // User data
-    char channel[CHANNELSTRSIZE + 1];
-    char nickname[NICKNAMESTRSIZE + 1];
-    char hostname[HOSTNAMESTRSIZE + 1];  // the real name of the host that the
-                                         // client is running on
-    char username[USERNAMESTRSIZE + 1];  // the username on that host
-    char realname[USERNAMESTRSIZE + 1];  // the username on that host
-    int  chop;
-    int  registered;
+    char        channel[CHANNELSTRSIZE + 1];
+    char        nickname[NICKNAMESTRSIZE + 1];
+    char        hostname[HOSTNAMESTRSIZE + 1];  // the real name of the host that the
+                                                // client is running on
+    char        username[USERNAMESTRSIZE + 1];  // the username on that host
+    char        realname[USERNAMESTRSIZE + 1];  // the username on that host
+    int         chop;
+    int         registered;
 } t_fd;
 
 /*
@@ -105,11 +110,11 @@ enum e_irc_reply
     ERR_ALREADYREGISTRED = 462,
 };
 
-typedef struct s_irc_reply
+typedef struct  s_irc_reply
 {
-    int   code;
-    char *name;
-    char *fmt;
-} t_irc_reply;
+    int         code;
+    char        *name;
+    char        *fmt;
+}               t_irc_reply;
 
 #endif

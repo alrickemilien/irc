@@ -31,6 +31,18 @@ typedef struct s_env
     int    is_tty;
 } t_env;
 
+/*
+** fd 
+*/
+
+void            clear_fd(t_fd *fd);
+void            init_fd(t_env *e);
+void            check_fd(t_env *e);
+
+/*
+** irc sepcific to server
+*/
+
 typedef enum e_irc {
     IRC_JOIN = 0UL,
     IRC_MSG,
@@ -72,10 +84,6 @@ void server_ipv4(const t_options *options, t_env *e);
 
 void client_write(t_env *e, size_t cs);
 void client_read(t_env *e, size_t cs);
-
-void clear_fd(t_fd *fd);
-void init_fd(t_env *e);
-void check_fd(t_env *e);
 
 void do_select(t_env *e);
 void daemonize(void);

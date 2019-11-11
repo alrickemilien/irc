@@ -10,13 +10,20 @@
 
 void client_ipv4(const t_options *options, t_env *e)
 {
-    int                sock;
+    int                cs;
     struct sockaddr_in sin;
     struct protoent *  pe;
-    int                reuseaddr;
-#ifdef __APPLE__
-    int reuseport;
-#endif  // __APPLE__
+    struct hostent *   hostnm;
+
+    //     int                reuseaddr;
+    // #ifdef __APPLE__
+    //     int reuseport;
+    // #endif  // __APPLE__
+
+    printf("Connecting to %s:%d through ipv4\n", options->host, options->port);
+
+    hostnm =
+        XPSAFE((void *)0, gethostbyname(options->host), "ipv4::gethostbyname");
 
     pe = (struct protoent *)XPSAFE((void *)0, getprotobyname("tcp"),
                                    "ipv4::getprotobyname");
@@ -26,19 +33,22 @@ void client_ipv4(const t_options *options, t_env *e)
     /* an endpoint.  Get a socket for address family AF_INET6 to        */
     /* prepare to accept incoming connections on.                       */
     /********************************************************************/
-    sock = XSAFE(-1, socket(AF_INET, SOCK_STREAM, pe->p_proto), "ipv4::socket");
-    /********************************************************************/
-    /* The setsockopt() function is used to allow the local address to  */
-    /* be reused when the server is restarted before the required wait  */
-    /* time expires.                                                    */
-    /********************************************************************/
-    reuseaddr = 1;
-    setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &reuseaddr, sizeof(reuseaddr));
+    cs = XSAFE(-1, socket(AF_INET, SOCK_STREAM, pe->p_proto), "ipv4::socket");
 
-#ifdef __APPLE__
-    reuseport = 1;
-    setsockopt(sock, SOL_SOCKET, SO_REUSEPORT, &reuseport, sizeof(reuseport));
-#endif  // __APPLE__
+    //     /********************************************************************/
+    //     /* The setsockopt() function is used to allow the local address to */
+    //     /* be reused when the server is restarted before the required wait */
+    //     /* time expires. */
+    //     /********************************************************************/
+    //     reuseaddr = 1;
+    //     setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &reuseaddr,
+    //     sizeof(reuseaddr));
+
+    // #ifdef __APPLE__
+    //     reuseport = 1;
+    //     setsockopt(sock, SOL_SOCKET, SO_REUSEPORT, &reuseport,
+    //     sizeof(reuseport));
+    // #endif  // __APPLE__
 
     /*********************************************************************/
     /* After the socket descriptor is created, a bind() function gets a  */
@@ -53,7 +63,7 @@ void client_ipv4(const t_options *options, t_env *e)
 
     sin.sin_family = AF_INET;
     sin.sin_port = htons(options->port);
-    inet_pton(AF_INET, options->host, &sin.sin_addr);
+    sin.sin_addr.s_addr = *((unsigned long *)hostnm->h_addr);
 
     /********************************************************************/
     /* The listen() function allows the server to accept incoming       */
@@ -62,10 +72,11 @@ void client_ipv4(const t_options *options, t_env *e)
     /* requests before the system starts rejecting the incoming         */
     /* requests.                                                        */
     /********************************************************************/
-    XSAFE(-1, connect(sock, (struct sockaddr *)&sin, sizeof(sin)),
+    XSAFE(-1, connect(cs, (struct sockaddr *)&sin, sizeof(sin)),
           "ipv4::connect");
 
-    e->fd.type = FD_CLIENT;
-    e->sock = sock;
-    // e->fds[sock].read = on_connect;
+    e->sock = cs;
+    e->fds[cs].type = FD_CLIENT;
+    e->fds[cs].read = server_read;
+    e->fds[cs].write = server_write;
 }

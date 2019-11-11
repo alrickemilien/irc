@@ -8,14 +8,23 @@
 
 void init_env(t_env *e)
 {
-    e->fd.registered = 0;
-    e->fd.type = FD_FREE;
-    e->fd.read = NULL;
-    e->fd.write = NULL;
+    size_t        i;
 
-    memset(e->fd.buf_write, 0, BUF_SIZE + 1);
-    memset(e->fd.buf_read.data, 0, BUF_SIZE + 1);
-    e->fd.buf_read.size = 0;
+    // there are three standard file descriptions, STDIN, STDOUT, and STDERR.
+    // They are assigned to 0, 1, and 2 respectively.
+    // The last is used for client to server
+    e->maxfd = 4;
+    e->fds = (t_fd *)XPSAFE(NULL, malloc(sizeof(*e->fds) * e->maxfd), "init_env::malloc");
+
+    i = 0;
+    while (i < e->maxfd)
+    {
+        clear_fd(&e->fds[i]);
+        memset(e->fds[i].buf_write, 0, BUF_SIZE + 1);
+        memset(e->fds[i].buf_read.data, 0, BUF_SIZE + 1);
+        e->fds[i].buf_read.size = 0;
+        i++;
+    }
 }
 
 static void init_options(t_options *options)
@@ -51,6 +60,13 @@ int main(int argc, const char **argv)
         client_ipv6(&options, &e);
     else
         client_ipv4(&options, &e);
+
+    printf("options.command: %s\n", options.command);
+
+    if (options.command[e.sock])
+        strcat(e.fds[e.sock].buf_write, options.command);
+
+    do_select(&e);
 
     XSAFE(-1, close(e.sock), "main::close");
 
