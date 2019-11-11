@@ -5,8 +5,8 @@
 CLIENT=client
 
 CLIENT_SRC=src/client/main.c \
-			src/client/client_ipv4.c \
-			src/client/client_ipv6.c 
+			src/client/ipv4.c \
+			src/client/ipv6.c 
 
 # options
 CLIENT_SRC+=src/client/options/utils.c \

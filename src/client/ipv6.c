@@ -7,16 +7,17 @@
 
 #include "client/irc.h"
 
-int client_ipv6()
+void client_ipv6(const t_options *options, t_env *e)
 {
     int                 sock;
     struct sockaddr_in6 sin;
+
+    (void)options;
+    (void)e;
 
     sock = socket(AF_INET6, SOCK_STREAM, 0);
     sin.sin6_family = AF_INET6;
     sin.sin6_port = htons(5556);
     inet_pton(AF_INET6, "::1", &sin.sin6_addr);
     connect(sock, (struct sockaddr *)&sin, sizeof(sin));
-
-    return (sock);
 }
