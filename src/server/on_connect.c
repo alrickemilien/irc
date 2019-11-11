@@ -1,10 +1,10 @@
 #include <arpa/inet.h>
+#include <netdb.h>
 #include <netinet/in.h>
+#include <server/irc.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
-
-#include "server/irc.h"
 
 const char *HELLO = "Welcome to the irc server !\n";
 
@@ -15,17 +15,25 @@ const char *HELLO = "Welcome to the irc server !\n";
 //     gid_t gid; /* group ID of the sending process */
 // };
 
-void on_connect(t_env *e, size_t s)
+int on_connect(t_env *e, size_t s)
 {
     int                cs;
     struct sockaddr_in csin;
     socklen_t          csin_len;
 
     csin_len = sizeof(csin);
-    cs = XSAFE(-1, accept(s, (struct sockaddr *)&csin, &csin_len), "accept");
+    cs = XSAFE(-1, accept(s, (struct sockaddr *)&csin, &csin_len),
+               "on_connect::accept");
 
-    loginfo("New client #%d from %s:%d", cs, inet_ntoa(csin.sin_addr),
+    loginfo("New client #%d from %s:%d\n", cs, inet_ntoa(csin.sin_addr),
             ntohs(csin.sin_port));
+
+    // if (gethostname(e->fds[cs].hostname, sizeof(e->fds[cs].hostname) < 0))
+    //   return (logerrno("on_connect::gethostname"));
+
+    if (getnameinfo((struct sockaddr *)&csin, csin_len, e->fds[cs].host,
+                    NI_MAXHOST, e->fds[cs].serv, NI_MAXSERV, NI_NAMEREQD) < 0)
+        return (logerrno("on_connect::getnameinfo"));
 
     e->fds[cs].type = FD_CLIENT;
     e->fds[cs].read = client_read;
@@ -34,9 +42,7 @@ void on_connect(t_env *e, size_t s)
     memcpy(e->fds[cs].nickname, DEFAULT_NICKNAME, sizeof(DEFAULT_NICKNAME));
     memset(e->fds[cs].username, 0, USERNAMESTRSIZE + 1);
 
-    XSAFE(-1, gethostname(e->fds[cs].hostname, sizeof(e->fds[cs].hostname)),
-          "on_connect::gethostname");
-
+    return (0);
     // memcpy(e->fds[cs].buf_write, HELLO, strlen(HELLO) * sizeof(char));
 
     // Say hello to new user

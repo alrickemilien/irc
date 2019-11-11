@@ -76,7 +76,7 @@ void broadcast(t_env *e, const char *msg, int type, size_t cs);
 
 void serv(t_env *e);
 
-void on_connect(t_env *e, size_t sock);
+int on_connect(t_env *e, size_t sock);
 void server_create(t_env *e, int port);
 int server_ipv6(const t_options *options, t_env *e);
 void server_ipv4(const t_options *options, t_env *e);
