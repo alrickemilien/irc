@@ -41,10 +41,12 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
         if (i != (size_t)cs && e->fds[i].type == FD_CLIENT &&
             strncmp(e->fds[i].nickname, tokens[1].addr, tokens[1].len) == 0)
         {
-            unicast(
-                e,
-                tokens[2].addr[0] == ':' ? tokens[2].addr + 1 : tokens[2].addr,
-                IRC_PRIVMSG, i);
+            strcat(e->fds[i].buf_write, ":");
+            strcat(e->fds[i].buf_write, e->fds[cs].nickname);
+            strcat(e->fds[i].buf_write, " PRIVMSG ");
+            strcat(e->fds[i].buf_write, tokens[2].addr[0] == ':'
+                                             ? tokens[2].addr + 1
+                                             : tokens[2].addr);
             return (IRC_PRIVMSG);
         }
         i++;
