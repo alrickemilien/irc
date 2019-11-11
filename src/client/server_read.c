@@ -19,11 +19,7 @@ void server_read(t_env *e, size_t cs)
     {
         close(cs);
         clear_fd(&e->fds[cs]);
-        printf(e->is_tty
-                   ? "\x1b[31m"
-                     "Connection between client hand server has been lost"
-                     "\x1B[0m\n"
-                   : "Connection between client hand server has been lost\n");
+        logerror("Connection between client hand server has been lost");
         e->sock = -1;
         // FD_CLR(cs, &e->fd_read);
         // FD_CLR(cs, &e->fd_write);

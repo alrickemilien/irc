@@ -26,11 +26,7 @@ void client_read(t_env *e, size_t cs)
     {
         close(cs);
         clear_fd(&e->fds[cs]);
-        printf(e->is_tty ? "\x1b[31m"
-                           "Client #%ld gone away"
-                           "\x1B[0m\n"
-                         : "Client #%ld gone away\n",
-               cs);
+        loginfo("Client #%ld gone away", cs);
 
         FD_CLR(cs, &e->fd_read);
         FD_CLR(cs, &e->fd_write);
@@ -56,12 +52,7 @@ void client_read(t_env *e, size_t cs)
         {
             close(cs);
             clear_fd(&e->fds[cs]);
-            printf(e->is_tty ? "\x1b[31m"
-                               "Client #%ld gone away"
-                               "\x1B[0m\n"
-                             : "Client #%ld gone away\n",
-                   cs);
-
+            loginfo("Client #%ld gone away", cs);
             FD_CLR(cs, &e->fd_read);
             FD_CLR(cs, &e->fd_write);
 

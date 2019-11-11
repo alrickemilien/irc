@@ -1,6 +1,5 @@
 #include <stdlib.h>
-#include <sys/resource.h>
-#include "server/irc.h"
+#include <server/irc.h>
 
 void init_env(t_env *e)
 {
@@ -41,7 +40,7 @@ static void init_options(t_options *options)
         memcpy(options->bind, "127.0.0.1", sizeof(char) * 9);
 
     if (options->ipv6) {
-        printf("Running server ipv6\n");
+        loginfo("Running server ipv6\n");
     }
 }
 
@@ -57,9 +56,7 @@ int main(int argc, const char **argv)
 
     init_options(&options);
 
-    e.is_tty = isatty(1);
-
-    printf("Running at %s:%d\n", options.bind, options.port);
+    loginfo("Running at %s:%d\n", options.bind, options.port);
 
     init_env(&e);
 

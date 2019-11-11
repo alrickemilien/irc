@@ -28,10 +28,7 @@ int irc_command(t_env *e, int cs, char *buffer)
         i++;
     }
 
-    printf(e->is_tty ? "\x1b[31m"
-                       "ERROR"
-                       "\x1b[0m"
-                       " Unknow command\n"
-                     : "ERROR Unknow command\n");
+    logerror("Unknow command\n");
+
     return (-1);
 }

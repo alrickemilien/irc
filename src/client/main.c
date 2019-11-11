@@ -61,7 +61,7 @@ int main(int argc, const char **argv)
     else
         client_ipv4(&options, &e);
 
-    printf("options.command: %s\n", options.command);
+    loginfo("options.command: %s\n", options.command);
 
     memset(e.fds[e.sock].nickname, 0, NICKNAMESTRSIZE + 1);
     memset(e.fds[e.sock].username, 0, USERNAMESTRSIZE + 1);

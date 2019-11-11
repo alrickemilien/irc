@@ -32,40 +32,20 @@ static int irc_join_check_command(t_env *e, int cs, const t_token *tokens)
     (void)e;
 
     if (!tokens[1].addr || tokens[2].addr)
-    {
-        printf("ERR_NEEDMOREPARAMS\n");
-        return (-1);
-    }
+        return logerror("ERR_NEEDMOREPARAMS");
 
     channel = tokens[1].addr;
     channel_len = tokens[1].len;
 
     if (strpbrk(channel, "\x07\x2C"))
-    {
-        printf("a\n");
-        printf("ERR_NOSUCHCHANNEL\n");
-    }
+            return logerror("ERR_NOSUCHCHANNEL");
     else if (channel_len - 1 > CHANNELSTRSIZE)
-    {
-        printf("b\n");
-        printf("ERR_NOSUCHCHANNEL\n");
-    }
+        return logerror("ERR_NOSUCHCHANNEL");
     else if ((channel[0] != '#' && channel[0] != '&') ||
              !is_valid_chan(channel))
-    {
-        printf("c\n");
-        printf("channel: %s\n", channel);
-        printf("channel[0] != #:%d\n", channel[0] == '#');
-        printf("channel[0] != &:%d\n", channel[0] == '&');
-        printf("is_valid_chan(channel):%d\n", is_valid_chan(channel));
-
-        printf("ERR_NOSUCHCHANNEL\n");
-    }
+        return logerror("ERR_NOSUCHCHANNEL");
     else if (channel_len < 1)
-    {
-        printf("d\n");
-        printf("ERR_NOSUCHCHANNEL\n");
-    }
+        return logerror("ERR_NOSUCHCHANNEL");
     else
         return (0);
     return (-1);
