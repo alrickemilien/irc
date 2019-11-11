@@ -63,8 +63,11 @@ int main(int argc, const char **argv)
 
     printf("options.command: %s\n", options.command);
 
+    memset(e.fds[e.sock].nickname, 0, NICKNAMESTRSIZE + 1);
+    memset(e.fds[e.sock].username, 0, USERNAMESTRSIZE + 1);
+
     if (options.command[e.sock])
-        strcat(e.fds[e.sock].buf_write, options.command);
+        irc_command(&e, e.sock, options.command);
 
     do_select(&options, &e);
 

@@ -26,6 +26,24 @@ typedef struct  s_env
 }               t_env;
 
 /*
+** irc sepcific to server
+*/
+
+typedef enum e_irc {
+    IRC_JOIN = 0UL,
+    IRC_COMMANDS_NUMBER
+} t_irc_enum;
+
+typedef struct  s_irc_cmd
+{
+    char        *command;
+    int         (*f)(t_env *e, int cs, t_token *tokens);
+}               t_irc_cmd;
+
+int             irc_command(t_env *e, int cs, char *buffer);
+int             irc_join(t_env *e, int cs, t_token *tokens);
+
+/*
 ** fd 
 */
 
