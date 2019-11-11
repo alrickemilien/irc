@@ -1,6 +1,6 @@
 #include <ctype.h>
 
-#include "server/irc.h"
+#include <server/irc.h>
 
 static int irc_privmsg_check_command(t_env *e, int cs, const t_token *tokens)
 {
