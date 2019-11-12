@@ -51,6 +51,7 @@ int logerrno(const char *str);
 #define NICKNAMESTRSIZE 9
 #define HOSTNAMESTRSIZE NI_MAXHOST
 #define USERNAMESTRSIZE 20
+#define PASSWDTRSIZE 512
 #define MAXMSGSIZE 512
 
 /*
@@ -64,6 +65,7 @@ typedef struct s_token
 } t_token;
 
 size_t tokenize(char *str, t_token *tokens, size_t len);
+size_t tokenizechr(char *str, t_token *tokens, size_t len, int c);
 
 /*
 ** CBuffer
@@ -105,6 +107,7 @@ typedef struct s_fd
     char serv[NI_MAXSERV + 1];
     char username[USERNAMESTRSIZE + 1];  // the username on that host
     char realname[USERNAMESTRSIZE + 1];  // the username on that host
+    char passwd[PASSWDTRSIZE + 1];  // the username on that host
     int  chop;
     int  registered;
 } t_fd;

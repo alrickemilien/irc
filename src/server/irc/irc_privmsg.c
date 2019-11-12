@@ -4,7 +4,7 @@
 
 static int irc_privmsg_check_command(t_env *e, int cs, const t_token *tokens)
 {
-    if (!tokens[1].addr || !tokens[1].len || tokens[1].len > 9)
+    if (!tokens[1].addr || !tokens[1].len)
     {
         irc_reply(e, cs, ERR_NOSUCHNICK, NULL);
         return (-1);
@@ -29,30 +29,49 @@ static int irc_privmsg_check_command(t_env *e, int cs, const t_token *tokens)
 
 int irc_privmsg(t_env *e, int cs, t_token *tokens)
 {
-    size_t i;
+    size_t  i;
+    size_t  j;
+    t_token subtokens[30];
 
     if ((irc_privmsg_check_command(e, cs, tokens)) != 0)
         return (-1);
+
+    memset(subtokens, 0, sizeof(t_token) * 30);
+
+    tokenizechr(tokens[1].addr, subtokens, 30, ',');
 
     // Find client to send private message
     i = 0;
     while (i <= e->max)
     {
-        if (i != (size_t)cs && e->fds[i].type == FD_CLIENT &&
-            strncmp(e->fds[i].nickname, tokens[1].addr, tokens[1].len) == 0)
+        if (i != (size_t)cs && e->fds[i].type == FD_CLIENT)
         {
-            strcat(e->fds[i].buf_write, ":");
-            strcat(e->fds[i].buf_write, e->fds[cs].nickname);
-            strcat(e->fds[i].buf_write, " PRIVMSG ");
-            strcat(e->fds[i].buf_write, tokens[2].addr[0] == ':'
-                                             ? tokens[2].addr + 1
-                                             : tokens[2].addr);
-            return (IRC_PRIVMSG);
+            j = 0;
+            while (subtokens[j].addr)
+            {
+                if (strncmp(e->fds[i].nickname, subtokens[j].addr,
+                            subtokens[j].len) == 0)
+                {
+                    strcat(e->fds[i].buf_write, ":");
+                    strcat(e->fds[i].buf_write, e->fds[cs].nickname);
+                    strcat(e->fds[i].buf_write, " PRIVMSG ");
+                    strcat(e->fds[i].buf_write, tokens[2].addr[0] == ':'
+                                                    ? tokens[2].addr + 1
+                                                    : tokens[2].addr);
+                    break;
+                }
+
+                j++;
+            }
         }
         i++;
     }
 
-    irc_reply(e, cs, ERR_NOSUCHNICK, e->fds[i].nickname);
+    // if (subtokens[j].addr == NULL)
+    // {
+    //     irc_reply(e, cs, ERR_NOSUCHNICK, e->fds[i].nickname);
+    //     return (-1);
+    // }
 
-    return (-1);
+    return (IRC_PRIVMSG);
 }

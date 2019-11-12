@@ -31,7 +31,6 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
         PeerPort => $PORT,
         Proto => 'tcp',
     );
-
     die "Couldn't connect to $HOST:$PORT : $!\n" unless $tmp_s;
 
     # All clients joining specific channel

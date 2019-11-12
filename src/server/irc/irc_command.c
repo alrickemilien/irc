@@ -8,6 +8,7 @@ static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
         [IRC_NAMES] = {"NAMES", &irc_names},
         [IRC_PRIVMSG] = {"PRIVMSG", &irc_privmsg},
         [IRC_NOTICE] = {"NOTICE", &irc_privmsg},
+        [IRC_PASS] = {"PASS", &irc_pass},
 };
 
 int irc_command(t_env *e, int cs, char *buffer)
