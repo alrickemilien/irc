@@ -100,19 +100,28 @@ typedef struct s_fd
     char      buf_write[BUF_SIZE + 1];
 
     // User data
-    char channel[CHANNELSTRSIZE + 1];
-    char nickname[NICKNAMESTRSIZE + 1];
-    char host[NI_MAXHOST + 1];  // the real name of the host that the
-                                // client is running on
-    char serv[NI_MAXSERV + 1];
-    char username[USERNAMESTRSIZE + 1];  // the username on that host
-    char realname[USERNAMESTRSIZE + 1];  // the username on that host
-    char passwd[PASSWDTRSIZE + 1];       // the username on that host
-    char awaymessage[BUF_SIZE + 1];      // the message to send when away
-    int  chop;
-    int  registered;
-    int  away;
+    size_t channel;
+    char   nickname[NICKNAMESTRSIZE + 1];
+    char   host[NI_MAXHOST + 1];  // the real name of the running on
+    char   serv[NI_MAXSERV + 1];
+    char   username[USERNAMESTRSIZE + 1];  // the username on that host
+    char   realname[USERNAMESTRSIZE + 1];  // the username on that host
+    char   passwd[PASSWDTRSIZE + 1];       // the username on that host
+    char   awaymessage[BUF_SIZE + 1];      // the message to send when away
+    char   channelname[CHANNELSTRSIZE + 1];      // the message to send when away
+    int    registered;
+    int    away;
 } t_fd;
+
+/*
+** Channel
+*/
+
+typedef struct s_channel
+{
+    char channel[CHANNELSTRSIZE + 1];
+    int  chop;
+} t_channel;
 
 /*
 ** Replys and errors
@@ -124,6 +133,8 @@ enum e_irc_reply
     RPL_AWAY = 301,
     RPL_UNAWAY = 305,
     RPL_NOWAWAY = 306,
+    RPL_NAMREPLY = 353,
+    RPL_ENDOFNAMES = 366,
     ERR_NOSUCHNICK = 401,
     ERR_NOSUCHSERVER = 402,
     ERR_NOSUCHCHANNEL = 403,

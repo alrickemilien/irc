@@ -37,10 +37,7 @@ int irc_command(t_env *e, int cs, char *buffer)
         i++;
     }
 
-    strcpy(e->fds[cs].buf_write,
-           "\x1b[31m"
-           "ERROR"
-           "\x1b[0m"
-           " Unknow command\n");
+    logerror("Unknow command\n");
+    
     return (-1);
 }

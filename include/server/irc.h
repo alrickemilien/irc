@@ -20,23 +20,25 @@
 
 typedef struct s_env
 {
-    t_fd * fds;
-    int    port;
-    size_t maxfd;
-    size_t max;
-    int    r;
-    fd_set fd_read;
-    fd_set fd_write;
-    char   isotime[ISOTIMESTRSIZE];
+    t_fd *     fds;
+    t_channel *channels;
+    int        port;
+    size_t     maxfd;
+    size_t     maxchannels;
+    size_t     max;
+    int        r;
+    fd_set     fd_read;
+    fd_set     fd_write;
+    char       isotime[ISOTIMESTRSIZE];
 } t_env;
 
 /*
-** fd 
+** fd
 */
 
-void            clear_fd(t_fd *fd);
-void            init_fd(t_env *e);
-void            check_fd(t_env *e);
+void clear_fd(t_fd *fd);
+void init_fd(t_env *e);
+void check_fd(t_env *e);
 
 /*
 ** irc sepcific to server

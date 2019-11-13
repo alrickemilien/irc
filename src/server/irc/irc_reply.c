@@ -7,6 +7,9 @@ const t_irc_reply replys[] = {
     {RPL_UNAWAY, TOSTR(RPL_UNAWAY), ":You are no longer marked as being away"},
     {RPL_NOWAWAY, TOSTR(RPL_NOWAWAY), ":You have been marked as being away"},
 
+    {RPL_NAMREPLY, TOSTR(RPL_NAMREPLY), "%s :%s"},
+    {RPL_ENDOFNAMES, TOSTR(RPL_ENDOFNAMES), "%s :End of /NAMES list"},
+
     {ERR_NOSUCHNICK, TOSTR(ERR_NOSUCHNICK), "%s :No such nick/channel"},
     {ERR_NOSUCHSERVER, TOSTR(ERR_NOSUCHSERVER), "%s :No such server"},
     {ERR_NOSUCHCHANNEL, TOSTR(ERR_NOSUCHCHANNEL), "%s :No such channel"},

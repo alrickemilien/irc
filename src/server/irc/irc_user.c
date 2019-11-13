@@ -1,6 +1,6 @@
 #include <ctype.h>
 
-#include "server/irc.h"
+#include <server/irc.h>
 
 /*
 ** Command: USER
@@ -95,7 +95,6 @@ int irc_user(t_env *e, int cs, t_token *tokens)
               e->fds[cs].realname);
 
     memset(concat, 0, sizeof(concat));
-    time2iso(e->isotime);
     sprintf(concat, "%s from %s registered with real name %s",
             e->fds[cs].username, e->fds[cs].host, e->fds[cs].realname);
     broadcast(e, concat, IRC_NOTICE, cs);

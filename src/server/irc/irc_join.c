@@ -1,6 +1,5 @@
 #include <ctype.h>
-
-#include "server/irc.h"
+#include <server/irc.h>
 
 /*
 ** the only restriction on a
@@ -9,7 +8,7 @@
 ** separator by the protocol)
 */
 
-static bool is_valid_chan(const char *channel)
+static bool is_valid_chan_name(const char *channel)
 {
     size_t i;
 
@@ -29,7 +28,7 @@ static int irc_join_check_command(t_env *e, int cs, const t_token *tokens)
     const char *channel;
     size_t      channel_len;
 
-    if (!tokens[0].addr || !tokens[1].addr || tokens[2].addr)
+    if (!tokens[1].addr || tokens[2].addr)
     {
         irc_reply(e, cs, ERR_NEEDMOREPARAMS, NULL);
         return (-1);
@@ -47,7 +46,7 @@ static int irc_join_check_command(t_env *e, int cs, const t_token *tokens)
         irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
     }
     else if ((channel[0] != '#' && channel[0] != '&') ||
-             !is_valid_chan(channel))
+             !is_valid_chan_name(channel))
     {
         irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
     }
@@ -62,26 +61,44 @@ static int irc_join_check_command(t_env *e, int cs, const t_token *tokens)
 
 int irc_join(t_env *e, int cs, t_token *tokens)
 {
-    char concat[CHANNELSTRSIZE + NICKNAMESTRSIZE + 11];
+    char   concat[CHANNELSTRSIZE + NICKNAMESTRSIZE + 11];
+    size_t i;
 
     if ((irc_join_check_command(e, cs, tokens)) != 0)
         return (-1);
 
+    // Look for already existing channel or create it
+    i = 0;
+    while (e->channels[i].channel[0] && i < e->maxchannels)
+    {
+        if (strncmp(e->channels[i].channel, tokens[1].addr, tokens[1].len) == 0)
+            break;
+        i++;
+    }
+
+    if (i == e->maxchannels)
+    {
+        irc_reply(e, cs, ERR_NOSUCHCHANNEL, tokens[1].addr);
+        return (-1);
+    }
+
     memset(concat, 0, sizeof(concat));
 
-    sprintf(concat, "%s leaved %s.\n", e->fds[cs].nickname, e->fds[cs].channel);
+    sprintf(concat, "%s leaved %s.\n", e->fds[cs].nickname,
+            e->channels[e->fds[cs].channel].channel);
     broadcast(e, concat, IRC_NOTICE, cs);
 
-    loginfo(" %s leaved %s\n", e->fds[cs].nickname, e->fds[cs].channel);
+    loginfo(" %s leaved %s\n", e->fds[cs].nickname,
+            e->channels[e->fds[cs].channel].channel);
 
-    memset(e->fds[cs].channel, 0, CHANNELSTRSIZE + 1);
-    strncpy(e->fds[cs].channel, tokens[1].addr, tokens[1].len);
-    memset(concat, 0, sizeof(concat));
+    memset(e->channels[i].channel, 0, CHANNELSTRSIZE + 1);
+    strncpy(e->channels[i].channel, tokens[1].addr, tokens[1].len);
+    e->fds[cs].channel = i;
 
-    sprintf(concat, "%s joined %s.\n", e->fds[cs].nickname, e->fds[cs].channel);
+    sprintf(concat, "%s joined %s.\n", e->fds[cs].nickname,
+            e->channels[i].channel);
     broadcast(e, concat, IRC_NOTICE, cs);
-
-    loginfo(" %s joined %s\n", e->fds[cs].nickname, e->fds[cs].channel);
+    loginfo(" %s joined %s\n", e->fds[cs].nickname, e->channels[i].channel);
 
     return (IRC_JOIN);
 }
