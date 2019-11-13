@@ -3,6 +3,9 @@
 const t_irc_reply replys[] = {
     {RPL_WELCOME, TOSTR(RPL_WELCOME),
      ":Welcome to the Internet Relay Network %s!%s@%s"},
+    {RPL_AWAY, TOSTR(RPL_AWAY), "%s :%s"},
+    {RPL_UNAWAY, TOSTR(RPL_UNAWAY), ":You are no longer marked as being away"},
+    {RPL_NOWAWAY, TOSTR(RPL_NOWAWAY), ":You have been marked as being away"},
 
     {ERR_NOSUCHNICK, TOSTR(ERR_NOSUCHNICK), "%s :No such nick/channel"},
     {ERR_NOSUCHSERVER, TOSTR(ERR_NOSUCHSERVER), "%s :No such server"},
@@ -33,7 +36,7 @@ int irc_reply(t_env *e, int cs, int code, ...)
             strcat(e->fds[cs].buf_write, replys[i].name);
             strcat(e->fds[cs].buf_write, " ");
             va_start(ap, code);
-            vsprintf(msg, "%s", ap);
+            vsprintf(msg, replys[i].fmt, ap);
             va_end(ap);
             strcat(e->fds[cs].buf_write, msg);
 

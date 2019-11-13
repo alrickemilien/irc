@@ -107,9 +107,11 @@ typedef struct s_fd
     char serv[NI_MAXSERV + 1];
     char username[USERNAMESTRSIZE + 1];  // the username on that host
     char realname[USERNAMESTRSIZE + 1];  // the username on that host
-    char passwd[PASSWDTRSIZE + 1];  // the username on that host
+    char passwd[PASSWDTRSIZE + 1];       // the username on that host
+    char awaymessage[BUF_SIZE + 1];      // the message to send when away
     int  chop;
     int  registered;
+    int  away;
 } t_fd;
 
 /*
@@ -119,6 +121,9 @@ typedef struct s_fd
 enum e_irc_reply
 {
     RPL_WELCOME = 001,
+    RPL_AWAY = 301,
+    RPL_UNAWAY = 305,
+    RPL_NOWAWAY = 306,
     ERR_NOSUCHNICK = 401,
     ERR_NOSUCHSERVER = 402,
     ERR_NOSUCHCHANNEL = 403,

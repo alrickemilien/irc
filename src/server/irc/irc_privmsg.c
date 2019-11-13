@@ -52,13 +52,21 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
                 if (strncmp(e->fds[i].nickname, subtokens[j].addr,
                             subtokens[j].len) == 0)
                 {
-                    strcat(e->fds[i].buf_write, ":");
-                    strcat(e->fds[i].buf_write, e->fds[cs].nickname);
-                    strcat(e->fds[i].buf_write, " PRIVMSG ");
-                    strcat(e->fds[i].buf_write, tokens[2].addr[0] == ':'
-                                                    ? tokens[2].addr + 1
-                                                    : tokens[2].addr);
-                    break;
+                    if (e->fds[i].away)
+                    {
+                        irc_reply(e, cs, RPL_AWAY, e->fds[i].nickname,
+                                  e->fds[i].awaymessage);
+                    }
+                    else
+                    {
+                        strcat(e->fds[i].buf_write, ":");
+                        strcat(e->fds[i].buf_write, e->fds[cs].nickname);
+                        strcat(e->fds[i].buf_write, " PRIVMSG ");
+                        strcat(e->fds[i].buf_write, tokens[2].addr[0] == ':'
+                                                        ? tokens[2].addr + 1
+                                                        : tokens[2].addr);
+                        break;
+                    }
                 }
 
                 j++;

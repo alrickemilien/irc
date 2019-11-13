@@ -1,5 +1,5 @@
 #include <ctype.h>
-#include "server/irc.h"
+#include <server/irc.h>
 
 static int irc_nick_check_command(t_env *e, int cs, const t_token *tokens)
 {
@@ -7,7 +7,7 @@ static int irc_nick_check_command(t_env *e, int cs, const t_token *tokens)
     size_t      nick_len;
     size_t      i;
 
-    if (!tokens[0].addr || !tokens[1].addr || tokens[2].addr)
+    if (!tokens[1].addr || tokens[2].addr)
     {
         irc_reply(e, cs, ERR_NONICKNAMEGIVEN, NULL);
         return (-1);

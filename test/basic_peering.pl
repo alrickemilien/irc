@@ -41,6 +41,9 @@ my $s2 = new IO::Socket::INET (
 );
 die "Couldn't connect to $HOST:$PORT : $!\n" unless $s2;
 
+#
+# Test registration
+#
 
 $s1->send("PASS dummy_password_1\x0D\x0A");
 $s2->send("PASS dummy_password_1\x0D\x0A");
@@ -55,8 +58,7 @@ sleep(1);
 #
 
 # Data to send to a server
-my $req = "PRIVMSG client_2 Why don't you call me anymore?\x0D\x0A";
-$s1->send($req);
+$s1->send("PRIVMSG client_2 Why don't you call me anymore?\x0D\x0A");
 sleep(1); # Wait message reception on the server
 
 my $response = "";
@@ -94,7 +96,7 @@ my $s3 = new IO::Socket::INET (
 );
 die "Couldn't connect to $HOST:$PORT : $!\n" unless $s2;
 
-$s3->send("NICK לקוח_3\x0D\x0AUSER לקוח3 aws.com :Three לקוח\x0D\x0A");
+$s3->send("NICK לקוח3\x0D\x0AUSER לקוח3 aws.com :Three לקוח\x0D\x0A");
 sleep(1);
 
 # data to send to a server
@@ -110,6 +112,22 @@ $s2->recv($response, 1024);
 ok(index($response, "איפה הביבליוטקה") ne -1);
 $s1->recv($response, 1024);
 ok(index($response, "איפה הביבליוטקה") ne -1);
+
+#
+# Test away
+#
+
+$s2->send("AWAY :Shagalaka\x0D\x0A");
+$s3->send("AWAY :Available between 00AM and 07AM\x0D\x0A");
+sleep(1);
+
+$s1->send("PRIVMSG לקוח3,client_2 :איפה הביבליוטקה" . "\x0D\x0A");
+
+sleep(1);
+
+$s1->recv($response, 2048);
+ok(index($response, "RPL_AWAY client_2 :Shagalaka") ne -1);
+ok(index($response, "RPL_AWAY לקוח3 :Available between 00AM and 07AM") ne -1);
 
 #
 # Terminate clients

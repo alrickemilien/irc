@@ -24,7 +24,6 @@ SERVER_SRC+=src/utils/safe.c \
 			src/utils/i64toa.c \
 			src/utils/time2iso.c
 
-
 # fd
 SERVER_SRC+=src/server/fd/init_fd.c \
 			src/server/fd/check_fd.c \
@@ -41,6 +40,7 @@ SERVER_SRC+=src/server/irc/irc_command.c \
 			src/server/irc/irc_quit.c \
 			src/server/irc/irc_pass.c \
 			src/server/irc/irc_names.c \
+			src/server/irc/irc_away.c \
 			src/server/irc/irc_privmsg.c
 
 # options
