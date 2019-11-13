@@ -24,6 +24,7 @@ int irc_names(t_env *e, int cs, t_token *tokens)
                     strcat(concat, e->fds[j].nickname);
                     strcat(concat, " ");
                 }
+                j++;
             }
             i++;
 
@@ -54,10 +55,11 @@ int irc_names(t_env *e, int cs, t_token *tokens)
                         strcat(concat, e->fds[j].nickname);
                         strcat(concat, " ");
                     }
+                    j++;
                 }
 
                 irc_reply(e, cs, RPL_NAMREPLY, e->channels[i].channel, concat);
-                irc_reply(e, cs, RPL_ENDOFNAMES, NULL);
+                irc_reply(e, cs, RPL_ENDOFNAMES, e->channels[i].channel);
 
                 break;
             }
