@@ -13,7 +13,7 @@ void login_window_init()
 {
     /* get graphics from login.glade */
     builder = gtk_builder_new();
-    gtk_builder_add_from_file(builder, "login.xml", NULL);
+    gtk_builder_add_from_file(builder, "build/ui/login.xml", NULL);
 
     window = GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
     gtk_signal_connect(GTK_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit),
