@@ -32,6 +32,7 @@ typedef struct  s_env
 typedef enum e_irc {
     IRC_JOIN = 0UL,
     IRC_NICK,
+    IRC_MSG,
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
 
@@ -43,6 +44,7 @@ typedef struct  s_irc_cmd
 
 int             irc_command(t_env *e, int cs, char *buffer);
 int             irc_join(t_env *e, int cs, t_token *tokens);
+int             irc_msg(t_env *e, int cs, t_token *tokens);
 int             irc_nick(t_env *e, int cs, t_token *tokens);
 
 /*

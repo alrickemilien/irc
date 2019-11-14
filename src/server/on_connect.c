@@ -40,8 +40,11 @@ void on_connect(t_env *e, size_t s)
     e->fds[cs].write = client_write;
     e->fds[cs].registered = 0;
     e->fds[cs].channel = 0;
+    e->fds[cs].away = 0;
+    memset(e->fds[cs].nickname, 0, NICKNAMESTRSIZE + 1);
     memcpy(e->fds[cs].nickname, DEFAULT_NICKNAME, sizeof(DEFAULT_NICKNAME));
     memset(e->fds[cs].username, 0, USERNAMESTRSIZE + 1);
+    memset(e->fds[cs].awaymessage, 0, sizeof(e->fds[cs].awaymessage));
 
     return;
 }

@@ -50,6 +50,8 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
             while (subtokens[j].addr)
             {
                 if (strncmp(e->fds[i].nickname, subtokens[j].addr,
+                            subtokens[j].len) == 0 ||
+                    strncmp(e->channels[e->fds[i].channel].channel, subtokens[j].addr,
                             subtokens[j].len) == 0)
                 {
                     if (e->fds[i].away)

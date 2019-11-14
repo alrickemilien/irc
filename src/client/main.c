@@ -45,6 +45,22 @@ static void init_options(t_options *options)
     }
 }
 
+static void execute_precommands(t_options *options, t_env *e)
+{
+    char *ptr;
+
+    ptr = options->command;
+    while (ptr && *ptr)
+    {
+        irc_command(e, e->sock, ptr);
+
+        ptr = strstr(ptr, "\x0D\x0A");
+
+        if (ptr)
+            ptr += 2;
+    }
+}
+
 int main(int argc, const char **argv)
 {
     t_options options;
@@ -70,9 +86,9 @@ int main(int argc, const char **argv)
 
     memset(e.fds[e.sock].nickname, 0, NICKNAMESTRSIZE + 1);
     memset(e.fds[e.sock].username, 0, USERNAMESTRSIZE + 1);
+    memset(e.fds[e.sock].channelname, 0, CHANNELSTRSIZE + 1);
 
-    if (options.command[e.sock])
-        irc_command(&e, e.sock, options.command);
+    execute_precommands(&options, &e);
 
     do_select(&options, &e);
 

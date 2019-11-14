@@ -61,7 +61,7 @@ int irc_join(t_env *e, int cs, t_token *tokens)
     if (!e->fds[cs].channelname[0])
         loginfo("You joined %s", tokens[1].addr);
     else
-        loginfo("You leaved %s for %s", e->fds[cs].channel, tokens[1].addr);
+        loginfo("You leaved %s for %s", e->fds[cs].channelname, tokens[1].addr);
     
     memset(e->fds[cs].channelname, 0, CHANNELSTRSIZE + 1);
     memcpy(e->fds[cs].channelname, tokens[1].addr, tokens[1].len);
