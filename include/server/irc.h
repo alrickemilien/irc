@@ -55,6 +55,7 @@ typedef enum e_irc {
     IRC_PASS,
     IRC_AWAY,
     IRC_PART,
+    IRC_WHOIS,
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
 
@@ -74,6 +75,7 @@ int irc_away(t_env *e, int cs, t_token *tokens);
 int irc_privmsg(t_env *e, int cs, t_token *tokens);
 int irc_pass(t_env *e, int cs, t_token *tokens);
 int irc_part(t_env *e, int cs, t_token *tokens);
+int irc_whois(t_env *e, int cs, t_token *tokens);
 int irc_reply(t_env *e, int cs, int code, ...);
 
 void unicast(t_env *e, const char *msg, int msg_type, size_t cs);

@@ -25,6 +25,9 @@ const t_irc_reply replys[] = {
     {ERR_NOTEXTTOSEND, TOSTR(ERR_NOTEXTTOSEND), ":No text to send"},
     {ERR_NOTONCHANNEL, TOSTR(ERR_NOTONCHANNEL),
      "%s :You're not on that channel"},
+    {RPL_WHOISUSER, TOSTR(RPL_WHOISUSER), "%s %s %s * :%s"},
+    {RPL_ENDOFWHOIS, TOSTR(RPL_ENDOFWHOIS), "%s :End of /WHOIS list"},
+    {RPL_WHOISCHANNELS, TOSTR(RPL_WHOISCHANNELS), "%s :%s"},
 };
 
 int irc_reply(t_env *e, int cs, int code, ...)
@@ -44,6 +47,7 @@ int irc_reply(t_env *e, int cs, int code, ...)
             vsprintf(msg, replys[i].fmt, ap);
             va_end(ap);
             strcat(e->fds[cs].buf_write, msg);
+            strcat(e->fds[cs].buf_write, "\x0D\x0A");
 
             return (0);
         }
