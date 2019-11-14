@@ -1,4 +1,5 @@
-#include "server/irc.h"
+#include <string.h>
+#include <irc.h>
 
 size_t tokenize(char *str, t_token *tokens, size_t len)
 {

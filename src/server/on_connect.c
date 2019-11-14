@@ -6,8 +6,6 @@
 #include <string.h>
 #include <sys/socket.h>
 
-const char *HELLO = "Welcome to the irc server !\n";
-
 // struct ucred
 // {
 //     pid_t pid; /* process ID of the sending process */
@@ -41,9 +39,12 @@ void on_connect(t_env *e, size_t s)
     e->fds[cs].read = client_read;
     e->fds[cs].write = client_write;
     e->fds[cs].registered = 0;
-    memcpy(e->fds[cs].channel, DEFAULT_CHANNEL, sizeof(DEFAULT_CHANNEL));
+    e->fds[cs].channel = 0;
+    e->fds[cs].away = 0;
+    memset(e->fds[cs].nickname, 0, NICKNAMESTRSIZE + 1);
     memcpy(e->fds[cs].nickname, DEFAULT_NICKNAME, sizeof(DEFAULT_NICKNAME));
     memset(e->fds[cs].username, 0, USERNAMESTRSIZE + 1);
+    memset(e->fds[cs].awaymessage, 0, sizeof(e->fds[cs].awaymessage));
 
     return;
 }

@@ -23,6 +23,7 @@ CLIENT_SRC+=src/client/options/utils.c \
 #irc
 CLIENT_SRC+=src/client/irc/irc_join.c \
 			src/client/irc/irc_nick.c \
+			src/client/irc/irc_msg.c \
 			src/client/irc/irc_command.c
 
 # utils

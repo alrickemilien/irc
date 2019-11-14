@@ -3,6 +3,7 @@
 static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
     [IRC_JOIN] = {"/join", &irc_join},
     [IRC_NICK] = {"/nick", &irc_nick},
+    [IRC_MSG] = {"/msg", &irc_msg},
 };
 
 int irc_command(t_env *e, int cs, char *buffer)
@@ -20,6 +21,8 @@ int irc_command(t_env *e, int cs, char *buffer)
         if (strncmp(buffer, g_irc_commands[i].command,
                     strlen(g_irc_commands[i].command)) == 0)
         {
+
+            printf("ici: %s\n", g_irc_commands[i].command);
             memset(tokens, 0, sizeof(t_token) * 30);
 
             tokenize(buffer, tokens, 30);

@@ -6,10 +6,20 @@ void init_env(t_env *e)
     size_t        i;
     struct rlimit rlp;
 
+    // RLIMIT_NOFILE:
+    // This specifies a value one greater than the maximum file
+    // descriptor number that can be opened by this process.
     XSAFE(-1, getrlimit(RLIMIT_NOFILE, &rlp), "init_env::getrlimit");
 
     e->maxfd = rlp.rlim_cur;
-    e->fds = (t_fd *)XPSAFE(NULL, malloc(sizeof(*e->fds) * e->maxfd), "init_env::malloc");
+    e->maxchannels = rlp.rlim_cur + 1;
+
+    e->fds = (t_fd *)XPSAFE(NULL, malloc(sizeof(t_fd) * e->maxfd),
+                            "init_env::malloc");
+
+    // We need at least same number of channel as number of users
+    e->channels = (t_channel *)XPSAFE(
+        NULL, malloc(sizeof(t_channel) * e->maxchannels), "init_env::malloc");
 
     i = 0;
     while (i < e->maxfd)
@@ -18,8 +28,13 @@ void init_env(t_env *e)
         memset(e->fds[i].buf_write, 0, BUF_SIZE + 1);
         memset(e->fds[i].buf_read.data, 0, BUF_SIZE + 1);
         e->fds[i].buf_read.size = 0;
+
         i++;
     }
+
+    // clear channels
+    memset(e->channels, 0, sizeof(t_channel) * e->maxchannels);
+    memcpy(e->channels[0].channel, DEFAULT_CHANNEL, sizeof(DEFAULT_CHANNEL));
 }
 
 static void init_options(t_options *options)
@@ -39,7 +54,8 @@ static void init_options(t_options *options)
     if (options->bind[0] == 0)
         memcpy(options->bind, "127.0.0.1", sizeof(char) * 9);
 
-    if (options->ipv6) {
+    if (options->ipv6)
+    {
         loginfo("Running server ipv6\n");
     }
 }

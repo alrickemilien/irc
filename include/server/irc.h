@@ -20,23 +20,25 @@
 
 typedef struct s_env
 {
-    t_fd * fds;
-    int    port;
-    size_t maxfd;
-    size_t max;
-    int    r;
-    fd_set fd_read;
-    fd_set fd_write;
-    char   isotime[ISOTIMESTRSIZE];
+    t_fd *     fds;
+    t_channel *channels;
+    int        port;
+    size_t     maxfd;
+    size_t     maxchannels;
+    size_t     max;
+    int        r;
+    fd_set     fd_read;
+    fd_set     fd_write;
+    char       isotime[ISOTIMESTRSIZE];
 } t_env;
 
 /*
-** fd 
+** fd
 */
 
-void            clear_fd(t_fd *fd);
-void            init_fd(t_env *e);
-void            check_fd(t_env *e);
+void clear_fd(t_fd *fd);
+void init_fd(t_env *e);
+void check_fd(t_env *e);
 
 /*
 ** irc sepcific to server
@@ -44,13 +46,15 @@ void            check_fd(t_env *e);
 
 typedef enum e_irc {
     IRC_JOIN = 0UL,
-    IRC_MSG,
     IRC_NICK,
     IRC_USER,
     IRC_QUIT,
     IRC_NAMES,
     IRC_PRIVMSG,
     IRC_NOTICE,
+    IRC_PASS,
+    IRC_AWAY,
+    IRC_PART,
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
 
@@ -66,7 +70,10 @@ int irc_nick(t_env *e, int cs, t_token *tokens);
 int irc_user(t_env *e, int cs, t_token *tokens);
 int irc_quit(t_env *e, int cs, t_token *tokens);
 int irc_names(t_env *e, int cs, t_token *tokens);
+int irc_away(t_env *e, int cs, t_token *tokens);
 int irc_privmsg(t_env *e, int cs, t_token *tokens);
+int irc_pass(t_env *e, int cs, t_token *tokens);
+int irc_part(t_env *e, int cs, t_token *tokens);
 int irc_reply(t_env *e, int cs, int code, ...);
 
 void unicast(t_env *e, const char *msg, int msg_type, size_t cs);

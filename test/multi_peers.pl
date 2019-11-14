@@ -15,7 +15,6 @@ use ircunittest;
 # Start server
 ircunittest::start_server();
 
-
 my $HOST = '127.0.0.1';
 my $PORT = '5555';
 my $CLIENTS_NUMBER = 10;
@@ -29,18 +28,22 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
         PeerPort => $PORT,
         Proto => 'tcp',
     );
-
     die "Couldn't connect to $HOST:$PORT : $!\n" unless $tmp_s;
+    
+    $tmp_s->setsockopt(SOL_SOCKET, SO_RCVTIMEO, pack('l!l!', 10, 0));
+
+    $tmp_s->send("NICK client_$i\x0D\x0AUSER client$i microsoft.com :Client $i\x0D\x0A");
 
     push @s, $tmp_s
 }
 
-# Wait client connection
+# Wait clients connection
+sleep(2);
 
 for (my $k = 0; $k <= $POOLS_NUMBER; $k++) {
     print "Sending data\n";
     for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
-        $s[$i]->send("MSG I say: $i\x0D\x0A");
+        $s[$i]->send("PRIVMSG client_0 I say: $i\x0D\x0A");
     }
 
     # Wait full messages reception on the server
@@ -56,10 +59,5 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
     $s[$i]->close();
 }
 
-# Wait for any othe behavior from server
-sleep(1);
-
-#
 # End
-#
 ircunittest::stop_server();

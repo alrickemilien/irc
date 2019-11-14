@@ -1,6 +1,16 @@
 package ircunittest;
 
 sub start_server {
+  unless(open(my $pidfd, 'ircserver.pid')) {
+    my $pidserver = <$pidfd>;
+    close($pidfd);
+
+    # If the pid is not here, it means something wring happened
+    if (defined($pidfdserver) && kill(0, $pidserver) != 0) {
+      return;
+    }
+  }
+
   `build/server --daemon`;
   print "Starting server, wait ...\n";
   sleep(1);

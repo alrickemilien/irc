@@ -1,5 +1,5 @@
 #include <ctype.h>
-#include "server/irc.h"
+#include <server/irc.h>
 
 static int irc_nick_check_command(t_env *e, int cs, const t_token *tokens)
 {
@@ -7,7 +7,7 @@ static int irc_nick_check_command(t_env *e, int cs, const t_token *tokens)
     size_t      nick_len;
     size_t      i;
 
-    if (!tokens[0].addr || !tokens[1].addr || tokens[2].addr)
+    if (!tokens[1].addr || tokens[2].addr)
     {
         irc_reply(e, cs, ERR_NONICKNAMEGIVEN, NULL);
         return (-1);
@@ -16,7 +16,7 @@ static int irc_nick_check_command(t_env *e, int cs, const t_token *tokens)
     nick = tokens[1].addr;
     nick_len = tokens[1].len;
 
-    if (nick_len > 9 || !nick_len)
+    if (nick_len > 9 || !nick_len || nick[0] == '#' || nick[0] == '&')
     {
         irc_reply(e, cs, ERR_ERRONEUSNICKNAME, nick);
         return (-1);
@@ -27,7 +27,11 @@ static int irc_nick_check_command(t_env *e, int cs, const t_token *tokens)
     {
         if (i != (size_t)cs && e->fds[i].type == FD_CLIENT &&
             strcmp(e->fds[i].nickname, nick) == 0)
+        {
+            irc_reply(e, cs, ERR_NICKNAMEINUSE, nick);
             return (-1);
+        }
+
         i++;
     }
 
@@ -43,13 +47,14 @@ int irc_nick(t_env *e, int cs, t_token *tokens)
 
     memset(concat, 0, sizeof(concat));
 
-    time2iso(e->isotime);
+    if (e->fds[cs].registered)
+    {
+        sprintf(concat, "%s changed nickname to %s", e->fds[cs].nickname,
+                tokens[1].addr);
+        broadcast(e, concat, IRC_NOTICE, cs);
 
-    sprintf(concat, "%s changed nickname to %s", e->fds[cs].nickname,
-            tokens[1].addr);
-    broadcast(e, concat, IRC_NOTICE, cs);
-
-    printf("[%s]: %s", e->isotime, concat);
+        loginfo("%s", concat);
+    }
 
     memset(e->fds[cs].nickname, 0, NICKNAMESTRSIZE);
     memcpy(e->fds[cs].nickname, tokens[1].addr, tokens[1].len);

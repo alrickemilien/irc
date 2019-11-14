@@ -7,6 +7,10 @@ static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
         [IRC_QUIT] = {"QUIT", &irc_quit},
         [IRC_NAMES] = {"NAMES", &irc_names},
         [IRC_PRIVMSG] = {"PRIVMSG", &irc_privmsg},
+        [IRC_NOTICE] = {"NOTICE", &irc_privmsg},
+        [IRC_PASS] = {"PASS", &irc_pass},
+        [IRC_AWAY] = {"AWAY", &irc_away},
+        [IRC_PART] = {"PART", &irc_part},
 };
 
 int irc_command(t_env *e, int cs, char *buffer)
@@ -14,7 +18,7 @@ int irc_command(t_env *e, int cs, char *buffer)
     size_t  i;
     t_token tokens[30];
 
-    // Skip zithespaces
+    // Skip withespaces
     while (*buffer == 0x20)
         buffer++;
 
@@ -34,10 +38,7 @@ int irc_command(t_env *e, int cs, char *buffer)
         i++;
     }
 
-    strcpy(e->fds[cs].buf_write,
-           "\x1b[31m"
-           "ERROR"
-           "\x1b[0m"
-           " Unknow command\n");
+    logerror("Unknow command\n");
+    
     return (-1);
 }
