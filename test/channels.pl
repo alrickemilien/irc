@@ -24,6 +24,8 @@ my $CLIENTS_NUMBER = 10;
 my $POOLS_NUMBER = 2;
 
 my @s;
+
+print "Connecting $CLIENTS_NUMBER clients\n";
 for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
     # create a connecting socket    
     my $tmp_s = new IO::Socket::INET (
@@ -59,6 +61,7 @@ print $response;
 # List all visible channels and user
 #
 
+print "Changing clients channel\n";
 for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
     # All clients joining their created channel
     $s[$i]->send("JOIN #channel_$i\x0D\x0A");
@@ -74,6 +77,7 @@ print $response;
 # All client leave their channel
 #
 
+print "Leaving clients channel\n";
 for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
     # All clients joining their created channel
     $s[$i]->send("PART #channel_$i\x0D\x0A");
@@ -83,8 +87,7 @@ sleep(2);
 # Get all connected people to the all channels
 $s[0]->send("NAMES\x0D\x0A");
 $s[0]->recv($response, 1024);
-print $response;
-
+print "end:" . $response;
 
 #
 # Terminate clients

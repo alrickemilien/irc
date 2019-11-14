@@ -119,8 +119,9 @@ typedef struct s_fd
 
 typedef struct s_channel
 {
-    char channel[CHANNELSTRSIZE + 1];
-    int  chop;
+    char   channel[CHANNELSTRSIZE + 1];
+    int    chop;
+    size_t clients;
 } t_channel;
 
 /*

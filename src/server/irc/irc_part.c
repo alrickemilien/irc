@@ -69,14 +69,14 @@ int irc_part(t_env *e, int cs, t_token *tokens)
 
     // Look for already existing channel or create it
     i = 0;
-    while (e->channels[i].channel[0] && i < e->maxchannels)
+    while (i < e->maxchannels)
     {
         if (strncmp(e->channels[i].channel, tokens[1].addr, tokens[1].len) == 0)
             break;
         i++;
     }
 
-    if (i == e->maxchannels || !e->channels[i].channel[0])
+    if (i == e->maxchannels)
     {
         irc_reply(e, cs, ERR_NOSUCHCHANNEL, tokens[1].addr);
         return (-1);
@@ -98,7 +98,14 @@ int irc_part(t_env *e, int cs, t_token *tokens)
     loginfo(" %s leaved %s\n", e->fds[cs].nickname,
             e->channels[e->fds[cs].channel].channel);
 
+    e->channels[e->fds[cs].channel].clients--;
+
+    // Clear the channel
+    if (e->fds[cs].channel != 0 && e->channels[e->fds[cs].channel].clients == 0)
+        memset(&e->channels[e->fds[cs].channel], 0, sizeof(t_channel));
+
     e->fds[cs].channel = 0;
+    e->channels[e->fds[cs].channel].clients++;
 
     return (IRC_JOIN);
 }

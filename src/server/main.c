@@ -19,7 +19,7 @@ void init_env(t_env *e)
 
     // We need at least same number of channel as number of users
     e->channels = (t_channel *)XPSAFE(
-        NULL, malloc(sizeof(t_channel) * e->maxfd), "init_env::malloc");
+        NULL, malloc(sizeof(t_channel) * e->maxchannels), "init_env::malloc");
 
     i = 0;
     while (i < e->maxfd)
@@ -33,9 +33,8 @@ void init_env(t_env *e)
     }
 
     // clear channels
-    memset(e->channels, 0, sizeof(t_channel) * e->maxfd);
+    memset(e->channels, 0, sizeof(t_channel) * e->maxchannels);
     memcpy(e->channels[0].channel, DEFAULT_CHANNEL, sizeof(DEFAULT_CHANNEL));
-    e->channels[0].chop = 0;
 }
 
 static void init_options(t_options *options)

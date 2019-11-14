@@ -91,6 +91,8 @@ int irc_user(t_env *e, int cs, t_token *tokens)
 
     e->fds[cs].registered = 1;
 
+    e->channels[e->fds[cs].channel].clients++;
+
     irc_reply(e, cs, RPL_WELCOME, e->fds[cs].username, e->fds[cs].host,
               e->fds[cs].realname);
 

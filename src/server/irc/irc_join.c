@@ -63,20 +63,27 @@ int irc_join(t_env *e, int cs, t_token *tokens)
 {
     char   concat[CHANNELSTRSIZE + NICKNAMESTRSIZE + 11];
     size_t i;
+    size_t empty_channel;
 
     if ((irc_join_check_command(e, cs, tokens)) != 0)
         return (-1);
 
     // Look for already existing channel or create it
     i = 0;
-    while (e->channels[i].channel[0] && i < e->maxchannels)
+    empty_channel = 0;
+    while (i < e->maxchannels)
     {
         if (strncmp(e->channels[i].channel, tokens[1].addr, tokens[1].len) == 0)
             break;
+        if (empty_channel == 0 && e->channels[i].channel[0] == 0)
+            empty_channel = i;
         i++;
     }
 
     if (i == e->maxchannels)
+        i = empty_channel;
+
+    if (i == 0)
     {
         irc_reply(e, cs, ERR_NOSUCHCHANNEL, tokens[1].addr);
         return (-1);
@@ -88,17 +95,26 @@ int irc_join(t_env *e, int cs, t_token *tokens)
             e->channels[e->fds[cs].channel].channel);
     broadcast(e, concat, IRC_NOTICE, cs);
 
-    loginfo(" %s leaved %s\n", e->fds[cs].nickname,
+    loginfo("%s leaved %s\n", e->fds[cs].nickname,
             e->channels[e->fds[cs].channel].channel);
 
     memset(e->channels[i].channel, 0, CHANNELSTRSIZE + 1);
     strncpy(e->channels[i].channel, tokens[1].addr, tokens[1].len);
+
+    e->channels[e->fds[cs].channel].clients--;
+
+    // Clear the channel
+    if (e->fds[cs].channel != 0 && e->channels[e->fds[cs].channel].clients == 0)
+        memset(&e->channels[e->fds[cs].channel], 0, sizeof(t_channel));
+
     e->fds[cs].channel = i;
 
     sprintf(concat, "%s joined %s.\n", e->fds[cs].nickname,
             e->channels[i].channel);
     broadcast(e, concat, IRC_NOTICE, cs);
-    loginfo(" %s joined %s\n", e->fds[cs].nickname, e->channels[i].channel);
+    loginfo("%s joined %s\n", e->fds[cs].nickname, e->channels[i].channel);
+
+    e->channels[i].clients++;
 
     return (IRC_JOIN);
 }

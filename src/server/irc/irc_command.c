@@ -18,7 +18,7 @@ int irc_command(t_env *e, int cs, char *buffer)
     size_t  i;
     t_token tokens[30];
 
-    // Skip zithespaces
+    // Skip withespaces
     while (*buffer == 0x20)
         buffer++;
 
