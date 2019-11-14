@@ -10,6 +10,7 @@ static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
         [IRC_NOTICE] = {"NOTICE", &irc_privmsg},
         [IRC_PASS] = {"PASS", &irc_pass},
         [IRC_AWAY] = {"AWAY", &irc_away},
+        [IRC_PART] = {"PART", &irc_part},
 };
 
 int irc_command(t_env *e, int cs, char *buffer)

@@ -44,15 +44,16 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
     i = 0;
     while (i <= e->max)
     {
-        if (i != (size_t)cs && e->fds[i].type == FD_CLIENT)
+        if (i != (size_t)cs && e->fds[i].type == FD_CLIENT &&
+            e->fds[i].registered == 1)
         {
             j = 0;
             while (subtokens[j].addr)
             {
                 if (strncmp(e->fds[i].nickname, subtokens[j].addr,
                             subtokens[j].len) == 0 ||
-                    strncmp(e->channels[e->fds[i].channel].channel, subtokens[j].addr,
-                            subtokens[j].len) == 0)
+                    strncmp(e->channels[e->fds[i].channel].channel,
+                            subtokens[j].addr, subtokens[j].len) == 0)
                 {
                     if (e->fds[i].away)
                     {

@@ -104,11 +104,11 @@ typedef struct s_fd
     char   nickname[NICKNAMESTRSIZE + 1];
     char   host[NI_MAXHOST + 1];  // the real name of the running on
     char   serv[NI_MAXSERV + 1];
-    char   username[USERNAMESTRSIZE + 1];  // the username on that host
-    char   realname[USERNAMESTRSIZE + 1];  // the username on that host
-    char   passwd[PASSWDTRSIZE + 1];       // the username on that host
-    char   awaymessage[BUF_SIZE + 1];      // the message to send when away
-    char   channelname[CHANNELSTRSIZE + 1];      // the message to send when away
+    char   username[USERNAMESTRSIZE + 1];    // the username on that host
+    char   realname[USERNAMESTRSIZE + 1];    // the username on that host
+    char   passwd[PASSWDTRSIZE + 1];         // the username on that host
+    char   awaymessage[BUF_SIZE + 1];        // the message to send when away
+    char   channelname[CHANNELSTRSIZE + 1];  // the message to send when away
     int    registered;
     int    away;
 } t_fd;
@@ -142,6 +142,7 @@ enum e_irc_reply
     ERR_NONICKNAMEGIVEN = 431,
     ERR_ERRONEUSNICKNAME = 432,
     ERR_NICKNAMEINUSE = 433,
+    ERR_NOTONCHANNEL = 442,
     ERR_NEEDMOREPARAMS = 461,
     ERR_ALREADYREGISTRED = 462,
 };

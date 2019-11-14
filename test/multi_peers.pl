@@ -28,8 +28,9 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
         PeerPort => $PORT,
         Proto => 'tcp',
     );
-
     die "Couldn't connect to $HOST:$PORT : $!\n" unless $tmp_s;
+    
+    $tmp_s->setsockopt(SOL_SOCKET, SO_RCVTIMEO, pack('l!l!', 10, 0));
 
     $tmp_s->send("NICK client_$i\x0D\x0AUSER client$i microsoft.com :Client $i\x0D\x0A");
 

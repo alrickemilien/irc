@@ -19,17 +19,19 @@ int irc_names(t_env *e, int cs, t_token *tokens)
             j = 0;
             while (j <= e->max)
             {
-                if (e->fds[j].type == FD_CLIENT && e->fds[j].channel == i)
+                if (e->fds[j].type == FD_CLIENT && e->fds[j].registered &&
+                    e->fds[j].channel == i)
                 {
                     strcat(concat, e->fds[j].nickname);
                     strcat(concat, " ");
                 }
                 j++;
             }
-            i++;
 
             irc_reply(e, cs, RPL_NAMREPLY, e->channels[i].channel, concat);
-            irc_reply(e, cs, RPL_ENDOFNAMES, NULL);
+            irc_reply(e, cs, RPL_ENDOFNAMES, e->channels[i].channel);
+
+            i++;
         }
 
         return (IRC_NAMES);
@@ -50,7 +52,8 @@ int irc_names(t_env *e, int cs, t_token *tokens)
                 j = 0;
                 while (j <= e->max)
                 {
-                    if (e->fds[j].type == FD_CLIENT && e->fds[j].channel == i)
+                    if (e->fds[j].type == FD_CLIENT && e->fds[j].channel == i &&
+                        e->fds[j].registered == 1)
                     {
                         strcat(concat, e->fds[j].nickname);
                         strcat(concat, " ");

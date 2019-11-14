@@ -23,6 +23,8 @@ const t_irc_reply replys[] = {
     {ERR_ALREADYREGISTRED, TOSTR(ERR_ALREADYREGISTRED),
      ":You may not reregister"},
     {ERR_NOTEXTTOSEND, TOSTR(ERR_NOTEXTTOSEND), ":No text to send"},
+    {ERR_NOTONCHANNEL, TOSTR(ERR_NOTONCHANNEL),
+     "%s :You're not on that channel"},
 };
 
 int irc_reply(t_env *e, int cs, int code, ...)
