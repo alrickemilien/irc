@@ -38,14 +38,18 @@ CLIENT_OBJ=$(CLIENT_SRC:.c=.o)
 # ui
 CLIENT_SRC+=src/client/ui/login.c
 
-# glade files
-CLIENT_SRC_GLADE=src/client/ui/login.xml
 
 GTK_DPKG=$(shell pkg-config --cflags --libs gtk+-2.0)
 
 %.o: %.c
 	@gcc $(DEBUG) -o $@ -c $< $(INCLUDE) $(GTK_DPKG) $(CFLAGS)
 
-%.xml:
-	mkdir -p $(BUILD_DIR)/ui
-	cp $@ $(BUILD_DIR)/ui
+# glade files
+CLIENT_SRC_GLADE_PREFIX=src/client/ui/
+CLIENT_BUILD_GLADE_PREFIX=build/ui/
+CLIENT_SRC_GLADE=login.xml
+CLIENT_UI_COPY_FILES=$(addprefix $(CLIENT_BUILD_GLADE_PREFIX), $(CLIENT_SRC_GLADE))
+
+$(CLIENT_BUILD_GLADE_PREFIX)%: $(CLIENT_SRC_GLADE_PREFIX)%
+	@mkdir -p $(CLIENT_BUILD_GLADE_PREFIX)
+	@cp -f $< $@
