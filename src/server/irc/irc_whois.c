@@ -18,8 +18,6 @@ int irc_whois(t_env *e, int cs, t_token *tokens)
     size_t  j;
     t_token subtokens[30];
 
-    printf("Received :%s\n", tokens[1].addr);
-
     if (irc_whois_check_command(e, cs, tokens) < 0)
         return (-1);
 
@@ -32,16 +30,12 @@ int irc_whois(t_env *e, int cs, t_token *tokens)
     {
         if (e->fds[i].type == FD_CLIENT && e->fds[i].registered == 1)
         {
-            printf("on => %s\n", e->fds[i].nickname);
-
             j = 0;
             while (subtokens[j].addr)
             {
                 if (strncmp(e->fds[i].nickname, subtokens[j].addr,
                             subtokens[j].len) == 0)
                 {
-                    printf("ICI\n");
-
                     irc_reply(e, cs, RPL_WHOISUSER, e->fds[i].nickname,
                               e->fds[i].username, e->fds[i].host,
                               e->fds[i].realname);
@@ -52,7 +46,7 @@ int irc_whois(t_env *e, int cs, t_token *tokens)
                               e->channels[e->fds[i].channel].channel);
                     irc_reply(e, cs, RPL_ENDOFWHOIS, e->fds[i].nickname);
 
-                    // break;
+                    break;
                 }
 
                 j++;
