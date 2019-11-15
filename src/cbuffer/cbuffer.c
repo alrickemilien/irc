@@ -7,33 +7,6 @@
 //     bool full;
 // } t_cbuffer;
 
-#pragma mark - Private Functions -
-
-static void advance_pointer(t_cbuffer *cbuf)
-{
-    assert(cbuf);
-
-    if (cbuf->full)
-    {
-        cbuf->tail = (cbuf->tail + 1) % CBUFFSIZE;
-    }
-
-    cbuf->head = (cbuf->head + 1) % CBUFFSIZE;
-
-    // We mark full because we will advance tail on the next time around
-    cbuf->full = (cbuf->head == cbuf->tail);
-}
-
-static void retreat_pointer(t_cbuffer *cbuf)
-{
-    assert(cbuf);
-
-    cbuf->full = false;
-    cbuf->tail = (cbuf->tail + 1) % CBUFFSIZE;
-}
-
-#pragma mark - APIs -
-
 void cbuffer_reset(t_cbuffer *cbuf)
 {
     assert(cbuf);
@@ -41,6 +14,7 @@ void cbuffer_reset(t_cbuffer *cbuf)
     cbuf->head = 0;
     cbuf->tail = 0;
     cbuf->full = false;
+    memset(buffer->data, 0, CBUFFSIZE);
 }
 
 size_t cbuffer_size(t_cbuffer *cbuf)
@@ -64,11 +38,21 @@ size_t cbuffer_size(t_cbuffer *cbuf)
 
 void cbuffer_put(t_cbuffer *cbuf, uint8_t *data, size_t n)
 {
+    int count;
+
     assert(cbuf && cbuf->buffer);
 
-    cbuf->buffer[cbuf->head] = data;
+    count = CBUFFSIZE - 1 - cbuf->head;
+    memcpy(cbuf->buffer + cbuf->head, data, count > n ? n : count);
 
-    advance_pointer(cbuf);
+    if (count < n)
+        memcpy(cbuf->buffer, data, n - count);
+    cbuf->head = (cbuf->head + n) % CBUFFSIZE;
+
+    if (cbuf->head < cbuf->tail)
+        cbuf->tail = cbuf->head + 1;
+
+    return (0);
 }
 
 /*
@@ -89,61 +73,31 @@ void cbuffer_put(t_cbuffer *cbuf, uint8_t *data, size_t n)
 
 int cbuffer_put_safe(t_cbuffer *cbuf, uint8_t *data, size_t n)
 {
-    int r;
     int count;
 
     assert(cbuf && cbuf->buffer);
 
-    r = -1;
+    count = 0;
+    if (cbuf->head > cbuf->tail)
+        count += CBUFFSIZE - 1 - cbuf->head;
 
-    if (circular_buf_full(cbuf))
+    if (count + cbuf->tail < n)
         return (-1);
 
-    if ( % CBUFFERSIZE) {
-
-    }
-
-	if(cbuf->full)
+    if (count != 0)
     {
-        cbuf->tail = (cbuf->tail + 1) % cbuf->max;
+        memcpy(cbuf->buffer + cbuf->head, data, count > n ? n : count);
+        cbuf->head += (count > n ? n : count);
     }
 
-	cbuf->head = (cbuf->head + 1) % cbuf->max;
-
-
-    count = CBUFFSIZE - cbuf->head;
-
-	if(cbuf->full)
-
-
-    memcpy(cbuf->buffer + cbuf->head, data, size);
-
-    cbuf->head
-
-    buffer->size += size;
-
-    cbuf->buffer[cbuf->head] = data;
-    advance_pointer(cbuf);
-    r = 0;
-
-    return r;
-}
-
-int circular_buf_get(t_cbuffer *cbuf, uint8_t *data)
-{
-    assert(cbuf && data && cbuf->buffer);
-
-    int r = -1;
-
-    if (!circular_buf_empty(cbuf))
+    if (count < n)
     {
-        *data = cbuf->buffer[cbuf->tail];
-        retreat_pointer(cbuf);
-
-        r = 0;
+        memcpy(cbuf->buffer, data,
+               cbuf->tail > (n - count) ? (n - count) : cbuf->tail);
+        cbuf->head = cbuf->tail > (n - count) ? (n - count) : cbuf->tail;
     }
 
-    return r;
+    return (0);
 }
 
 bool cbuffer_isempty(t_cbuffer *cbuf)
@@ -153,47 +107,44 @@ bool cbuffer_isempty(t_cbuffer *cbuf)
     return (!cbuf->full && (cbuf->head == cbuf->tail));
 }
 
-int cbuffer_push(t_cbuffer *buffer, char *data, size_t size)
-{
-    if (size > BUF_SIZE - buffer->size)
-        return (-1);
-    memcpy(buffer->data + buffer->size, data, size);
-    buffer->size += size;
-    return (0);
-}
-
-int cbuffer_flush(t_cbuffer *buffer)
-{
-    memset(buffer->data, 0, BUF_SIZE);
-    buffer->size = 0;
-    return (0);
-}
-
-int cbuffer_nflush(t_cbuffer *buffer, size_t n)
-{
-    memmove(buffer->data, buffer->data + n, BUF_SIZE - n);
-    memset(buffer->data + BUF_SIZE - n, 0, n);
-
-    buffer->size = buffer->size < n ? 0 : buffer->size - n;
-    return (0);
-}
-
 // Receiving data from the client cs
-int cbuffer_recv(t_cbuffer *buffer, int cs)
+int cbuffer_recv(t_cbuffer *cbuf, int cs)
 {
     int r;
 
-    r = recv(cs, buffer->data + buffer->size, BUF_SIZE - buffer->size, 0);
+    // Not enough space for data fetch
+    // Buffer still full
+    if (cbuffer_size(buffer) == CBUFFSIZE)
+        return (-1);
+
+    if (cbuf->head > cbuf->tail)
+        r = recv(cs, cbuf->buffer + cbuf->head, CBUFFSIZE - cbuf->head, 0);
+    else
+        r = recv(cs, cbuf->buffer + cbuf->head, cbuf->tail - cbuf->head, 0);
 
     if (r > 0)
-        buffer->size += r;
+        cbuf->head = (cbuf->head + r) % CBUFFSIZE;
     return (r);
 }
 
-int cbuffer_pflush(t_cbuffer *buffer, char *data, size_t size)
+// Receiving data from the client cs
+int cbuffer_send(t_cbuffer *cbuf, int cs, size_t n)
 {
-    if (cbuffer_push(buffer, data, size) < 0)
+    int r;
+
+    // Not enough space for data fetch
+    // Buffer still full
+    if (cbuffer_size(buffer) == CBUFFSIZE)
         return (-1);
-    cbuffer_flush(buffer);
-    return (0);
+
+    send(cbuf->buffer + cbuf->tail);
+
+    if (cbuf->head > cbuf->tail)
+        r = send(cs, cbuf->buffer + cbuf->head, CBUFFSIZE - cbuf->head, 0);
+    else
+        r = send(cs, cbuf->buffer + cbuf->head, cbuf->tail - cbuf->head, 0);
+
+    if (r > 0)
+        cbuf->head = (cbuf->head + r) % CBUFFSIZE;
+    return (r);
 }
