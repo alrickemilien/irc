@@ -4,16 +4,19 @@
 #include <sys/types.h>
 #include <arpa/inet.h>
 
-#include "client/irc.h"
+#include <client/irc.h>
 
 #include "client/ui/ui.h"
 #include "client/ui/login.h"
+
+extern t_env *    e;
+extern t_options *options;
 
 void login_window_init()
 {
     /* get graphics from login.glade */
     builder = gtk_builder_new();
-    gtk_builder_add_from_file(builder, "login.xml", NULL);
+    gtk_builder_add_from_file(builder, "build/ui/login.xml", NULL);
 
     window = GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
     gtk_signal_connect(GTK_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit),
@@ -35,23 +38,37 @@ void login_window_init()
 
 void login_connect(const char *uname, const char *pword)
 {
-    // short int         flag = 0;
-    int socket_fd;
+    char concat[512];
 
-    char username[20];
-    char password[20];
+    if (options->ipv6 == 1)
+        client_ipv6(options, e);
+    else
+        client_ipv4(options, e);
 
+    if (e->sock == -1)
+    {
+        logerrno("main:");
+        return;
+    }
 
-    (void)pword;
+    // loginfo("options.command: %s\n", options.command);
 
-    socket_fd = client_ipv4();
+    // memset(e.fds[e.sock].nickname, 0, NICKNAMESTRSIZE + 1);
+    // memset(e.fds[e.sock].username, 0, USERNAMESTRSIZE + 1);
+    // memset(e.fds[e.sock].channelname, 0, CHANNELSTRSIZE + 1);
 
-    /* send username and password */
-    strcpy(username, uname);
-    strcpy(password, pword);
+    // execute_precommands(&options, &e);
 
-    printf("send u=%s, p=%s\n", username, password);
-    send(socket_fd, username, sizeof(username), 0);
+    // do_select(&options, &e);
+
+    memset(concat, 0, sizeof(concat));
+
+    sprintf(concat, "PASS %s\x0D\x0ANICK %s\x0D\x0AUSER %s %s :%s\x0D\x0A",
+            pword, uname, uname,
+            "lalal@lalal.com",
+            "Diego delavega");
+
+    send(e->sock, concat, sizeof(concat), 0);
 
     /* received flag */
     // recv(socket_fd, &flag, 2, 0);
@@ -68,11 +85,14 @@ void login_connect(const char *uname, const char *pword)
     // else
     // {
     //     gtk_label_set_text(GTK_LABEL(label),
-	// 			"loading failed,username or password error!");
+    // 			"loading failed,username or password error!");
     //     gtk_entry_set_text(GTK_ENTRY(passwordEntry), "");
     // }
 
-    close(socket_fd);
+    do_select(options, e);
+
+    if (e->sock != -1)
+        XSAFE(-1, close(e->sock), "login_connect::close");
 }
 
 /*

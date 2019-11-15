@@ -1,0 +1,42 @@
+#include <string.h>
+#include <irc.h>
+
+size_t tokenizechr(char *str, t_token *tokens, size_t len, int c)
+{
+    size_t i;
+    size_t count;
+    char * end;
+
+    end = strstr(str, "\x0D\x0A");
+    count = 0;
+
+    // Skip possible whitespaces
+    i = 0;
+    while (str[i] == 0x20)
+        i++;
+
+    if (!str[i])
+        return (1);
+
+    while (str[i] && str[i] != 0x20 && str + i < end && count < len)
+    {
+        // Skip comma
+        while (str[i] == c)
+            i++;
+
+        if (str[i] == 0 || str[i] == 0x20)
+            break;
+
+        tokens[count].addr = str + i;
+
+        // Skip printable
+        while (str[i] != c && str[i] && str[i] != 0x20)
+            i++;
+
+        tokens[count].len = (size_t)(&str[i] - tokens[count].addr);
+
+        count++;
+    }
+
+    return (i);
+}

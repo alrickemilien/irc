@@ -1,16 +1,9 @@
-#include "server/irc.h"
+#include <client/irc.h>
 
 static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
-        [IRC_JOIN] = {"JOIN", &irc_join},
-        [IRC_NICK] = {"NICK", &irc_nick},
-        [IRC_USER] = {"USER", &irc_user},
-        [IRC_QUIT] = {"QUIT", &irc_quit},
-        [IRC_NAMES] = {"NAMES", &irc_names},
-        [IRC_PRIVMSG] = {"PRIVMSG", &irc_privmsg},
-        [IRC_NOTICE] = {"NOTICE", &irc_privmsg},
-        [IRC_PASS] = {"PASS", &irc_pass},
-        [IRC_AWAY] = {"AWAY", &irc_away},
-        [IRC_PART] = {"PART", &irc_part},
+    [IRC_JOIN] = {"/join", &irc_join},
+    [IRC_NICK] = {"/nick", &irc_nick},
+    [IRC_MSG] = {"/msg", &irc_msg},
 };
 
 int irc_command(t_env *e, int cs, char *buffer)
@@ -28,9 +21,10 @@ int irc_command(t_env *e, int cs, char *buffer)
         if (strncmp(buffer, g_irc_commands[i].command,
                     strlen(g_irc_commands[i].command)) == 0)
         {
+
+            printf("ici: %s\n", g_irc_commands[i].command);
             memset(tokens, 0, sizeof(t_token) * 30);
 
-            // printf("ret:%ld\n", tokenize(buffer + 1, tokens, 30));
             tokenize(buffer, tokens, 30);
 
             return g_irc_commands[i].f(e, cs, tokens);
@@ -39,6 +33,6 @@ int irc_command(t_env *e, int cs, char *buffer)
     }
 
     logerror("Unknow command\n");
-    
+
     return (-1);
 }

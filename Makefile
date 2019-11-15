@@ -18,7 +18,7 @@ INCLUDE=-I include -I libft
 
 .PHONY: all clean fclean
 
-all: $(SERVER) $(CLIENT)
+all: $(SERVER) $(CLIENT) $(CLIENT_SRC_GLADE)
 
 $(SERVER): $(SERVER_OBJ)
 	@mkdir -p $(BUILD_DIR)

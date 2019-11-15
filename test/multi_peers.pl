@@ -2,22 +2,18 @@
 
 use strict;
 use warnings;
-
 use IO::Socket::INET;
+
+use File::Basename;
+use lib dirname(__FILE__);
+use ircunittest;
 
 # ############################################# #
 # Test connections on server with many clients  #
 # ############################################# #
 
 # Start server
-# `build/server --daemon`;
-
-#
-# Test clients connections
-#
-
-print "Starting server, wait ...\n";
-sleep(1);
+ircunittest::start_server();
 
 my $HOST = '127.0.0.1';
 my $PORT = '5555';
@@ -32,18 +28,22 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
         PeerPort => $PORT,
         Proto => 'tcp',
     );
-
     die "Couldn't connect to $HOST:$PORT : $!\n" unless $tmp_s;
+    
+    $tmp_s->setsockopt(SOL_SOCKET, SO_RCVTIMEO, pack('l!l!', 10, 0));
+
+    $tmp_s->send("NICK client_$i\x0D\x0AUSER client$i microsoft.com :Client $i\x0D\x0A");
 
     push @s, $tmp_s
 }
 
-# Wait client connection
+# Wait clients connection
+sleep(2);
 
 for (my $k = 0; $k <= $POOLS_NUMBER; $k++) {
     print "Sending data\n";
     for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
-        $s[$i]->send("MSG I say: $i\x0D\x0A");
+        $s[$i]->send("PRIVMSG client_0 I say: $i\x0D\x0A");
     }
 
     # Wait full messages reception on the server
@@ -59,22 +59,5 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
     $s[$i]->close();
 }
 
-# Wait for any othe behavior from server
-sleep(1);
-
-#
 # End
-#
-{
-    open(my $fd, 'ircserver.pid') or die "Can't read server pid file: $!\n";  
-    my $pidserver = <$fd>;
-    close($fd);
-
-    # If the pid is not here, it means something wring happened
-    if (kill(0, $pidserver)) {
-        print "Closing server\n";
-        kill 9, -$pidserver;
-
-        unlink 'ircserver.pid'; # Supress pid file of teh server
-    }
-}
+ircunittest::stop_server();

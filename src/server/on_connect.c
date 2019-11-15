@@ -1,11 +1,10 @@
 #include <arpa/inet.h>
+#include <netdb.h>
 #include <netinet/in.h>
+#include <server/irc.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
-#include "server/irc.h"
-
-const char *HELLO = "Welcome to the irc server !\n";
 
 // struct ucred
 // {
@@ -21,26 +20,31 @@ void on_connect(t_env *e, size_t s)
     socklen_t          csin_len;
 
     csin_len = sizeof(csin);
-    cs = XSAFE(-1, accept(s, (struct sockaddr *)&csin, &csin_len), "accept");
+    cs = XSAFE(-1, accept(s, (struct sockaddr *)&csin, &csin_len),
+               "on_connect::accept");
 
-    printf(e->is_tty ? "\x1b[31m"
-                       "New client #%d from %s:%d"
-                       "\x1b[0m\n"
-                     : "New client #%d from %s:%d\n",
-           cs, inet_ntoa(csin.sin_addr), ntohs(csin.sin_port));
+    loginfo("New client #%d from %s:%d\n", cs, inet_ntoa(csin.sin_addr),
+            ntohs(csin.sin_port));
+
+    if (getnameinfo((struct sockaddr *)&csin, csin_len, e->fds[cs].host,
+                    NI_MAXHOST, e->fds[cs].serv, NI_MAXSERV, NI_NAMEREQD) < 0)
+    {
+        logerrno("on_connect::getnameinfo");
+        return;
+    }
+
+    // init the new client
 
     e->fds[cs].type = FD_CLIENT;
     e->fds[cs].read = client_read;
     e->fds[cs].write = client_write;
-    memcpy(e->fds[cs].channel, DEFAULT_CHANNEL, sizeof(DEFAULT_CHANNEL));
+    e->fds[cs].registered = 0;
+    e->fds[cs].channel = 0;
+    e->fds[cs].away = 0;
+    memset(e->fds[cs].nickname, 0, NICKNAMESTRSIZE + 1);
     memcpy(e->fds[cs].nickname, DEFAULT_NICKNAME, sizeof(DEFAULT_NICKNAME));
-    memset(e->fds[cs].username, 0, sizeof(USERNAMESTRSIZE + 1));
+    memset(e->fds[cs].username, 0, USERNAMESTRSIZE + 1);
+    memset(e->fds[cs].awaymessage, 0, sizeof(e->fds[cs].awaymessage));
 
-    XSAFE(-1, gethostname(e->fds[cs].hostname, sizeof(e->fds[cs].hostname)),
-          "on_connect::gethostname");
-
-    // memcpy(e->fds[cs].buf_write, HELLO, strlen(HELLO) * sizeof(char));
-
-    // Say hello to new user
-    // cbuffer_pflush(e->fds[cs].buf_write, HELLO, strlen(HELLO) * sizeof(char));
+    return;
 }
