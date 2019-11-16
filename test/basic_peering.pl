@@ -14,7 +14,7 @@ use ircunittest;
 # ############################################# #
 
 # Start server
-ircunittest::start_server();
+# ircunittest::start_server();
 
 #
 # Test clients connections
@@ -43,17 +43,19 @@ my $s2 = new IO::Socket::INET (
 die "Couldn't connect to $HOST:$PORT : $!\n" unless $s2;
 $s2->setsockopt(SOL_SOCKET, SO_RCVTIMEO, pack('l!l!', 10, 0));
 
+
 #
 # Test registration
 #
 
-$s1->send("PASS dummy_password_1\x0D\x0A");
-$s2->send("PASS dummy_password_1\x0D\x0A");
+$s1->send("PASS dummy_password\x0D\x0A");
+$s2->send("PASS dummy_password\x0D\x0A");
 sleep(1);
 
 $s1->send("NICK client_1\x0D\x0AUSER client1 microsoft.com :Client One\x0D\x0A");
 $s2->send("NICK client_2\x0D\x0AUSER client2 aws.com :Client Two\x0D\x0A");
 sleep(1);
+
 
 #
 # Test basic peering
@@ -61,7 +63,7 @@ sleep(1);
 
 # Data to send to a server
 $s1->send("PRIVMSG client_2 Why don't you call me anymore?\x0D\x0A");
-sleep(1); # Wait message reception on the server
+sleep(2); # Wait message reception on the server
 
 my $response = "";
 $s2->recv($response, 1024);
@@ -79,13 +81,15 @@ ok(index($response, "YAAAA") ne -1);
 
 my $msg = "PRIVMSG ";
 for (my $i = 0; $i <= 10000; $i++) {
-    $msg .= $i;
+    $msg .= "X";
 }
 $msg .= "\x0D\x0A PRIVMSG client_2 non \x0D\x0A";
 $s1->send($msg);
 
 $s2->recv($response, 1024);
 ok(index($response, "non") ne -1);
+
+exit(1);
 
 #
 # Test utf8

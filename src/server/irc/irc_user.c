@@ -30,7 +30,7 @@ static int irc_user_check_command(t_env *e, int cs, const t_token *tokens)
     if (!tokens[1].addr || !tokens[2].addr || !tokens[3].addr ||
         !tokens[4].addr)
     {
-        irc_reply(e, cs, ERR_NEEDMOREPARAMS, tokens[0].addr);
+        irc_reply(e, cs, ERR_NEEDMOREPARAMS, "USER");
         return (-1);
     }
 

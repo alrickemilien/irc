@@ -177,18 +177,13 @@ int cbuffer_recv(t_cbuffer *cbuf, int cs)
 {
     int r;
 
-    // Not enough space for data fetch
-    // Buffer still full
-    if (cbuffer_size(cbuf) == CBUFFSIZE)
-        return (-1);
-
-    if (cbuf->head > cbuf->tail)
+    if (cbuf->head >= cbuf->tail)
         r = recv(cs, cbuf->buffer + cbuf->head, CBUFFSIZE - cbuf->head, 0);
     else
         r = recv(cs, cbuf->buffer + cbuf->head, cbuf->tail - cbuf->head, 0);
 
     if (r > 0)
-        cbuf->head = (cbuf->head + r) % CBUFFSIZE;
+        cbuf->head = (cbuf->head + r) % (CBUFFSIZE + 1);
     return (r);
 }
 

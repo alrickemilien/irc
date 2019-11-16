@@ -11,7 +11,7 @@ static int irc_pass_check_command(t_env *e, int cs, const t_token *tokens)
 
     if (!tokens[1].addr)
     {
-        irc_reply(e, cs, ERR_NEEDMOREPARAMS, NULL);
+        irc_reply(e, cs, ERR_NEEDMOREPARAMS, "PASS");
         return (-1);
     }
 

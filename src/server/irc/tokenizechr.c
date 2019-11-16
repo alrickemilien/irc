@@ -1,5 +1,5 @@
-#include <string.h>
 #include <irc.h>
+#include <string.h>
 
 size_t tokenizechr(char *str, t_token *tokens, size_t len, int c)
 {
@@ -9,6 +9,9 @@ size_t tokenizechr(char *str, t_token *tokens, size_t len, int c)
 
     end = strstr(str, "\x0D\x0A");
     count = 0;
+
+    if (end == (void *)0)
+        end = str + strlen(str);
 
     // Skip possible whitespaces
     i = 0;

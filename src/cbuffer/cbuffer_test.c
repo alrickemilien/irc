@@ -84,6 +84,15 @@ UNITTEST(test_cbuffer_indexof)
     memcpy(cbuf.buffer + 26, "HELLO", 5);
 
     assert(cbuffer_indexof(&cbuf, "HELLO") == -1);
+
+    // TEST 8
+    cbuffer_reset(&cbuf);
+    const char *cmd = "PASS dummy_password\x0D\x0ANICK client_1\x0D\x0AUSER client1 microsoft.com :Client One\x0D\x0A";
+    memcpy(cbuf.buffer, cmd, strlen(cmd));
+    cbuf.tail = 21;
+    cbuf.head = 76;
+
+    assert(cbuffer_indexof(&cbuf, "\x0D\x0A") == 34);
 }
 
 int main()
