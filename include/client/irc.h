@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <linux/limits.h>
 
 #include <irc.h>
 #include <client/options.h>
@@ -23,6 +24,7 @@ typedef struct  s_env
     char        isotime[ISOTIMESTRSIZE];
     int         is_tty;
     int         sock;
+    char		cwd[PATH_MAX];
 }               t_env;
 
 /*

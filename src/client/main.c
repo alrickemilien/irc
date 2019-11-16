@@ -9,7 +9,6 @@
 #include "client/ui/ui.h"
 #include "client/ui/login.h"
 
-
 t_env *    e = NULL;
 t_options *options = NULL;
 
@@ -24,6 +23,8 @@ void init_env(t_env *e)
     e->fds = (t_fd *)XPSAFE(NULL, malloc(sizeof(*e->fds) * e->maxfd),
                             "init_env::malloc");
     e->sock = -1;
+
+    XPSAFE(NULL, getcwd(e->cwd, sizeof(e->cwd)), "init_env::getcwd");
 
     i = 0;
     while (i < e->maxfd)
@@ -70,27 +71,29 @@ static void init_options(t_options *options)
 
 int main(int argc, char **argv)
 {
-    int       exit_code;
+    int exit_code;
 
+    printf("%s\n",  argv[0]);
+ 
     e = malloc(sizeof(t_env));
     options = malloc(sizeof(t_options));
 
-    exit_code = read_options(argc, (const char **) argv, options);
+    exit_code = read_options(argc, (const char **)argv, options);
     if (exit_code != 0)
         return (exit_code);
 
     init_options(options);
     init_env(e);
 
-	gtk_init(&argc, &argv);
-	
-	login_window_init();
+    gtk_init(&argc, &argv);
 
-	g_object_unref(G_OBJECT(builder));
+    login_window_init();
 
-	gtk_widget_show_all(window);
+    g_object_unref(G_OBJECT(builder));
 
-	gtk_main();
+    gtk_widget_show_all(window);
+
+    gtk_main();
 
     return (exit_code);
 }

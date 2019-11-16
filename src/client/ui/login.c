@@ -14,9 +14,17 @@ extern t_options *options;
 
 void login_window_init()
 {
+    char *login_template;
+
+    printf("e->cwd: %s\n", e->cwd);
+
+    login_template = strjoin(e->cwd, "/ui/login.xml");
+
     /* get graphics from login.glade */
     builder = gtk_builder_new();
-    gtk_builder_add_from_file(builder, "build/ui/login.xml", NULL);
+    gtk_builder_add_from_file(builder, login_template, NULL);
+
+    free(login_template);
 
     window = GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
     gtk_signal_connect(GTK_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit),

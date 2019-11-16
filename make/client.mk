@@ -30,6 +30,8 @@ CLIENT_SRC+=src/client/irc/irc_join.c \
 CLIENT_SRC+=src/utils/safe.c \
 			src/utils/log.c \
 			src/utils/ato32.c \
+			src/utils/extract_folder_from_path.c \
+			src/utils/strjoin.c \
 			src/utils/i64toa.c \
 			src/utils/time2iso.c
 
