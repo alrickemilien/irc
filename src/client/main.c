@@ -23,8 +23,7 @@ void init_env(t_env *e)
     {
         clear_fd(&e->fds[i]);
         memset(e->fds[i].buf_write, 0, BUF_SIZE + 1);
-        memset(e->fds[i].buf_read.data, 0, BUF_SIZE + 1);
-        e->fds[i].buf_read.size = 0;
+        cbuffer_reset(&e->fds[i].buf_read);
         i++;
     }
 }

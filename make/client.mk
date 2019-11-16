@@ -26,7 +26,7 @@ CLIENT_SRC+=src/client/irc/irc_join.c \
 			src/client/irc/irc_command.c
 
 #cbuffer
-SERVER_SRC+=src/cbuffer/cbuffer.c
+CLIENT_SRC+=src/cbuffer/cbuffer.c
 
 # utils
 CLIENT_SRC+=src/utils/safe.c \
