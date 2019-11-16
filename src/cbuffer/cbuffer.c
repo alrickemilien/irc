@@ -1,17 +1,8 @@
 #include <cbuffer.h>
 
-// typedef struct s_cbuffer {
-//     uint8_t buffer[CBUFFSIZE];
-//     size_t head;
-//     size_t tail;
-//     bool full;
-// } t_cbuffer;
-
 void cbuffer_reset(t_cbuffer *cbuf)
 {
     assert(cbuf);
-
-    printf("cbuffer_reset:: ...\n");
 
     cbuf->head = 0;
     cbuf->tail = 0;
@@ -132,7 +123,6 @@ size_t cbuffer_indexof(t_cbuffer *cbuf, const char *str)
         if (str[count] != 0 && i + count == CBUFFSIZE &&
             str[count - 1] == cbuf->buffer[i + count - 1])
         {
-            // printf("la\n");
             j = 0;
             while (j != cbuf->head && str[count] != 0 &&
                    str[count] == cbuf->buffer[j])

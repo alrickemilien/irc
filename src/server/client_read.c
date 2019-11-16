@@ -15,14 +15,11 @@ void client_read(t_env *e, size_t cs)
     size_t r;
     size_t index;
 
-    printf("client_read::%ld\n", cs);
-    printf("databuffer tail BEFORE RECV is %ld\n", e->fds[cs].buf_read.tail);
-    printf("databuffer head BEFORE RECV is %ld\n", e->fds[cs].buf_read.head);
+    // printf("client_read::%ld\n", cs);
+    // printf("databuffer tail BEFORE RECV is %ld\n", e->fds[cs].buf_read.tail);
+    // printf("databuffer head BEFORE RECV is %ld\n", e->fds[cs].buf_read.head);
 
     index = -1;
-
-    printf("cbuffer_size(&e->fds[cs].buf_read): %ld\n", cbuffer_size(&e->fds[cs].buf_read));
-
     if (cbuffer_size(&e->fds[cs].buf_read) != CBUFFSIZE &&
         (cbuffer_isempty(&e->fds[cs].buf_read) ||
          (index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0D\x0A")) ==
@@ -31,21 +28,18 @@ void client_read(t_env *e, size_t cs)
         // Receiving data from the client cs
         r = cbuffer_recv(&e->fds[cs].buf_read, cs);
 
-        printf("%ld bytes has been received for %ld\n", r, cs);
+        // printf("%ld bytes has been received for %ld\n", r, cs);
 
         if (r <= 0)
             return (disconnect(e, cs));
     }
 
-    printf("data buffer tail is %ld\n", e->fds[cs].buf_read.tail);
-    printf("data buffer head is %ld\n", e->fds[cs].buf_read.head);
+    // printf("data buffer tail is %ld\n", e->fds[cs].buf_read.tail);
+    // printf("data buffer head is %ld\n", e->fds[cs].buf_read.head);
     // printf("data buffer is: %s\n", e->fds[cs].buf_read.buffer);
-
-    printf("INDEX before: %ld\n", index);
 
     if (index == (size_t)-1)
         index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0D\x0A");
-    printf("INDEX after: %ld\n", index);
 
     if (index == (size_t)-1)
     {

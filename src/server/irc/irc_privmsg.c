@@ -37,12 +37,12 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
 
     memset(subtokens, 0, sizeof(t_token) * 30);
 
-    // tokenizechr(tokens[1].addr, subtokens, 30, ',');
+    tokenizechr(tokens[1].addr, subtokens, 30, ',');
 
-    printf("subtokens ret:%ld\n", tokenizechr(tokens[1].addr, subtokens, 30, ','));
-    j = 0;
-    while (j < 30 && subtokens[j].addr)
-        printf("subtokens:%s\n", subtokens[j++].addr);
+    // printf("subtokens ret:%ld\n", tokenizechr(tokens[1].addr, subtokens, 30, ','));
+    // j = 0;
+    // while (j < 30 && subtokens[j].addr)
+    //     printf("subtokens:%s\n", subtokens[j++].addr);
 
     // Find client to send private message
     i = 0;
