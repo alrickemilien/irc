@@ -65,7 +65,7 @@ typedef struct s_irc_cmd
     int (*f)(t_env *e, int cs, t_token *tokens);
 } t_irc_cmd;
 
-int irc_command(t_env *e, int cs, char *buffer);
+int irc_command(t_env *e, int cs, size_t end_command_index);
 int irc_join(t_env *e, int cs, t_token *tokens);
 int irc_nick(t_env *e, int cs, t_token *tokens);
 int irc_user(t_env *e, int cs, t_token *tokens);

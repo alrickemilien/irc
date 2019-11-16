@@ -5,7 +5,12 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+
+// Debug
 #include <assert.h>
+#include <stdio.h>
 
 #define CBUFFSIZE 512
 
@@ -30,11 +35,6 @@ void circular_buf_put(t_cbuffer* cbuf, uint8_t data);
 /// Returns 0 on success, -1 if buffer is full
 int circular_buf_put_safe(t_cbuffer* cbuf, uint8_t data);
 
-/// Retrieve a value from the buffer
-/// Requires: cbuf is valid and created by circular_buf_init
-/// Returns 0 on success, -1 if the buffer is empty
-int circular_buf_get(t_cbuffer* cbuf, uint8_t* data);
-
 /// CHecks if the buffer is empty
 /// Requires: cbuf is valid and created by circular_buf_init
 /// Returns true if the buffer is empty
@@ -45,7 +45,12 @@ bool cbuffer_isempty(t_cbuffer* cbuf);
 /// Returns the current number of elements in the buffer
 size_t cbuffer_size(t_cbuffer* cbuf);
 
-// TODO: int circular_buf_get_range(t_cbuffer cbuf, uint8_t *data, size_t len);
-// TODO: int circular_buf_put_range(t_cbuffer cbuf, uint8_t * data, size_t len);
+///
+int cbuffer_send(t_cbuffer *cbuf, int cs, size_t n);
+
+///
+int cbuffer_recv(t_cbuffer *cbuf, int cs);
+size_t cbuffer_indexof(t_cbuffer *cbuf, const char *str);
+void cbuffer_dropn(t_cbuffer *cbuf, size_t n);
 
 #endif  // CBUFFER_H_
