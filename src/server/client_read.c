@@ -39,7 +39,7 @@ void client_read(t_env *e, size_t cs)
 
     printf("data buffer tail is %ld\n", e->fds[cs].buf_read.tail);
     printf("data buffer head is %ld\n", e->fds[cs].buf_read.head);
-    printf("data buffer is: %s\n", e->fds[cs].buf_read.buffer);
+    // printf("data buffer is: %s\n", e->fds[cs].buf_read.buffer);
 
     printf("INDEX before: %ld\n", index);
 

@@ -183,7 +183,7 @@ int cbuffer_recv(t_cbuffer *cbuf, int cs)
         r = recv(cs, cbuf->buffer + cbuf->head, cbuf->tail - cbuf->head, 0);
 
     if (r > 0)
-        cbuf->head = (cbuf->head + r) % (CBUFFSIZE + 1);
+        cbuf->head = (cbuf->head + r) % CBUFFSIZE;
     return (r);
 }
 
@@ -224,6 +224,6 @@ void cbuffer_dropn(t_cbuffer *cbuf, size_t n)
         return ;
 
     if (cbuf->tail + n > CBUFFSIZE)
-        cbuf->head = (cbuf->tail + n) % CBUFFSIZE + 1;
+        cbuf->head = (cbuf->tail + n) % CBUFFSIZE;
     cbuf->tail = (cbuf->tail + n) % CBUFFSIZE;
 }

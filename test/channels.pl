@@ -70,7 +70,7 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
 sleep(2);
 # Get all connected people to the all channels
 $s[0]->send("NAMES\x0D\x0A");
-$s[0]->recv($response, 1024);
+$s[0]->recv($response, 2048);
 print $response;
 
 #
@@ -86,7 +86,7 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
 sleep(2);
 # Get all connected people to the all channels
 $s[0]->send("NAMES\x0D\x0A");
-$s[0]->recv($response, 1024);
+$s[0]->recv($response, 2048);
 print "end:" . $response;
 
 #

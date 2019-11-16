@@ -56,7 +56,6 @@ $s1->send("NICK client_1\x0D\x0AUSER client1 microsoft.com :Client One\x0D\x0A")
 $s2->send("NICK client_2\x0D\x0AUSER client2 aws.com :Client Two\x0D\x0A");
 sleep(1);
 
-
 #
 # Test basic peering
 #
@@ -65,8 +64,7 @@ sleep(1);
 $s1->send("PRIVMSG client_2 Why don't you call me anymore?\x0D\x0A");
 sleep(2); # Wait message reception on the server
 
-my $response = "";
-$s2->recv($response, 1024);
+$s2->recv(my $response, 1024);
 ok(index($response, "Why don't you call me anymore?") ne -1);
 
 $s1->send("PRIVMSG client_2 YAAAA?\x0D\x0A");
@@ -89,7 +87,6 @@ $s1->send($msg);
 $s2->recv($response, 1024);
 ok(index($response, "non") ne -1);
 
-exit(1);
 
 #
 # Test utf8
