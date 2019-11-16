@@ -30,6 +30,7 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
 {
     size_t  i;
     size_t  j;
+    size_t  subtoken_count;
     t_token subtokens[30];
 
     if ((irc_privmsg_check_command(e, cs, tokens)) != 0)
@@ -37,12 +38,14 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
 
     memset(subtokens, 0, sizeof(t_token) * 30);
 
-    tokenizechr(tokens[1].addr, subtokens, 30, ',');
+    subtoken_count = tokenizechr(tokens[1].addr, subtokens, 30, ',');
 
-    // printf("subtokens ret:%ld\n", tokenizechr(tokens[1].addr, subtokens, 30, ','));
-    // j = 0;
-    // while (j < 30 && subtokens[j].addr)
+    // printf("subtokens ret:%ld\n", tokenizechr(tokens[1].addr, subtokens, 30,
+    // ',')); j = 0; while (j < 30 && subtokens[j].addr)
     //     printf("subtokens:%s\n", subtokens[j++].addr);
+
+    printf("subtoken_count: %ld\n", subtoken_count);
+    printf("to send to: %s\n", tokens[1].addr);
 
     // Find client to send private message
     i = 0;
@@ -52,12 +55,13 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
             e->fds[i].registered == 1)
         {
             j = 0;
-            while (subtokens[j].addr)
+            while (j < subtoken_count)
             {
-                if (strncmp(e->fds[i].nickname, subtokens[j].addr,
-                            subtokens[j].len) == 0 ||
-                    strncmp(e->channels[e->fds[i].channel].channel,
-                            subtokens[j].addr, subtokens[j].len) == 0)
+                if (subtokens[j].addr &&
+                    (strncmp(e->fds[i].nickname, subtokens[j].addr,
+                             subtokens[j].len) == 0 ||
+                     strncmp(e->channels[e->fds[i].channel].channel,
+                             subtokens[j].addr, subtokens[j].len) == 0))
                 {
                     if (e->fds[i].away)
                     {
@@ -72,8 +76,12 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
                         strcat(e->fds[i].buf_write, tokens[2].addr[0] == ':'
                                                         ? tokens[2].addr + 1
                                                         : tokens[2].addr);
-                        break;
                     }
+
+                    // Set to NULL only clients
+                    if (subtokens[j].addr[0] != '&' && subtokens[j].addr[0] != '#')
+                        subtokens[j].addr = (void *)0;
+                    break;
                 }
 
                 j++;
@@ -82,11 +90,14 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
         i++;
     }
 
-    // if (subtokens[j].addr == NULL)
-    // {
-    //     irc_reply(e, cs, ERR_NOSUCHNICK, e->fds[i].nickname);
-    //     return (-1);
-    // }
+    // Error on nick that match nothing
+    j = 0;
+    while (j < subtoken_count)
+    {
+        if (subtokens[j].addr != NULL)
+            irc_reply(e, cs, ERR_NOSUCHNICK, subtokens[j].addr);
+        j++;
+    }
 
     return (IRC_PRIVMSG);
 }

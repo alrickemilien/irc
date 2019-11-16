@@ -19,7 +19,7 @@ size_t tokenizechr(char *str, t_token *tokens, size_t len, int c)
         i++;
 
     if (!str[i])
-        return (1);
+        return (0);
 
     while (str[i] && str[i] != 0x20 && str + i < end && count < len)
     {
@@ -41,5 +41,5 @@ size_t tokenizechr(char *str, t_token *tokens, size_t len, int c)
         count++;
     }
 
-    return (i);
+    return (count);
 }
