@@ -7,7 +7,6 @@ CLIENT=client
 CLIENT_SRC=src/client/main.c \
 			src/client/ipv4.c \
 			src/client/ipv6.c \
-			src/server/cbuffer.c \
 			src/client/irc/tokenize.c \
 			src/client/server_read.c \
 			src/client/server_write.c \
@@ -25,6 +24,9 @@ CLIENT_SRC+=src/client/irc/irc_join.c \
 			src/client/irc/irc_nick.c \
 			src/client/irc/irc_msg.c \
 			src/client/irc/irc_command.c
+
+#cbuffer
+CLIENT_SRC+=src/cbuffer/cbuffer.c
 
 # utils
 CLIENT_SRC+=src/utils/safe.c \

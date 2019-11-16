@@ -13,7 +13,6 @@ SERVER_SRC=src/server/main.c \
 			src/server/disconnect.c \
 			src/server/daemonize.c \
 			src/server/do_select.c \
-			src/server/cbuffer.c \
 			src/server/client_read.c \
 			src/server/client_write.c
 
@@ -42,7 +41,11 @@ SERVER_SRC+=src/server/irc/irc_command.c \
 			src/server/irc/irc_names.c \
 			src/server/irc/irc_away.c \
 			src/server/irc/irc_part.c \
+			src/server/irc/irc_whois.c \
 			src/server/irc/irc_privmsg.c
+
+#cbuffer
+SERVER_SRC+=src/cbuffer/cbuffer.c
 
 # options
 SERVER_SRC+=src/server/options/utils.c \

@@ -38,56 +38,29 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
     $tmp_s->setsockopt(SOL_SOCKET, SO_RCVTIMEO, pack('l!l!', 10, 0));
 
     # All clients joining specific channel
-    $tmp_s->send("NICK client_$i\x0D\x0AUSER client$i microsoft.com :Client $i\x0D\x0AJOIN #meeting\x0D\x0A");
+    $tmp_s->send("NICK client_$i\x0D\x0AUSER client$i microsoft.com :Client $i\x0D\x0A");
 
     push @s, $tmp_s
 }
 sleep(3);
 
 #
-# List all visible users of channel
+# All client leave their channel
 #
 
-my $response = "";
-$s[0]->recv($response, 2048);
-
-sleep(2);
-# Get all connected people to the channel
-$s[0]->send("NAMES #meeting\x0D\x0A");
-$s[0]->recv($response, 1024);
-print $response;
-
-#
-# List all visible channels and user
-#
-
-print "Changing clients channel\n";
+print "Joining clients channel\n";
 for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
     # All clients joining their created channel
     $s[$i]->send("JOIN #channel_$i\x0D\x0A");
 }
-
 sleep(2);
+
 # Get all connected people to the all channels
-$s[0]->send("NAMES\x0D\x0A");
-$s[0]->recv($response, 2048);
+$s[0]->send("WHOIS client_3\x0D\x0AWHOIS client_5,client_8\x0D\x0A");
+sleep(4);
+
+$s[0]->recv(my $response, 2048);
 print $response;
-
-#
-# All client leave their channel
-#
-
-print "Leaving clients channel\n";
-for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
-    # All clients joining their created channel
-    $s[$i]->send("PART #channel_$i\x0D\x0A");
-}
-
-sleep(2);
-# Get all connected people to the all channels
-$s[0]->send("NAMES\x0D\x0A");
-$s[0]->recv($response, 2048);
-print "end:" . $response;
 
 #
 # Terminate clients

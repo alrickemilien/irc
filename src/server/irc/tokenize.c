@@ -8,6 +8,10 @@ size_t tokenize(char *str, t_token *tokens, size_t len)
     char * end;
 
     end = strstr(str, "\x0D\x0A");
+
+    if (end == (void*)0)
+        end = str + strlen(str);
+
     i = 0;
     count = 0;
     while (str[i] && str + i < end && count < len)

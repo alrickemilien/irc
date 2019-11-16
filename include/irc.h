@@ -71,17 +71,7 @@ size_t tokenizechr(char *str, t_token *tokens, size_t len, int c);
 ** CBuffer
 */
 
-typedef struct s_cbuffer
-{
-    size_t size;
-    char   data[BUF_SIZE + 1];
-} t_cbuffer;
-
-int cbuffer_push(t_cbuffer *buffer, char *data, size_t size);
-int cbuffer_flush(t_cbuffer *buffer);
-int cbuffer_nflush(t_cbuffer *buffer, size_t n);
-int cbuffer_recv(t_cbuffer *buffer, int cs);
-int cbuffer_pflush(t_cbuffer *buffer, char *data, size_t size);
+# include <cbuffer.h>
 
 /*
 ** File descriptor
@@ -134,6 +124,9 @@ enum e_irc_reply
     RPL_AWAY = 301,
     RPL_UNAWAY = 305,
     RPL_NOWAWAY = 306,
+    RPL_WHOISUSER = 311,
+    RPL_ENDOFWHOIS = 318,
+    RPL_WHOISCHANNELS = 319,
     RPL_NAMREPLY = 353,
     RPL_ENDOFNAMES = 366,
     ERR_NOSUCHNICK = 401,
