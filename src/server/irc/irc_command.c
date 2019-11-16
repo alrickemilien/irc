@@ -12,6 +12,7 @@ static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
     [IRC_AWAY] = {"AWAY", &irc_away},
     [IRC_PART] = {"PART", &irc_part},
     [IRC_WHOIS] = {"WHOIS", &irc_whois},
+    [IRC_WHO] = {"WHO", &irc_who},
 };
 
 int irc_command(t_env *e, int cs, size_t end_command_index)

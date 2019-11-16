@@ -44,9 +44,6 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
     // ',')); j = 0; while (j < 30 && subtokens[j].addr)
     //     printf("subtokens:%s\n", subtokens[j++].addr);
 
-    printf("subtoken_count: %ld\n", subtoken_count);
-    printf("to send to: %s\n", tokens[1].addr);
-
     // Find client to send private message
     i = 0;
     while (i <= e->max)
@@ -78,9 +75,10 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
                                                         : tokens[2].addr);
                     }
 
-                    // Set to NULL only clients
+                    // Set to NULL only clients, to channels
                     if (subtokens[j].addr[0] != '&' && subtokens[j].addr[0] != '#')
                         subtokens[j].addr = (void *)0;
+                    
                     break;
                 }
 

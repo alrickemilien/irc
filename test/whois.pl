@@ -55,11 +55,18 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
 }
 sleep(2);
 
-# Get all connected people to the all channels
+# Test WHOIS query
 $s[0]->send("WHOIS client_3\x0D\x0AWHOIS client_5,client_8\x0D\x0A");
 sleep(4);
 
 $s[0]->recv(my $response, 2048);
+print $response;
+
+# Test WHO query
+$s[0]->send("WHO client_3\x0D\x0AWHO\x0D\x0A");
+sleep(4);
+
+$s[0]->recv($response, 2048);
 print $response;
 
 #

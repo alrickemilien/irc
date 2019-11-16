@@ -28,6 +28,10 @@ const t_irc_reply replys[] = {
     {RPL_WHOISUSER, TOSTR(RPL_WHOISUSER), "%s %s %s * :%s"},
     {RPL_ENDOFWHOIS, TOSTR(RPL_ENDOFWHOIS), "%s :End of /WHOIS list"},
     {RPL_WHOISCHANNELS, TOSTR(RPL_WHOISCHANNELS), "%s :%s"},
+
+    {RPL_WHOREPLY, TOSTR(RPL_WHOREPLY),
+     "%s %s %s %s %s %s" /*"%s %s %s %s %s :%d %s"*/},
+    {RPL_ENDOFWHO, TOSTR(RPL_ENDOFWHO), "%s :End of /WHO list"},
 };
 
 int irc_reply(t_env *e, int cs, int code, ...)
