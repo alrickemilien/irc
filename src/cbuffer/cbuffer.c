@@ -54,16 +54,32 @@ void cbuffer_putstr(t_cbuffer *cbuf, const char *str)
     assert(cbuf);
 
     n = strlen(str);
-
-    count = CBUFFSIZE - 1 - cbuf->head;
+    count = CBUFFSIZE - cbuf->head;
     memcpy(cbuf->buffer + cbuf->head, str, count > n ? n : count);
 
-    if (count < n)
-        memcpy(cbuf->buffer, str, n - count);
-    cbuf->head = (cbuf->head + n) % CBUFFSIZE;
+    // printf("count: %ld\n", count);
+    // printf("cbuf->head: %ld\n", cbuf->head);
+    // printf("cbuf->tail: %ld\n", cbuf->tail);
 
-    if (cbuf->head < cbuf->tail)
-        cbuf->tail = cbuf->head + 1;
+    // When all string has been copied
+    if (count >= n)
+    {
+        cbuf->head += n;
+        return;
+    }
+
+    if ((cbuf->head + n) % CBUFFSIZE >= cbuf->tail)
+    {
+        cbuf->head = cbuf->tail == 0 ? CBUFFSIZE : cbuf->tail - 1;
+        count = cbuf->tail;
+    }
+    else
+    {
+        cbuf->head = (cbuf->head + n) % CBUFFSIZE;
+        count = n - count;
+    }
+    if (count)
+        memcpy(cbuf->buffer, str, n - count);
 }
 
 /*
@@ -202,20 +218,24 @@ int cbuffer_send(int cs, t_cbuffer *cbuf, size_t n, int flags)
 {
     int    r;
     size_t count;
+    char   to_send[CBUFFSIZE];
 
     // Buffer empty
     if (cbuffer_isempty(cbuf))
         return (0);
 
     count = CBUFFSIZE - cbuf->tail < n ? CBUFFSIZE - cbuf->tail : n;
-    printf("Sending %ld bytes to %d\n", count, cs);
-    r = send(cs, cbuf->buffer + cbuf->tail, count, flags);
+    printf("Sending %ld bytes to #%d\n", count, cs);
 
-    if (r < 0)
-        return (r);
+    memset(to_send, 0, sizeof(to_send));
+    memcpy(to_send, cbuf->buffer + cbuf->tail, count);
 
     if (count < n)
-        r = send(cs, cbuf->buffer, n - count, flags);
+        memcpy(to_send + count, cbuf->buffer, n - count);
+
+    printf("to_send: %s\n", to_send);
+
+    r = send(cs, to_send, n, flags);
 
     if (r < 0)
         return (r);
@@ -231,7 +251,7 @@ void cbuffer_dropn(t_cbuffer *cbuf, size_t n)
     // Not enough space for data fetch
     // Buffer still full
     if (cbuffer_isempty(cbuf))
-        return ;
+        return;
 
     if (cbuf->tail + n > CBUFFSIZE)
         cbuf->head = (cbuf->tail + n) % CBUFFSIZE;

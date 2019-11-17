@@ -28,7 +28,7 @@ void client_read(t_env *e, size_t cs)
         // Receiving data from the client cs
         r = cbuffer_recv(&e->fds[cs].buf_read, cs);
 
-        // printf("%ld bytes has been received for %ld\n", r, cs);
+        printf("client_read::%ld bytes has been received for %ld\n", r, cs);
 
         if (r <= 0)
             return (disconnect(e, cs));

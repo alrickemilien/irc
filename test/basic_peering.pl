@@ -22,6 +22,7 @@ use ircunittest;
 
 my $HOST = '127.0.0.1';
 my $PORT = '5555';
+my $DBUF_BLOCK_SIZE = 512;
 
 diag "Connecting client 1\n";
 # create a connecting socket
@@ -54,28 +55,20 @@ sleep(1);
 
 $s1->send("NICK client_1\x0D\x0AUSER client1 microsoft.com :Client One\x0D\x0A");
 $s2->send("NICK client_2\x0D\x0AUSER client2 aws.com :Client Two\x0D\x0A");
-sleep(1);
+sleep(4);
 
 #
 # Test basic peering
 #
 
 # Data to send to a server
-$s1->send("PRIVMSG client_2 Why don't you call me anymore?\x0D\x0A");
+$s1->send("PRIVMSG client_2 Hi\x0D\x0A");
 sleep(2); # Wait message reception on the server
 
-$s2->recv(my $response, 1024);
-ok(index($response, "Why don't you call me anymore?") ne -1);
+$s2->recv(my $response, $DBUF_BLOCK_SIZE);
+ok(index($response, "Hi") ne -1);
 
-diag "response " . $response;
-
-$s1->send("PRIVMSG client_2 YAAAA?\x0D\x0A");
-sleep(1); # Wait message reception on the server
-
-$s2->recv($response, 1024);
-ok(index($response, "YAAAA") ne -1);
-
-diag "response " . $response;
+diag "response 1  " . $response;
 
 exit (1);
 
@@ -90,7 +83,7 @@ for (my $i = 0; $i <= 10000; $i++) {
 $msg .= "\x0D\x0A PRIVMSG client_2 non \x0D\x0A";
 $s1->send($msg);
 
-$s2->recv($response, 1024);
+$s2->recv($response, $DBUF_BLOCK_SIZE);
 ok(index($response, "non") ne -1);
 
 

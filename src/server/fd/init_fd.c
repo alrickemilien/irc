@@ -17,7 +17,7 @@ void init_fd(t_env *e)
             FD_SET(i, &e->fd_read);
 
             // Add the write fd only if write buffer is available
-            if (cbuffer_isempty(&e->fds[i].buf_write) == false)
+            if (cbuffer_size(&e->fds[i].buf_write) != 0)
                 FD_SET(i, &e->fd_write);
 
             e->max = MAX(e->max, i);

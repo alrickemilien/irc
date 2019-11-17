@@ -75,6 +75,7 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
                                        tokens[2].addr[0] == ':'
                                            ? tokens[2].addr + 1
                                            : tokens[2].addr);
+                        cbuffer_putstr(&e->fds[i].buf_write, "\x0D\x0A");
                     }
 
                     // Set to NULL only clients, to channels
