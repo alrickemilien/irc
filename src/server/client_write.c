@@ -46,5 +46,4 @@ void client_write(t_env *e, size_t cs)
 
     // printf(":AFTER :\n");
     // cbuffer_debug(&e->fds[cs].buf_write);
-
 }

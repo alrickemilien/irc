@@ -140,8 +140,7 @@ ok(ircunittest::recv_eq $s3, "RPL_NOWAWAY :You have been marked as being away");
 
 $s1->send("PRIVMSG לקוח3,client_2 :איפה הביבליוטקה\x0D\x0A");
 
-ok(ircunittest::recv_eq $s1, "RPL_AWAY client_2 :משם");
-ok(ircunittest::recv_eq $s1, "RPL_AWAY לקוח3 :Available between 00AM and 07AM");
+ok(ircunittest::recv_eq $s1, "RPL_AWAY client_2 :משם\x0D\x0ARPL_AWAY לקוח3 :Available between 00AM and 07AM");
 
 #
 # Terminate clients
@@ -149,8 +148,8 @@ ok(ircunittest::recv_eq $s1, "RPL_AWAY לקוח3 :Available between 00AM and 07A
 
 $s1->send("QUIT :bye\x0D\x0A");
 
-ok(ircunittest::recv_eq $s2, "#ערוץ1 quit :bye");
-ok(ircunittest::recv_eq $s3, "#ערוץ1 quit :bye");
+ok(ircunittest::recv_eq $s2, "client_1 QUIT :bye");
+ok(ircunittest::recv_eq $s3, "client_1 QUIT :bye");
 
 diag "Closing clients";
 $s1->close();
