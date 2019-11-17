@@ -4,12 +4,12 @@ void unicast(t_env *e, const char *msg, int msg_type, size_t cs)
 {
     if (msg_type == IRC_NOTICE)
     {
-        strcat(e->fds[cs].buf_write, "NOTICE ");
-        strcat(e->fds[cs].buf_write, msg);
+        cbuffer_putstr(&e->fds[cs].buf_write, "NOTICE ");
+        cbuffer_putstr(&e->fds[cs].buf_write, msg);
     }
     if (msg_type == IRC_PRIVMSG)
     {
-        strcat(e->fds[cs].buf_write, "PRIVMSG ");
-        strcat(e->fds[cs].buf_write, msg);
+        cbuffer_putstr(&e->fds[cs].buf_write, "PRIVMSG ");
+        cbuffer_putstr(&e->fds[cs].buf_write, msg);
     }
 }

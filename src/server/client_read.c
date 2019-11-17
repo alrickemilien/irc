@@ -4,7 +4,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include "server/irc.h"
+#include <server/irc.h>
 
 /*
 ** Data available on read on the socket cs

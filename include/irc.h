@@ -87,7 +87,7 @@ typedef struct s_fd
     void (*read)();
     void (*write)();
     t_cbuffer buf_read;
-    char      buf_write[BUF_SIZE + 1];
+    t_cbuffer buf_write;
 
     // User data
     size_t channel;

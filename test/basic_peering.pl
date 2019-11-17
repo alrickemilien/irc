@@ -67,11 +67,17 @@ sleep(2); # Wait message reception on the server
 $s2->recv(my $response, 1024);
 ok(index($response, "Why don't you call me anymore?") ne -1);
 
+diag "response " . $response;
+
 $s1->send("PRIVMSG client_2 YAAAA?\x0D\x0A");
 sleep(1); # Wait message reception on the server
 
 $s2->recv($response, 1024);
 ok(index($response, "YAAAA") ne -1);
+
+diag "response " . $response;
+
+exit (1);
 
 #
 # Test fat message

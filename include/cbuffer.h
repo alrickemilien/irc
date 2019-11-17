@@ -30,6 +30,8 @@ void cbuffer_reset(t_cbuffer* cbuf);
 /// Requires: cbuf is valid and created by circular_buf_init
 void circular_buf_put(t_cbuffer* cbuf, uint8_t data);
 
+void cbuffer_putstr(t_cbuffer *cbuf, const char *str);
+
 /// Rejects new data if the buffer is full
 /// Requires: cbuf is valid and created by circular_buf_init
 /// Returns 0 on success, -1 if buffer is full
@@ -46,7 +48,7 @@ bool cbuffer_isempty(t_cbuffer* cbuf);
 size_t cbuffer_size(t_cbuffer* cbuf);
 
 ///
-int cbuffer_send(t_cbuffer *cbuf, int cs, size_t n);
+int cbuffer_send(int cs, t_cbuffer *cbuf, size_t n, int flags);
 
 ///
 int cbuffer_recv(t_cbuffer *cbuf, int cs);

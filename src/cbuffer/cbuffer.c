@@ -46,6 +46,26 @@ void cbuffer_put(t_cbuffer *cbuf, uint8_t *data, size_t n)
         cbuf->tail = cbuf->head + 1;
 }
 
+void cbuffer_putstr(t_cbuffer *cbuf, const char *str)
+{
+    size_t count;
+    size_t n;
+
+    assert(cbuf);
+
+    n = strlen(str);
+
+    count = CBUFFSIZE - 1 - cbuf->head;
+    memcpy(cbuf->buffer + cbuf->head, str, count > n ? n : count);
+
+    if (count < n)
+        memcpy(cbuf->buffer, str, n - count);
+    cbuf->head = (cbuf->head + n) % CBUFFSIZE;
+
+    if (cbuf->head < cbuf->tail)
+        cbuf->tail = cbuf->head + 1;
+}
+
 /*
 ** on put, the head pointer is moved forward
 **
@@ -178,24 +198,24 @@ int cbuffer_recv(t_cbuffer *cbuf, int cs)
 }
 
 // Receiving data from the client cs
-int cbuffer_send(t_cbuffer *cbuf, int cs, size_t n)
+int cbuffer_send(int cs, t_cbuffer *cbuf, size_t n, int flags)
 {
     int    r;
     size_t count;
 
-    // Not enough space for data fetch
-    // Buffer still full
+    // Buffer empty
     if (cbuffer_isempty(cbuf))
         return (0);
 
     count = CBUFFSIZE - cbuf->tail < n ? CBUFFSIZE - cbuf->tail : n;
-    r = send(cs, cbuf->buffer + cbuf->tail, count, 0);
+    printf("Sending %ld bytes to %d\n", count, cs);
+    r = send(cs, cbuf->buffer + cbuf->tail, count, flags);
 
     if (r < 0)
         return (r);
 
     if (count < n)
-        r = send(cs, cbuf->buffer, n - count, 0);
+        r = send(cs, cbuf->buffer, n - count, flags);
 
     if (r < 0)
         return (r);

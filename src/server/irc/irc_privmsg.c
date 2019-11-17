@@ -67,18 +67,21 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
                     }
                     else
                     {
-                        strcat(e->fds[i].buf_write, ":");
-                        strcat(e->fds[i].buf_write, e->fds[cs].nickname);
-                        strcat(e->fds[i].buf_write, " PRIVMSG ");
-                        strcat(e->fds[i].buf_write, tokens[2].addr[0] == ':'
-                                                        ? tokens[2].addr + 1
-                                                        : tokens[2].addr);
+                        cbuffer_putstr(&e->fds[i].buf_write, ":");
+                        cbuffer_putstr(&e->fds[i].buf_write,
+                                       e->fds[cs].nickname);
+                        cbuffer_putstr(&e->fds[i].buf_write, " PRIVMSG ");
+                        cbuffer_putstr(&e->fds[i].buf_write,
+                                       tokens[2].addr[0] == ':'
+                                           ? tokens[2].addr + 1
+                                           : tokens[2].addr);
                     }
 
                     // Set to NULL only clients, to channels
-                    if (subtokens[j].addr[0] != '&' && subtokens[j].addr[0] != '#')
+                    if (subtokens[j].addr[0] != '&' &&
+                        subtokens[j].addr[0] != '#')
                         subtokens[j].addr = (void *)0;
-                    
+
                     break;
                 }
 

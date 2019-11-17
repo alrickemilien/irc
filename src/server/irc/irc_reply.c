@@ -45,13 +45,15 @@ int irc_reply(t_env *e, int cs, int code, ...)
     {
         if (replys[i].code == code)
         {
-            strcat(e->fds[cs].buf_write, replys[i].name);
-            strcat(e->fds[cs].buf_write, " ");
+            cbuffer_putstr(&e->fds[cs].buf_write, replys[i].name);
+            cbuffer_putstr(&e->fds[cs].buf_write, " ");
+
             va_start(ap, code);
             vsprintf(msg, replys[i].fmt, ap);
             va_end(ap);
-            strcat(e->fds[cs].buf_write, msg);
-            strcat(e->fds[cs].buf_write, "\x0D\x0A");
+
+            cbuffer_putstr(&e->fds[cs].buf_write, msg);
+            cbuffer_putstr(&e->fds[cs].buf_write, "\x0D\x0A");
 
             return (0);
         }
