@@ -23,7 +23,7 @@ void init_fd(t_env *e)
             FD_SET(i, &e->fd_read);
 
             // Add the write fd only if write buffer is available
-            if (strlen(e->fds[i].buf_write) > 0)
+            if (cbuffer_size(&e->fds[i].buf_write) > 0)
                 FD_SET(i, &e->fd_write);
             e->max = MAX(e->max, i);
         }

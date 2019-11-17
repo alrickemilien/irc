@@ -9,7 +9,6 @@ SERVER_SRC=src/server/main.c \
 			src/server/ipv6.c \
 			src/server/on_connect.c \
 			src/server/broadcast.c \
-			src/server/unicast.c \
 			src/server/disconnect.c \
 			src/server/daemonize.c \
 			src/server/do_select.c \
@@ -38,9 +37,11 @@ SERVER_SRC+=src/server/irc/irc_command.c \
 			src/server/irc/irc_user.c \
 			src/server/irc/irc_quit.c \
 			src/server/irc/irc_pass.c \
+			src/server/irc/irc_notice.c \
 			src/server/irc/irc_names.c \
 			src/server/irc/irc_away.c \
 			src/server/irc/irc_part.c \
+			src/server/irc/irc_who.c \
 			src/server/irc/irc_whois.c \
 			src/server/irc/irc_privmsg.c
 

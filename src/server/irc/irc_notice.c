@@ -1,7 +1,7 @@
 #include <ctype.h>
 #include <server/irc.h>
 
-static int irc_privmsg_check_command(t_env *e, int cs, const t_token *tokens)
+static int irc_notice_check_command(t_env *e, int cs, const t_token *tokens)
 {
     if (!tokens[1].addr || !tokens[1].len)
     {
@@ -26,14 +26,14 @@ static int irc_privmsg_check_command(t_env *e, int cs, const t_token *tokens)
     return (0);
 }
 
-int irc_privmsg(t_env *e, int cs, t_token *tokens)
+int irc_notice(t_env *e, int cs, t_token *tokens)
 {
     size_t  i;
     size_t  j;
     size_t  subtoken_count;
     t_token subtokens[30];
 
-    if ((irc_privmsg_check_command(e, cs, tokens)) != 0)
+    if ((irc_notice_check_command(e, cs, tokens)) != 0)
         return (-1);
 
     memset(subtokens, 0, sizeof(t_token) * 30);
@@ -60,12 +60,7 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
                      strncmp(e->channels[e->fds[i].channel].channel,
                              subtokens[j].addr, subtokens[j].len) == 0))
                 {
-                    if (e->fds[i].away)
-                    {
-                        irc_reply(e, cs, RPL_AWAY, e->fds[i].nickname,
-                                  e->fds[i].awaymessage);
-                    }
-                    else
+                    if (!e->fds[i].away)
                     {
                         cbuffer_putstr(&e->fds[i].buf_write, ":");
                         cbuffer_putstr(&e->fds[i].buf_write,

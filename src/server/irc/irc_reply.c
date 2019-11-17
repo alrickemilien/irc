@@ -28,6 +28,11 @@ const t_irc_reply replys[] = {
     {RPL_WHOISUSER, TOSTR(RPL_WHOISUSER), "%s %s %s * :%s"},
     {RPL_ENDOFWHOIS, TOSTR(RPL_ENDOFWHOIS), "%s :End of /WHOIS list"},
     {RPL_WHOISCHANNELS, TOSTR(RPL_WHOISCHANNELS), "%s :%s"},
+
+    {RPL_WHOREPLY, TOSTR(RPL_WHOREPLY),
+     "%s %s %s %s %s %s" /*"%s %s %s %s %s :%d %s"*/},
+    {RPL_ENDOFWHO, TOSTR(RPL_ENDOFWHO), "%s :End of /WHO list"},
+    {RPL_TOPIC, TOSTR(RPL_TOPIC), "%s :%s"},
 };
 
 int irc_reply(t_env *e, int cs, int code, ...)
@@ -41,13 +46,15 @@ int irc_reply(t_env *e, int cs, int code, ...)
     {
         if (replys[i].code == code)
         {
-            strcat(e->fds[cs].buf_write, replys[i].name);
-            strcat(e->fds[cs].buf_write, " ");
+            cbuffer_putstr(&e->fds[cs].buf_write, replys[i].name);
+            cbuffer_putstr(&e->fds[cs].buf_write, " ");
+
             va_start(ap, code);
             vsprintf(msg, replys[i].fmt, ap);
             va_end(ap);
-            strcat(e->fds[cs].buf_write, msg);
-            strcat(e->fds[cs].buf_write, "\x0D\x0A");
+
+            cbuffer_putstr(&e->fds[cs].buf_write, msg);
+            cbuffer_putstr(&e->fds[cs].buf_write, "\x0D\x0A");
 
             return (0);
         }

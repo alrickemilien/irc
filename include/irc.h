@@ -87,7 +87,7 @@ typedef struct s_fd
     void (*read)();
     void (*write)();
     t_cbuffer buf_read;
-    char      buf_write[BUF_SIZE + 1];
+    t_cbuffer buf_write;
 
     // User data
     size_t channel;
@@ -125,8 +125,11 @@ enum e_irc_reply
     RPL_UNAWAY = 305,
     RPL_NOWAWAY = 306,
     RPL_WHOISUSER = 311,
+    RPL_ENDOFWHO = 315,
     RPL_ENDOFWHOIS = 318,
     RPL_WHOISCHANNELS = 319,
+    RPL_TOPIC = 332,
+    RPL_WHOREPLY = 352,
     RPL_NAMREPLY = 353,
     RPL_ENDOFNAMES = 366,
     ERR_NOSUCHNICK = 401,

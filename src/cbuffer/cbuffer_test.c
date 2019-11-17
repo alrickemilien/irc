@@ -93,9 +93,52 @@ UNITTEST(test_cbuffer_indexof)
     cbuf.head = 76;
 
     assert(cbuffer_indexof(&cbuf, "\x0D\x0A") == 34);
+
+    // TEST 9
+    cbuffer_reset(&cbuf);
+    memset(cbuf.buffer, 'X', CBUFFSIZE);
+    cbuf.buffer[CBUFFSIZE - 2] = 't';
+    cbuf.buffer[CBUFFSIZE - 1] = 'o';
+    cbuf.buffer[0] = 't';
+    cbuf.buffer[1] = 'o';
+    cbuf.tail = 3;
+    cbuf.head = 2;
+    assert(cbuffer_indexof(&cbuf, "toto") == CBUFFSIZE - 2);
+}
+
+UNITTEST(test_cbuffer_putstr)
+{
+    t_cbuffer cbuf;
+
+    // TEST 1
+    cbuffer_reset(&cbuf);
+    cbuffer_putstr(&cbuf, "ajwf wefh hello vnkjr");
+    assert(cbuffer_indexof(&cbuf, "ajwf wefh hello vnkjr") == 0);
+
+    // TEST 2
+    cbuffer_putstr(&cbuf, "yaya");
+    // printf("cbuffer_indexof(&cbuf, 'yaya'): %ld\n", cbuffer_indexof(&cbuf, "yaya"));
+    assert(cbuffer_indexof(&cbuf, "yaya") == 21);
+
+    // TEST 3
+    cbuf.head = CBUFFSIZE - 2;
+    cbuffer_putstr(&cbuf, "toto");
+    printf("cbuffer_indexof(&cbuf, 'toto'): %ld\n", cbuffer_indexof(&cbuf, "toto"));
+    assert(cbuffer_indexof(&cbuf, "toto") == -1);
+
+    // TEST 4
+    memset(cbuf.buffer, 'X', CBUFFSIZE);
+    cbuf.buffer[CBUFFSIZE] = 0;
+    cbuf.tail = 3;
+    cbuf.head = CBUFFSIZE - 2;
+    cbuffer_putstr(&cbuf, "toto");
+    printf("::%s\n", cbuf.buffer);
+    printf("cbuffer_indexof(&cbuf, 'toto'): %ld\n", cbuffer_indexof(&cbuf, "toto"));
+    assert(cbuffer_indexof(&cbuf, "toto") == CBUFFSIZE - 2);
 }
 
 int main()
 {
     test_cbuffer_indexof();
+    test_cbuffer_putstr();
 }

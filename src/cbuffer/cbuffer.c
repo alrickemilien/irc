@@ -10,7 +10,7 @@ void cbuffer_reset(t_cbuffer *cbuf)
     memset(cbuf->buffer, 0, CBUFFSIZE);
 }
 
-size_t cbuffer_size(t_cbuffer *cbuf)
+size_t cbuffer_size(const t_cbuffer *cbuf)
 {
     size_t size;
 
@@ -35,15 +35,68 @@ void cbuffer_put(t_cbuffer *cbuf, uint8_t *data, size_t n)
 
     assert(cbuf);
 
-    count = CBUFFSIZE - 1 - cbuf->head;
+    count = CBUFFSIZE - cbuf->head;
     memcpy(cbuf->buffer + cbuf->head, data, count > n ? n : count);
 
-    if (count < n)
-        memcpy(cbuf->buffer, data, n - count);
-    cbuf->head = (cbuf->head + n) % CBUFFSIZE;
+    // printf("count: %ld\n", count);
+    // printf("cbuf->head: %ld\n", cbuf->head);
+    // printf("cbuf->tail: %ld\n", cbuf->tail);
 
-    if (cbuf->head < cbuf->tail)
-        cbuf->tail = cbuf->head + 1;
+    // When all string has been copied
+    if (count >= n)
+    {
+        cbuf->head += n;
+        return;
+    }
+
+    if ((cbuf->head + n) % CBUFFSIZE >= cbuf->tail)
+    {
+        cbuf->head = cbuf->tail == 0 ? CBUFFSIZE : cbuf->tail - 1;
+        count = cbuf->tail;
+    }
+    else
+    {
+        cbuf->head = (cbuf->head + n) % CBUFFSIZE;
+        count = n - count;
+    }
+    if (count)
+        memcpy(cbuf->buffer, data, n - count);
+}
+
+void cbuffer_putstr(t_cbuffer *cbuf, const char *str)
+{
+    size_t count;
+    size_t n;
+
+    assert(cbuf);
+
+    n = strlen(str);
+    count = CBUFFSIZE - cbuf->head;
+    memcpy(cbuf->buffer + cbuf->head, str, count > n ? n : count);
+
+    // printf("count: %ld\n", count);
+    // printf("cbuf->head: %ld\n", cbuf->head);
+    // printf("cbuf->tail: %ld\n", cbuf->tail);
+
+    // When all string has been copied
+    if (count >= n)
+    {
+        cbuf->head += n;
+        return;
+    }
+
+    if ((cbuf->head + n) % CBUFFSIZE >= cbuf->tail)
+    {
+        cbuf->head = cbuf->tail == 0 ? CBUFFSIZE : cbuf->tail - 1;
+        count = cbuf->tail;
+    }
+    else
+    {
+        cbuf->head = (cbuf->head + n) % CBUFFSIZE;
+        count = n - count;
+    }
+    if (count)
+        memcpy(cbuf->buffer, str, n - count);
 }
 
 /*
@@ -178,24 +231,28 @@ int cbuffer_recv(t_cbuffer *cbuf, int cs)
 }
 
 // Receiving data from the client cs
-int cbuffer_send(t_cbuffer *cbuf, int cs, size_t n)
+int cbuffer_send(int cs, t_cbuffer *cbuf, size_t n, int flags)
 {
     int    r;
     size_t count;
+    char   to_send[CBUFFSIZE];
 
-    // Not enough space for data fetch
-    // Buffer still full
+    // Buffer empty
     if (cbuffer_isempty(cbuf))
         return (0);
 
     count = CBUFFSIZE - cbuf->tail < n ? CBUFFSIZE - cbuf->tail : n;
-    r = send(cs, cbuf->buffer + cbuf->tail, count, 0);
+    // printf("Sending %ld bytes to #%d\n", count, cs);
 
-    if (r < 0)
-        return (r);
+    memset(to_send, 0, sizeof(to_send));
+    memcpy(to_send, cbuf->buffer + cbuf->tail, count);
 
     if (count < n)
-        r = send(cs, cbuf->buffer, n - count, 0);
+        memcpy(to_send + count, cbuf->buffer, n - count);
+
+    // printf("to_send: %s\n", to_send);
+
+    r = send(cs, to_send, n, flags);
 
     if (r < 0)
         return (r);
@@ -211,9 +268,35 @@ void cbuffer_dropn(t_cbuffer *cbuf, size_t n)
     // Not enough space for data fetch
     // Buffer still full
     if (cbuffer_isempty(cbuf))
-        return ;
+        return;
 
     if (cbuf->tail + n > CBUFFSIZE)
         cbuf->head = (cbuf->tail + n) % CBUFFSIZE;
     cbuf->tail = (cbuf->tail + n) % CBUFFSIZE;
+}
+
+// Drop n bytes of the buffer from tail
+void cbuffer_debug(const t_cbuffer *cbuf)
+{
+    printf(
+        "cbuf->tail: %ld\n"
+        "cbuf->head: %ld\n"
+        "cbuf->size: %ld\n",
+        cbuf->tail, cbuf->head, cbuffer_size(cbuf));
+
+
+    printf("cbuf->data:\n");
+
+    for (size_t i = 0; i < CBUFFSIZE; i++)
+    {
+        if (cbuf->buffer[i] == 0)
+            printf("%c", '.');
+        else if (cbuf->buffer[i] == '\x0D')
+            printf("%s", "\\x0D");
+        else if (cbuf->buffer[i] == '\x0A')
+            printf("%s", "\\x0A");
+        else
+            printf("%c", cbuf->buffer[i]);
+    }
+    printf("\n");
 }
