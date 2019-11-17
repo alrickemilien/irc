@@ -225,7 +225,7 @@ int cbuffer_send(int cs, t_cbuffer *cbuf, size_t n, int flags)
         return (0);
 
     count = CBUFFSIZE - cbuf->tail < n ? CBUFFSIZE - cbuf->tail : n;
-    printf("Sending %ld bytes to #%d\n", count, cs);
+    // printf("Sending %ld bytes to #%d\n", count, cs);
 
     memset(to_send, 0, sizeof(to_send));
     memcpy(to_send, cbuf->buffer + cbuf->tail, count);
@@ -233,7 +233,7 @@ int cbuffer_send(int cs, t_cbuffer *cbuf, size_t n, int flags)
     if (count < n)
         memcpy(to_send + count, cbuf->buffer, n - count);
 
-    printf("to_send: %s\n", to_send);
+    // printf("to_send: %s\n", to_send);
 
     r = send(cs, to_send, n, flags);
 

@@ -80,7 +80,6 @@ int irc_whois(t_env *e, int cs, t_token *tokens);
 int irc_who(t_env *e, int cs, t_token *tokens);
 int irc_reply(t_env *e, int cs, int code, ...);
 
-void unicast(t_env *e, const char *msg, int msg_type, size_t cs);
 void broadcast(t_env *e, const char *msg, int type, size_t cs);
 void disconnect(t_env *e, size_t cs);
 

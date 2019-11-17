@@ -9,7 +9,6 @@ SERVER_SRC=src/server/main.c \
 			src/server/ipv6.c \
 			src/server/on_connect.c \
 			src/server/broadcast.c \
-			src/server/unicast.c \
 			src/server/disconnect.c \
 			src/server/daemonize.c \
 			src/server/do_select.c \
