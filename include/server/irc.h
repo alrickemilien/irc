@@ -51,12 +51,12 @@ typedef enum e_irc {
     IRC_QUIT,
     IRC_NAMES,
     IRC_PRIVMSG,
-    IRC_NOTICE,
     IRC_PASS,
     IRC_AWAY,
     IRC_PART,
     IRC_WHOIS,
     IRC_WHO,
+    IRC_NOTICE,
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
 
@@ -72,6 +72,7 @@ int irc_nick(t_env *e, int cs, t_token *tokens);
 int irc_user(t_env *e, int cs, t_token *tokens);
 int irc_quit(t_env *e, int cs, t_token *tokens);
 int irc_names(t_env *e, int cs, t_token *tokens);
+int irc_notice(t_env *e, int cs, t_token *tokens);
 int irc_away(t_env *e, int cs, t_token *tokens);
 int irc_privmsg(t_env *e, int cs, t_token *tokens);
 int irc_pass(t_env *e, int cs, t_token *tokens);

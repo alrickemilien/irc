@@ -37,6 +37,7 @@ SERVER_SRC+=src/server/irc/irc_command.c \
 			src/server/irc/irc_user.c \
 			src/server/irc/irc_quit.c \
 			src/server/irc/irc_pass.c \
+			src/server/irc/irc_notice.c \
 			src/server/irc/irc_names.c \
 			src/server/irc/irc_away.c \
 			src/server/irc/irc_part.c \
