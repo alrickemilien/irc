@@ -28,7 +28,7 @@ void cbuffer_reset(t_cbuffer* cbuf);
 /// Continues to add data if the buffer is full
 /// Old data is overwritten
 /// Requires: cbuf is valid and created by circular_buf_init
-void circular_buf_put(t_cbuffer* cbuf, uint8_t data);
+void cbuffer_put(t_cbuffer *cbuf, uint8_t *data, size_t n);
 
 void cbuffer_putstr(t_cbuffer *cbuf, const char *str);
 

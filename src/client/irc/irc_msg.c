@@ -38,11 +38,11 @@ int irc_msg(t_env *e, int cs, t_token *tokens)
     if ((irc_msg_check_command(e, cs, tokens)) != 0)
         return (-1);
 
-    strcat(e->fds[cs].buf_write, "PRIVMSG ");
-    strncat(e->fds[cs].buf_write, tokens[1].addr, tokens[1].len);
-    strcat(e->fds[cs].buf_write, " :");
-    strncat(e->fds[cs].buf_write, tokens[2].addr, tokens[2].len);
-    strcat(e->fds[cs].buf_write, "\x0D\x0A");
+    cbuffer_putstr(&e->fds[cs].buf_write, "PRIVMSG ");
+    cbuffer_put(&e->fds[cs].buf_write, (uint8_t*)tokens[1].addr, tokens[1].len);
+    cbuffer_putstr(&e->fds[cs].buf_write, " :");
+    cbuffer_put(&e->fds[cs].buf_write, (uint8_t*)tokens[2].addr, tokens[2].len);
+    cbuffer_putstr(&e->fds[cs].buf_write, "\x0D\x0A");
 
     // loginfo("%s: %s", e->fds[cs].nickname, tokens[2].addr);
 

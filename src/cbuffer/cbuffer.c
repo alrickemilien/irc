@@ -35,15 +35,32 @@ void cbuffer_put(t_cbuffer *cbuf, uint8_t *data, size_t n)
 
     assert(cbuf);
 
-    count = CBUFFSIZE - 1 - cbuf->head;
+    count = CBUFFSIZE - cbuf->head;
     memcpy(cbuf->buffer + cbuf->head, data, count > n ? n : count);
 
-    if (count < n)
-        memcpy(cbuf->buffer, data, n - count);
-    cbuf->head = (cbuf->head + n) % CBUFFSIZE;
+    // printf("count: %ld\n", count);
+    // printf("cbuf->head: %ld\n", cbuf->head);
+    // printf("cbuf->tail: %ld\n", cbuf->tail);
 
-    if (cbuf->head < cbuf->tail)
-        cbuf->tail = cbuf->head + 1;
+    // When all string has been copied
+    if (count >= n)
+    {
+        cbuf->head += n;
+        return;
+    }
+
+    if ((cbuf->head + n) % CBUFFSIZE >= cbuf->tail)
+    {
+        cbuf->head = cbuf->tail == 0 ? CBUFFSIZE : cbuf->tail - 1;
+        count = cbuf->tail;
+    }
+    else
+    {
+        cbuf->head = (cbuf->head + n) % CBUFFSIZE;
+        count = n - count;
+    }
+    if (count)
+        memcpy(cbuf->buffer, data, n - count);
 }
 
 void cbuffer_putstr(t_cbuffer *cbuf, const char *str)
