@@ -56,7 +56,9 @@ int irc_join(t_env *e, int cs, t_token *tokens)
     if ((irc_join_check_command(e, cs, tokens)) != 0)
         return (-1);
 
+    cbuffer_putstr(&e->fds[cs].buf_write, "JOIN ");
     cbuffer_put(&e->fds[cs].buf_write, (uint8_t*)tokens[1].addr, tokens[1].len);
+    cbuffer_putstr(&e->fds[cs].buf_write, "\x0A\x0D");
 
     if (!e->fds[cs].channelname[0])
         loginfo("You joined %s", tokens[1].addr);

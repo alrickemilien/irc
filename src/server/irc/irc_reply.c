@@ -32,6 +32,7 @@ const t_irc_reply replys[] = {
     {RPL_WHOREPLY, TOSTR(RPL_WHOREPLY),
      "%s %s %s %s %s %s" /*"%s %s %s %s %s :%d %s"*/},
     {RPL_ENDOFWHO, TOSTR(RPL_ENDOFWHO), "%s :End of /WHO list"},
+    {RPL_TOPIC, TOSTR(RPL_TOPIC), "%s :%s"},
 };
 
 int irc_reply(t_env *e, int cs, int code, ...)

@@ -13,8 +13,9 @@ int irc_away(t_env *e, int cs, t_token *tokens)
     }
     else
     {
-        strcat(e->fds[cs].awaymessage,
-               tokens[1].addr[0] == ':' ? tokens[1].addr + 1 : tokens[1].addr);
+        memcpy(e->fds[cs].awaymessage,
+               tokens[1].addr[0] == ':' ? tokens[1].addr + 1 : tokens[1].addr,
+               tokens[1].addr[0] == ':' ? tokens[1].len - 1 : tokens[1].len);
         e->fds[cs].away = 1;
         irc_reply(e, cs, RPL_NOWAWAY, NULL);
         loginfo("%s marked as away\n", e->fds[cs].nickname);

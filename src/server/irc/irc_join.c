@@ -89,15 +89,6 @@ int irc_join(t_env *e, int cs, t_token *tokens)
         return (-1);
     }
 
-    memset(concat, 0, sizeof(concat));
-
-    // sprintf(concat, "%s leaved %s.\x0D\x0A", e->fds[cs].nickname,
-            // e->channels[e->fds[cs].channel].channel);
-    // broadcast(e, concat, IRC_NOTICE, cs);
-
-    loginfo("%s leaved %s\n", e->fds[cs].nickname,
-            e->channels[e->fds[cs].channel].channel);
-
     memset(e->channels[i].channel, 0, CHANNELSTRSIZE + 1);
     strncpy(e->channels[i].channel, tokens[1].addr, tokens[1].len);
 
@@ -109,10 +100,18 @@ int irc_join(t_env *e, int cs, t_token *tokens)
 
     e->fds[cs].channel = i;
 
-    // sprintf(concat, "%s joined %s.\x0D\x0A", e->fds[cs].nickname,
-            // e->channels[i].channel);
-    // broadcast(e, concat, IRC_NOTICE, cs);
-    loginfo("%s joined %s\n", e->fds[cs].nickname, e->channels[i].channel);
+    memset(concat, 0, sizeof(concat));
+
+    sprintf(concat, ":%s JOIN %s\x0D\x0A", e->fds[cs].nickname,
+            e->channels[e->fds[cs].channel].channel);
+
+    broadcast(e, concat, IRC_NOTICE, cs);
+
+    loginfo(":%s JOIN %s\n", e->fds[cs].nickname,
+            e->channels[e->fds[cs].channel].channel);
+
+    irc_reply(e, cs, RPL_TOPIC, e->channels[e->fds[cs].channel].channel,
+              e->fds[cs].nickname);
 
     e->channels[i].clients++;
 
