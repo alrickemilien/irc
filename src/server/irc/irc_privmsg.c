@@ -70,7 +70,7 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
                         cbuffer_putstr(&e->fds[i].buf_write, ":");
                         cbuffer_putstr(&e->fds[i].buf_write,
                                        e->fds[cs].nickname);
-                        cbuffer_putstr(&e->fds[i].buf_write, " PRIVMSG ");
+                        cbuffer_putstr(&e->fds[i].buf_write, " PRIVMSG :");
                         cbuffer_putstr(&e->fds[i].buf_write,
                                        tokens[2].addr[0] == ':'
                                            ? tokens[2].addr + 1
@@ -96,7 +96,8 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
     j = 0;
     while (j < subtoken_count)
     {
-        if (subtokens[j].addr != NULL)
+        if (subtokens[j].addr != NULL && subtokens[j].addr[0] != '&' &&
+            subtokens[j].addr[0] != '#')
             irc_reply(e, cs, ERR_NOSUCHNICK, subtokens[j].addr);
         j++;
     }

@@ -64,8 +64,6 @@ static int irc_user_check_command(t_env *e, int cs, const t_token *tokens)
 
 int irc_user(t_env *e, int cs, t_token *tokens)
 {
-    char concat[512];
-
     if ((irc_user_check_command(e, cs, tokens)) < 0)
         return (-1);
 
@@ -95,11 +93,6 @@ int irc_user(t_env *e, int cs, t_token *tokens)
 
     irc_reply(e, cs, RPL_WELCOME, e->fds[cs].username, e->fds[cs].host,
               e->fds[cs].realname);
-
-    memset(concat, 0, sizeof(concat));
-    sprintf(concat, "%s from %s registered with real name %s",
-            e->fds[cs].username, e->fds[cs].host, e->fds[cs].realname);
-    broadcast(e, concat, IRC_NOTICE, cs);
 
     return (IRC_USER);
 }

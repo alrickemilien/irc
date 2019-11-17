@@ -43,7 +43,7 @@ sleep(2);
 for (my $k = 0; $k <= $POOLS_NUMBER; $k++) {
     print "Sending data\n";
     for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
-        $s[$i]->send("PRIVMSG client_0 I say: $i\x0D\x0A");
+        $s[$i]->send("PRIVMSG client_0 :I say: $i\x0D\x0A");
     }
 
     # Wait full messages reception on the server

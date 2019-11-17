@@ -45,7 +45,10 @@ void client_read(t_env *e, size_t cs)
     {
         // The buffer is full without any end of command, flush it
         if (e->fds[cs].buf_read.full)
+        {
+            logerror("[!] Buffer is reset because it is full without command\n");
             cbuffer_reset(&e->fds[cs].buf_read);
+        }
         return;
     }
 
@@ -55,7 +58,6 @@ void client_read(t_env *e, size_t cs)
         if (irc_command(e, cs, index) == IRC_QUIT)
         {
             disconnect(e, cs);
-            cbuffer_reset(&e->fds[cs].buf_read);
             return;
         }
 

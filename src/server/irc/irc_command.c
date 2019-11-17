@@ -60,7 +60,7 @@ int irc_command(t_env *e, int cs, size_t end_command_index)
         i++;
     }
 
-    logerror("Unknow command\n");
+    logerror("Unknow command %s\n", command);
 
     return (-1);
 }

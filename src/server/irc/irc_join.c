@@ -91,9 +91,9 @@ int irc_join(t_env *e, int cs, t_token *tokens)
 
     memset(concat, 0, sizeof(concat));
 
-    sprintf(concat, "%s leaved %s.\x0D\x0A", e->fds[cs].nickname,
-            e->channels[e->fds[cs].channel].channel);
-    broadcast(e, concat, IRC_NOTICE, cs);
+    // sprintf(concat, "%s leaved %s.\x0D\x0A", e->fds[cs].nickname,
+            // e->channels[e->fds[cs].channel].channel);
+    // broadcast(e, concat, IRC_NOTICE, cs);
 
     loginfo("%s leaved %s\n", e->fds[cs].nickname,
             e->channels[e->fds[cs].channel].channel);
@@ -109,9 +109,9 @@ int irc_join(t_env *e, int cs, t_token *tokens)
 
     e->fds[cs].channel = i;
 
-    sprintf(concat, "%s joined %s.\x0D\x0A", e->fds[cs].nickname,
-            e->channels[i].channel);
-    broadcast(e, concat, IRC_NOTICE, cs);
+    // sprintf(concat, "%s joined %s.\x0D\x0A", e->fds[cs].nickname,
+            // e->channels[i].channel);
+    // broadcast(e, concat, IRC_NOTICE, cs);
     loginfo("%s joined %s\n", e->fds[cs].nickname, e->channels[i].channel);
 
     e->channels[i].clients++;

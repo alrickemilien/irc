@@ -10,7 +10,7 @@ void cbuffer_reset(t_cbuffer *cbuf)
     memset(cbuf->buffer, 0, CBUFFSIZE);
 }
 
-size_t cbuffer_size(t_cbuffer *cbuf)
+size_t cbuffer_size(const t_cbuffer *cbuf)
 {
     size_t size;
 
@@ -256,4 +256,30 @@ void cbuffer_dropn(t_cbuffer *cbuf, size_t n)
     if (cbuf->tail + n > CBUFFSIZE)
         cbuf->head = (cbuf->tail + n) % CBUFFSIZE;
     cbuf->tail = (cbuf->tail + n) % CBUFFSIZE;
+}
+
+// Drop n bytes of the buffer from tail
+void cbuffer_debug(const t_cbuffer *cbuf)
+{
+    printf(
+        "cbuf->tail: %ld\n"
+        "cbuf->head: %ld\n"
+        "cbuf->size: %ld\n",
+        cbuf->tail, cbuf->head, cbuffer_size(cbuf));
+
+
+    printf("cbuf->data:\n");
+
+    for (size_t i = 0; i < CBUFFSIZE; i++)
+    {
+        if (cbuf->buffer[i] == 0)
+            printf("%c", '.');
+        else if (cbuf->buffer[i] == '\x0D')
+            printf("%s", "\\x0D");
+        else if (cbuf->buffer[i] == '\x0A')
+            printf("%s", "\\x0A");
+        else
+            printf("%c", cbuf->buffer[i]);
+    }
+    printf("\n");
 }

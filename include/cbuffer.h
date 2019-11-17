@@ -45,7 +45,7 @@ bool cbuffer_isempty(t_cbuffer* cbuf);
 /// Check the number of elements stored in the buffer
 /// Requires: cbuf is valid and created by circular_buf_init
 /// Returns the current number of elements in the buffer
-size_t cbuffer_size(t_cbuffer* cbuf);
+size_t cbuffer_size(const t_cbuffer* cbuf);
 
 ///
 int cbuffer_send(int cs, t_cbuffer *cbuf, size_t n, int flags);
@@ -54,5 +54,7 @@ int cbuffer_send(int cs, t_cbuffer *cbuf, size_t n, int flags);
 int cbuffer_recv(t_cbuffer *cbuf, int cs);
 size_t cbuffer_indexof(t_cbuffer *cbuf, const char *str);
 void cbuffer_dropn(t_cbuffer *cbuf, size_t n);
+
+void cbuffer_debug(const t_cbuffer *cbuf);
 
 #endif  // CBUFFER_H_
