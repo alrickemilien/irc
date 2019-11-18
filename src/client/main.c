@@ -19,6 +19,7 @@ void init_env(t_env *e)
 
     // Server's socket connection
     e->sock = -1;
+    e->ipv6 = 0;
 
     i = 0;
     while (i < e->maxfd)
@@ -47,16 +48,15 @@ static void init_options(t_options *options)
         loginfo("Running server ipv6\n");
 }
 
-// static void init_std(t_env *e)
-// {
-//     t_fd *stdin_fd;
-//     t_fd *stdout_fd;
+static void init_std(t_env *e)
+{
+    t_fd *stdin_fd;
+    // t_fd *stdout_fd;
 
-//     stdin_fd = &e->fds[0];
-//     stdin_fd->type = FD_CLIENT;
-//     stdin_fd->read = server_read;
-//     stdin_fd->write = server_write;
-// }
+    stdin_fd = &e->fds[0];
+    stdin_fd->type = FD_CLIENT;
+    stdin_fd->read = stdin_read;
+}
 
 static void execute_precommands(t_env *e)
 {
@@ -94,7 +94,7 @@ int main(int argc, const char **argv)
 
     execute_precommands(&e);
 
-    // init_std(&e);
+    init_std(&e);
 
     do_select(&e);
 

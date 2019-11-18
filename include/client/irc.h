@@ -64,6 +64,7 @@ void            client_ipv6(t_env *e);
 
 void            server_read(t_env *e, size_t cs);
 void            server_write(t_env *e, size_t cs);
+void            stdin_read(t_env *e, size_t cs);
 
 void            do_select(t_env *e);
 #endif

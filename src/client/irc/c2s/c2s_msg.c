@@ -29,13 +29,13 @@ static int c2s_msg_check_command(t_env *e, int cs, const t_token *tokens)
     (void)e;
 
     if (!tokens[1].addr || !tokens[2].addr)
-        return logerror("ERR_NEEDMOREPARAMS");
+        return logerror("ERR_NEEDMOREPARAMS\n");
     return (0);
 }
 
 int c2s_msg(t_env *e, int cs, t_token *tokens)
 {
-    if ((c2s_msg_check_command(e, cs, tokens)) != 0)
+    if ((c2s_msg_check_command(e, cs, tokens)) < 0)
         return (-1);
 
     cbuffer_putstr(&e->fds[cs].buf_write, "PRIVMSG ");

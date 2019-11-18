@@ -9,12 +9,12 @@ static int c2s_nick_check_command(t_env *e, int cs, const t_token *tokens)
     (void)e;
     
     if (!tokens[1].addr || tokens[2].addr)
-        return (logerror("ERR_NONICKNAMEGIVEN"));
+        return (logerror("ERR_NONICKNAMEGIVEN\n"));
 
     nick_len = tokens[1].len;
 
     if (nick_len > 9 || !nick_len)
-        return (logerror("ERR_ERRONEUSNICKNAME"));
+        return (logerror("ERR_ERRONEUSNICKNAME\n"));
 
     return (0);
 }

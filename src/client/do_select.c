@@ -40,7 +40,7 @@ void check_fd(t_env *e)
     {
         if (FD_ISSET(i, &e->fd_read))
         {
-            printf("available data for read\n");
+            // logdebug("available data for read\n");
             e->fds[i].read(e, i);
         }
         if (FD_ISSET(i, &e->fd_write))
@@ -59,7 +59,7 @@ void do_select(t_env *e)
     timeout.tv_usec = 5000;
 
     (void)timeout;
-    while (e->sock != -1)
+    while (1)
     {
         init_fd(e);
 

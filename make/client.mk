@@ -10,6 +10,7 @@ CLIENT_SRC=src/client/main.c \
 			src/client/irc/tokenize.c \
 			src/client/server_read.c \
 			src/client/server_write.c \
+			src/client/std/stdin_read.c \
 			src/client/do_select.c
 
 # options

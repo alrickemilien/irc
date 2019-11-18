@@ -4,23 +4,23 @@
 #include <pwd.h>
 #include <sys/types.h>
 
-static int c2s_connect_check_command(t_env *e, int cs, const t_token *tokens)
-{
-    size_t nick_len;
+// static int c2s_connect_check_command(t_env *e, int cs, const t_token *tokens)
+// {
+//     size_t nick_len;
 
-    (void)cs;
-    (void)e;
+//     (void)cs;
+//     (void)e;
 
-    if (!tokens[1].addr || tokens[2].addr)
-        return (logerror("ERR_NONICKNAMEGIVEN"));
+//     if (!tokens[1].addr || tokens[2].addr)
+//         return (logerror("ERR_NONICKNAMEGIVEN"));
 
-    nick_len = tokens[1].len;
+//     nick_len = tokens[1].len;
 
-    if (nick_len > NI_MAXHOST || !nick_len)
-        return (logerror("ERR_ERRONEUSNICKNAME"));
+//     if (nick_len > NI_MAXHOST || !nick_len)
+//         return (logerror("ERR_ERRONEUSNICKNAME"));
 
-    return (0);
-}
+//     return (0);
+// }
 
 int c2s_connect(t_env *e, int cs, t_token *tokens)
 {
@@ -31,8 +31,8 @@ int c2s_connect(t_env *e, int cs, t_token *tokens)
     if (e->sock != -1)
         return logerror("Already connected\n");
 
-    if ((c2s_connect_check_command(e, cs, tokens)) < 0)
-        return (-1);
+    // if ((c2s_connect_check_command(e, cs, tokens)) < 0)
+    //     return (-1);
 
     if (e->ipv6 == 1)
         client_ipv6(e);

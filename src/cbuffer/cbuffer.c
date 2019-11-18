@@ -231,6 +231,29 @@ int cbuffer_recv(t_cbuffer *cbuf, int cs)
 }
 
 // Receiving data from the client cs
+int cbuffer_read(t_cbuffer *cbuf, int cs)
+{
+    int r;
+
+    // logdebug("cbuffer_read::cbuffer head BEFO: %ld\n", cbuf->head);
+    // logdebug("cbuffer_read::cbuffer tail BEFO: %ld\n", cbuf->tail);
+
+    if (cbuf->head >= cbuf->tail)
+        r = read(cs, cbuf->buffer + cbuf->head, CBUFFSIZE - cbuf->head);
+    else
+        r = read(cs, cbuf->buffer + cbuf->head, cbuf->tail - cbuf->head);
+
+
+    if (r > 0)
+        cbuf->head = (cbuf->head + r) % CBUFFSIZE;
+
+    // logdebug("cbuffer_read::cbuffer head AFTER: %ld\n", cbuf->head);
+    // logdebug("cbuffer_read::cbuffer tail AFTER: %ld\n", cbuf->tail);
+    
+    return (r);
+}
+
+// Receiving data from the client cs
 int cbuffer_send(int cs, t_cbuffer *cbuf, size_t n, int flags)
 {
     int    r;

@@ -11,26 +11,21 @@ void stdin_read(t_env *e, size_t cs)
     char   command[512];
 
     // Receiving data from the client cs
-    r = cbuffer_recv(&e->fds[cs].buf_read, cs);
+    r = cbuffer_read(&e->fds[cs].buf_read, cs);
 
-    printf("stdin_read::%ld\n", cs);
-    printf("stdin_read buffer tail BEFORE RECV is %ld\n",
-           e->fds[cs].buf_read.tail);
-    printf("stdin_read buffer head BEFORE RECV is %ld\n",
-           e->fds[cs].buf_read.head);
+//     logdebug("stdin_read::%ld\n", cs);
+//     logdebug("stdin_read::r : %ld\n", r);
 
-    printf("stdin_read cbuffer_size(&e->fds[cs].buf_read): %ld\n",
-           cbuffer_size(&e->fds[cs].buf_read));
+//     logdebug("stdin_read cbuffer_size(&e->fds[cs].buf_read): %ld\n",
+//            cbuffer_size(&e->fds[cs].buf_read));
 
     if (r <= 0)
         return;
 
     index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0A");
 
-    if (index == -1)
-        index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0D\x0A");
-
-    printf("INDEX: %ld\n", index);
+    if (index == (size_t)-1)
+        return;
 
     memset(command, 0, CBUFFSIZE);
 
@@ -46,13 +41,15 @@ void stdin_read(t_env *e, size_t cs)
                e->fds[cs].buf_read.buffer, index);
     }
 
-    printf("command: %s\n", command);
+//     logdebug("command: %s\n", command);
+
+    c2s(e, e->sock, command);
 
     // Drop command
-    // +2 because of "\x0D\x0A" skipping
+    // +1 because of "\x0A" skipping
     cbuffer_dropn(&e->fds[cs].buf_read,
                   (e->fds[cs].buf_read.tail < index
                        ? index - e->fds[cs].buf_read.tail
                        : index + CBUFFSIZE - e->fds[cs].buf_read.tail) +
-                      2);
+                      1);
 }

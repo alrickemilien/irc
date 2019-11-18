@@ -55,7 +55,7 @@ int logerror(const char *fmt, ...)
     vprintf(final_fmt, ap);
     va_end(ap);
 
-    return (0);
+    return (-1);
 }
 
 int logdebug(const char *fmt, ...)
