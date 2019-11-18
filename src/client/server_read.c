@@ -55,7 +55,7 @@ void server_read(t_env *e, size_t cs)
                    e->fds[cs].buf_read.buffer, index);
         }
 
-        logdebug("%s\n", command);
+        s2c(e, cs, command);
 
         // Drop command
         // +2 because of "\x0D\x0A" skipping

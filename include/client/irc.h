@@ -39,6 +39,11 @@ typedef enum e_irc {
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
 
+typedef enum e_irc_s2c {
+    IRC_S2C_RPL_WELCOME = 0UL,
+    IRC_S2C_COMMANDS_NUMBER
+} t_irc_s2c;
+
 typedef struct  s_irc_cmd
 {
     char        *command;
@@ -50,6 +55,10 @@ int             c2s_join(t_env *e, int cs, t_token *tokens);
 int             c2s_msg(t_env *e, int cs, t_token *tokens);
 int             c2s_connect(t_env *e, int cs, t_token *tokens);
 int             c2s_nick(t_env *e, int cs, t_token *tokens);
+
+int             s2c(t_env *e, int cs, char *buffer);
+int             s2c_rpl_welcome(t_env *e, int cs, t_token *tokens);
+
 
 /*
 ** fd 
