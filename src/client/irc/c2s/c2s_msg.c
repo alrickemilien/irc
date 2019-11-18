@@ -23,7 +23,7 @@
 //     return (true);
 // }
 
-static int irc_msg_check_command(t_env *e, int cs, const t_token *tokens)
+static int c2s_msg_check_command(t_env *e, int cs, const t_token *tokens)
 {
     (void)cs;
     (void)e;
@@ -33,9 +33,9 @@ static int irc_msg_check_command(t_env *e, int cs, const t_token *tokens)
     return (0);
 }
 
-int irc_msg(t_env *e, int cs, t_token *tokens)
+int c2s_msg(t_env *e, int cs, t_token *tokens)
 {
-    if ((irc_msg_check_command(e, cs, tokens)) != 0)
+    if ((c2s_msg_check_command(e, cs, tokens)) != 0)
         return (-1);
 
     cbuffer_putstr(&e->fds[cs].buf_write, "PRIVMSG ");

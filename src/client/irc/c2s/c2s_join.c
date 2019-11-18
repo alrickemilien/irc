@@ -23,7 +23,7 @@ static bool is_valid_chan(const char *channel)
     return (true);
 }
 
-static int irc_join_check_command(t_env *e, int cs, const t_token *tokens)
+static int c2s_join_check_command(t_env *e, int cs, const t_token *tokens)
 {
     const char *channel;
     size_t      channel_len;
@@ -51,9 +51,9 @@ static int irc_join_check_command(t_env *e, int cs, const t_token *tokens)
     return (-1);
 }
 
-int irc_join(t_env *e, int cs, t_token *tokens)
+int c2s_join(t_env *e, int cs, t_token *tokens)
 {
-    if ((irc_join_check_command(e, cs, tokens)) != 0)
+    if ((c2s_join_check_command(e, cs, tokens)) != 0)
         return (-1);
 
     cbuffer_putstr(&e->fds[cs].buf_write, "JOIN ");

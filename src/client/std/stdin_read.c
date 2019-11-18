@@ -4,7 +4,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-void server_read(t_env *e, size_t cs)
+void stdin_read(t_env *e, size_t cs)
 {
     size_t r;
     size_t index;
@@ -13,26 +13,24 @@ void server_read(t_env *e, size_t cs)
     // Receiving data from the client cs
     r = cbuffer_recv(&e->fds[cs].buf_read, cs);
 
-    printf("server_read::%ld\n", cs);
-    printf("databuffer tail BEFORE RECV is %ld\n", e->fds[cs].buf_read.tail);
-    printf("databuffer head BEFORE RECV is %ld\n", e->fds[cs].buf_read.head);
+    printf("stdin_read::%ld\n", cs);
+    printf("stdin_read buffer tail BEFORE RECV is %ld\n",
+           e->fds[cs].buf_read.tail);
+    printf("stdin_read buffer head BEFORE RECV is %ld\n",
+           e->fds[cs].buf_read.head);
 
-    printf("cbuffer_size(&e->fds[cs].buf_read): %ld\n",
+    printf("stdin_read cbuffer_size(&e->fds[cs].buf_read): %ld\n",
            cbuffer_size(&e->fds[cs].buf_read));
 
     if (r <= 0)
-    {
-        close(cs);
-        clear_fd(&e->fds[cs]);
-        logerror("Connection between client hand server has been lost\n");
-        e->sock = -1;
-        // FD_CLR(cs, &e->fd_read);
-        // FD_CLR(cs, &e->fd_write);
-    }
+        return;
 
-    index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0D\x0A");
+    index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0A");
 
-    printf("index: %ld\n", index);
+    if (index == -1)
+        index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0D\x0A");
+
+    printf("INDEX: %ld\n", index);
 
     memset(command, 0, CBUFFSIZE);
 
@@ -48,7 +46,7 @@ void server_read(t_env *e, size_t cs)
                e->fds[cs].buf_read.buffer, index);
     }
 
-    loginfo("%s\n", command);
+    printf("command: %s\n", command);
 
     // Drop command
     // +2 because of "\x0D\x0A" skipping

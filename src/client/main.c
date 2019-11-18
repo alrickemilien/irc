@@ -16,12 +16,17 @@ void init_env(t_env *e)
     e->maxfd = 4;
     e->fds = (t_fd *)XPSAFE(NULL, malloc(sizeof(*e->fds) * e->maxfd),
                             "init_env::malloc");
+
+    // Connection to serveer socket
     e->sock = -1;
 
     i = 0;
     while (i < e->maxfd)
     {
         clear_fd(&e->fds[i]);
+        memset(&e->fds[i].nickname, 0, NICKNAMESTRSIZE + 1);
+        memset(&e->fds[i].username, 0, USERNAMESTRSIZE + 1);
+        memset(&e->fds[i].channelname, 0, CHANNELSTRSIZE + 1);
         cbuffer_reset(&e->fds[i].buf_read);
         cbuffer_reset(&e->fds[i].buf_write);
         i++;
@@ -39,10 +44,19 @@ static void init_options(t_options *options)
         memcpy(options->host, "127.0.0.1", sizeof(char) * 9);
 
     if (options->ipv6)
-    {
-        printf("Running server ipv6\n");
-    }
+        loginfo("Running server ipv6\n");
 }
+
+// static void init_std(t_env *e)
+// {
+//     t_fd *stdin_fd;
+//     t_fd *stdout_fd;
+
+//     stdin_fd = &e->fds[0];
+//     stdin_fd->type = FD_CLIENT;
+//     stdin_fd->read = server_read;
+//     stdin_fd->write = server_write;
+// }
 
 static void execute_precommands(t_options *options, t_env *e)
 {
@@ -51,7 +65,7 @@ static void execute_precommands(t_options *options, t_env *e)
     ptr = options->command;
     while (ptr && *ptr)
     {
-        irc_command(e, e->sock, ptr);
+        c2s(e, e->sock, ptr);
 
         ptr = strstr(ptr, "\x0D\x0A");
 
@@ -81,13 +95,12 @@ int main(int argc, const char **argv)
     if (e.sock == -1)
         return (logerrno("main:"));
 
-    loginfo("options.command: %s\n", options.command);
-
-    memset(e.fds[e.sock].nickname, 0, NICKNAMESTRSIZE + 1);
-    memset(e.fds[e.sock].username, 0, USERNAMESTRSIZE + 1);
-    memset(e.fds[e.sock].channelname, 0, CHANNELSTRSIZE + 1);
+    if (options.command)
+        loginfo("options.command: %s\n", options.command);
 
     execute_precommands(&options, &e);
+
+    // init_std(&e);
 
     do_select(&options, &e);
 

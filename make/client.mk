@@ -19,11 +19,15 @@ CLIENT_SRC+=src/client/options/utils.c \
 			src/client/options/read_port_option.c \
 			src/client/options/read_host_option.c
 
-#irc
-CLIENT_SRC+=src/client/irc/irc_join.c \
-			src/client/irc/irc_nick.c \
-			src/client/irc/irc_msg.c \
-			src/client/irc/irc_command.c
+#irc client to server
+CLIENT_SRC+=src/client/irc/c2s/c2s.c \
+			src/client/irc/c2s/c2s_join.c \
+			src/client/irc/c2s/c2s_nick.c \
+			src/client/irc/c2s/c2s_msg.c \
+			src/client/irc/c2s/c2s_connect.c
+
+#irc s2c
+# CLIENT_SRC+=
 
 #cbuffer
 CLIENT_SRC+=src/cbuffer/cbuffer.c
