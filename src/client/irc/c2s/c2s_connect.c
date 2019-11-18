@@ -27,10 +27,22 @@ int c2s_connect(t_env *e, int cs, t_token *tokens)
     struct passwd *p;
     char           hostname[NI_MAXHOST + 1];
     char           concat[512];
-    int            ret;
+
+    if (e->sock != -1)
+        return logerror("Already connected\n");
 
     if ((c2s_connect_check_command(e, cs, tokens)) < 0)
         return (-1);
+
+    if (e->ipv6 == 1)
+        client_ipv6(e);
+    else
+        client_ipv4(e);
+
+    if (e->sock == -1)
+        return (logerrno("c2s_connect:"));
+
+    cs = e->sock;
 
     if ((p = getpwuid(getuid())) == NULL)
         return (-1);
@@ -45,10 +57,19 @@ int c2s_connect(t_env *e, int cs, t_token *tokens)
     printf("Host name: %s\n", hostname);
 
     memset(concat, 0, sizeof(concat));
-    ret = sprintf(concat, "USER %s %s %s %s\x0A\x0D", p->pw_name, hostname,
-                  tokens[1].addr, p->pw_name);
+    strcat(concat, "USER ");
+    strcat(concat, p->pw_name);
+    strcat(concat, " ");
+    strcat(concat, hostname);
+    strcat(concat, " ");
+    strncat(concat, tokens[1].addr, tokens[1].len);
+    strcat(concat, " ");
+    strcat(concat, p->pw_name);
+    strcat(concat, " ");
 
-    cbuffer_put(&e->fds[cs].buf_write, (uint8_t*)concat, ret);
+    logdebug("%s\n", concat);
+
+    cbuffer_put(&e->fds[cs].buf_write, (uint8_t *)concat, strlen(concat));
 
     loginfo("Connecting to %s\n", tokens[1].addr);
 

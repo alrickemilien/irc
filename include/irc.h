@@ -41,6 +41,7 @@ int i64toa(uint64_t nbr, char *buffer, size_t buffer_size, uint64_t base);
 int loginfo(const char *fmt, ...);
 int logerror(const char *fmt, ...);
 int logerrno(const char *str);
+int logdebug(const char *fmt, ...);
 
 /*
 ** IRC specific

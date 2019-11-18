@@ -13,12 +13,12 @@ void server_read(t_env *e, size_t cs)
     // Receiving data from the client cs
     r = cbuffer_recv(&e->fds[cs].buf_read, cs);
 
-    printf("server_read::%ld\n", cs);
-    printf("databuffer tail BEFORE RECV is %ld\n", e->fds[cs].buf_read.tail);
-    printf("databuffer head BEFORE RECV is %ld\n", e->fds[cs].buf_read.head);
+    // printf("server_read::%ld\n", cs);
+    // printf("databuffer tail BEFORE RECV is %ld\n", e->fds[cs].buf_read.tail);
+    // printf("databuffer head BEFORE RECV is %ld\n", e->fds[cs].buf_read.head);
 
-    printf("cbuffer_size(&e->fds[cs].buf_read): %ld\n",
-           cbuffer_size(&e->fds[cs].buf_read));
+    // printf("cbuffer_size(&e->fds[cs].buf_read): %ld\n",
+    //        cbuffer_size(&e->fds[cs].buf_read));
 
     if (r <= 0)
     {
@@ -26,13 +26,14 @@ void server_read(t_env *e, size_t cs)
         clear_fd(&e->fds[cs]);
         logerror("Connection between client hand server has been lost\n");
         e->sock = -1;
-        // FD_CLR(cs, &e->fd_read);
-        // FD_CLR(cs, &e->fd_write);
+        FD_CLR(cs, &e->fd_read);
+        FD_CLR(cs, &e->fd_write);
+        return;
     }
 
     index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0D\x0A");
 
-    printf("index: %ld\n", index);
+    // printf("index: %ld\n", index);
 
     memset(command, 0, CBUFFSIZE);
 

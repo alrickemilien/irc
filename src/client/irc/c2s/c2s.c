@@ -10,6 +10,7 @@ static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
 int c2s(t_env *e, int cs, char *buffer)
 {
     size_t  i;
+    // size_t  j;
     t_token tokens[30];
 
     // Skip withespaces
@@ -22,11 +23,19 @@ int c2s(t_env *e, int cs, char *buffer)
         if (strncmp(buffer, g_irc_commands[i].command,
                     strlen(g_irc_commands[i].command)) == 0)
         {
-            printf("ici: %s\n", g_irc_commands[i].command);
+            // printf("buffer: %s\n", buffer);
             
             memset(tokens, 0, sizeof(t_token) * 30);
 
             tokenize(buffer, tokens, 30);
+
+            // logdebug("ret:%ld\n", tokenize(buffer, tokens, 30));
+            // j = 0;
+            // while (j < 30 && tokens[j].addr)
+            // {
+            //     logdebug("token:%s - token_len:%ld\n", tokens[j].addr,tokens[j].len);
+            //     j++;
+            // }
 
             return g_irc_commands[i].f(e, cs, tokens);
         }

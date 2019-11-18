@@ -23,6 +23,8 @@ typedef struct  s_env
     char        isotime[ISOTIMESTRSIZE];
     int         is_tty;
     int         sock;
+    int         ipv6;
+    t_options   options;
 }               t_env;
 
 /*
@@ -57,11 +59,11 @@ void            clear_fd(t_fd *fd);
 void            init_fd(t_env *e);
 void            check_fd(t_env *e);
 
-void            client_ipv4(const t_options *options, t_env *e);
-void            client_ipv6(const t_options *options, t_env *e);
+void            client_ipv4(t_env *e);
+void            client_ipv6(t_env *e);
 
 void            server_read(t_env *e, size_t cs);
 void            server_write(t_env *e, size_t cs);
 
-void            do_select(const t_options *options, t_env *e);
+void            do_select(t_env *e);
 #endif

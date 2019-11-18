@@ -17,7 +17,7 @@ void init_env(t_env *e)
     e->fds = (t_fd *)XPSAFE(NULL, malloc(sizeof(*e->fds) * e->maxfd),
                             "init_env::malloc");
 
-    // Connection to serveer socket
+    // Server's socket connection
     e->sock = -1;
 
     i = 0;
@@ -58,11 +58,11 @@ static void init_options(t_options *options)
 //     stdin_fd->write = server_write;
 // }
 
-static void execute_precommands(t_options *options, t_env *e)
+static void execute_precommands(t_env *e)
 {
     char *ptr;
 
-    ptr = options->command;
+    ptr = e->options.command;
     while (ptr && *ptr)
     {
         c2s(e, e->sock, ptr);
@@ -76,33 +76,27 @@ static void execute_precommands(t_options *options, t_env *e)
 
 int main(int argc, const char **argv)
 {
-    t_options options;
     int       exit_code;
     t_env     e;
 
-    exit_code = read_options(argc, argv, &options);
+    exit_code = read_options(argc, argv, &e.options);
     if (exit_code != 0)
         return (exit_code);
 
-    init_options(&options);
+    init_options(&e.options);
     init_env(&e);
 
-    if (options.ipv6 == 1)
-        client_ipv6(&options, &e);
-    else
-        client_ipv4(&options, &e);
+    if (e.options.ipv6 == 1)
+        e.ipv6 = 1;
 
-    if (e.sock == -1)
-        return (logerrno("main:"));
+    if (e.options.command)
+        loginfo("options.command: %s\n", e.options.command);
 
-    if (options.command)
-        loginfo("options.command: %s\n", options.command);
-
-    execute_precommands(&options, &e);
+    execute_precommands(&e);
 
     // init_std(&e);
 
-    do_select(&options, &e);
+    do_select(&e);
 
     if (e.sock != -1)
         XSAFE(-1, close(e.sock), "main::close");
