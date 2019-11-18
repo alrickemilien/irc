@@ -40,12 +40,12 @@ void check_fd(t_env *e)
     {
         if (FD_ISSET(i, &e->fd_read))
         {
-            // logdebug("#%ld:: available data for read\n", i);
+            logdebug("#%ld:: available data for read\n", i);
             e->fds[i].read(e, i);
         }
         if (FD_ISSET(i, &e->fd_write))
         {
-            // logdebug("#%ld:: available data for write\n", i);
+            logdebug("#%ld:: available data for write\n", i);
 
             e->fds[i].write(e, i);
         }

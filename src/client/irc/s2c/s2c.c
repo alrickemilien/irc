@@ -1,18 +1,22 @@
 #include <client/irc.h>
 
 static const t_irc_cmd g_s2c_replys[IRC_S2C_COMMANDS_NUMBER] = {
-    [IRC_S2C_RPL_WELCOME] = {"RPL_WELCOME", &s2c_rpl_welcome},
+        [IRC_S2C_RPL_WELCOME] = {"RPL_WELCOME", &s2c_rpl_welcome},
+        [IRC_S2C_RPL_NAMREPLY] = {"RPL_NAMREPLY", &s2c_rpl_namreply},
+        [IRC_S2C_RPL_ENDOFNAMES] = {"RPL_ENDOFNAMES", &s2c_rpl_endofnames},
 };
 
 int s2c(t_env *e, int cs, char *buffer)
 {
-    size_t  i;
+    size_t i;
     // size_t  j;
     t_token tokens[30];
 
     // Skip withespaces
     while (*buffer == 0x20)
         buffer++;
+
+    // logdebug("s2c::buffer %s\n", buffer);
 
     i = 0;
     while (i < IRC_S2C_COMMANDS_NUMBER)
@@ -28,7 +32,8 @@ int s2c(t_env *e, int cs, char *buffer)
             // j = 0;
             // while (j < 30 && tokens[j].addr)
             // {
-            //     logdebug("token:%s - token_len:%ld\n", tokens[j].addr,tokens[j].len);
+            //     logdebug("token:%s - token_len:%ld\n",
+            //     tokens[j].addr,tokens[j].len);
             //     j++;
             // }
 
