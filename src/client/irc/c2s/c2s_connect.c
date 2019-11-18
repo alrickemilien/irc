@@ -40,7 +40,7 @@ int c2s_connect(t_env *e, int cs, t_token *tokens)
         client_ipv4(e);
 
     if (e->sock == -1)
-        return (logerrno("c2s_connect:"));
+        return (logerrno("c2s_connect::"));
 
     cs = e->sock;
 
@@ -53,9 +53,6 @@ int c2s_connect(t_env *e, int cs, t_token *tokens)
     // Command: USER
     // Parameters: <username> <hostname> <servername> <realname>
 
-    printf("User name: %s\n", p->pw_name);
-    printf("Host name: %s\n", hostname);
-
     memset(concat, 0, sizeof(concat));
     strcat(concat, "USER ");
     strcat(concat, p->pw_name);
@@ -65,10 +62,8 @@ int c2s_connect(t_env *e, int cs, t_token *tokens)
     strncat(concat, tokens[1].addr, tokens[1].len);
     strcat(concat, " ");
     strcat(concat, p->pw_name);
-    strcat(concat, " ");
 
-    logdebug("%s\n", concat);
-
+    strcat(concat, "\x0D\x0A");
     cbuffer_put(&e->fds[cs].buf_write, (uint8_t *)concat, strlen(concat));
 
     loginfo("Connecting to %s\n", tokens[1].addr);

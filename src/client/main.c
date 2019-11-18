@@ -30,6 +30,7 @@ void init_env(t_env *e)
         memset(&e->fds[i].channelname, 0, CHANNELSTRSIZE + 1);
         cbuffer_reset(&e->fds[i].buf_read);
         cbuffer_reset(&e->fds[i].buf_write);
+
         i++;
     }
 }
@@ -40,7 +41,7 @@ static void init_options(t_options *options)
     if (options->port == 0)
         options->port = 5555;
 
-    // Set default backlog
+    // Set default host to connect
     if (options->host[0] == 0)
         memcpy(options->host, "127.0.0.1", sizeof(char) * 9);
 
@@ -56,6 +57,7 @@ static void init_std(t_env *e)
     stdin_fd = &e->fds[0];
     stdin_fd->type = FD_CLIENT;
     stdin_fd->read = stdin_read;
+    stdin_fd->write = (void*)0;
 }
 
 static void execute_precommands(t_env *e)
@@ -92,9 +94,9 @@ int main(int argc, const char **argv)
     if (e.options.command)
         loginfo("options.command: %s\n", e.options.command);
 
-    execute_precommands(&e);
-
     init_std(&e);
+
+    execute_precommands(&e);
 
     do_select(&e);
 

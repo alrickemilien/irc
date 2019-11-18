@@ -29,7 +29,7 @@ static int c2s_msg_check_command(t_env *e, int cs, const t_token *tokens)
     (void)e;
 
     if (!tokens[1].addr)
-        return logerror("ERR_NEEDMOREPARAMS\n");
+        return logerror("c2s_msg_check_command::ERR_NEEDMOREPARAMS\n");
     return (0);
 }
 
@@ -59,7 +59,7 @@ int c2s_msg(t_env *e, int cs, t_token *tokens)
 
     cbuffer_putstr(&e->fds[cs].buf_write, "\x0D\x0A");
 
-    logdebug("PRIVMSG: %s\n", tokens[2].addr ? tokens[2].addr : tokens[1].addr);
+    logdebug("c2s_msg:: PRIVMSG: %s\n", tokens[2].addr ? tokens[2].addr : tokens[1].addr);
 
     return (IRC_JOIN);
 }

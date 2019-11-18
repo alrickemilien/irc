@@ -13,11 +13,11 @@ void server_read(t_env *e, size_t cs)
     // Receiving data from the client cs
     r = cbuffer_recv(&e->fds[cs].buf_read, cs);
 
-    // printf("server_read::%ld\n", cs);
-    // printf("databuffer tail BEFORE RECV is %ld\n", e->fds[cs].buf_read.tail);
-    // printf("databuffer head BEFORE RECV is %ld\n", e->fds[cs].buf_read.head);
+    // logdebug("server_read:: %ld\n", cs);
+    // logdebug("server_read:: databuffer tail BEFORE RECV is %ld\n", e->fds[cs].buf_read.tail);
+    // logdebug("server_read:: databuffer head BEFORE RECV is %ld\n", e->fds[cs].buf_read.head);
 
-    // printf("cbuffer_size(&e->fds[cs].buf_read): %ld\n",
+    // logdebug("server_read:: cbuffer_size(&e->fds[cs].buf_read): %ld\n",
     //        cbuffer_size(&e->fds[cs].buf_read));
 
     if (r <= 0)
@@ -33,29 +33,38 @@ void server_read(t_env *e, size_t cs)
 
     index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0D\x0A");
 
-    // printf("index: %ld\n", index);
-
-    memset(command, 0, CBUFFSIZE);
-
-    // Copy circular buffer command into local buffer
-    if (e->fds[cs].buf_read.tail < index)
-        memcpy(command, e->fds[cs].buf_read.buffer + e->fds[cs].buf_read.tail,
-               index - e->fds[cs].buf_read.tail);
-    else
+    while (index != (size_t)-1)
     {
-        memcpy(command, e->fds[cs].buf_read.buffer + e->fds[cs].buf_read.tail,
-               CBUFFSIZE - e->fds[cs].buf_read.tail);
-        memcpy(command + CBUFFSIZE - e->fds[cs].buf_read.tail,
-               e->fds[cs].buf_read.buffer, index);
+        // printf("index: %ld\n", index);
+
+        memset(command, 0, CBUFFSIZE);
+
+        // Copy circular buffer command into local buffer
+        if (e->fds[cs].buf_read.tail < index)
+        {
+            memcpy(command,
+                   e->fds[cs].buf_read.buffer + e->fds[cs].buf_read.tail,
+                   index - e->fds[cs].buf_read.tail);
+        }
+        else
+        {
+            memcpy(command,
+                   e->fds[cs].buf_read.buffer + e->fds[cs].buf_read.tail,
+                   CBUFFSIZE - e->fds[cs].buf_read.tail);
+            memcpy(command + CBUFFSIZE - e->fds[cs].buf_read.tail,
+                   e->fds[cs].buf_read.buffer, index);
+        }
+
+        logdebug("%s\n", command);
+
+        // Drop command
+        // +2 because of "\x0D\x0A" skipping
+        cbuffer_dropn(&e->fds[cs].buf_read,
+                      (e->fds[cs].buf_read.tail < index
+                           ? index - e->fds[cs].buf_read.tail
+                           : index + CBUFFSIZE - e->fds[cs].buf_read.tail) +
+                          2);
+
+        index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0D\x0A");
     }
-
-    loginfo("%s\n", command);
-
-    // Drop command
-    // +2 because of "\x0D\x0A" skipping
-    cbuffer_dropn(&e->fds[cs].buf_read,
-                  (e->fds[cs].buf_read.tail < index
-                       ? index - e->fds[cs].buf_read.tail
-                       : index + CBUFFSIZE - e->fds[cs].buf_read.tail) +
-                      2);
 }

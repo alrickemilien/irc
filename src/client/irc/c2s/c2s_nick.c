@@ -26,7 +26,7 @@ int c2s_nick(t_env *e, int cs, t_token *tokens)
 
     cbuffer_putstr(&e->fds[cs].buf_write, "NICK ");
     cbuffer_put(&e->fds[cs].buf_write, (uint8_t*)tokens[1].addr, tokens[1].len);
-    cbuffer_putstr(&e->fds[cs].buf_write, "\x0A\x0D");
+    cbuffer_putstr(&e->fds[cs].buf_write, "\x0D\x0A");
 
     loginfo("You changed nickname to %s\n", tokens[1].addr);
 
