@@ -6,6 +6,7 @@ static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
     [IRC_MSG] = {"/msg", &c2s_msg},
     [IRC_CONNECT] = {"/connect", &c2s_connect},
     [IRC_WHO] = {"/who", &c2s_who},
+    [IRC_PASS] = {"/pass", &c2s_pass},
 };
 
 int c2s(t_env *e, int cs, char *buffer)

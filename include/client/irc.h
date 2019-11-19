@@ -40,6 +40,7 @@ typedef enum e_irc {
     IRC_MSG,
     IRC_CONNECT,
     IRC_WHO,
+    IRC_PASS,
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
 
@@ -62,6 +63,7 @@ int             c2s_msg(t_env *e, int cs, t_token *tokens);
 int             c2s_connect(t_env *e, int cs, t_token *tokens);
 int             c2s_nick(t_env *e, int cs, t_token *tokens);
 int             c2s_who(t_env *e, int cs, t_token *tokens);
+int             c2s_pass(t_env *e, int cs, t_token *tokens);
 
 int             s2c(t_env *e, int cs, char *buffer);
 int             s2c_rpl_welcome(t_env *e, int cs, t_token *tokens);
