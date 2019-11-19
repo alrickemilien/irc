@@ -1,5 +1,5 @@
-#include <string.h>
 #include <irc.h>
+#include <string.h>
 
 size_t tokenizechr(char *str, t_token *tokens, size_t len, int c)
 {
@@ -10,13 +10,16 @@ size_t tokenizechr(char *str, t_token *tokens, size_t len, int c)
     end = strstr(str, "\x0D\x0A");
     count = 0;
 
+    if (end == (void *)0)
+        end = str + strlen(str);
+
     // Skip possible whitespaces
     i = 0;
     while (str[i] == 0x20)
         i++;
 
     if (!str[i])
-        return (1);
+        return (0);
 
     while (str[i] && str[i] != 0x20 && str + i < end && count < len)
     {
@@ -30,7 +33,7 @@ size_t tokenizechr(char *str, t_token *tokens, size_t len, int c)
         tokens[count].addr = str + i;
 
         // Skip printable
-        while (str[i] != c && str[i] && str[i] != 0x20)
+        while (str[i] != c && str[i] && str[i] != 0x20 && str + i < end)
             i++;
 
         tokens[count].len = (size_t)(&str[i] - tokens[count].addr);
@@ -38,5 +41,5 @@ size_t tokenizechr(char *str, t_token *tokens, size_t len, int c)
         count++;
     }
 
-    return (i);
+    return (count);
 }

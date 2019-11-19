@@ -51,10 +51,12 @@ typedef enum e_irc {
     IRC_QUIT,
     IRC_NAMES,
     IRC_PRIVMSG,
-    IRC_NOTICE,
     IRC_PASS,
     IRC_AWAY,
     IRC_PART,
+    IRC_WHOIS,
+    IRC_WHO,
+    IRC_NOTICE,
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
 
@@ -64,19 +66,21 @@ typedef struct s_irc_cmd
     int (*f)(t_env *e, int cs, t_token *tokens);
 } t_irc_cmd;
 
-int irc_command(t_env *e, int cs, char *buffer);
+int irc_command(t_env *e, int cs, size_t end_command_index);
 int irc_join(t_env *e, int cs, t_token *tokens);
 int irc_nick(t_env *e, int cs, t_token *tokens);
 int irc_user(t_env *e, int cs, t_token *tokens);
 int irc_quit(t_env *e, int cs, t_token *tokens);
 int irc_names(t_env *e, int cs, t_token *tokens);
+int irc_notice(t_env *e, int cs, t_token *tokens);
 int irc_away(t_env *e, int cs, t_token *tokens);
 int irc_privmsg(t_env *e, int cs, t_token *tokens);
 int irc_pass(t_env *e, int cs, t_token *tokens);
 int irc_part(t_env *e, int cs, t_token *tokens);
+int irc_whois(t_env *e, int cs, t_token *tokens);
+int irc_who(t_env *e, int cs, t_token *tokens);
 int irc_reply(t_env *e, int cs, int code, ...);
 
-void unicast(t_env *e, const char *msg, int msg_type, size_t cs);
 void broadcast(t_env *e, const char *msg, int type, size_t cs);
 void disconnect(t_env *e, size_t cs);
 

@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-void client_ipv4(const t_options *options, t_env *e)
+void client_ipv4(t_env *e)
 {
     int                cs;
     struct sockaddr_in sin;
@@ -20,10 +20,10 @@ void client_ipv4(const t_options *options, t_env *e)
     //     int reuseport;
     // #endif  // __APPLE__
 
-    printf("Connecting to %s:%d through ipv4\n", options->host, options->port);
+    logdebug("Connecting to %s:%d through ipv4\n", e->options.host, e->options.port);
 
     hostnm =
-        XPSAFE((void *)0, gethostbyname(options->host), "ipv4::gethostbyname");
+        XPSAFE((void *)0, gethostbyname(e->options.host), "ipv4::gethostbyname");
 
     pe = (struct protoent *)XPSAFE((void *)0, getprotobyname("tcp"),
                                    "ipv4::getprotobyname");
@@ -62,7 +62,7 @@ void client_ipv4(const t_options *options, t_env *e)
     memset(&sin, 0, sizeof(struct sockaddr_in));
 
     sin.sin_family = AF_INET;
-    sin.sin_port = htons(options->port);
+    sin.sin_port = htons(e->options.port);
     sin.sin_addr.s_addr = *((unsigned long *)hostnm->h_addr);
 
     /********************************************************************/

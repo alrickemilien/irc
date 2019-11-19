@@ -30,7 +30,7 @@ static int irc_user_check_command(t_env *e, int cs, const t_token *tokens)
     if (!tokens[1].addr || !tokens[2].addr || !tokens[3].addr ||
         !tokens[4].addr)
     {
-        irc_reply(e, cs, ERR_NEEDMOREPARAMS, tokens[0].addr);
+        irc_reply(e, cs, ERR_NEEDMOREPARAMS, "USER");
         return (-1);
     }
 
@@ -64,8 +64,6 @@ static int irc_user_check_command(t_env *e, int cs, const t_token *tokens)
 
 int irc_user(t_env *e, int cs, t_token *tokens)
 {
-    char concat[512];
-
     if ((irc_user_check_command(e, cs, tokens)) < 0)
         return (-1);
 
@@ -83,11 +81,15 @@ int irc_user(t_env *e, int cs, t_token *tokens)
     memset(e->fds[cs].realname, 0, USERNAMESTRSIZE);
     memcpy(e->fds[cs].realname,
            tokens[4].addr[0] == ':' ? tokens[4].addr + 1 : tokens[4].addr,
-           tokens[4].len < USERNAMESTRSIZE ? tokens[4].len : USERNAMESTRSIZE);
+           tokens[4].addr[0] == ':' ? tokens[4].len - 1 : tokens[4].len);
 
     // When nickname is not set
     if (e->fds[cs].nickname[0] == 0)
+    {
+        logdebug("USER command received for client #%ld without nickname\n",
+                 cs);
         return (IRC_USER);
+    }
 
     e->fds[cs].registered = 1;
 
@@ -95,11 +97,6 @@ int irc_user(t_env *e, int cs, t_token *tokens)
 
     irc_reply(e, cs, RPL_WELCOME, e->fds[cs].username, e->fds[cs].host,
               e->fds[cs].realname);
-
-    memset(concat, 0, sizeof(concat));
-    sprintf(concat, "%s from %s registered with real name %s",
-            e->fds[cs].username, e->fds[cs].host, e->fds[cs].realname);
-    broadcast(e, concat, IRC_NOTICE, cs);
 
     return (IRC_USER);
 }

@@ -31,6 +31,7 @@ void time2iso(char *str);
 int ato32(const char *str, uint32_t *nbr);
 int i64toa(uint64_t nbr, char *buffer, size_t buffer_size, uint64_t base);
 char *extract_folder_from_path(const char *path);
+char *merge_and_extract_folder_from_path(const char *a, const char *b);
 char *strjoin(char const *s1, char const *s2);
 
 /*
@@ -43,6 +44,7 @@ char *strjoin(char const *s1, char const *s2);
 int loginfo(const char *fmt, ...);
 int logerror(const char *fmt, ...);
 int logerrno(const char *str);
+int logdebug(const char *fmt, ...);
 
 /*
 ** IRC specific
@@ -73,17 +75,7 @@ size_t tokenizechr(char *str, t_token *tokens, size_t len, int c);
 ** CBuffer
 */
 
-typedef struct s_cbuffer
-{
-    size_t size;
-    char   data[BUF_SIZE + 1];
-} t_cbuffer;
-
-int cbuffer_push(t_cbuffer *buffer, char *data, size_t size);
-int cbuffer_flush(t_cbuffer *buffer);
-int cbuffer_nflush(t_cbuffer *buffer, size_t n);
-int cbuffer_recv(t_cbuffer *buffer, int cs);
-int cbuffer_pflush(t_cbuffer *buffer, char *data, size_t size);
+# include <cbuffer.h>
 
 /*
 ** File descriptor
@@ -99,7 +91,7 @@ typedef struct s_fd
     void (*read)();
     void (*write)();
     t_cbuffer buf_read;
-    char      buf_write[BUF_SIZE + 1];
+    t_cbuffer buf_write;
 
     // User data
     size_t channel;
@@ -136,6 +128,12 @@ enum e_irc_reply
     RPL_AWAY = 301,
     RPL_UNAWAY = 305,
     RPL_NOWAWAY = 306,
+    RPL_WHOISUSER = 311,
+    RPL_ENDOFWHO = 315,
+    RPL_ENDOFWHOIS = 318,
+    RPL_WHOISCHANNELS = 319,
+    RPL_TOPIC = 332,
+    RPL_WHOREPLY = 352,
     RPL_NAMREPLY = 353,
     RPL_ENDOFNAMES = 366,
     ERR_NOSUCHNICK = 401,

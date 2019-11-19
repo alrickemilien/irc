@@ -9,16 +9,20 @@
 #include "client/ui/ui.h"
 #include "client/ui/login.h"
 
-extern t_env *    e;
-extern t_options *options;
-
-void login_window_init()
+void login_window_init(t_env *e)
 {
     char *login_template;
 
-    printf("e->cwd: %s\n", e->cwd);
+    // printf("e->cwd: %s\n", e->cwd);
+    // printf("e->argv_0: %s\n", e->argv_0);
 
-    login_template = strjoin(e->cwd, "/ui/login.xml");
+    // login_template = merge_and_extract_folder_from_path(e->cwd, e->argv_0);
+
+    // printf("merge_and_extract_folder_from_path::login_template: %s\n", login_template);
+
+    login_template = strjoin(e->argv_0, "/ui/login.xml");
+
+    printf("strjoin::login_template: %s\n", login_template);
 
     /* get graphics from login.glade */
     builder = gtk_builder_new();
@@ -44,14 +48,14 @@ void login_window_init()
                        G_CALLBACK(get_login_info), NULL);
 }
 
-void login_connect(const char *uname, const char *pword)
+void login_connect(t_env* e, const char *uname, const char *pword)
 {
     char concat[512];
 
-    if (options->ipv6 == 1)
-        client_ipv6(options, e);
-    else
-        client_ipv4(options, e);
+    // if (options->ipv6 == 1)
+    //     client_ipv6(options, e);
+    // else
+    //     client_ipv4(options, e);
 
     if (e->sock == -1)
     {
@@ -97,7 +101,7 @@ void login_connect(const char *uname, const char *pword)
     //     gtk_entry_set_text(GTK_ENTRY(passwordEntry), "");
     // }
 
-    do_select(options, e);
+    do_select(e);
 
     if (e->sock != -1)
         XSAFE(-1, close(e->sock), "login_connect::close");
@@ -114,11 +118,10 @@ void get_login_info(GtkWidget *widget, gpointer data)
     const gchar *uname, *pword;
 
     (void)widget;
-    (void)data;
 
     /* get username text  */
     uname = gtk_entry_get_text(GTK_ENTRY(usernameEntry));
     pword = gtk_entry_get_text(GTK_ENTRY(passwordEntry));
     printf("username=%s\npassword=%s\n", uname, pword);
-    login_connect(uname, pword);
+    login_connect((t_env*)data, uname, pword);
 }

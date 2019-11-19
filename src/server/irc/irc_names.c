@@ -1,5 +1,5 @@
 #include <ctype.h>
-#include "server/irc.h"
+#include <server/irc.h>
 
 int irc_names(t_env *e, int cs, t_token *tokens)
 {

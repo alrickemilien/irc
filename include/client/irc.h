@@ -25,6 +25,9 @@ typedef struct  s_env
     int         is_tty;
     int         sock;
     char		cwd[PATH_MAX];
+    int         ipv6;
+    char        *argv_0;
+    t_options   options;
 }               t_env;
 
 /*
@@ -35,8 +38,17 @@ typedef enum e_irc {
     IRC_JOIN = 0UL,
     IRC_NICK,
     IRC_MSG,
+    IRC_CONNECT,
+    IRC_WHO,
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
+
+typedef enum e_irc_s2c {
+    IRC_S2C_RPL_WELCOME = 0UL,
+    IRC_S2C_RPL_NAMREPLY,
+    IRC_S2C_RPL_ENDOFNAMES,
+    IRC_S2C_COMMANDS_NUMBER
+} t_irc_s2c;
 
 typedef struct  s_irc_cmd
 {
@@ -44,10 +56,17 @@ typedef struct  s_irc_cmd
     int         (*f)(t_env *e, int cs, t_token *tokens);
 }               t_irc_cmd;
 
-int             irc_command(t_env *e, int cs, char *buffer);
-int             irc_join(t_env *e, int cs, t_token *tokens);
-int             irc_msg(t_env *e, int cs, t_token *tokens);
-int             irc_nick(t_env *e, int cs, t_token *tokens);
+int             c2s(t_env *e, int cs, char *buffer);
+int             c2s_join(t_env *e, int cs, t_token *tokens);
+int             c2s_msg(t_env *e, int cs, t_token *tokens);
+int             c2s_connect(t_env *e, int cs, t_token *tokens);
+int             c2s_nick(t_env *e, int cs, t_token *tokens);
+int             c2s_who(t_env *e, int cs, t_token *tokens);
+
+int             s2c(t_env *e, int cs, char *buffer);
+int             s2c_rpl_welcome(t_env *e, int cs, t_token *tokens);
+int             s2c_rpl_namreply(t_env *e, int cs, t_token *tokens);
+int             s2c_rpl_endofnames(t_env *e, int cs, t_token *tokens);
 
 /*
 ** fd 
@@ -57,11 +76,12 @@ void            clear_fd(t_fd *fd);
 void            init_fd(t_env *e);
 void            check_fd(t_env *e);
 
-void            client_ipv4(const t_options *options, t_env *e);
-void            client_ipv6(const t_options *options, t_env *e);
+void            client_ipv4(t_env *e);
+void            client_ipv6(t_env *e);
 
 void            server_read(t_env *e, size_t cs);
 void            server_write(t_env *e, size_t cs);
+void            stdin_read(t_env *e, size_t cs);
 
-void            do_select(const t_options *options, t_env *e);
+void            do_select(t_env *e);
 #endif

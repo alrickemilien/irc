@@ -9,7 +9,7 @@
 
 #include <client/irc.h>
 
-void client_ipv6(const t_options *options, t_env *e)
+void client_ipv6(t_env *e)
 {
     int                 cs;
     struct sockaddr_in6 sin;
@@ -38,8 +38,8 @@ void client_ipv6(const t_options *options, t_env *e)
     memset(&sin, 0, sizeof(sin));
 
     sin.sin6_family = AF_INET6;
-    sin.sin6_port = htons(options->port);
-    inet_pton(AF_INET6, options->host, &sin.sin6_addr);
+    sin.sin6_port = htons(e->options.port);
+    inet_pton(AF_INET6, e->options.host, &sin.sin6_addr);
 
     /********************************************************************/
     /* The listen() function allows the server to accept incoming       */

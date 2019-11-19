@@ -14,9 +14,7 @@ int read_command_option(t_options *options, const char *value)
 
     strcat(options->command, value);
 
-    printf("Sending command to %s\n", options->command);
-
-    strcat(options->command, "\x0D\x0A");
+    strcat(options->command, "\x0A");
 
     return (0);
 }

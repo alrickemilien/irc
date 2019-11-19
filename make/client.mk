@@ -7,10 +7,10 @@ CLIENT=client
 CLIENT_SRC=src/client/main.c \
 			src/client/ipv4.c \
 			src/client/ipv6.c \
-			src/server/cbuffer.c \
 			src/client/irc/tokenize.c \
 			src/client/server_read.c \
 			src/client/server_write.c \
+			src/client/std/stdin_read.c \
 			src/client/do_select.c
 
 # options
@@ -20,17 +20,31 @@ CLIENT_SRC+=src/client/options/utils.c \
 			src/client/options/read_port_option.c \
 			src/client/options/read_host_option.c
 
-#irc
-CLIENT_SRC+=src/client/irc/irc_join.c \
-			src/client/irc/irc_nick.c \
-			src/client/irc/irc_msg.c \
-			src/client/irc/irc_command.c
+#irc client to server
+CLIENT_SRC+=src/client/irc/c2s/c2s.c \
+			src/client/irc/c2s/c2s_join.c \
+			src/client/irc/c2s/c2s_nick.c \
+			src/client/irc/c2s/c2s_msg.c \
+			src/client/irc/c2s/c2s_who.c \
+			src/client/irc/c2s/c2s_connect.c
+
+#irc server to client
+CLIENT_SRC+=src/client/irc/s2c/s2c.c \
+			src/client/irc/s2c/s2c_names.c \
+			src/client/irc/s2c/s2c_rpl_welcome.c
+
+#irc s2c
+# CLIENT_SRC+=
+
+#cbuffer
+CLIENT_SRC+=src/cbuffer/cbuffer.c
 
 # utils
 CLIENT_SRC+=src/utils/safe.c \
 			src/utils/log.c \
 			src/utils/ato32.c \
 			src/utils/extract_folder_from_path.c \
+			src/utils/merge_and_extract_folder_from_path.c \
 			src/utils/strjoin.c \
 			src/utils/i64toa.c \
 			src/utils/time2iso.c

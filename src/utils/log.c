@@ -55,6 +55,31 @@ int logerror(const char *fmt, ...)
     vprintf(final_fmt, ap);
     va_end(ap);
 
+    return (-1);
+}
+
+int logdebug(const char *fmt, ...)
+{
+    va_list ap;
+    char    final_fmt[LOGSIZE + 1];
+    char    t[ISOTIMESTRSIZE];
+
+    if (is_tty == -1)
+        is_tty = isatty(1);
+
+    time2iso(t);
+    sprintf(final_fmt,
+            is_tty ? "[%s] "
+                     "\x1b[33m"
+                     "DEBUG:"
+                     "\x1b[0m"
+                     " %s"
+                   : "[%s] DEBUG: %s",
+            t, fmt);
+    va_start(ap, fmt);
+    vprintf(final_fmt, ap);
+    va_end(ap);
+
     return (0);
 }
 

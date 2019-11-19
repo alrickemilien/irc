@@ -1,12 +1,17 @@
 package ircunittest;
 
+use strict;
+use warnings;
+
+my $DBUF_BLOCK_SIZE = 5121;
+
 sub start_server {
   unless(open(my $pidfd, 'ircserver.pid')) {
     my $pidserver = <$pidfd>;
     close($pidfd);
 
     # If the pid is not here, it means something wring happened
-    if (defined($pidfdserver) && kill(0, $pidserver) != 0) {
+    if (defined($pidserver) && kill(0, $pidserver) != 0) {
       return;
     }
   }
@@ -29,6 +34,24 @@ sub stop_server {
         kill 9, $pidserver;
         unlink 'ircserver.pid'; # Supress pid file of teh server
     }
+}
+
+sub recv_eq {
+  my ($sock, $match) = @_;
+
+  # sleep(1); # Wait message reception on the server
+  $sock->recv(my $response, $DBUF_BLOCK_SIZE);
+  print "[+] recv_eq::response: $response\n";
+  return (index($response, $match) ne -1);
+}
+
+sub recv_ne {
+  my ($sock, $match) = @_;
+
+  # sleep(1); # Wait message reception on the server
+  $sock->recv(my $response, $DBUF_BLOCK_SIZE);
+  print "[+] recv_ne::response: $response\n";
+  return (index($response, $match) eq -1);
 }
 
 1;  # packages need to return true.
