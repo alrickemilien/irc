@@ -1,34 +1,19 @@
-#include <string.h>
+#include <arpa/inet.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <arpa/inet.h>
 
 #include <client/irc.h>
-
-#include "client/ui/ui.h"
-#include "client/ui/login.h"
+#include <client/ui/login.h>
+#include <client/ui/ui.h>
 
 void login_window_init(t_env *e)
 {
-    char *login_template;
-
-    // printf("e->cwd: %s\n", e->cwd);
-    // printf("e->argv_0: %s\n", e->argv_0);
-
-    // login_template = merge_and_extract_folder_from_path(e->cwd, e->argv_0);
-
-    // printf("merge_and_extract_folder_from_path::login_template: %s\n", login_template);
-
-    login_template = strjoin(e->argv_0, "/ui/login.xml");
-
-    printf("strjoin::login_template: %s\n", login_template);
-
-    /* get graphics from login.glade */
     builder = gtk_builder_new();
-    gtk_builder_add_from_file(builder, login_template, NULL);
 
-    free(login_template);
+    if (gtk_builder_load(builder, e->argv_0, "/ui/login.xml") < 0)
+        return;
 
     window = GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
     gtk_signal_connect(GTK_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit),
@@ -48,7 +33,7 @@ void login_window_init(t_env *e)
                        G_CALLBACK(get_login_info), NULL);
 }
 
-void login_connect(t_env* e, const char *uname, const char *pword)
+void login_connect(t_env *e, const char *uname, const char *pword)
 {
     char concat[512];
 
@@ -76,9 +61,7 @@ void login_connect(t_env* e, const char *uname, const char *pword)
     memset(concat, 0, sizeof(concat));
 
     sprintf(concat, "PASS %s\x0D\x0ANICK %s\x0D\x0AUSER %s %s :%s\x0D\x0A",
-            pword, uname, uname,
-            "lalal@lalal.com",
-            "Diego delavega");
+            pword, uname, uname, "lalal@lalal.com", "Diego delavega");
 
     send(e->sock, concat, sizeof(concat), 0);
 
@@ -123,5 +106,5 @@ void get_login_info(GtkWidget *widget, gpointer data)
     uname = gtk_entry_get_text(GTK_ENTRY(usernameEntry));
     pword = gtk_entry_get_text(GTK_ENTRY(passwordEntry));
     printf("username=%s\npassword=%s\n", uname, pword);
-    login_connect((t_env*)data, uname, pword);
+    login_connect((t_env *)data, uname, pword);
 }

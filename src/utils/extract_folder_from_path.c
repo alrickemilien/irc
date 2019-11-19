@@ -24,10 +24,7 @@
 char *extract_folder_from_path(const char *path)
 {
     char *tmp;
-    char *ret;
 
     tmp = strdup(path);
-    ret = dirname(tmp);
-    free(tmp);
-    return (ret);
+    return (dirname(tmp));
 }

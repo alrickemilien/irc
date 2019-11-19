@@ -19,4 +19,8 @@ GtkWidget *    textview1;
 GtkWidget *    textview2;
 GtkTextBuffer *textbuffer;
 
+int gtk_builder_load(GtkBuilder *b,
+                     const char *bin_path,
+                     const char *ui_path);
+
 #endif

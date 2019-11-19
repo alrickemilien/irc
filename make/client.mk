@@ -52,7 +52,8 @@ CLIENT_SRC+=src/utils/safe.c \
 CLIENT_OBJ=$(CLIENT_SRC:.c=.o)
 
 # ui
-CLIENT_SRC+=src/client/ui/login.c
+CLIENT_SRC+=src/client/ui/gtk_builder_load.c \
+			src/client/ui/login.c \
 
 
 GTK_DPKG=$(shell pkg-config --cflags --libs gtk+-2.0)
