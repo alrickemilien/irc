@@ -65,7 +65,7 @@ GTK_DPKG=$(shell pkg-config --cflags --libs gtk+-3.0)
 # glade files
 CLIENT_SRC_GLADE_PREFIX=src/client/ui/
 CLIENT_BUILD_GLADE_PREFIX=build/ui/
-CLIENT_SRC_GLADE=login.xml
+CLIENT_SRC_GLADE=login.glade
 CLIENT_UI_COPY_FILES=$(addprefix $(CLIENT_BUILD_GLADE_PREFIX), $(CLIENT_SRC_GLADE))
 
 $(CLIENT_BUILD_GLADE_PREFIX)%: $(CLIENT_SRC_GLADE_PREFIX)%
