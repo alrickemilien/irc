@@ -6,10 +6,6 @@
 GtkBuilder *builder;
 GtkBuilder *mainwindow;
 GtkWidget * window;
-GtkWidget * usernameEntry;
-GtkWidget * passwordEntry;
-GtkWidget * button;
-GtkWidget * label;
 GtkWidget * eventBox;
 
 GtkWidget *table;
