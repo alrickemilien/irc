@@ -7,7 +7,7 @@ size_t tokenize(char *str, t_token *tokens, size_t len)
 
     i = 0;
     count = 0;
-    while (str[i] && str[i] != 0x0A && count < len)
+    while (str[i] && str[i] != 0x0A && str[i] != 0x0D && count < len)
     {
         // Skip whitespaces
         while (str[i] == 0x20 && str[i])
@@ -19,12 +19,14 @@ size_t tokenize(char *str, t_token *tokens, size_t len)
         tokens[count].addr = str + i;
 
         // Skip printable
-        while (str[i] != 0x20 && str[i] != 0x0A && str[i])
+        while (str[i] != 0x20 && str[i] != 0x0A && str[i] != 0x0D && str[i])
+        {
+            tokens[count].len++;
             i++;
-        tokens[count].len = (size_t)(&str[i] - tokens[count].addr);
+        }
 
         count++;
     }
 
-    return (i);
+    return (count);
 }

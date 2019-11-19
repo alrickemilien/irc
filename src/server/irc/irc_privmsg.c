@@ -38,6 +38,8 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
 
     memset(subtokens, 0, sizeof(t_token) * 30);
 
+    logdebug("irc_privmsg:: %s\n", tokens[0].addr);
+
     subtoken_count = tokenizechr(tokens[1].addr, subtokens, 30, ',');
 
     // printf("subtokens ret:%ld\n", tokenizechr(tokens[1].addr, subtokens, 30,
@@ -54,12 +56,15 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
             j = 0;
             while (j < subtoken_count)
             {
+                logdebug("irc_privmsg:: subtokens[j]: %s\n", subtokens[j].addr);
                 if (subtokens[j].addr &&
                     (strncmp(e->fds[i].nickname, subtokens[j].addr,
                              subtokens[j].len) == 0 ||
                      strncmp(e->channels[e->fds[i].channel].channel,
                              subtokens[j].addr, subtokens[j].len) == 0))
                 {
+                    logdebug("irc_privmsg:: sending message to %ld\n", i);
+
                     if (e->fds[i].away)
                     {
                         irc_reply(e, cs, RPL_AWAY, e->fds[i].nickname,

@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <sys/socket.h>
 
 // Debug
@@ -52,6 +53,7 @@ int cbuffer_send(int cs, t_cbuffer *cbuf, size_t n, int flags);
 
 ///
 int cbuffer_recv(t_cbuffer *cbuf, int cs);
+int cbuffer_read(t_cbuffer *cbuf, int cs);
 size_t cbuffer_indexof(t_cbuffer *cbuf, const char *str);
 void cbuffer_dropn(t_cbuffer *cbuf, size_t n);
 

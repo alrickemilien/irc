@@ -81,11 +81,15 @@ int irc_user(t_env *e, int cs, t_token *tokens)
     memset(e->fds[cs].realname, 0, USERNAMESTRSIZE);
     memcpy(e->fds[cs].realname,
            tokens[4].addr[0] == ':' ? tokens[4].addr + 1 : tokens[4].addr,
-          tokens[4].addr[0] == ':' ? tokens[4].len - 1 : tokens[4].len);
+           tokens[4].addr[0] == ':' ? tokens[4].len - 1 : tokens[4].len);
 
     // When nickname is not set
     if (e->fds[cs].nickname[0] == 0)
+    {
+        logdebug("USER command received for client #%ld without nickname\n",
+                 cs);
         return (IRC_USER);
+    }
 
     e->fds[cs].registered = 1;
 

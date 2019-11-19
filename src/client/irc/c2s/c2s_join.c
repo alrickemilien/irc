@@ -23,7 +23,7 @@ static bool is_valid_chan(const char *channel)
     return (true);
 }
 
-static int irc_join_check_command(t_env *e, int cs, const t_token *tokens)
+static int c2s_join_check_command(t_env *e, int cs, const t_token *tokens)
 {
     const char *channel;
     size_t      channel_len;
@@ -32,28 +32,32 @@ static int irc_join_check_command(t_env *e, int cs, const t_token *tokens)
     (void)e;
 
     if (!tokens[1].addr || tokens[2].addr)
-        return logerror("ERR_NEEDMOREPARAMS");
+        return logerror("c2s_join_check_command::ERR_NEEDMOREPARAMS\n");
 
     channel = tokens[1].addr;
     channel_len = tokens[1].len;
 
     if (strpbrk(channel, "\x07\x2C"))
-            return logerror("ERR_NOSUCHCHANNEL");
+            return logerror("c2s_join_check_command::ERR_NOSUCHCHANNEL\n");
     else if (channel_len - 1 > CHANNELSTRSIZE)
-        return logerror("ERR_NOSUCHCHANNEL");
+        return logerror("c2s_join_check_command::ERR_NOSUCHCHANNEL\n");
     else if ((channel[0] != '#' && channel[0] != '&') ||
              !is_valid_chan(channel))
-        return logerror("ERR_NOSUCHCHANNEL");
+        return logerror("c2s_join_check_command::ERR_NOSUCHCHANNEL\n");
     else if (channel_len < 1)
-        return logerror("ERR_NOSUCHCHANNEL");
+        return logerror("c2s_join_check_command::ERR_NOSUCHCHANNEL\n");
     else
         return (0);
     return (-1);
 }
 
-int irc_join(t_env *e, int cs, t_token *tokens)
+int c2s_join(t_env *e, int cs, t_token *tokens)
 {
-    if ((irc_join_check_command(e, cs, tokens)) != 0)
+    if (e->sock == -1)
+        return logerror("%s\n", "You nee to be logged in before any command. Use /connect [server] ?[port]");
+
+
+    if ((c2s_join_check_command(e, cs, tokens)) != 0)
         return (-1);
 
     cbuffer_putstr(&e->fds[cs].buf_write, "JOIN ");
@@ -61,9 +65,9 @@ int irc_join(t_env *e, int cs, t_token *tokens)
     cbuffer_putstr(&e->fds[cs].buf_write, "\x0A\x0D");
 
     if (!e->fds[cs].channelname[0])
-        loginfo("You joined %s", tokens[1].addr);
+        loginfo("You joined %s\n", tokens[1].addr);
     else
-        loginfo("You leaved %s for %s", e->fds[cs].channelname, tokens[1].addr);
+        loginfo("You leaved %s for %s\n", e->fds[cs].channelname, tokens[1].addr);
     
     memset(e->fds[cs].channelname, 0, CHANNELSTRSIZE + 1);
     memcpy(e->fds[cs].channelname, tokens[1].addr, tokens[1].len);
