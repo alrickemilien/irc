@@ -56,7 +56,7 @@ CLIENT_SRC+=src/client/ui/gtk_builder_load.c \
 			src/client/ui/login.c \
 
 
-GTK_DPKG=$(shell pkg-config --cflags --libs gtk+-2.0)
+GTK_DPKG=$(shell pkg-config --cflags --libs gtk+-3.0)
 
 %.o: %.c
 	@gcc $(DEBUG) -o $@ -c $< $(INCLUDE) $(GTK_DPKG) $(CFLAGS)

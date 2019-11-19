@@ -16,12 +16,7 @@ void login_window_init(t_env *e)
         return;
 
     window = GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
-    gtk_signal_connect(GTK_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit),
-                       NULL);
-
-    button = GTK_WIDGET(gtk_builder_get_object(builder, "quitbutton"));
-    gtk_signal_connect(GTK_OBJECT(button), "clicked", G_CALLBACK(gtk_main_quit),
-                       NULL);
+    g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
     usernameEntry = GTK_WIDGET(gtk_builder_get_object(builder, "unentry"));
     passwordEntry = GTK_WIDGET(gtk_builder_get_object(builder, "pwentry"));
@@ -29,8 +24,7 @@ void login_window_init(t_env *e)
     label = GTK_WIDGET(gtk_builder_get_object(builder, "inform"));
 
     button = GTK_WIDGET(gtk_builder_get_object(builder, "loginbutton"));
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
-                       G_CALLBACK(get_login_info), NULL);
+    g_signal_connect(button, "clicked", G_CALLBACK(get_login_info), NULL);
 }
 
 void login_connect(t_env *e, const char *uname, const char *pword)

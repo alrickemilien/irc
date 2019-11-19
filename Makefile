@@ -29,7 +29,7 @@ $(CLIENT): $(CLIENT_OBJ)
 	@gcc $(DEBUG) $^ -o $(BUILD_DIR)$@ $(LINK_LIBFT) $(GTK_DPKG) $(CFLAGS)
 
 clean:
-	@rm -rf $(SERVER_OBJ) $(CLIENT_OBJ)
+	@rm -rf $(SERVER_OBJ) $(CLIENT_OBJ) $(CLIENT_UI_COPY_FILES)
 
 fclean: clean
 	@rm -rf $(SERVER) $(CLIENT)

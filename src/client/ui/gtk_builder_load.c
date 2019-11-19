@@ -18,10 +18,6 @@ int gtk_builder_load(GtkBuilder *b,
     if (!template_path)
         return (-1);
 
-    printf("loading: %s\n", template_path);
-    printf("bin_path: %s\n", bin_path);
-    printf("ui_path: %s\n", ui_path);
-
     /* get graphics from login.glade */
     gtk_builder_add_from_file(b, template_path, (void *)0);
 
