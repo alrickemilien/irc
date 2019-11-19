@@ -31,6 +31,7 @@ CLIENT_SRC+=src/client/irc/c2s/c2s.c \
 #irc server to client
 CLIENT_SRC+=src/client/irc/s2c/s2c.c \
 			src/client/irc/s2c/s2c_names.c \
+			src/client/irc/s2c/s2c_privmsg.c \
 			src/client/irc/s2c/s2c_rpl_welcome.c
 
 #irc s2c
