@@ -45,8 +45,6 @@ void stdin_read(t_env *e, size_t cs)
                    e->fds[cs].buf_read.buffer, index);
         }
 
-        //     logdebug("command: %s\n", command);
-
         c2s(e, e->sock, command);
 
         // Drop command

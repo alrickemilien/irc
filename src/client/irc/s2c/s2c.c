@@ -10,10 +10,8 @@ static const t_irc_cmd g_s2c_replys[IRC_S2C_COMMANDS_NUMBER] = {
 int s2c(t_env *e, int cs, char *buffer)
 {
     size_t i;
-    size_t  j;
+    // size_t  j;
     t_token tokens[30];
-
-    // logdebug("s2c::buffer %s\n", buffer);
 
     // Skip withespaces
     while (*buffer == 0x20)
@@ -21,16 +19,16 @@ int s2c(t_env *e, int cs, char *buffer)
 
     memset(tokens, 0, sizeof(t_token) * 30);
 
-    // tokenize(buffer, tokens, 30);
+    tokenize(buffer, tokens, 30);
 
-    logdebug("ret:%ld\n", tokenize(buffer, tokens, 30));
-    j = 0;
-    while (j < 30 && tokens[j].addr)
-    {
-        logdebug("token:%s - token_len:%ld\n",
-        tokens[j].addr,tokens[j].len);
-        j++;
-    }
+    // logdebug("ret:%ld\n", tokenize(buffer, tokens, 30));
+    // j = 0;
+    // while (j < 30 && tokens[j].addr)
+    // {
+    //     logdebug("token:%s - token_len:%ld\n",
+    //     tokens[j].addr,tokens[j].len);
+    //     j++;
+    // }
 
     i = 0;
     while (tokens[0].addr && i < IRC_S2C_COMMANDS_NUMBER)
