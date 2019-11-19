@@ -35,6 +35,12 @@ static int c2s_msg_check_command(t_env *e, int cs, const t_token *tokens)
 
 int c2s_msg(t_env *e, int cs, t_token *tokens)
 {
+    if (e->sock == -1)
+        return logerror(
+            "%s\n",
+            "You nee to be logged in before any command. Use /connect [server] "
+            "?[port]");
+
     if ((c2s_msg_check_command(e, cs, tokens)) < 0)
         return (-1);
 
@@ -59,7 +65,8 @@ int c2s_msg(t_env *e, int cs, t_token *tokens)
 
     cbuffer_putstr(&e->fds[cs].buf_write, "\x0D\x0A");
 
-    logdebug("c2s_msg:: PRIVMSG: %s\n", tokens[2].addr ? tokens[2].addr : tokens[1].addr);
+    logdebug("c2s_msg:: PRIVMSG: %s\n",
+             tokens[2].addr ? tokens[2].addr : tokens[1].addr);
 
     return (IRC_JOIN);
 }

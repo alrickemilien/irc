@@ -20,7 +20,7 @@ void client_ipv4(t_env *e)
     //     int reuseport;
     // #endif  // __APPLE__
 
-    printf("Connecting to %s:%d through ipv4\n", e->options.host, e->options.port);
+    logdebug("Connecting to %s:%d through ipv4\n", e->options.host, e->options.port);
 
     hostnm =
         XPSAFE((void *)0, gethostbyname(e->options.host), "ipv4::gethostbyname");

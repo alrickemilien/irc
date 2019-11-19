@@ -4,23 +4,36 @@
 #include <pwd.h>
 #include <sys/types.h>
 
-// static int c2s_connect_check_command(t_env *e, int cs, const t_token *tokens)
-// {
-//     size_t nick_len;
+static int c2s_connect_check_command(t_env *e, int cs, const t_token *tokens)
+{
+    size_t host_len;
 
-//     (void)cs;
-//     (void)e;
+    (void)cs;
+    (void)e;
 
-//     if (!tokens[1].addr || tokens[2].addr)
-//         return (logerror("ERR_NONICKNAMEGIVEN"));
+    if (!tokens[1].addr)
+        return (logerror("c2s_connect_check_command:: NO HOST GIVEN\n"));
 
-//     nick_len = tokens[1].len;
+    host_len = tokens[1].len;
 
-//     if (nick_len > NI_MAXHOST || !nick_len)
-//         return (logerror("ERR_ERRONEUSNICKNAME"));
+    if (host_len > NI_MAXHOST || !host_len)
+        return (logerror("c2s_connect_check_command:: INVALID HOSTNAME\n"));
 
-//     return (0);
-// }
+    memset(e->options.host, 0, sizeof(e->options.host));
+    memcpy(e->options.host, tokens[1].addr, tokens[1].len);
+
+    if (!tokens[2].addr)
+        return (0);
+
+    if (ato32(tokens[2].addr, (uint32_t *)&e->options.port) != 0 ||
+        e->options.port < 1000 || e->options.port > 99999)
+        return (
+            logerror("c2s_connect_check_command:: port must be a value between "
+                     "1000 an 99999: '%s'.\n",
+                     tokens[2].addr));
+
+    return (0);
+}
 
 int c2s_connect(t_env *e, int cs, t_token *tokens)
 {
@@ -31,8 +44,8 @@ int c2s_connect(t_env *e, int cs, t_token *tokens)
     if (e->sock != -1)
         return logerror("Already connected\n");
 
-    // if ((c2s_connect_check_command(e, cs, tokens)) < 0)
-    //     return (-1);
+    if ((c2s_connect_check_command(e, cs, tokens)) < 0)
+        return (-1);
 
     if (e->ipv6 == 1)
         client_ipv6(e);
