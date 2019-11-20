@@ -6,6 +6,9 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "client/ui/login.h"
+#include "client/ui/ui.h"
+
 void init_env(t_env *e)
 {
     size_t i;
@@ -20,6 +23,8 @@ void init_env(t_env *e)
     // Server's socket connection
     e->sock = -1;
     e->ipv6 = 0;
+
+    XPSAFE(NULL, getcwd(e->cwd, sizeof(e->cwd)), "init_env::getcwd");
 
     i = 0;
     while (i < e->maxfd)
@@ -57,7 +62,7 @@ static void init_std(t_env *e)
     stdin_fd = &e->fds[0];
     stdin_fd->type = FD_CLIENT;
     stdin_fd->read = stdin_read;
-    stdin_fd->write = (void*)0;
+    stdin_fd->write = (void *)0;
 }
 
 static void execute_precommands(t_env *e)
@@ -76,20 +81,40 @@ static void execute_precommands(t_env *e)
     }
 }
 
-int main(int argc, const char **argv)
+int gui(t_env *e, int argc, char **argv)
 {
-    int       exit_code;
-    t_env     e;
+    GtkWidget *window;
+    
+    gtk_init(&argc, &argv);
 
-    exit_code = read_options(argc, argv, &e.options);
+    window = login_window(e);
+
+    gtk_widget_show_all(window);
+
+    gtk_main();
+
+    return (0);
+}
+
+int main(int argc, char **argv)
+{
+    int   exit_code;
+    t_env e;
+
+    exit_code = read_options(argc, (const char**)argv, &e.options);
     if (exit_code != 0)
         return (exit_code);
 
     init_options(&e.options);
+
+    e.argv_0 = argv[0];
     init_env(&e);
 
     if (e.options.ipv6 == 1)
         e.ipv6 = 1;
+
+    if (e.options.gui)
+        return (gui(&e, argc, argv));
 
     if (e.options.command)
         loginfo("options.command: %s\n", e.options.command);
@@ -99,9 +124,6 @@ int main(int argc, const char **argv)
     execute_precommands(&e);
 
     do_select(&e);
-
-    if (e.sock != -1)
-        XSAFE(-1, close(e.sock), "main::close");
 
     return (exit_code);
 }

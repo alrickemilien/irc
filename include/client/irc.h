@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <linux/limits.h>
 
 #include <irc.h>
 #include <client/options.h>
@@ -23,7 +24,10 @@ typedef struct  s_env
     char        isotime[ISOTIMESTRSIZE];
     int         is_tty;
     int         sock;
+    char		cwd[PATH_MAX];
     int         ipv6;
+    char        *argv_0;
+    char        passwd[PASSWDTRSIZE + 1];
     t_options   options;
 }               t_env;
 
@@ -37,6 +41,7 @@ typedef enum e_irc {
     IRC_MSG,
     IRC_CONNECT,
     IRC_WHO,
+    IRC_PASS,
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
 
@@ -60,6 +65,14 @@ int             c2s_msg(t_env *e, int cs, t_token *tokens);
 int             c2s_connect(t_env *e, int cs, t_token *tokens);
 int             c2s_nick(t_env *e, int cs, t_token *tokens);
 int             c2s_who(t_env *e, int cs, t_token *tokens);
+int             c2s_pass(t_env *e, int cs, t_token *tokens);
+
+int             _c2s_nick(t_fd *fd, const char *nick, size_t nick_length);
+int             _c2s_pass(t_env *e, const char *password, size_t password_length);
+int             _c2s_connect(t_env *e,
+                        const char *name,
+                        const char *hostname,
+                        const char *servername);
 
 int             s2c(t_env *e, int cs, char *buffer);
 int             s2c_rpl_welcome(t_env *e, int cs, t_token *tokens);
