@@ -27,6 +27,7 @@ typedef struct  s_env
     char		cwd[PATH_MAX];
     int         ipv6;
     char        *argv_0;
+    char        passwd[PASSWDTRSIZE + 1];
     t_options   options;
 }               t_env;
 
@@ -65,10 +66,19 @@ int             c2s_nick(t_env *e, int cs, t_token *tokens);
 int             c2s_who(t_env *e, int cs, t_token *tokens);
 int             c2s_pass(t_env *e, int cs, t_token *tokens);
 
+int             _c2s_nick(t_fd *fd, const char *nick, size_t nick_length);
+int             _c2s_pass(t_env *e, const char *password, size_t password_length);
+int             _c2s_connect(t_env *e,
+                        const char *name,
+                        const char *hostname,
+                        const char *servername);
+
 int             s2c(t_env *e, int cs, char *buffer);
 int             s2c_rpl_welcome(t_env *e, int cs, t_token *tokens);
 int             s2c_rpl_namreply(t_env *e, int cs, t_token *tokens);
 int             s2c_rpl_endofnames(t_env *e, int cs, t_token *tokens);
+
+
 
 /*
 ** fd 
