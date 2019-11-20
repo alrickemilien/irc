@@ -25,22 +25,10 @@ gboolean on_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data)
     return FALSE;
 }
 
-void apply_style(GtkCssProvider *provider)
-{
-    GtkStyleContext *context;
-    context = gtk_widget_get_style_context(button_go);
-    gtk_style_context_add_provider(context, GTK_STYLE_PROVIDER(provider),
-                                   GTK_STYLE_PROVIDER_PRIORITY_USER);
-
-    gtk_style_context_save(context);
-    //    gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
-    //                                              GTK_STYLE_PROVIDER(provider),TK_STYLE_PROVIDER_PRIORITY_USER);
-}
-
 void login_window_init(t_env *e)
 {
-    GtkCssProvider *provider = gtk_css_provider_new();
-    gtk_provider_load_css(provider, e->argv_0, "/ui/login.css");
+    GtkCssProvider *cssProvider = gtk_css_provider_new();
+    gtk_provider_load_css(cssProvider, e->argv_0, "/ui/login.css");
 
     builder = gtk_builder_new();
 
@@ -62,7 +50,9 @@ void login_window_init(t_env *e)
     button_go = GTK_WIDGET(gtk_builder_get_object(builder, "button_go"));
     g_signal_connect(button_go, "clicked", G_CALLBACK(login_connect), e);
 
-    apply_style(provider);
+    gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
+                                              GTK_STYLE_PROVIDER(cssProvider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
 }
 
 void login_connect(GtkWidget *widget, gpointer data)

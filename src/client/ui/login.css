@@ -28,16 +28,34 @@ GtkButton:active {
             color-stop(1.00, rgba(104, 191, 134, 1)));
 } */
 
+GtkWindow {
+    /* background-image: -gtk-gradient (linear,
+            left top,
+            right bottom,
+            color-stop(0.00, rgb(170, 108, 185)),
+            color-stop(0.75, rgb(158, 77, 179)),
+            color-stop(1.00, rgb(127, 38, 149))); */
+    background-image: url("login-1920x1080.jpg");
+    background-size: cover;
+    border-width: 3px;
+}
+
+GtkLabel {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bolder;
+}
+
+#title {
+    font-weight: normal;
+}
+
 GtkButton {
-    color: yellowgreen;
-    background-color: green;
-    opacity: 0.797;
     text-decoration: underline;
     background-image: -gtk-gradient (linear,
             left top,
             left bottom,
             color-stop(0.0, rgba(34, 97, 70, 1)),
             color-stop(0.50, rgba(56, 145, 118, 1)),
-            color-stop(0.51, rgba(34, 131, 116, 1)),
+            color-stop(0.51, rgb(34, 131, 126)),
             color-stop(1.00, rgba(104, 191, 134, 1)));
 }

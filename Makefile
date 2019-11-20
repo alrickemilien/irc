@@ -18,7 +18,7 @@ INCLUDE=-I include -I libft
 
 .PHONY: all clean fclean
 
-all: $(SERVER) $(CLIENT) $(CLIENT_UI_COPY_FILES)
+all: $(SERVER) $(CLIENT) $(CLIENT_UI_COPY_FILES) $(ASSETS_COPY_FILES)
 
 $(SERVER): $(SERVER_OBJ)
 	@mkdir -p $(BUILD_DIR)
@@ -29,7 +29,7 @@ $(CLIENT): $(CLIENT_OBJ)
 	@gcc $(DEBUG) $^ -o $(BUILD_DIR)$@ $(LINK_LIBFT) $(GTK_DPKG) $(CFLAGS)
 
 clean:
-	@rm -rf $(SERVER_OBJ) $(CLIENT_OBJ) $(CLIENT_UI_COPY_FILES)
+	@rm -rf $(SERVER_OBJ) $(CLIENT_OBJ) $(CLIENT_UI_COPY_FILES) $(ASSETS_COPY_FILES)
 
 fclean: clean
 	@rm -rf $(SERVER) $(CLIENT)
