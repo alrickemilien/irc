@@ -48,7 +48,8 @@ typedef enum e_irc_s2c {
     IRC_S2C_RPL_WELCOME = 0UL,
     IRC_S2C_RPL_NAMREPLY,
     IRC_S2C_RPL_ENDOFNAMES,
-    IRC_S2C_COMMANDS_NUMBER
+    IRC_S2C_PRIVMSG,
+    IRC_S2C_COMMANDS_NUMBER,
 } t_irc_s2c;
 
 typedef struct  s_irc_cmd
@@ -69,6 +70,7 @@ int             s2c(t_env *e, int cs, char *buffer);
 int             s2c_rpl_welcome(t_env *e, int cs, t_token *tokens);
 int             s2c_rpl_namreply(t_env *e, int cs, t_token *tokens);
 int             s2c_rpl_endofnames(t_env *e, int cs, t_token *tokens);
+int             s2c_privmsg(t_env *e, int cs, t_token *tokens);
 
 /*
 ** fd 

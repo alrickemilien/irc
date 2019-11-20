@@ -51,7 +51,7 @@ static void init_options(t_options *options)
         memcpy(options->host, "127.0.0.1", sizeof(char) * 9);
 
     if (options->ipv6)
-        loginfo("%s\n", "Running server ipv6");
+        loginfo("Running server ipv6\n");
 }
 
 static void init_std(t_env *e)
