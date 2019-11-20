@@ -1,0 +1,22 @@
+GtkWindow {
+    background-color: white;
+}
+
+#channel_label {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#username_label {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+#status {
+    border-radius: 10px;
+    background-color: red;
+}
+
+#left-pane {
+    background-color: rgb(124, 85, 195);
+}
