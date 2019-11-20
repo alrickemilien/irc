@@ -15,23 +15,28 @@ static int c2s_pass_check_command(t_env *e, int cs, const t_token *tokens)
     return (0);
 }
 
+int _c2s_pass(t_env *e, const char *password, size_t password_length)
+{
+    memset(e->passwd, 0, PASSWDTRSIZE);
+    memcpy(e->passwd, password, password_length);
+    return (0);
+}
+
 int c2s_pass(t_env *e, int cs, t_token *tokens)
 {
-    if (e->sock == -1)
-        return logerror("You already logged in\n");
+    if (e->sock != -1)
+        return logerror("You are already logged in\n");
 
     if ((c2s_pass_check_command(e, cs, tokens)) < 0)
         return (-1);
 
+    _c2s_pass(e, tokens[1].addr, tokens[1].len);
+
     cbuffer_putstr(&e->fds[cs].buf_write, "PASS ");
-    cbuffer_put(&e->fds[cs].buf_write, (uint8_t *)tokens[1].addr,
-                tokens[1].len);
+    cbuffer_put(&e->fds[cs].buf_write, (uint8_t*) tokens[1].addr, tokens[1].len);
     cbuffer_putstr(&e->fds[cs].buf_write, "\x0D\x0A");
 
-    loginfo("You changed password\n");
-
-    memset(e->fds[cs].passwd, 0, PASSWDTRSIZE);
-    memcpy(e->fds[cs].passwd, tokens[1].addr, tokens[1].len);
+    loginfo("_c2s_pass::You changed password\n");
 
     return (IRC_PASS);
 }

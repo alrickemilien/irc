@@ -29,7 +29,7 @@ size_t cbuffer_size(const t_cbuffer *cbuf)
     return size;
 }
 
-void cbuffer_put(t_cbuffer *cbuf, uint8_t *data, size_t n)
+void cbuffer_put(t_cbuffer *cbuf, const uint8_t *data, size_t n)
 {
     size_t count;
 
@@ -115,7 +115,7 @@ void cbuffer_putstr(t_cbuffer *cbuf, const char *str)
 ** t               h
 */
 
-int cbuffer_put_safe(t_cbuffer *cbuf, uint8_t *data, size_t n)
+int cbuffer_put_safe(t_cbuffer *cbuf, const uint8_t *data, size_t n)
 {
     size_t count;
 

@@ -55,6 +55,7 @@ CLIENT_OBJ=$(CLIENT_SRC:.c=.o)
 
 # ui
 CLIENT_SRC+=src/client/ui/gtk_builder_load.c \
+			src/client/ui/gtk_provider_load_css.c \
 			src/client/ui/login.c \
 
 
@@ -66,9 +67,19 @@ GTK_DPKG=$(shell pkg-config --cflags --libs gtk+-3.0)
 # glade files
 CLIENT_SRC_GLADE_PREFIX=src/client/ui/
 CLIENT_BUILD_GLADE_PREFIX=build/ui/
-CLIENT_SRC_GLADE=login.glade
+CLIENT_SRC_GLADE=login.glade login.css
 CLIENT_UI_COPY_FILES=$(addprefix $(CLIENT_BUILD_GLADE_PREFIX), $(CLIENT_SRC_GLADE))
 
 $(CLIENT_BUILD_GLADE_PREFIX)%: $(CLIENT_SRC_GLADE_PREFIX)%
 	@mkdir -p $(CLIENT_BUILD_GLADE_PREFIX)
+	@cp -f $< $@
+
+# assets files
+CLIENT_SRC_ASSETS_PREFIX=assets/
+CLIENT_BUILD_ASSETS_PREFIX=build/ui/
+CLIENT_SRC_ASSETS=login-1920x1080.jpg
+ASSETS_COPY_FILES=$(addprefix $(CLIENT_BUILD_ASSETS_PREFIX), $(CLIENT_SRC_ASSETS))
+
+$(CLIENT_BUILD_ASSETS_PREFIX)%: $(CLIENT_SRC_ASSETS_PREFIX)%
+	@mkdir -p $(CLIENT_BUILD_ASSETS_PREFIX)
 	@cp -f $< $@

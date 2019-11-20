@@ -19,6 +19,20 @@ static int c2s_nick_check_command(t_env *e, int cs, const t_token *tokens)
     return (0);
 }
 
+int _c2s_nick(t_fd *fd, const char *nick, size_t nick_length)
+{
+    cbuffer_putstr(&fd->buf_write, "NICK ");
+    cbuffer_put(&fd->buf_write, (const uint8_t *)nick, nick_length);
+    cbuffer_putstr(&fd->buf_write, "\x0D\x0A");
+
+    loginfo("You changed nickname to %s\n", nick);
+
+    memset(fd->nickname, 0, NICKNAMESTRSIZE);
+    memcpy(fd->nickname, nick, nick_length);
+
+    return (0);
+}
+
 int c2s_nick(t_env *e, int cs, t_token *tokens)
 {
     if (e->sock == -1)
@@ -30,15 +44,7 @@ int c2s_nick(t_env *e, int cs, t_token *tokens)
     if ((c2s_nick_check_command(e, cs, tokens)) < 0)
         return (-1);
 
-    cbuffer_putstr(&e->fds[cs].buf_write, "NICK ");
-    cbuffer_put(&e->fds[cs].buf_write, (uint8_t *)tokens[1].addr,
-                tokens[1].len);
-    cbuffer_putstr(&e->fds[cs].buf_write, "\x0D\x0A");
-
-    loginfo("You changed nickname to %s\n", tokens[1].addr);
-
-    memset(e->fds[cs].nickname, 0, NICKNAMESTRSIZE);
-    memcpy(e->fds[cs].nickname, tokens[1].addr, tokens[1].len);
+    _c2s_nick(&e->fds[cs], tokens[1].addr, tokens[1].len);
 
     return (IRC_NICK);
 }
