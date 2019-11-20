@@ -3,6 +3,6 @@
 
 #include <client/ui/ui.h>
 
-void panel_window(t_env *e);
+GtkWidget *panel_window(t_env *e);
 
 #endif

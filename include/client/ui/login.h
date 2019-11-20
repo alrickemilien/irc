@@ -3,7 +3,7 @@
 
 #include "client/ui/ui.h"
 
-void login_window(t_env *e);
+GtkWidget *login_window(t_env *e);
 void login_connect(GtkWidget *widget, gpointer data);
 
 #endif

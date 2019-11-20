@@ -83,11 +83,11 @@ static void execute_precommands(t_env *e)
 
 int gui(t_env *e, int argc, char **argv)
 {
+    GtkWidget *window;
+    
     gtk_init(&argc, &argv);
 
-    login_window(e);
-
-    g_object_unref(G_OBJECT(builder));
+    window = login_window(e);
 
     gtk_widget_show_all(window);
 

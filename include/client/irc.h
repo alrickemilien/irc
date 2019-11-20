@@ -80,8 +80,6 @@ int             s2c_rpl_namreply(t_env *e, int cs, t_token *tokens);
 int             s2c_rpl_endofnames(t_env *e, int cs, t_token *tokens);
 int             s2c_privmsg(t_env *e, int cs, t_token *tokens);
 
-
-
 /*
 ** fd 
 */
