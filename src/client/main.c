@@ -85,7 +85,7 @@ int gui(t_env *e, int argc, char **argv)
 {
     gtk_init(&argc, &argv);
 
-    login_window_init(e);
+    login_window(e);
 
     g_object_unref(G_OBJECT(builder));
 

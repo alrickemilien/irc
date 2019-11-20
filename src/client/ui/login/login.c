@@ -6,7 +6,7 @@
 
 #include <client/irc.h>
 #include <client/ui/login.h>
-#include <client/ui/ui.h>
+#include <client/ui/panel.h>
 
 static GtkWidget *host_entry;
 static GtkWidget *port_entry;
@@ -15,7 +15,7 @@ static GtkWidget *pass_entry;
 static GtkWidget *button_go;
 static GtkWidget *label;
 
-gboolean on_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data)
+static gboolean on_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
     (void)widget;
     (void)data;
@@ -25,14 +25,14 @@ gboolean on_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data)
     return FALSE;
 }
 
-void login_window_init(t_env *e)
+void login_window(t_env *e)
 {
     GtkCssProvider *cssProvider = gtk_css_provider_new();
-    gtk_provider_load_css(cssProvider, e->argv_0, "/ui/login.css");
+    gtk_provider_load_css(cssProvider, e->argv_0, "/ui/login/login.css");
 
     builder = gtk_builder_new();
 
-    if (gtk_builder_load(builder, e->argv_0, "/ui/login.glade") < 0)
+    if (gtk_builder_load(builder, e->argv_0, "/ui/login/login.glade") < 0)
         return;
 
     window = GTK_WIDGET(gtk_builder_get_object(builder, "window_login"));
@@ -99,7 +99,7 @@ void login_connect(GtkWidget *widget, gpointer data)
     {
         gtk_entry_set_text(GTK_ENTRY(pass_entry), "");
 
-        // mainWindow();
+        panel_window(e);
 
         gtk_label_set_text(GTK_LABEL(label), "[!] Failed to connect to server");
     }
