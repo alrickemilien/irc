@@ -6,17 +6,22 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "client/ui/login.h"
-#include "client/ui/ui.h"
+#include <client/ui/login.h>
+#include <client/ui/panel.h>
 
 void init_env(t_env *e)
 {
-    size_t i;
+    size_t        i;
+    struct rlimit rlp;
+
+    // RLIMIT_NOFILE:
+    // This specifies a value one greater than the maximum file
+    // descriptor number that can be opened by this process.
+    XSAFE(-1, getrlimit(RLIMIT_NOFILE, &rlp), "init_env::getrlimit");
 
     // there are three standard file descriptions, STDIN, STDOUT, and STDERR.
     // They are assigned to 0, 1, and 2 respectively.
-    // The last is used for client to server
-    e->maxfd = 4;
+    e->maxfd = rlp.rlim_cur;
     e->fds = (t_fd *)XPSAFE(NULL, malloc(sizeof(*e->fds) * e->maxfd),
                             "init_env::malloc");
 
@@ -84,10 +89,18 @@ static void execute_precommands(t_env *e)
 int gui(t_env *e, int argc, char **argv)
 {
     GtkWidget *window;
-    
+
     gtk_init(&argc, &argv);
 
-    window = login_window(e);
+    // When host has already been set through command line
+
+    if (!e->options.host[0])
+        window = login_window(e);
+
+    if (e->options.host[0] && _c2s_connect(e, NULL, NULL, e->options.host) < 0)
+        window = login_window(e);
+    else if (e->sock != -1)
+        window = panel_window(e);
 
     gtk_widget_show_all(window);
 
@@ -101,7 +114,7 @@ int main(int argc, char **argv)
     int   exit_code;
     t_env e;
 
-    exit_code = read_options(argc, (const char**)argv, &e.options);
+    exit_code = read_options(argc, (const char **)argv, &e.options);
     if (exit_code != 0)
         return (exit_code);
 

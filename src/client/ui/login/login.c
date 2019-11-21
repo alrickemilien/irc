@@ -67,7 +67,6 @@ GtkWidget *login_window(t_env *e)
 void login_connect(GtkWidget *widget, gpointer data)
 {
     t_env *     e;
-    char        hostname[NI_MAXHOST + 1];
     const char *host_data;
     const char *port_data;
     const char *username_data;
@@ -95,12 +94,9 @@ void login_connect(GtkWidget *widget, gpointer data)
     memcpy(e->options.host, host_data[0] ? host_data : "127.0.0.1",
            host_data[0] ? strlen(host_data) : strlen("127.0.0.1"));
 
-    if (gethostname(hostname, sizeof(hostname)) == -1)
-        return;
-
     _c2s_pass(e, pass_data, strlen(pass_data));
 
-    _c2s_connect(e, username_data, hostname, e->options.host);
+    _c2s_connect(e, username_data, NULL, e->options.host);
 
     if (e->sock != -1)
     {

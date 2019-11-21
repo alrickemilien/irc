@@ -40,9 +40,17 @@ int _c2s_connect(t_env *     e,
                  const char *hostname,
                  const char *servername)
 {
-    char  concat[512];
-    int   cs;
-    t_fd *fd;
+    char           concat[512];
+    char           local_hostname[NI_MAXHOST + 1];
+    int            cs;
+    t_fd *         fd;
+    struct passwd *p;
+
+    if ((p = getpwuid(getuid())) == NULL)
+        return (-1);
+
+    if (gethostname(local_hostname, sizeof(local_hostname)) == -1)
+        return (-1);
 
     if (e->ipv6 == 1)
         client_ipv6(e);
@@ -55,8 +63,9 @@ int _c2s_connect(t_env *     e,
     cs = e->sock;
     fd = &e->fds[cs];
 
-    sprintf(concat, "USER %s %s %s %s\x0D\x0A", name, hostname, servername,
-            name);
+    sprintf(concat, "USER %s %s %s %s\x0D\x0A", name ? name : p->pw_name,
+            hostname ? hostname : local_hostname, servername,
+            name ? name : p->pw_name);
 
     memset(concat, 0, sizeof(concat));
 
@@ -64,38 +73,29 @@ int _c2s_connect(t_env *     e,
 
     loginfo("Connecting to %s\n", servername);
 
-    memset(fd->nickname, 0, NICKNAMESTRSIZE);
+    memset(fd->nickname, 0, NICKNAMESTRSIZE - 1);
     memcpy(fd->nickname, servername, strlen(servername));
 
-    memset(fd->realname, 0, USERNAMESTRSIZE);
-    memcpy(fd->realname, name, strlen(name));
+    memset(fd->realname, 0, USERNAMESTRSIZE - 1);
+    memcpy(fd->realname, name ? name : p->pw_name, strlen(name ? name : p->pw_name));
 
-    memset(fd->username, 0, USERNAMESTRSIZE);
-    memcpy(fd->username, name, strlen(name));
+    memset(fd->username, 0, USERNAMESTRSIZE - 1);
+    memcpy(fd->username, name ? name : p->pw_name, strlen(name ? name : p->pw_name));
 
     return (0);
 }
 
 int c2s_connect(t_env *e, int cs, t_token *tokens)
 {
-    struct passwd *p;
-    char           hostname[NI_MAXHOST + 1];
-
     if (e->sock != -1)
         return logerror("Already connected\n");
 
     if ((c2s_connect_check_command(e, cs, tokens)) < 0)
         return (-1);
 
-    if ((p = getpwuid(getuid())) == NULL)
-        return (-1);
-
-    if (gethostname(hostname, sizeof(hostname)) == -1)
-        return (-1);
-
     // Command: USER
     // Parameters: <username> <hostname> <servername> <realname>
-    _c2s_connect(e, p->pw_name, hostname, tokens[1].addr);
+    _c2s_connect(e, NULL, NULL, tokens[1].addr);
 
     return (IRC_CONNECT);
 }
