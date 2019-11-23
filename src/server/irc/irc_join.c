@@ -106,7 +106,7 @@ int irc_join(t_env *e, int cs, t_token *tokens)
             e->fds[cs].nickname, e->fds[cs].host,
             e->channels[e->fds[cs].channel].channel);
 
-    broadcast(e, concat, IRC_NOTICE, cs);
+    broadcast_all_in_channel(e, concat, IRC_NOTICE, cs);
 
     loginfo("%s!%s@%s JOIN %s\n", e->fds[cs].nickname, e->fds[cs].nickname,
             e->fds[cs].host, e->channels[e->fds[cs].channel].channel);

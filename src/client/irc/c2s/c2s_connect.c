@@ -92,12 +92,8 @@ int c2s_connect(t_env *e, int cs, t_token *tokens)
     if (e->sock != -1)
         return logerror("Already connected\n");
 
-    printf("ici\n");
-
     if ((c2s_connect_check_command(e, cs, tokens)) < 0)
         return (-1);
-
-    printf("la\n");
 
     // Command: USER
     // Parameters: <username> <hostname> <servername> <realname>
