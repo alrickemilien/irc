@@ -98,5 +98,7 @@ int irc_user(t_env *e, int cs, t_token *tokens)
     irc_reply(e, cs, RPL_WELCOME, e->fds[cs].username, e->fds[cs].host,
               e->fds[cs].realname);
 
+    logdebug("irc_user:: USER %s@%s %s join the server\n", e->fds[cs].username, e->fds[cs].host, e->fds[cs].realname);
+
     return (IRC_USER);
 }

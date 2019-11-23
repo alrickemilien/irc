@@ -87,45 +87,24 @@ int gui(t_env *e, int argc, char **argv)
 
     gtk_init(&argc, &argv);
 
-    printf("A\n");
-
     // When host has already been set through command line
-    printf("e->sock: %d\n", e->sock);
 
     if (!e->options.host[0])
         window = login_window(e);
 
-    printf("B\n");
-
-    printf("e->sock 2: %d\n", e->sock);
-    printf("e->options.host: %s\n", e->options.host);
-
     if (e->options.host[0] && _c2s_connect(e, NULL, NULL, e->options.host) < 0)
     {
-
-    printf("0\n");
         window = login_window(e);
 
     }
     else if (e->sock != -1)
     {
-        printf("e->sock 2: %d\n", e->sock);
-
         window = panel_window(e);
     }
 
-    printf("C\n");
-
     gtk_widget_show_all(window);
 
-    printf("D\n");
-
-    // while (1)
-    //     do_select(e);
-
     gtk_main();
-
-    printf("E\n");
 
     return (0);
 }
@@ -134,12 +113,8 @@ int main(int argc, char **argv)
 {
     int            exit_code;
     t_env          e;
-    struct timeval timeout;
 
     memset(&e, 0, sizeof(t_env));
-
-    timeout.tv_sec = 0;
-    timeout.tv_usec = 5000;
 
     exit_code = read_options(argc, (const char **)argv, &e.options);
     if (exit_code != 0)
@@ -163,7 +138,6 @@ int main(int argc, char **argv)
 
     execute_precommands(&e);
 
-    (void)timeout;
     while (1)
         do_select(&e);
     return (exit_code);

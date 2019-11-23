@@ -47,10 +47,10 @@ int _c2s_connect(t_env *     e,
     struct passwd *p;
 
     if ((p = getpwuid(getuid())) == NULL)
-        return (-1);
+        return (logerrno("_c2s_connect::getpwuid\n"));
 
     if (gethostname(local_hostname, sizeof(local_hostname)) == -1)
-        return (-1);
+        return (logerrno("_c2s_connect::gethostname\n"));
 
     if (e->ipv6 == 1)
         client_ipv6(e);
@@ -63,13 +63,15 @@ int _c2s_connect(t_env *     e,
     cs = e->sock;
     fd = &e->fds[cs];
 
+    memset(concat, 0, sizeof(concat));
+
     sprintf(concat, "USER %s %s %s %s\x0D\x0A", name ? name : p->pw_name,
             hostname ? hostname : local_hostname, servername,
             name ? name : p->pw_name);
 
-    memset(concat, 0, sizeof(concat));
+    logdebug("concat: %s\n", concat);
 
-    cbuffer_put(&fd->buf_write, (uint8_t *)concat, strlen(concat));
+    cbuffer_putstr(&fd->buf_write, concat);
 
     loginfo("Connecting to %s\n", servername);
 
@@ -90,12 +92,17 @@ int c2s_connect(t_env *e, int cs, t_token *tokens)
     if (e->sock != -1)
         return logerror("Already connected\n");
 
+    printf("ici\n");
+
     if ((c2s_connect_check_command(e, cs, tokens)) < 0)
         return (-1);
 
+    printf("la\n");
+
     // Command: USER
     // Parameters: <username> <hostname> <servername> <realname>
-    _c2s_connect(e, NULL, NULL, tokens[1].addr);
+    if (_c2s_connect(e, NULL, NULL, tokens[1].addr) < 0)
+        return (-1);
 
     return (IRC_CONNECT);
 }

@@ -4,5 +4,6 @@
 #include <client/ui/ui.h>
 
 GtkWidget *panel_window(t_env *e);
+void new_chat_message(const char *str);
 
 #endif

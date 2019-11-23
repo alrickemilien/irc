@@ -53,7 +53,7 @@ int irc_nick(t_env *e, int cs, t_token *tokens)
                 tokens[1].addr);
         broadcast(e, concat, IRC_NOTICE, cs);
 
-        loginfo("%s", concat);
+        loginfo("%s\n", concat);
     }
 
     memset(e->fds[cs].nickname, 0, NICKNAMESTRSIZE);

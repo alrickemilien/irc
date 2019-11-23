@@ -1,19 +1,19 @@
 #include <arpa/inet.h>
+#include <client/irc.h>
+#include <client/ui/panel.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-
-#include <client/irc.h>
-#include <client/ui/panel.h>
 
 // static GtkWidget *host_entry;
 // static GtkWidget *port_entry;
 // static GtkWidget *username_entry;
 // static GtkWidget *pass_entry;
 // static GtkWidget *button_go;
-static GtkWidget *chat_box;
-static GtkWidget *window_panel;
+static GtkWidget * chat_box;
+static GtkWidget * window_panel;
+static GtkBuilder *builder;
 
 static gboolean on_keypress(GtkWidget *  widget,
                             GdkEventKey *event,
@@ -27,10 +27,27 @@ static gboolean on_keypress(GtkWidget *  widget,
     return FALSE;
 }
 
+void new_chat_message(const char *msg)
+{
+    GtkWidget *w;
+
+    logdebug("ui::new_chat_message:: %s\n", msg);
+
+    chat_box = GTK_WIDGET(gtk_builder_get_object(builder, "chat_box"));
+
+    w = gtk_label_new(msg);
+    gtk_set_class(w, "chat-message");
+    gtk_label_set_xalign(GTK_LABEL(w), 0);
+    gtk_widget_set_margin_start(GTK_WIDGET(w), 12);
+    gtk_list_box_insert(GTK_LIST_BOX(chat_box), w, -1);
+    gtk_widget_show_all(chat_box);
+}
+
 GtkWidget *panel_window(t_env *e)
 {
-    GtkBuilder *    builder;
     GtkCssProvider *cssProvider;
+
+    g_idle_add((GSourceFunc)do_select, e);
 
     builder = gtk_builder_new();
     if (gtk_builder_load(builder, e->argv_0, "/ui/panel/panel.glade") < 0)
@@ -63,24 +80,11 @@ GtkWidget *panel_window(t_env *e)
 
     chat_box = GTK_WIDGET(gtk_builder_get_object(builder, "chat_box"));
 
-    GtkWidget *w;
+    new_chat_message("toto: msg number 1");
+    new_chat_message("ayya: msg number 2");
 
-    w = gtk_label_new("toto: msg number 1");
-    gtk_set_class(w, "chat-message");
-    gtk_label_set_xalign(GTK_LABEL(w), 0);
-    gtk_widget_set_margin_start(GTK_WIDGET(w), 12);
-
-    gtk_list_box_insert(GTK_LIST_BOX(chat_box), w, -1);
-
-    w = gtk_label_new("ayya: msg number 2");
-    gtk_set_class(w, "chat-message");
-    gtk_label_set_xalign(GTK_LABEL(w), 0);
-    gtk_widget_set_margin_start(GTK_WIDGET(w), 12);
-
-    gtk_list_box_insert(GTK_LIST_BOX(chat_box), w, -1);
-
-    g_object_unref(G_OBJECT(builder));
-    g_object_unref(G_OBJECT(cssProvider));
+    // g_object_unref(G_OBJECT(builder));
+    // g_object_unref(G_OBJECT(cssProvider));
 
     return (window_panel);
 }

@@ -1,4 +1,5 @@
 #include <client/irc.h>
+#include <client/ui/panel.h>
 #include <ctype.h>
 
 static int s2c_privmsg_check_command(t_env *e, int cs, const t_token *tokens)
@@ -27,6 +28,9 @@ int s2c_privmsg(t_env *e, int cs, t_token *tokens)
             tokens[2].addr[0] == ':' ? tokens[2].len - 1 : tokens[2].len);
 
     loginfo("%s\n", msg);
+
+    if (e->options.gui)
+        new_chat_message(msg);
 
     return (IRC_S2C_RPL_WELCOME);
 }
