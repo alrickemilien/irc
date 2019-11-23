@@ -16,6 +16,7 @@ static GtkWidget * channel_label;
 static GtkWidget * nick_label;
 static GtkWidget * window_panel;
 static GtkBuilder *builder;
+static GtkWidget *chat_entry;
 
 static gboolean on_keypress(GtkWidget *  widget,
                             GdkEventKey *event,
@@ -27,6 +28,22 @@ static gboolean on_keypress(GtkWidget *  widget,
     if (event->keyval == GDK_KEY_Escape)
         gtk_main_quit();
     return FALSE;
+}
+
+static void chat_entry_send(GtkWidget *widget, gpointer data)
+{
+    const char *text;
+    t_env *e;
+
+    e = (t_env*)data;
+
+    text = gtk_entry_get_text(GTK_ENTRY(widget));
+
+    printf("Entry contents: %s\n", text);
+
+    c2s(e, e->sock, strdup(text));
+
+    gtk_entry_set_text(GTK_ENTRY(widget), "");
 }
 
 void new_chat_message(const char *msg)
@@ -49,7 +66,8 @@ void set_channel_name(const char *msg)
 {
     logdebug("ui::set_channel_name:: %s\n", msg);
 
-    channel_label = GTK_WIDGET(gtk_builder_get_object(builder, "channel_label"));
+    channel_label =
+        GTK_WIDGET(gtk_builder_get_object(builder, "channel_label"));
 
     gtk_label_set_text(GTK_LABEL(channel_label), msg);
     gtk_widget_show_all(channel_label);
@@ -64,7 +82,6 @@ void set_nick_name(const char *msg)
     gtk_label_set_text(GTK_LABEL(nick_label), msg);
     gtk_widget_show_all(nick_label);
 }
-
 
 GtkWidget *panel_window(t_env *e)
 {
@@ -110,6 +127,10 @@ GtkWidget *panel_window(t_env *e)
     g_object_unref(G_OBJECT(cssProvider));
 
     g_idle_add((GSourceFunc)do_select, e);
+
+    chat_entry = GTK_WIDGET(gtk_builder_get_object(builder, "chat_entry"));
+
+    g_signal_connect(chat_entry, "activate", G_CALLBACK(chat_entry_send), e);
 
     return (window_panel);
 }
