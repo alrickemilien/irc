@@ -7,7 +7,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <linux/limits.h>
+#include <limits.h>
 
 #include <irc.h>
 #include <client/options.h>

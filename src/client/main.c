@@ -1,13 +1,12 @@
 #include <arpa/inet.h>
 #include <client/irc.h>
+#include <client/ui/login.h>
+#include <client/ui/panel.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
-
-#include <client/ui/login.h>
-#include <client/ui/panel.h>
 
 void init_env(t_env *e)
 {
@@ -104,6 +103,9 @@ int gui(t_env *e, int argc, char **argv)
 
     gtk_widget_show_all(window);
 
+    while (1)
+        do_select(e);
+
     gtk_main();
 
     return (0);
@@ -111,8 +113,12 @@ int gui(t_env *e, int argc, char **argv)
 
 int main(int argc, char **argv)
 {
-    int   exit_code;
-    t_env e;
+    int            exit_code;
+    t_env          e;
+    struct timeval timeout;
+
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 5000;
 
     exit_code = read_options(argc, (const char **)argv, &e.options);
     if (exit_code != 0)
@@ -129,14 +135,15 @@ int main(int argc, char **argv)
     if (e.options.gui)
         return (gui(&e, argc, argv));
 
-    if (e.options.command)
+    if (e.options.command[0])
         loginfo("options.command: %s\n", e.options.command);
 
     init_std(&e);
 
     execute_precommands(&e);
 
-    do_select(&e);
-
+    (void)timeout;
+    while (1)
+        do_select(&e);
     return (exit_code);
 }

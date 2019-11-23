@@ -60,11 +60,11 @@ CLIENT_SRC+=src/client/ui/gtk_builder_load.c \
 			src/client/ui/login/login.c \
 			src/client/ui/panel/panel.c
 
-
-GTK_DPKG=$(shell pkg-config --cflags --libs gtk+-3.0)
+GTK_DPKG_CFLAGS=$(shell pkg-config --cflags gtk+-3.0)
+GTK_DPKG_LIBS=$(shell pkg-config --libs gtk+-3.0)
 
 %.o: %.c
-	@gcc $(DEBUG) -o $@ -c $< $(INCLUDE) $(GTK_DPKG) $(CFLAGS)
+	@gcc $(DEBUG) -o $@ -c $< $(INCLUDE) $(GTK_DPKG_CFLAGS) $(CFLAGS)
 
 # glade files
 CLIENT_SRC_GLADE_PREFIX=src/client/ui/
