@@ -1,0 +1,83 @@
+#include <client/irc.h>
+#include <client/ui/panel.h>
+#include <ctype.h>
+
+static bool is_valid_chan(const char *channel)
+{
+    size_t i;
+
+    i = 1;
+    while (channel[i] && channel[i] != '\x0D')
+    {
+        if (channel[i] == '\x07' || channel[i] == '\x20' ||
+            channel[i] == '\x2C')
+            return (false);
+        i++;
+    }
+    return (true);
+}
+
+static int s2c_join_check_command(t_env *e, int cs, const t_token *tokens)
+{
+    const char *channel;
+    size_t      channel_len;
+
+    (void)cs;
+    (void)e;
+
+    if (!tokens[0].addr || !tokens[1].addr || !tokens[2].addr)
+        return logerror("s2c_join_check_command::ERR_NEEDMOREPARAMS\n");
+
+    channel = tokens[2].addr;
+    channel_len = tokens[2].len;
+
+    if (strpbrk(channel, "\x07\x2C"))
+        return logerror("s2c_join_check_command::ERR_NOSUCHCHANNEL\n");
+    else if (channel_len - 1 > CHANNELSTRSIZE)
+        return logerror("s2c_join_check_command::ERR_NOSUCHCHANNEL\n");
+    else if ((channel[0] != '#' && channel[0] != '&') ||
+             !is_valid_chan(channel))
+        return logerror("s2c_join_check_command::ERR_NOSUCHCHANNEL\n");
+    else if (channel_len < 1)
+        return logerror("s2c_join_check_command::ERR_NOSUCHCHANNEL\n");
+    else
+        return (0);
+    return (-1);
+}
+
+/*
+** Return true when the JOIN user in the message is the current client
+*/
+
+static bool s2c_join_is_me(t_env *e, const char *user, size_t len)
+{
+    char  expected[512];
+    t_fd *cli;
+
+    cli = &e->fds[e->sock];
+
+    memset(expected, 0, sizeof(expected));
+
+    sprintf(expected, "%s!%s@%s", cli->nickname, cli->nickname, cli->host);
+
+    return (strncmp(expected, user, len) == 0);
+}
+
+int s2c_join(t_env *e, int cs, t_token *tokens)
+{
+    logdebug("s2c_join:: %s\n", tokens[0].addr);
+
+    if (s2c_join_check_command(e, cs, tokens) < 0)
+        return (-1);
+
+    if (s2c_join_is_me(e, tokens[0].addr, tokens[0].len))
+    {
+        memcpy(e->fds[e->sock].channelname, tokens[2].addr, tokens[2].len);
+        loginfo("s2c_privmsg:: You joined %s\n", e->fds[e->sock].channelname);
+    }
+
+    if (e->options.gui)
+        set_channel_name(tokens[2].addr);
+
+    return (IRC_S2C_JOIN);
+}

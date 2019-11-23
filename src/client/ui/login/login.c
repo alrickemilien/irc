@@ -20,9 +20,10 @@ static gboolean on_keypress(GtkWidget *  widget,
                             gpointer     data)
 {
     (void)widget;
+    (void)data;
 
     if (event->keyval == GDK_KEY_Escape)
-        g_application_quit(G_APPLICATION(data));
+        gtk_main_quit();
     return FALSE;
 }
 

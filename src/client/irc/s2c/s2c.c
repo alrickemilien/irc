@@ -1,10 +1,12 @@
 #include <client/irc.h>
 
 static const t_irc_cmd g_s2c_replys[IRC_S2C_COMMANDS_NUMBER] = {
-        [IRC_S2C_RPL_WELCOME] = {"RPL_WELCOME", &s2c_rpl_welcome},
-        [IRC_S2C_RPL_NAMREPLY] = {"RPL_NAMREPLY", &s2c_rpl_namreply},
-        [IRC_S2C_RPL_ENDOFNAMES] = {"RPL_ENDOFNAMES", &s2c_rpl_endofnames},
-        [IRC_S2C_PRIVMSG] = {"PRIVMSG", &s2c_privmsg},
+    [IRC_S2C_RPL_WELCOME] = {"RPL_WELCOME", &s2c_rpl_welcome},
+    [IRC_S2C_RPL_NAMREPLY] = {"RPL_NAMREPLY", &s2c_rpl_namreply},
+    [IRC_S2C_RPL_ENDOFNAMES] = {"RPL_ENDOFNAMES", &s2c_rpl_endofnames},
+    [IRC_S2C_PRIVMSG] = {"PRIVMSG", &s2c_privmsg},
+    [IRC_S2C_JOIN] = {"JOIN", &s2c_join},
+    [IRC_S2C_NICK] = {"NICK", &s2c_nick},
 };
 
 int s2c(t_env *e, int cs, char *buffer)
@@ -33,9 +35,8 @@ int s2c(t_env *e, int cs, char *buffer)
     i = 0;
     while (tokens[0].addr && i < IRC_S2C_COMMANDS_NUMBER)
     {
-        if (tokens[0].addr[0] == ':' && tokens[1].addr &&
-            strncmp(tokens[1].addr, g_s2c_replys[i].command,
-                    strlen(g_s2c_replys[i].command)) == 0)
+        if (tokens[1].addr && strncmp(tokens[1].addr, g_s2c_replys[i].command,
+                                      strlen(g_s2c_replys[i].command)) == 0)
         {
             return g_s2c_replys[i].f(e, cs, tokens);
         }

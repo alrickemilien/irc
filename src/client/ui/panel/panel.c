@@ -12,6 +12,8 @@
 // static GtkWidget *pass_entry;
 // static GtkWidget *button_go;
 static GtkWidget * chat_box;
+static GtkWidget * channel_label;
+static GtkWidget * nick_label;
 static GtkWidget * window_panel;
 static GtkBuilder *builder;
 
@@ -43,11 +45,30 @@ void new_chat_message(const char *msg)
     gtk_widget_show_all(chat_box);
 }
 
+void set_channel_name(const char *msg)
+{
+    logdebug("ui::set_channel_name:: %s\n", msg);
+
+    channel_label = GTK_WIDGET(gtk_builder_get_object(builder, "channel_label"));
+
+    gtk_label_set_text(GTK_LABEL(channel_label), msg);
+    gtk_widget_show_all(channel_label);
+}
+
+void set_nick_name(const char *msg)
+{
+    logdebug("ui::set_nick_name:: %s\n", msg);
+
+    nick_label = GTK_WIDGET(gtk_builder_get_object(builder, "nick_label"));
+
+    gtk_label_set_text(GTK_LABEL(nick_label), msg);
+    gtk_widget_show_all(nick_label);
+}
+
+
 GtkWidget *panel_window(t_env *e)
 {
     GtkCssProvider *cssProvider;
-
-    g_idle_add((GSourceFunc)do_select, e);
 
     builder = gtk_builder_new();
     if (gtk_builder_load(builder, e->argv_0, "/ui/panel/panel.glade") < 0)
@@ -83,8 +104,12 @@ GtkWidget *panel_window(t_env *e)
     new_chat_message("toto: msg number 1");
     new_chat_message("ayya: msg number 2");
 
+    set_nick_name(e->fds[e->sock].nickname);
+
     // g_object_unref(G_OBJECT(builder));
-    // g_object_unref(G_OBJECT(cssProvider));
+    g_object_unref(G_OBJECT(cssProvider));
+
+    g_idle_add((GSourceFunc)do_select, e);
 
     return (window_panel);
 }

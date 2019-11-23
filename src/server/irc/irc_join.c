@@ -102,13 +102,14 @@ int irc_join(t_env *e, int cs, t_token *tokens)
 
     memset(concat, 0, sizeof(concat));
 
-    sprintf(concat, ":%s JOIN %s\x0D\x0A", e->fds[cs].nickname,
+    sprintf(concat, "%s!%s@%s JOIN %s\x0D\x0A", e->fds[cs].nickname,
+            e->fds[cs].nickname, e->fds[cs].host,
             e->channels[e->fds[cs].channel].channel);
 
     broadcast(e, concat, IRC_NOTICE, cs);
 
-    loginfo(":%s JOIN %s\n", e->fds[cs].nickname,
-            e->channels[e->fds[cs].channel].channel);
+    loginfo("%s!%s@%s JOIN %s\n", e->fds[cs].nickname, e->fds[cs].nickname,
+            e->fds[cs].host, e->channels[e->fds[cs].channel].channel);
 
     irc_reply(e, cs, RPL_TOPIC, e->channels[e->fds[cs].channel].channel,
               e->fds[cs].nickname);

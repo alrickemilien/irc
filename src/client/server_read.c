@@ -20,6 +20,8 @@ void server_read(t_env *e, size_t cs)
     // logdebug("server_read:: cbuffer_size(&e->fds[cs].buf_read): %ld\n",
     //        cbuffer_size(&e->fds[cs].buf_read));
 
+    // cbuffer_debug(&e->fds[cs].buf_write);
+
     if (r <= 0)
     {
         close(cs);
