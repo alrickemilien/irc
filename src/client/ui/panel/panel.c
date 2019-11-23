@@ -12,7 +12,7 @@
 // static GtkWidget *username_entry;
 // static GtkWidget *pass_entry;
 // static GtkWidget *button_go;
-// static GtkWidget *label;
+static GtkWidget *chat_box;
 static GtkWidget *window_panel;
 
 static gboolean on_keypress(GtkWidget *  widget,
@@ -60,6 +60,24 @@ GtkWidget *panel_window(t_env *e)
     gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
                                               GTK_STYLE_PROVIDER(cssProvider),
                                               GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+    chat_box = GTK_WIDGET(gtk_builder_get_object(builder, "chat_box"));
+
+    GtkWidget *w;
+
+    w = gtk_label_new("toto: msg number 1");
+    gtk_set_class(w, "chat-message");
+    gtk_label_set_xalign(GTK_LABEL(w), 0);
+    gtk_widget_set_margin_start(GTK_WIDGET(w), 12);
+
+    gtk_list_box_insert(GTK_LIST_BOX(chat_box), w, -1);
+
+    w = gtk_label_new("ayya: msg number 2");
+    gtk_set_class(w, "chat-message");
+    gtk_label_set_xalign(GTK_LABEL(w), 0);
+    gtk_widget_set_margin_start(GTK_WIDGET(w), 12);
+
+    gtk_list_box_insert(GTK_LIST_BOX(chat_box), w, -1);
 
     g_object_unref(G_OBJECT(builder));
     g_object_unref(G_OBJECT(cssProvider));

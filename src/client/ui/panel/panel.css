@@ -20,3 +20,34 @@ GtkWindow {
 #left-pane {
     background-color: rgb(124, 85, 195);
 }
+
+#channel_label {
+    font-size: 18px;
+}
+
+#channel_list_button {
+    color: black;
+    border-style: solid;
+    padding: 5px;
+}
+
+#channel_list_button:hover {
+    transition: inherit;
+    border-radius: 0px;
+    background-image: inherit;
+    border: 0px;
+    outline: 0px;
+}
+
+#channel_list_button:hover GtkLabel {
+    font-weight: bold;
+    transition: inherit;
+    border: 0px;
+}
+
+.chat-message {
+    margin-left: 12px;
+    padding: 3px;
+    background-color: #fefefe;
+    border-radius: 4px;
+}

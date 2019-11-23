@@ -56,6 +56,7 @@ CLIENT_OBJ=$(CLIENT_SRC:.c=.o)
 # ui
 CLIENT_SRC+=src/client/ui/gtk_builder_load.c \
 			src/client/ui/gtk_provider_load_css.c \
+			src/client/ui/gtk_set_class.c \
 			src/client/ui/login/login.c \
 			src/client/ui/panel/panel.c
 
