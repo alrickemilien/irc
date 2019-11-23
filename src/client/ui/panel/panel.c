@@ -81,5 +81,6 @@ GtkWidget *panel_window(t_env *e)
 
     g_object_unref(G_OBJECT(builder));
     g_object_unref(G_OBJECT(cssProvider));
+
     return (window_panel);
 }

@@ -21,8 +21,8 @@ int gtk_builder_load(GtkBuilder *b,
     /* get graphics from login.glade */
     gtk_builder_add_from_file(b, template_path, (void *)0);
 
-    free(bin_folder_path);
-    free(template_path);
+    // free(bin_folder_path);
+    // free(template_path);
 
     return (0);
 }
