@@ -59,6 +59,9 @@ typedef enum e_irc_s2c {
     IRC_S2C_RPL_NOWAWAY,
     IRC_S2C_RPL_UNAWAY,
     IRC_S2C_RPL_TOPIC,
+    IRC_S2C_RPL_WHOISUSER,
+    IRC_S2C_RPL_WHOISCHANNELS,
+    IRC_S2C_RPL_ENDOFWHOIS,
     IRC_S2C_COMMANDS_NUMBER,
 } t_irc_s2c;
 
@@ -102,6 +105,10 @@ int             s2c_nick(t_env *e, int cs, t_token *tokens);
 int             s2c_rpl_nowaway(t_env *e, int cs, t_token *tokens);
 int             s2c_rpl_unaway(t_env *e, int cs, t_token *tokens);
 int             s2c_rpl_topic(t_env *e, int cs, t_token *tokens);
+int             s2c_rpl_whoisuser(t_env *e, int cs, t_token *tokens);
+int             s2c_rpl_whoischannels(t_env *e, int cs, t_token *tokens);
+int             s2c_rpl_endofwhois(t_env *e, int cs, t_token *tokens);
+
 
 /*
 ** fd 

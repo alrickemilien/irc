@@ -16,6 +16,7 @@ int irc_whois(t_env *e, int cs, t_token *tokens)
 {
     size_t  i;
     size_t  j;
+    size_t  subtoken_count;
     t_token subtokens[30];
 
     loginfo("irc_whois:: %s\n", tokens[0].addr);
@@ -25,7 +26,7 @@ int irc_whois(t_env *e, int cs, t_token *tokens)
 
     memset(subtokens, 0, sizeof(t_token) * 30);
 
-    tokenizechr(tokens[1].addr, subtokens, 30, ',');
+    subtoken_count = tokenizechr(tokens[1].addr, subtokens, 30, ',');
 
     i = 0;
     while (i <= e->max)
@@ -48,6 +49,8 @@ int irc_whois(t_env *e, int cs, t_token *tokens)
                               e->channels[e->fds[i].channel].channel);
                     irc_reply(e, cs, RPL_ENDOFWHOIS, e->fds[i].nickname);
 
+                    subtokens[j].addr = (void *)0;
+
                     break;
                 }
 
@@ -57,7 +60,14 @@ int irc_whois(t_env *e, int cs, t_token *tokens)
         i++;
     }
 
-    // @TODO need to handle ERR_NOSUCHNICK
+    // Error on nick that match nothing
+    j = 0;
+    while (j < subtoken_count)
+    {
+        if (subtokens[j].addr != NULL)
+            irc_reply(e, cs, ERR_NOSUCHNICK, subtokens[j].addr);
+        j++;
+    }
 
     return (IRC_WHOIS);
 }
