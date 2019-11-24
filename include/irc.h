@@ -11,6 +11,7 @@
 #include <netdb.h>
 #include <sys/time.h>
 #include <sys/resource.h>
+#include <stdbool.h>
 
 /*
 ** Utils
@@ -28,11 +29,17 @@ void *xpsafe(void *err, void *res, char *str);
 #define ISOTIMESTRSIZE 25
 void time2iso(char *str);
 
-int ato32(const char *str, uint32_t *nbr);
-int i64toa(uint64_t nbr, char *buffer, size_t buffer_size, uint64_t base);
-char *extract_folder_from_path(const char *path);
-char *merge_and_extract_folder_from_path(const char *a, const char *b);
-char *strjoin(char const *s1, char const *s2);
+int     ato32(const char *str, uint32_t *nbr);
+int     i64toa(uint64_t nbr, char *buffer, size_t buffer_size, uint64_t base);
+char    *extract_folder_from_path(const char *path);
+char    *merge_and_extract_folder_from_path(const char *a, const char *b);
+char    *strjoin(char const *s1, char const *s2);
+void    *memrpl(char *dest, size_t dest_size, const char *src, size_t src_size);
+
+/*
+** irc utils
+*/
+bool    is_valid_chan_name(const char *channel);
 
 /*
 ** log

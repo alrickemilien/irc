@@ -56,8 +56,21 @@ int irc_nick(t_env *e, int cs, t_token *tokens)
         loginfo("%s\n", concat);
     }
 
-    memset(e->fds[cs].nickname, 0, NICKNAMESTRSIZE);
-    memcpy(e->fds[cs].nickname, tokens[1].addr, tokens[1].len);
+    memrpl(e->fds[cs].nickname, NICKNAMESTRSIZE, tokens[1].addr, tokens[1].len);
+
+    // When nickname is not set
+    if (e->fds[cs].username[0] == 0)
+        return (IRC_NICK);
+
+    e->fds[cs].registered = 1;
+    e->channels[e->fds[cs].channel].clients++;
+    irc_reply(e, cs, RPL_WELCOME, e->fds[cs].username, e->fds[cs].host,
+              e->fds[cs].realname);
+
+    logdebug("irc_user:: USER %s@%s %s join the server\n", e->fds[cs].username,
+             e->fds[cs].host, e->fds[cs].realname);
+
+    irc_user_join_default_channel(e, cs);
 
     return (IRC_NICK);
 }

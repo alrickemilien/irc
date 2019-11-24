@@ -4,12 +4,9 @@
 #include <pwd.h>
 #include <sys/types.h>
 
-static int c2s_connect_check_command(t_env *e, int cs, const t_token *tokens)
+static int c2s_connect_check_command(t_env *e, const t_token *tokens)
 {
     size_t host_len;
-
-    (void)cs;
-    (void)e;
 
     if (!tokens[1].addr)
         return (logerror("c2s_connect_check_command:: NO HOST GIVEN\n"));
@@ -40,7 +37,6 @@ int _c2s_connect(t_env *     e,
                  const char *hostname,
                  const char *servername)
 {
-    char           concat[512];
     char           local_hostname[NI_MAXHOST + 1];
     int            cs;
     t_fd *         fd;
@@ -63,36 +59,43 @@ int _c2s_connect(t_env *     e,
     cs = e->sock;
     fd = &e->fds[cs];
 
-    memset(concat, 0, sizeof(concat));
-
-    sprintf(concat, "USER %s %s %s %s\x0D\x0A", name ? name : p->pw_name,
-            hostname ? hostname : local_hostname, servername,
-            name ? name : p->pw_name);
-
-    logdebug("concat: %s\n", concat);
-
-    cbuffer_putstr(&fd->buf_write, concat);
+    cbuffer_putcmd(&fd->buf_write, "USER %s %s %s %s\x0D\x0A",
+                   name ? name : p->pw_name,
+                   hostname ? hostname : local_hostname, servername,
+                   name ? name : p->pw_name);
 
     loginfo("Connecting to %s\n", servername);
 
-    memset(fd->nickname, 0, NICKNAMESTRSIZE - 1);
-    memcpy(fd->nickname, servername, strlen(servername));
+    memrpl(fd->host, HOSTNAMESTRSIZE, hostname ? hostname : local_hostname,
+           strlen(hostname ? hostname : local_hostname));
 
-    memset(fd->realname, 0, USERNAMESTRSIZE - 1);
-    memcpy(fd->realname, name ? name : p->pw_name, strlen(name ? name : p->pw_name));
+    memrpl(fd->realname, USERNAMESTRSIZE, name ? name : p->pw_name,
+           strlen(name ? name : p->pw_name));
 
-    memset(fd->username, 0, USERNAMESTRSIZE - 1);
-    memcpy(fd->username, name ? name : p->pw_name, strlen(name ? name : p->pw_name));
+    memrpl(fd->username, USERNAMESTRSIZE, name ? name : p->pw_name,
+           strlen(name ? name : p->pw_name));
+
+    // Send nickname if local one has been set
+    if (e->nick[0])
+    {
+        cbuffer_putcmd(&fd->buf_write, "NICK %s\x0D\x0A", e->nick);
+
+        memrpl(fd->nickname, NICKNAMESTRSIZE, e->nick, strlen(e->nick));
+    }
 
     return (0);
 }
 
 int c2s_connect(t_env *e, int cs, t_token *tokens)
 {
+    (void)cs;
+
+    // Leave when socket already set
+    // @TODO reset whole file descriptor
     if (e->sock != -1)
         return logerror("Already connected\n");
 
-    if ((c2s_connect_check_command(e, cs, tokens)) < 0)
+    if ((c2s_connect_check_command(e, tokens)) < 0)
         return (-1);
 
     // Command: USER

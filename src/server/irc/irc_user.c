@@ -61,7 +61,7 @@ static int irc_user_check_command(t_env *e, int cs, const t_token *tokens)
     return (0);
 }
 
-static void irc_user_join_default_channel(t_env *e, int cs)
+void irc_user_join_default_channel(t_env *e, int cs)
 {
     char concat[512];
 
@@ -81,26 +81,25 @@ int irc_user(t_env *e, int cs, t_token *tokens)
         return (-1);
 
     // Set username
-    memset(e->fds[cs].username, 0, USERNAMESTRSIZE);
-    memcpy(e->fds[cs].username, tokens[1].addr,
+    memrpl(e->fds[cs].username, USERNAMESTRSIZE, tokens[1].addr,
            tokens[1].len < USERNAMESTRSIZE ? tokens[1].len : USERNAMESTRSIZE);
 
     // Set hostname
-    memset(e->fds[cs].host, 0, HOSTNAMESTRSIZE);
-    memcpy(e->fds[cs].host, tokens[2].addr,
-           tokens[2].len < HOSTNAMESTRSIZE ? tokens[2].len : HOSTNAMESTRSIZE);
+    memrpl(e->fds[cs].host, HOSTNAMESTRSIZE, tokens[1].addr,
+           tokens[1].len < HOSTNAMESTRSIZE ? tokens[1].len : HOSTNAMESTRSIZE);
 
     // Set realname
-    memset(e->fds[cs].realname, 0, USERNAMESTRSIZE);
-    memcpy(e->fds[cs].realname,
+    memrpl(e->fds[cs].realname, USERNAMESTRSIZE,
            tokens[4].addr[0] == ':' ? tokens[4].addr + 1 : tokens[4].addr,
            tokens[4].addr[0] == ':' ? tokens[4].len - 1 : tokens[4].len);
 
     // When nickname is not set
     if (e->fds[cs].nickname[0] == 0)
     {
-        logdebug("USER command received for client #%ld without nickname\n",
-                 cs);
+        logdebug(
+            "USER command received for client #%ld without nickname, do not "
+            "set as registered now\n",
+            cs);
         return (IRC_USER);
     }
 

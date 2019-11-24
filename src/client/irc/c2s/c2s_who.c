@@ -11,9 +11,9 @@ int c2s_who(t_env *e, int cs, t_token *tokens)
             "You nee to be logged in before any command. Use /connect [server] "
             "?[port]");
 
-    cbuffer_putstr(&e->fds[cs].buf_write, "NAMES ");
-    cbuffer_putstr(&e->fds[cs].buf_write, e->fds[cs].channelname);
-    cbuffer_putstr(&e->fds[cs].buf_write, "\x0D\x0A");
+    if (cbuffer_putcmd(&e->fds[cs].buf_write, "NAMES %s\x0D\x0A",
+                       e->fds[cs].channelname) < 0)
+        return (-1);
 
     return (IRC_WHO);
 }

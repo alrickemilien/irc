@@ -28,6 +28,8 @@ typedef struct  s_env
     int         ipv6;
     char        *argv_0;
     char        passwd[PASSWDTRSIZE + 1];
+    char        nick[NICKNAMESTRSIZE + 1];
+    int         registered;
     t_options   options;
 }               t_env;
 
@@ -35,25 +37,35 @@ typedef struct  s_env
 ** irc sepcific to server
 */
 
-typedef enum e_irc {
+typedef enum    e_irc {
     IRC_JOIN = 0UL,
     IRC_NICK,
     IRC_MSG,
     IRC_CONNECT,
     IRC_WHO,
     IRC_PASS,
+    IRC_AWAY,
+    IRC_UNAWAY,
+    IRC_LEAVE,
+    IRC_WHOIS,
     IRC_COMMANDS_NUMBER
-} t_irc_enum;
+}               t_irc_enum;
 
-typedef enum e_irc_s2c {
+typedef enum    e_irc_s2c {
     IRC_S2C_RPL_WELCOME = 0UL,
     IRC_S2C_RPL_NAMREPLY,
     IRC_S2C_RPL_ENDOFNAMES,
     IRC_S2C_PRIVMSG,
     IRC_S2C_JOIN,
     IRC_S2C_NICK,
+    IRC_S2C_RPL_NOWAWAY,
+    IRC_S2C_RPL_UNAWAY,
+    IRC_S2C_RPL_TOPIC,
+    IRC_S2C_RPL_WHOISUSER,
+    IRC_S2C_RPL_WHOISCHANNELS,
+    IRC_S2C_RPL_ENDOFWHOIS,
     IRC_S2C_COMMANDS_NUMBER,
-} t_irc_s2c;
+}               t_irc_s2c;
 
 typedef struct  s_irc_cmd
 {
@@ -68,13 +80,23 @@ int             c2s_connect(t_env *e, int cs, t_token *tokens);
 int             c2s_nick(t_env *e, int cs, t_token *tokens);
 int             c2s_who(t_env *e, int cs, t_token *tokens);
 int             c2s_pass(t_env *e, int cs, t_token *tokens);
+int             c2s_away(t_env *e, int cs, t_token *tokens);
+int             c2s_unaway(t_env *e, int cs, t_token *tokens);
+int             c2s_leave(t_env *e, int cs, t_token *tokens);
+int             c2s_whois(t_env *e, int cs, t_token *tokens);
 
-int             _c2s_nick(t_fd *fd, const char *nick, size_t nick_length);
+int             _c2s_nick(t_env *e, const char *nick, size_t nick_length);
 int             _c2s_pass(t_env *e, const char *password, size_t password_length);
 int             _c2s_connect(t_env *e,
                         const char *name,
                         const char *hostname,
                         const char *servername);
+int             _c2s_away(t_fd *fd, const char *msg, size_t msg_len);
+int             _c2s_unaway(t_fd *fd);
+int             _c2s_leave(t_fd *fd, const char *channel_name, size_t channel_name_len);
+int             _c2s_join(t_fd *fd, const char *channel_name, size_t channel_name_len);
+int             _c2s_whois(t_fd *fd, const char *nick, size_t nick_len);
+int             _c2s_msg(t_fd *fd, const char *dest, size_t dest_len, const char *msg);
 
 int             s2c(t_env *e, int cs, char *buffer);
 int             s2c_rpl_welcome(t_env *e, int cs, t_token *tokens);
@@ -83,6 +105,12 @@ int             s2c_rpl_endofnames(t_env *e, int cs, t_token *tokens);
 int             s2c_privmsg(t_env *e, int cs, t_token *tokens);
 int             s2c_join(t_env *e, int cs, t_token *tokens);
 int             s2c_nick(t_env *e, int cs, t_token *tokens);
+int             s2c_rpl_nowaway(t_env *e, int cs, t_token *tokens);
+int             s2c_rpl_unaway(t_env *e, int cs, t_token *tokens);
+int             s2c_rpl_topic(t_env *e, int cs, t_token *tokens);
+int             s2c_rpl_whoisuser(t_env *e, int cs, t_token *tokens);
+int             s2c_rpl_whoischannels(t_env *e, int cs, t_token *tokens);
+int             s2c_rpl_endofwhois(t_env *e, int cs, t_token *tokens);
 
 /*
 ** fd 
@@ -91,6 +119,10 @@ int             s2c_nick(t_env *e, int cs, t_token *tokens);
 void            clear_fd(t_fd *fd);
 void            init_fd(t_env *e);
 void            check_fd(t_env *e);
+
+/*
+** Socket
+*/
 
 void            client_ipv4(t_env *e);
 void            client_ipv6(t_env *e);

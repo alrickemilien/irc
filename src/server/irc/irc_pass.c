@@ -23,8 +23,7 @@ int irc_pass(t_env *e, int cs, t_token *tokens)
     if ((irc_pass_check_command(e, cs, tokens)) != 0)
         return (-1);
 
-    memset(e->fds[cs].passwd, 0, sizeof(e->fds[cs].passwd));
-    memcpy(e->fds[cs].passwd, tokens[1].addr, tokens[1].len);
+    memrpl(e->fds[cs].passwd, PASSWDTRSIZE, tokens[1].addr, tokens[1].len);
 
     return (IRC_PASS);
 }

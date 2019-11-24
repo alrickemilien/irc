@@ -8,6 +8,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/socket.h>
+#include <stdarg.h>
 
 // Debug
 #include <assert.h>
@@ -15,12 +16,12 @@
 
 #define CBUFFSIZE 512
 
-typedef struct s_cbuffer {
-    uint8_t buffer[CBUFFSIZE];
-    size_t head;
-    size_t tail;
-    bool full;
-} t_cbuffer;
+typedef struct  s_cbuffer {
+    uint8_t     buffer[CBUFFSIZE];
+    size_t      head;
+    size_t      tail;
+    bool        full;
+}               t_cbuffer;
 
 /// Reset the circular buffer to empty, head == tail. Data not cleared
 /// Requires: cbuf is valid and created by circular_buf_init
@@ -58,5 +59,7 @@ size_t cbuffer_indexof(t_cbuffer *cbuf, const char *str);
 void cbuffer_dropn(t_cbuffer *cbuf, size_t n);
 
 void cbuffer_debug(const t_cbuffer *cbuf);
+
+int cbuffer_putcmd(t_cbuffer *cbuf, const char *fmt, ...);
 
 #endif  // CBUFFER_H_

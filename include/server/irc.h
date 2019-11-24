@@ -81,6 +81,8 @@ int irc_whois(t_env *e, int cs, t_token *tokens);
 int irc_who(t_env *e, int cs, t_token *tokens);
 int irc_reply(t_env *e, int cs, int code, ...);
 
+void irc_user_join_default_channel(t_env *e, int cs);
+
 void broadcast(t_env *e, const char *msg, int type, size_t cs);
 void broadcast_all_in_channel(t_env *     e,
                               const char *msg,
