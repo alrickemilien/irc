@@ -6,6 +6,8 @@
 #include <string.h>
 #include <sys/socket.h>
 
+#include <server/ssl.h>
+
 void on_connect(t_env *e, size_t s)
 {
     int                cs;
@@ -25,6 +27,9 @@ void on_connect(t_env *e, size_t s)
         logerrno("on_connect::getnameinfo");
         return;
     }
+
+    if (e->ssl_ctx)
+        on_connect_ssl(e->ssl_ctx, &e->fds[cs], cs);
 
     // init the new client
     e->fds[cs].type = FD_CLIENT;

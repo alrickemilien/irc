@@ -11,6 +11,9 @@ ifeq ($(CC),)
 CC=gcc
 endif
 
+OPENSSL_CFLAGS=$(shell pkg-config --cflags openssl)
+OPENSSL_LIBS=$(shell pkg-config --libs openssl)
+
 include make/client.mk
 include make/server.mk
 
@@ -22,11 +25,11 @@ all: $(SERVER) $(CLIENT) $(CLIENT_UI_COPY_FILES) $(ASSETS_COPY_FILES)
 
 $(SERVER): $(SERVER_OBJ)
 	@mkdir -p $(BUILD_DIR)
-	@gcc $(DEBUG) $^ -o $(BUILD_DIR)$@ $(LINK_LIBFT) $(CFLAGS)
+	@gcc $(DEBUG) $^ -o $(BUILD_DIR)$@ $(LINK_LIBFT) $(OPENSSL_LIBS) $(CFLAGS)
 
 $(CLIENT): $(CLIENT_OBJ)
 	@mkdir -p $(BUILD_DIR)
-	@gcc $(DEBUG) $^ -o $(BUILD_DIR)$@ $(LINK_LIBFT) $(GTK_DPKG_LIBS) $(CFLAGS)
+	@gcc $(DEBUG) $^ -o $(BUILD_DIR)$@ $(LINK_LIBFT) $(GTK_DPKG_LIBS) $(OPENSSL_LIBS) $(CFLAGS)
 
 clean:
 	@rm -rf $(SERVER_OBJ) $(CLIENT_OBJ) $(CLIENT_UI_COPY_FILES) $(ASSETS_COPY_FILES)

@@ -18,6 +18,7 @@ static t_options_map	g_options_map[] = {
 	{ "bind", SERVER_BIND, &read_bind_option, },
 	{ "ipv6", SERVER_IPV6, NULL, },
 	{ "daemon", SERVER_DAEMON, NULL, },
+	{ "ssl", SERVER_SSL, NULL, },
 	{ NULL, 0, NULL },
 };
 

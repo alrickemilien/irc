@@ -30,6 +30,7 @@ typedef struct s_env
     fd_set     fd_read;
     fd_set     fd_write;
     char       isotime[ISOTIMESTRSIZE];
+    void        *ssl_ctx;
 } t_env;
 
 /*

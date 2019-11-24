@@ -50,7 +50,12 @@ SERVER_SRC+=src/server/irc/irc_command.c \
 			src/server/irc/irc_privmsg.c
 
 #cbuffer
-SERVER_SRC+=src/cbuffer/cbuffer.c
+SERVER_SRC+=src/cbuffer/cbuffer.c \
+			src/cbuffer/cbuffer_ssl.c
+
+# ssl
+SERVER_SRC+=src/server/ssl/ssl.c \
+			src/server/ssl/ssl_on_connect.c
 
 # options
 SERVER_SRC+=src/server/options/utils.c \

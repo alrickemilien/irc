@@ -1,7 +1,8 @@
 #include <netdb.h>
 #include <netinet/in.h>
 
-#include "server/irc.h"
+#include <server/irc.h>
+#include <server/ssl.h>
 
 void server_ipv4(const t_options *options, t_env *e)
 {
@@ -69,4 +70,7 @@ void server_ipv4(const t_options *options, t_env *e)
 
     e->fds[sock].type = FD_SERV;
     e->fds[sock].read = on_connect;
+
+    if (options->ssl)
+        load_ssl(e);
 }

@@ -11,3 +11,16 @@ IRC server RFC1459 complient for the feature it implements.
 
 - `netstat -avt` let see which port currently runnin on the machine
 - `strace -f -e accept,socket,close,shutdown ./build/server` let see each IO socket operation run by the pid of your program at runtime
+
+
+## Generate self signed certs
+
+Ensure `openssl` is installed on the machine.
+
+```
+openssl genrsa -des3 -passout pass:x -out server.pass.key 2048
+openssl rsa -passin pass:x -in server.pass.key -out server.key
+rm server.pass.key
+openssl req -new -key server.key -out server.csr
+openssl x509 -req -sha256 -days 365 -in server.csr -signkey server.key -out server.crt
+```

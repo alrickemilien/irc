@@ -1,4 +1,5 @@
 #include <server/irc.h>
+#include <server/ssl.h>
 
 void clear_fd(t_fd *fd)
 {
@@ -10,4 +11,5 @@ void clear_fd(t_fd *fd)
     fd->write = NULL;
     cbuffer_reset(&fd->buf_read);
     cbuffer_reset(&fd->buf_write);
+    SSL_free(fd->ssl);
 }

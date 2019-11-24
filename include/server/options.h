@@ -13,7 +13,8 @@ enum {
 	SERVER_BACKLOG,
 	SERVER_BIND,
 	SERVER_IPV6,
-	SERVER_DAEMON,	
+	SERVER_DAEMON,
+	SERVER_SSL,
 	OPTIONS_NUMBER,
 };
 
@@ -42,6 +43,7 @@ typedef struct	s_options {
 	int			_bind;
 	int			ipv6;
 	int			daemon;
+	int			ssl;
 
 	// Metata data related to options
 	char		bind[MAX_ALLOWED_VALUE_SIZE];

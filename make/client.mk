@@ -76,7 +76,7 @@ GTK_DPKG_CFLAGS=$(shell pkg-config --cflags gtk+-3.0)
 GTK_DPKG_LIBS=$(shell pkg-config --libs gtk+-3.0)
 
 %.o: %.c
-	@gcc $(DEBUG) -o $@ -c $< $(INCLUDE) $(GTK_DPKG_CFLAGS) $(CFLAGS)
+	@gcc $(DEBUG) -o $@ -c $< $(INCLUDE) $(OPENSSL_CFLAGS) $(GTK_DPKG_CFLAGS) $(CFLAGS)
 
 # glade files
 CLIENT_SRC_GLADE_PREFIX=src/client/ui/
