@@ -20,6 +20,7 @@ SERVER_SRC+=src/utils/safe.c \
 			src/utils/log.c \
 			src/utils/ato32.c \
 			src/utils/i64toa.c \
+			src/utils/memrpl.c \
 			src/utils/time2iso.c
 
 # fd

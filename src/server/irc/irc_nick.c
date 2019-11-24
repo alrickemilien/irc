@@ -56,8 +56,7 @@ int irc_nick(t_env *e, int cs, t_token *tokens)
         loginfo("%s\n", concat);
     }
 
-    memset(e->fds[cs].nickname, 0, NICKNAMESTRSIZE);
-    memcpy(e->fds[cs].nickname, tokens[1].addr, tokens[1].len);
+    memrpl(e->fds[cs].nickname, NICKNAMESTRSIZE, tokens[1].addr, tokens[1].len);
 
     // When nickname is not set
     if (e->fds[cs].username[0] == 0)

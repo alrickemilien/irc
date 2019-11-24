@@ -57,6 +57,7 @@ CLIENT_SRC+=src/utils/safe.c \
 			src/utils/merge_and_extract_folder_from_path.c \
 			src/utils/strjoin.c \
 			src/utils/i64toa.c \
+			src/utils/memrpl.c \
 			src/utils/time2iso.c
 
 CLIENT_OBJ=$(CLIENT_SRC:.c=.o)

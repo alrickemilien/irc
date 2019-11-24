@@ -1,5 +1,5 @@
-#include <ctype.h>
 #include <client/irc.h>
+#include <ctype.h>
 
 static int c2s_nick_check_command(t_env *e, int cs, const t_token *tokens)
 {
@@ -24,8 +24,7 @@ int _c2s_nick(t_env *e, const char *nick, size_t nick_length)
     // Set only local nickname
     if (e->sock == -1)
     {
-        memset(e->nick, 0, NICKNAMESTRSIZE);
-        memcpy(e->nick, nick, nick_length);
+        memrpl(e->nick, NICKNAMESTRSIZE, nick, nick_length);
         return (0);
     }
 
@@ -35,8 +34,7 @@ int _c2s_nick(t_env *e, const char *nick, size_t nick_length)
 
     loginfo("You changed nickname to %s\n", nick);
 
-    memset(e->fds[e->sock].nickname, 0, NICKNAMESTRSIZE);
-    memcpy(e->fds[e->sock].nickname, nick, nick_length);
+    memrpl(e->fds[e->sock].nickname, NICKNAMESTRSIZE, nick, nick_length);
 
     return (0);
 }

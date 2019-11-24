@@ -70,16 +70,13 @@ int _c2s_connect(t_env *     e,
 
     loginfo("Connecting to %s\n", servername);
 
-    memset(fd->host, 0, HOSTNAMESTRSIZE);
-    memcpy(fd->host, hostname ? hostname : local_hostname,
+    memrpl(fd->host, HOSTNAMESTRSIZE, hostname ? hostname : local_hostname,
            strlen(hostname ? hostname : local_hostname));
 
-    memset(fd->realname, 0, USERNAMESTRSIZE);
-    memcpy(fd->realname, name ? name : p->pw_name,
+    memrpl(fd->realname, USERNAMESTRSIZE, name ? name : p->pw_name,
            strlen(name ? name : p->pw_name));
 
-    memset(fd->username, 0, USERNAMESTRSIZE);
-    memcpy(fd->username, name ? name : p->pw_name,
+    memrpl(fd->username, USERNAMESTRSIZE, name ? name : p->pw_name,
            strlen(name ? name : p->pw_name));
 
     // Send nickname if local one has been set
@@ -93,8 +90,7 @@ int _c2s_connect(t_env *     e,
 
         cbuffer_putstr(&fd->buf_write, concat);
 
-        memset(fd->nickname, 0, NICKNAMESTRSIZE);
-        memcpy(fd->nickname, e->nick, strlen(e->nick));
+        memrpl(fd->nickname, NICKNAMESTRSIZE, e->nick, strlen(e->nick));
     }
 
     return (0);

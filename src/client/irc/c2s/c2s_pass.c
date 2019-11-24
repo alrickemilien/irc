@@ -17,8 +17,7 @@ static int c2s_pass_check_command(t_env *e, int cs, const t_token *tokens)
 
 int _c2s_pass(t_env *e, const char *password, size_t password_length)
 {
-    memset(e->passwd, 0, PASSWDTRSIZE);
-    memcpy(e->passwd, password, password_length);
+    memrpl(e->passwd, PASSWDTRSIZE, password, password_length);
     return (0);
 }
 

@@ -40,7 +40,8 @@ int s2c_nick(t_env *e, int cs, t_token *tokens)
             e, tokens[0].addr[0] == ':' ? tokens[0].addr + 1 : tokens[0].addr,
             tokens[0].addr[0] == ':' ? tokens[0].len - 1 : tokens[0].len))
     {
-        memcpy(e->fds[e->sock].nickname, tokens[2].addr, tokens[2].len);
+        memrpl(e->fds[e->sock].nickname, NICKNAMESTRSIZE, tokens[2].addr,
+               tokens[2].len);
         loginfo("s2c_nick_is_me:: You changed nickname to %s\n",
                 e->fds[e->sock].channelname);
         if (e->options.gui)

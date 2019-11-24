@@ -74,8 +74,9 @@ int s2c_join(t_env *e, int cs, t_token *tokens)
 
     if (s2c_join_is_me(e, tokens[0].addr, tokens[0].len))
     {
-        memcpy(e->fds[e->sock].channelname, tokens[2].addr, tokens[2].len);
-        
+        memrpl(e->fds[e->sock].channelname, CHANNELSTRSIZE, tokens[2].addr,
+               tokens[2].len);
+
         loginfo("s2c_privmsg:: You joined %s\n", e->fds[e->sock].channelname);
 
         if (e->options.gui)
