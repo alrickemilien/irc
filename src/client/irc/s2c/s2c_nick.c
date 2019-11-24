@@ -43,10 +43,9 @@ int s2c_nick(t_env *e, int cs, t_token *tokens)
         memcpy(e->fds[e->sock].nickname, tokens[2].addr, tokens[2].len);
         loginfo("s2c_nick_is_me:: You changed nickname to %s\n",
                 e->fds[e->sock].channelname);
+        if (e->options.gui)
+            set_nick_name(tokens[2].addr);
     }
-
-    if (e->options.gui)
-        set_nick_name(tokens[2].addr);
 
     return (IRC_S2C_NICK);
 }

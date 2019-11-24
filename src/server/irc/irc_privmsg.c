@@ -50,8 +50,8 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
     i = 0;
     while (i <= e->max)
     {
-        if (i != (size_t)cs && e->fds[i].type == FD_CLIENT &&
-            e->fds[i].registered == 1)
+        // logdebug("#%ld - registered: %d\n", i, e->fds[i].registered);
+        if (e->fds[i].type == FD_CLIENT && e->fds[i].registered == 1)
         {
             j = 0;
             while (j < subtoken_count)

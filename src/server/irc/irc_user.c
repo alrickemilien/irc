@@ -61,7 +61,7 @@ static int irc_user_check_command(t_env *e, int cs, const t_token *tokens)
     return (0);
 }
 
-static void irc_user_join_default_channel(t_env *e, int cs)
+void irc_user_join_default_channel(t_env *e, int cs)
 {
     char concat[512];
 
@@ -99,8 +99,10 @@ int irc_user(t_env *e, int cs, t_token *tokens)
     // When nickname is not set
     if (e->fds[cs].nickname[0] == 0)
     {
-        logdebug("USER command received for client #%ld without nickname\n",
-                 cs);
+        logdebug(
+            "USER command received for client #%ld without nickname, do not "
+            "set as registered now\n",
+            cs);
         return (IRC_USER);
     }
 

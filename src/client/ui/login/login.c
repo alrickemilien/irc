@@ -11,6 +11,7 @@ static GtkWidget *host_entry;
 static GtkWidget *port_entry;
 static GtkWidget *username_entry;
 static GtkWidget *pass_entry;
+// static GtkWidget *nick_entry;
 static GtkWidget *button_go;
 static GtkWidget *window_login;
 static GtkWidget *panel_login;
@@ -71,6 +72,7 @@ void login_connect(GtkWidget *widget, gpointer data)
     const char *port_data;
     const char *username_data;
     const char *pass_data;
+    // const char *nick_data;
 
     (void)widget;
     e = (t_env *)data;
@@ -81,6 +83,7 @@ void login_connect(GtkWidget *widget, gpointer data)
     port_data = gtk_entry_get_text(GTK_ENTRY(port_entry));
     username_data = gtk_entry_get_text(GTK_ENTRY(username_entry));
     pass_data = gtk_entry_get_text(GTK_ENTRY(pass_entry));
+    // nick_data = gtk_entry_get_text(GTK_ENTRY(nick_entry));
 
     if (ato32(port_data[0] ? port_data : "5555",
               (uint32_t *)&e->options.port) != 0 ||
@@ -95,6 +98,8 @@ void login_connect(GtkWidget *widget, gpointer data)
            host_data[0] ? strlen(host_data) : strlen("127.0.0.1"));
 
     _c2s_pass(e, pass_data, strlen(pass_data));
+
+    _c2s_nick(e, "robert"/*nick_data*/, strlen("robert"));
 
     _c2s_connect(e, username_data[0] ? username_data : NULL, NULL,
                  e->options.host);

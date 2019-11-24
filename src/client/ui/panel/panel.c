@@ -121,8 +121,6 @@ GtkWidget *panel_window(t_env *e)
     new_chat_message("toto: msg number 1");
     new_chat_message("ayya: msg number 2");
 
-    set_nick_name(e->fds[e->sock].nickname);
-
     // g_object_unref(G_OBJECT(builder));
     g_object_unref(G_OBJECT(cssProvider));
 

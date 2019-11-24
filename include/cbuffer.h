@@ -15,12 +15,12 @@
 
 #define CBUFFSIZE 512
 
-typedef struct s_cbuffer {
-    uint8_t buffer[CBUFFSIZE];
-    size_t head;
-    size_t tail;
-    bool full;
-} t_cbuffer;
+typedef struct  s_cbuffer {
+    uint8_t     buffer[CBUFFSIZE];
+    size_t      head;
+    size_t      tail;
+    bool        full;
+}               t_cbuffer;
 
 /// Reset the circular buffer to empty, head == tail. Data not cleared
 /// Requires: cbuf is valid and created by circular_buf_init

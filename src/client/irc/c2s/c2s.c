@@ -44,12 +44,16 @@ int c2s(t_env *e, int cs, char *buffer)
             //     tokens[j].addr,tokens[j].len); j++;
             // }
 
-            return g_irc_commands[i].f(e, cs, tokens);
+            return (g_irc_commands[i].f(e, cs, tokens));
         }
         i++;
     }
 
-    logerror("Unknow command %s\n", buffer);
+    logdebug("Unknow command '%s', treat as a msg to current channel\n",
+             buffer);
 
-    return (-1);
+    _c2s_msg(&e->fds[e->sock], e->fds[e->sock].channelname,
+             strlen(e->fds[e->sock].channelname), buffer);
+
+    return (0);
 }

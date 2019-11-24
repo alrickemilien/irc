@@ -40,9 +40,7 @@ static int s2c_join_check_command(t_env *e, int cs, const t_token *tokens)
         return logerror("s2c_join_check_command::ERR_NOSUCHCHANNEL\n");
     else if (channel_len < 1)
         return logerror("s2c_join_check_command::ERR_NOSUCHCHANNEL\n");
-    else
-        return (0);
-    return (-1);
+    return (0);
 }
 
 /*
@@ -60,6 +58,10 @@ static bool s2c_join_is_me(t_env *e, const char *user, size_t len)
 
     sprintf(expected, "%s!%s@%s", cli->nickname, cli->nickname, cli->host);
 
+    logdebug("s2c_join::cli->nickname:: %s\n", cli->nickname);
+    logdebug("s2c_join::user:: %s\n", user);
+    logdebug("s2c_join::expected:: %s\n", expected);
+
     return (strncmp(expected, user, len) == 0);
 }
 
@@ -73,11 +75,12 @@ int s2c_join(t_env *e, int cs, t_token *tokens)
     if (s2c_join_is_me(e, tokens[0].addr, tokens[0].len))
     {
         memcpy(e->fds[e->sock].channelname, tokens[2].addr, tokens[2].len);
+        
         loginfo("s2c_privmsg:: You joined %s\n", e->fds[e->sock].channelname);
-    }
 
-    if (e->options.gui)
-        set_channel_name(tokens[2].addr);
+        if (e->options.gui)
+            set_channel_name(e->fds[e->sock].channelname);
+    }
 
     return (IRC_S2C_JOIN);
 }

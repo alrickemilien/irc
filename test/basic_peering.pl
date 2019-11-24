@@ -112,17 +112,27 @@ $s1->send("JOIN #ערוץ1\x0D\x0A");
 $s2->send("JOIN #ערוץ1\x0D\x0A");
 $s3->send("JOIN #ערוץ1\x0D\x0A");
 
+ok(ircunittest::recv_eq $s1, "JOIN #ערוץ1");
+ok(ircunittest::recv_eq $s2, "JOIN #ערוץ1");
+ok(ircunittest::recv_ne $s3, "JOIN #ערוץ1");
+
+diag "JOIN #ערוץ1";
+
 $s3->send("PRIVMSG client_2,client_1 :איפה הביבליוטקה\x0D\x0A");
 
 ok(ircunittest::recv_eq $s1, "לקוח3 PRIVMSG :איפה הביבליוטקה");
 ok(ircunittest::recv_eq $s2, "לקוח3 PRIVMSG :איפה הביבליוטקה");
 ok(ircunittest::recv_ne $s3, "לקוח3 PRIVMSG :איפה הביבליוטקה");
 
+exit 1;
+
 #
 # Test PRIVMSG to all clients in the channel
 #
 
 $s3->send("PRIVMSG #ערוץ1 :Wake up\x0D\x0A");
+
+diag "PRIVMSG #ערוץ1 :Wake up";
 
 ok(ircunittest::recv_eq $s1, "לקוח3 PRIVMSG :Wake up");
 ok(ircunittest::recv_eq $s2, "לקוח3 PRIVMSG :Wake up");
@@ -140,7 +150,7 @@ ok(ircunittest::recv_eq $s3, "RPL_NOWAWAY :You have been marked as being away");
 
 $s1->send("PRIVMSG לקוח3,client_2 :איפה הביבליוטקה\x0D\x0A");
 
-ok(ircunittest::recv_eq $s1, "RPL_AWAY client_2 :משם\x0D\x0ARPL_AWAY לקוח3 :Available between 00AM and 07AM");
+ok(ircunittest::recv_eq $s1, "RPL_AWAY client_2 :משם\x0D\x0ARPL_AWAY לקוח3 :Available between 00AM and 07AM\x0D\x0A");
 
 #
 # Terminate clients
