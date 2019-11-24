@@ -1,5 +1,4 @@
 #include <arpa/inet.h>
-#include <client/irc.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -7,6 +6,9 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
+
+#include <client/irc.h>
+#include <client/ssl.h>
 
 void client_ipv4(t_env *e)
 {
@@ -20,10 +22,11 @@ void client_ipv4(t_env *e)
     //     int reuseport;
     // #endif  // __APPLE__
 
-    logdebug("Connecting to %s:%d through ipv4\n", e->options.host, e->options.port);
+    logdebug("Connecting to %s:%d through ipv4\n", e->options.host,
+             e->options.port);
 
-    hostnm =
-        XPSAFE((void *)0, gethostbyname(e->options.host), "ipv4::gethostbyname");
+    hostnm = XPSAFE((void *)0, gethostbyname(e->options.host),
+                    "ipv4::gethostbyname");
 
     pe = (struct protoent *)XPSAFE((void *)0, getprotobyname("tcp"),
                                    "ipv4::getprotobyname");
@@ -75,6 +78,12 @@ void client_ipv4(t_env *e)
 
     if (connect(cs, (struct sockaddr *)&sin, sizeof(sin)) < 0)
         return;
+
+    if (e->options.ssl)
+    {
+        load_ssl(e);
+        connect_ssl(e->ssl_ctx, &e->fds[cs], cs);
+    }
 
     e->sock = cs;
     e->fds[cs].type = FD_CLIENT;

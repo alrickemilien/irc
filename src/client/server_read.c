@@ -1,8 +1,10 @@
-#include <client/irc.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+
+#include <client/irc.h>
+#include <cbuffer_ssl.h>
 
 void server_read(t_env *e, size_t cs)
 {
@@ -11,7 +13,10 @@ void server_read(t_env *e, size_t cs)
     char   command[512];
 
     // Receiving data from the client cs
-    r = cbuffer_recv(&e->fds[cs].buf_read, cs);
+    if (e->options.ssl)
+        r = cbuffer_read_ssl(&e->fds[cs].buf_read, e->fds[cs].ssl);
+    else
+        r = cbuffer_recv(&e->fds[cs].buf_read, cs);
 
     // logdebug("server_read:: %ld\n", cs);
     // logdebug("server_read:: databuffer tail BEFORE RECV is %ld\n", e->fds[cs].buf_read.tail);

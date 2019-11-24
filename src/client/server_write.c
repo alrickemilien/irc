@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <string.h>
 
+#include <cbuffer_ssl.h>
+
 void server_write(t_env *e, size_t cs)
 {
     size_t index;
@@ -35,12 +37,20 @@ void server_write(t_env *e, size_t cs)
     // Reading each output of the buffer
     while (index != (size_t)-1)
     {
-        cbuffer_send(cs, &e->fds[cs].buf_write,
-                     (e->fds[cs].buf_write.tail < index
-                          ? index - e->fds[cs].buf_write.tail
-                          : index + CBUFFSIZE - e->fds[cs].buf_write.tail) +
-                         2,
-                     0);
+        if (e->options.ssl)
+            cbuffer_write_ssl(
+                e->fds[cs].ssl, &e->fds[cs].buf_write,
+                (e->fds[cs].buf_write.tail < index
+                     ? index - e->fds[cs].buf_write.tail
+                     : index + CBUFFSIZE - e->fds[cs].buf_write.tail) +
+                    2);
+        else
+            cbuffer_send(cs, &e->fds[cs].buf_write,
+                         (e->fds[cs].buf_write.tail < index
+                              ? index - e->fds[cs].buf_write.tail
+                              : index + CBUFFSIZE - e->fds[cs].buf_write.tail) +
+                             2,
+                         0);
 
         index = cbuffer_indexof(&e->fds[cs].buf_write, "\x0D\x0A");
     }

@@ -20,7 +20,7 @@ use ircunittest;
 
 my $HOST = '127.0.0.1';
 my $PORT = '5555';
-my $CLIENTS_NUMBER = 10;
+my $CLIENTS_NUMBER = 2;
 my $POOLS_NUMBER = 2;
 my $SSL_cert_file = '.cert/server.crt';
 
@@ -33,8 +33,6 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
         PeerHost => $HOST,
         PeerPort => $PORT,
         Proto => 'tcp',
-        SSL_verify_mode => SSL_VERIFY_PEER| SSL_VERIFY_FAIL_IF_NO_PEER_CERT,
-        SSL_ca_file => $SSL_cert_file, # typical CA file on BSD
     );
     die "Couldn't connect to $HOST:$PORT : $SSL_ERROR\n" unless $tmp_s;
 

@@ -18,9 +18,26 @@ IRC server RFC1459 complient for the feature it implements.
 Ensure `openssl` is installed on the machine.
 
 ```
-openssl genrsa -des3 -passout pass:x -out server.pass.key 2048
-openssl rsa -passin pass:x -in server.pass.key -out server.key
-rm server.pass.key
+mkdir -p.cert
+cd .cert
+
+openssl genrsa -des3 -out server.key 1024
+
+mv server.key server.key.org
+openssl rsa -in server.key.org -out server.key
+rm -rf server.key.org
+
 openssl req -new -key server.key -out server.csr
-openssl x509 -req -sha256 -days 365 -in server.csr -signkey server.key -out server.crt
+
+openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+
+cd -
+```
+
+## Check packets
+
+Use the following command to check packets :
+
+```
+tcpdump -vv -X -i lo port 5555
 ```

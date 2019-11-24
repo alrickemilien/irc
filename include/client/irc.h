@@ -30,6 +30,7 @@ typedef struct  s_env
     char        passwd[PASSWDTRSIZE + 1];
     char        nick[NICKNAMESTRSIZE + 1];
     int         registered;
+    void        *ssl_ctx;
     t_options   options;
 }               t_env;
 

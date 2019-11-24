@@ -28,7 +28,6 @@ void on_connect_ssl(SSL_CTX *ctx, t_fd *fd, int cs)
     logdebug("SSL connection using %s\n", SSL_get_cipher(fd->ssl));
 
     /* Get client's certificate (note: beware of dynamic allocation) - opt */
-
     client_cert = SSL_get_peer_certificate(fd->ssl);
     if (client_cert != NULL)
     {

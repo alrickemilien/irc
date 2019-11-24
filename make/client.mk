@@ -43,11 +43,13 @@ CLIENT_SRC+=src/client/irc/s2c/s2c.c \
 			src/client/irc/s2c/s2c_rpl_whois.c \
 			src/client/irc/s2c/s2c_rpl_welcome.c
 
-#irc s2c
-# CLIENT_SRC+=
+# ssl
+CLIENT_SRC+=src/client/ssl/connect_ssl.c \
+			src/client/ssl/ssl.c
 
 #cbuffer
-CLIENT_SRC+=src/cbuffer/cbuffer.c
+CLIENT_SRC+=src/cbuffer/cbuffer.c \
+			src/cbuffer/cbuffer_ssl.c
 
 # utils
 CLIENT_SRC+=src/utils/safe.c \

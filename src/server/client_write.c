@@ -3,6 +3,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <cbuffer_ssl.h>
 
 void client_write(t_env *e, size_t cs)
 {
@@ -25,7 +26,8 @@ void client_write(t_env *e, size_t cs)
     {
         if (e->fds[cs].buf_write.full)
         {
-            logerror("[!] Buffer is reset because it is full without command\n");
+            logerror(
+                "[!] Buffer is reset because it is full without command\n");
             cbuffer_reset(&e->fds[cs].buf_write);
         }
         return;
@@ -34,12 +36,20 @@ void client_write(t_env *e, size_t cs)
     // Reading each output of the buffer
     while (index != (size_t)-1)
     {
-        cbuffer_send(cs, &e->fds[cs].buf_write,
-                     (e->fds[cs].buf_write.tail < index
-                          ? index - e->fds[cs].buf_write.tail
-                          : index + CBUFFSIZE - e->fds[cs].buf_write.tail) +
-                         2,
-                     0);
+        if (!e->ssl_ctx)
+            cbuffer_send(cs, &e->fds[cs].buf_write,
+                         (e->fds[cs].buf_write.tail < index
+                              ? index - e->fds[cs].buf_write.tail
+                              : index + CBUFFSIZE - e->fds[cs].buf_write.tail) +
+                             2,
+                         0);
+        else
+            cbuffer_write_ssl(
+                e->fds[cs].ssl, &e->fds[cs].buf_write,
+                (e->fds[cs].buf_write.tail < index
+                     ? index - e->fds[cs].buf_write.tail
+                     : index + CBUFFSIZE - e->fds[cs].buf_write.tail) +
+                    2);
 
         index = cbuffer_indexof(&e->fds[cs].buf_write, "\x0D\x0A");
     }
