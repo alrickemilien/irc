@@ -51,6 +51,14 @@ static int c2s_join_check_command(t_env *e, int cs, const t_token *tokens)
     return (-1);
 }
 
+int _c2s_join(t_fd *fd, const char *channel_name, size_t channel_name_len)
+{
+    cbuffer_putstr(&fd->buf_write, "JOIN ");
+    cbuffer_put(&fd->buf_write, (uint8_t*)channel_name, channel_name_len);
+    cbuffer_putstr(&fd->buf_write, "\x0D\x0A");
+    return (0);
+}
+
 int c2s_join(t_env *e, int cs, t_token *tokens)
 {
     if (e->sock == -1)
@@ -59,9 +67,7 @@ int c2s_join(t_env *e, int cs, t_token *tokens)
     if ((c2s_join_check_command(e, cs, tokens)) != 0)
         return (-1);
 
-    cbuffer_putstr(&e->fds[cs].buf_write, "JOIN ");
-    cbuffer_put(&e->fds[cs].buf_write, (uint8_t*)tokens[1].addr, tokens[1].len);
-    cbuffer_putstr(&e->fds[cs].buf_write, "\x0D\x0A");
+    _c2s_join(&e->fds[cs], tokens[1].addr, tokens[1].len);
 
     return (IRC_JOIN);
 }

@@ -45,6 +45,7 @@ typedef enum e_irc {
     IRC_AWAY,
     IRC_UNAWAY,
     IRC_LEAVE,
+    IRC_WHOIS,
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
 
@@ -77,6 +78,7 @@ int             c2s_pass(t_env *e, int cs, t_token *tokens);
 int             c2s_away(t_env *e, int cs, t_token *tokens);
 int             c2s_unaway(t_env *e, int cs, t_token *tokens);
 int             c2s_leave(t_env *e, int cs, t_token *tokens);
+int             c2s_whois(t_env *e, int cs, t_token *tokens);
 
 int             _c2s_nick(t_fd *fd, const char *nick, size_t nick_length);
 int             _c2s_pass(t_env *e, const char *password, size_t password_length);
@@ -87,6 +89,8 @@ int             _c2s_connect(t_env *e,
 int             _c2s_away(t_fd *fd, const char *msg, size_t msg_len);
 int             _c2s_unaway(t_fd *fd);
 int             _c2s_leave(t_fd *fd, const char *channel_name, size_t channel_name_len);
+int             _c2s_join(t_fd *fd, const char *channel_name, size_t channel_name_len);
+int             _c2s_whois(t_fd *fd, const char *nick, size_t nick_len);
 
 int             s2c(t_env *e, int cs, char *buffer);
 int             s2c_rpl_welcome(t_env *e, int cs, t_token *tokens);

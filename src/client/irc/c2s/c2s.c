@@ -10,11 +10,12 @@ static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
     [IRC_AWAY] = {"/away", &c2s_away},
     [IRC_UNAWAY] = {"/unaway", &c2s_unaway},
     [IRC_LEAVE] = {"/leave", &c2s_leave},
+    [IRC_WHOIS] = {"/whois", &c2s_whois},
 };
 
 int c2s(t_env *e, int cs, char *buffer)
 {
-    size_t  i;
+    size_t i;
     // size_t  j;
     t_token tokens[30];
 
@@ -26,10 +27,11 @@ int c2s(t_env *e, int cs, char *buffer)
     while (i < IRC_COMMANDS_NUMBER)
     {
         if (strncmp(buffer, g_irc_commands[i].command,
-                    strlen(g_irc_commands[i].command)) == 0)
+                    strlen(g_irc_commands[i].command)) == 0 &&
+            buffer[strlen(g_irc_commands[i].command)] == ' ')
         {
             // printf("buffer: %s\n", buffer);
-            
+
             memset(tokens, 0, sizeof(t_token) * 30);
 
             tokenize(buffer, tokens, 30);
@@ -38,8 +40,8 @@ int c2s(t_env *e, int cs, char *buffer)
             // j = 0;
             // while (j < 30 && tokens[j].addr)
             // {
-            //     logdebug("token:%s - token_len:%ld\n", tokens[j].addr,tokens[j].len);
-            //     j++;
+            //     logdebug("token:%s - token_len:%ld\n",
+            //     tokens[j].addr,tokens[j].len); j++;
             // }
 
             return g_irc_commands[i].f(e, cs, tokens);

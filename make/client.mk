@@ -29,6 +29,7 @@ CLIENT_SRC+=src/client/irc/c2s/c2s.c \
 			src/client/irc/c2s/c2s_pass.c \
 			src/client/irc/c2s/c2s_away.c \
 			src/client/irc/c2s/c2s_leave.c \
+			src/client/irc/c2s/c2s_whois.c \
 			src/client/irc/c2s/c2s_connect.c
 
 #irc server to client

@@ -18,6 +18,8 @@ int irc_whois(t_env *e, int cs, t_token *tokens)
     size_t  j;
     t_token subtokens[30];
 
+    loginfo("irc_whois:: %s\n", tokens[0].addr);
+
     if (irc_whois_check_command(e, cs, tokens) < 0)
         return (-1);
 
