@@ -11,6 +11,7 @@
 #include <netdb.h>
 #include <sys/time.h>
 #include <sys/resource.h>
+#include <stdbool.h>
 
 /*
 ** Utils
@@ -34,6 +35,12 @@ char    *extract_folder_from_path(const char *path);
 char    *merge_and_extract_folder_from_path(const char *a, const char *b);
 char    *strjoin(char const *s1, char const *s2);
 void    *memrpl(char *dest, size_t dest_size, const char *src, size_t src_size);
+
+/*
+** irc utils
+*/
+bool    is_valid_chan_name(const char *channel);
+
 /*
 ** log
 */

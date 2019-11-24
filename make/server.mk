@@ -23,6 +23,9 @@ SERVER_SRC+=src/utils/safe.c \
 			src/utils/memrpl.c \
 			src/utils/time2iso.c
 
+# irc utils
+SERVER_SRC+=src/utils/irc/is_valid_channel.c
+
 # fd
 SERVER_SRC+=src/server/fd/init_fd.c \
 			src/server/fd/check_fd.c \

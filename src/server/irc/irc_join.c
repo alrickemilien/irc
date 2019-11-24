@@ -8,21 +8,6 @@
 ** separator by the protocol)
 */
 
-static bool is_valid_chan_name(const char *channel)
-{
-    size_t i;
-
-    i = 1;
-    while (channel[i] && channel[i] != '\x0D')
-    {
-        if (channel[i] == '\x07' || channel[i] == '\x20' ||
-            channel[i] == '\x2C')
-            return (false);
-        i++;
-    }
-    return (true);
-}
-
 static int irc_join_check_command(t_env *e, int cs, const t_token *tokens)
 {
     const char *channel;

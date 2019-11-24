@@ -8,21 +8,6 @@
 ** separator by the protocol)
 */
 
-static bool is_valid_chan(const char *channel)
-{
-    size_t i;
-
-    i = 1;
-    while (channel[i] && channel[i] != '\x0D')
-    {
-        if (channel[i] == '\x07' || channel[i] == '\x20' ||
-            channel[i] == '\x2C')
-            return (false);
-        i++;
-    }
-    return (true);
-}
-
 static int c2s_leave_check_command(t_env *e, int cs, const t_token *tokens)
 {
     const char *channel;
@@ -42,7 +27,7 @@ static int c2s_leave_check_command(t_env *e, int cs, const t_token *tokens)
     else if (channel_len - 1 > CHANNELSTRSIZE)
         return logerror("c2s_leave_check_command::ERR_NOSUCHCHANNEL\n");
     else if ((channel[0] != '#' && channel[0] != '&') ||
-             !is_valid_chan(channel))
+             !is_valid_chan_name(channel))
         return logerror("c2s_leave_check_command::ERR_NOSUCHCHANNEL\n");
     else if (channel_len < 1)
         return logerror("c2s_leave_check_command::ERR_NOSUCHCHANNEL\n");

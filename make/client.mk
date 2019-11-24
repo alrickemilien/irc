@@ -60,6 +60,9 @@ CLIENT_SRC+=src/utils/safe.c \
 			src/utils/memrpl.c \
 			src/utils/time2iso.c
 
+# irc utils
+CLIENT_SRC+=src/utils/irc/is_valid_channel.c
+
 CLIENT_OBJ=$(CLIENT_SRC:.c=.o)
 
 # ui
