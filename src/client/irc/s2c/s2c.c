@@ -9,6 +9,7 @@ static const t_irc_cmd g_s2c_replys[IRC_S2C_COMMANDS_NUMBER] = {
     [IRC_S2C_NICK] = {"NICK", &s2c_nick},
     [IRC_S2C_RPL_NOWAWAY] = {"RPL_NOWAWAY", &s2c_rpl_nowaway},
     [IRC_S2C_RPL_UNAWAY] = {"RPL_UNAWAY", &s2c_rpl_unaway},
+    [IRC_S2C_RPL_TOPIC] = {"RPL_TOPIC", &s2c_rpl_topic},
 };
 
 int s2c(t_env *e, int cs, char *buffer)

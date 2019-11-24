@@ -44,6 +44,7 @@ typedef enum e_irc {
     IRC_PASS,
     IRC_AWAY,
     IRC_UNAWAY,
+    IRC_LEAVE,
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
 
@@ -56,6 +57,7 @@ typedef enum e_irc_s2c {
     IRC_S2C_NICK,
     IRC_S2C_RPL_NOWAWAY,
     IRC_S2C_RPL_UNAWAY,
+    IRC_S2C_RPL_TOPIC,
     IRC_S2C_COMMANDS_NUMBER,
 } t_irc_s2c;
 
@@ -74,6 +76,7 @@ int             c2s_who(t_env *e, int cs, t_token *tokens);
 int             c2s_pass(t_env *e, int cs, t_token *tokens);
 int             c2s_away(t_env *e, int cs, t_token *tokens);
 int             c2s_unaway(t_env *e, int cs, t_token *tokens);
+int             c2s_leave(t_env *e, int cs, t_token *tokens);
 
 int             _c2s_nick(t_fd *fd, const char *nick, size_t nick_length);
 int             _c2s_pass(t_env *e, const char *password, size_t password_length);
@@ -83,6 +86,7 @@ int             _c2s_connect(t_env *e,
                         const char *servername);
 int             _c2s_away(t_fd *fd, const char *msg, size_t msg_len);
 int             _c2s_unaway(t_fd *fd);
+int             _c2s_leave(t_fd *fd, const char *channel_name, size_t channel_name_len);
 
 int             s2c(t_env *e, int cs, char *buffer);
 int             s2c_rpl_welcome(t_env *e, int cs, t_token *tokens);
@@ -93,6 +97,7 @@ int             s2c_join(t_env *e, int cs, t_token *tokens);
 int             s2c_nick(t_env *e, int cs, t_token *tokens);
 int             s2c_rpl_nowaway(t_env *e, int cs, t_token *tokens);
 int             s2c_rpl_unaway(t_env *e, int cs, t_token *tokens);
+int             s2c_rpl_topic(t_env *e, int cs, t_token *tokens);
 
 /*
 ** fd 

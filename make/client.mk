@@ -28,6 +28,7 @@ CLIENT_SRC+=src/client/irc/c2s/c2s.c \
 			src/client/irc/c2s/c2s_who.c \
 			src/client/irc/c2s/c2s_pass.c \
 			src/client/irc/c2s/c2s_away.c \
+			src/client/irc/c2s/c2s_leave.c \
 			src/client/irc/c2s/c2s_connect.c
 
 #irc server to client
@@ -37,6 +38,7 @@ CLIENT_SRC+=src/client/irc/s2c/s2c.c \
 			src/client/irc/s2c/s2c_join.c \
 			src/client/irc/s2c/s2c_privmsg.c \
 			src/client/irc/s2c/s2c_rpl_away.c \
+			src/client/irc/s2c/s2c_rpl_topic.c \
 			src/client/irc/s2c/s2c_rpl_welcome.c
 
 #irc s2c
