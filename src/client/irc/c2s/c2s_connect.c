@@ -37,7 +37,6 @@ int _c2s_connect(t_env *     e,
                  const char *hostname,
                  const char *servername)
 {
-    char           concat[512];
     char           local_hostname[NI_MAXHOST + 1];
     int            cs;
     t_fd *         fd;
@@ -60,13 +59,10 @@ int _c2s_connect(t_env *     e,
     cs = e->sock;
     fd = &e->fds[cs];
 
-    memset(concat, 0, sizeof(concat));
-
-    sprintf(concat, "USER %s %s %s %s\x0D\x0A", name ? name : p->pw_name,
-            hostname ? hostname : local_hostname, servername,
-            name ? name : p->pw_name);
-
-    cbuffer_putstr(&fd->buf_write, concat);
+    cbuffer_putcmd(&fd->buf_write, "USER %s %s %s %s\x0D\x0A",
+                   name ? name : p->pw_name,
+                   hostname ? hostname : local_hostname, servername,
+                   name ? name : p->pw_name);
 
     loginfo("Connecting to %s\n", servername);
 
@@ -82,13 +78,7 @@ int _c2s_connect(t_env *     e,
     // Send nickname if local one has been set
     if (e->nick[0])
     {
-        memset(concat, 0, sizeof(concat));
-
-        sprintf(concat, "NICK %s\x0D\x0A", e->nick);
-
-        logdebug("concat: %s\n", concat);
-
-        cbuffer_putstr(&fd->buf_write, concat);
+        cbuffer_putcmd(&fd->buf_write, "NICK %s\x0D\x0A", e->nick);
 
         memrpl(fd->nickname, NICKNAMESTRSIZE, e->nick, strlen(e->nick));
     }

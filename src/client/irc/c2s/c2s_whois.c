@@ -21,10 +21,8 @@ static int c2s_whois_check_command(t_env *e, int cs, const t_token *tokens)
 
 int _c2s_whois(t_fd *fd, const char *nick, size_t nick_len)
 {
-    cbuffer_putstr(&fd->buf_write, "WHOIS ");
-    cbuffer_put(&fd->buf_write, (uint8_t*)nick, nick_len);
-    cbuffer_putstr(&fd->buf_write, "\x0D\x0A");
-    return (0);
+    return (
+        cbuffer_putcmd(&fd->buf_write, "WHOIS %*s\x0D\x0A", nick_len, nick));
 }
 
 int c2s_whois(t_env *e, int cs, t_token *tokens)
@@ -40,7 +38,8 @@ int c2s_whois(t_env *e, int cs, t_token *tokens)
     if (c2s_whois_check_command(e, cs, tokens) < 0)
         return (-1);
 
-    _c2s_whois(&e->fds[cs], tokens[1].addr, tokens[1].len);
+    if (_c2s_whois(&e->fds[cs], tokens[1].addr, tokens[1].len) < 0)
+        return (-1);
 
     return (IRC_WHO);
 }

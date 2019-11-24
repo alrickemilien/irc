@@ -99,6 +99,29 @@ void cbuffer_putstr(t_cbuffer *cbuf, const char *str)
         memcpy(cbuf->buffer, str, n - count);
 }
 
+int cbuffer_putcmd(t_cbuffer *cbuf, const char *fmt, ...)
+{
+    va_list ap;
+    int  len;
+    char    msg[512];
+
+    assert(cbuf);
+
+    memset(msg, 0, 510);
+
+    va_start(ap, fmt);
+    len = vsnprintf(msg, 512, fmt, ap);
+    va_end(ap);
+
+    if (len < 0)
+        return (-1);
+
+    cbuffer_put(cbuf, (uint8_t *)msg, len);
+    // exit(1);
+
+    return (len);
+}
+
 /*
 ** on put, the head pointer is moved forward
 **
@@ -243,13 +266,12 @@ int cbuffer_read(t_cbuffer *cbuf, int cs)
     else
         r = read(cs, cbuf->buffer + cbuf->head, cbuf->tail - cbuf->head);
 
-
     if (r > 0)
         cbuf->head = (cbuf->head + r) % CBUFFSIZE;
 
     // logdebug("cbuffer_read::cbuffer head AFTER: %ld\n", cbuf->head);
     // logdebug("cbuffer_read::cbuffer tail AFTER: %ld\n", cbuf->tail);
-    
+
     return (r);
 }
 
@@ -306,7 +328,6 @@ void cbuffer_debug(const t_cbuffer *cbuf)
         "cbuf->head: %ld\n"
         "cbuf->size: %ld\n",
         cbuf->tail, cbuf->head, cbuffer_size(cbuf));
-
 
     printf("cbuf->data:\n");
 

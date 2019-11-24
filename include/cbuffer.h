@@ -8,6 +8,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/socket.h>
+#include <stdarg.h>
 
 // Debug
 #include <assert.h>
@@ -58,5 +59,7 @@ size_t cbuffer_indexof(t_cbuffer *cbuf, const char *str);
 void cbuffer_dropn(t_cbuffer *cbuf, size_t n);
 
 void cbuffer_debug(const t_cbuffer *cbuf);
+
+int cbuffer_putcmd(t_cbuffer *cbuf, const char *fmt, ...);
 
 #endif  // CBUFFER_H_

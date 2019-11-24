@@ -38,7 +38,7 @@ static int c2s_join_check_command(t_env *e, int cs, const t_token *tokens)
     channel_len = tokens[1].len;
 
     if (strpbrk(channel, "\x07\x2C"))
-            return logerror("c2s_join_check_command::ERR_NOSUCHCHANNEL\n");
+        return logerror("c2s_join_check_command::ERR_NOSUCHCHANNEL\n");
     else if (channel_len - 1 > CHANNELSTRSIZE)
         return logerror("c2s_join_check_command::ERR_NOSUCHCHANNEL\n");
     else if ((channel[0] != '#' && channel[0] != '&') ||
@@ -53,16 +53,16 @@ static int c2s_join_check_command(t_env *e, int cs, const t_token *tokens)
 
 int _c2s_join(t_fd *fd, const char *channel_name, size_t channel_name_len)
 {
-    cbuffer_putstr(&fd->buf_write, "JOIN ");
-    cbuffer_put(&fd->buf_write, (uint8_t*)channel_name, channel_name_len);
-    cbuffer_putstr(&fd->buf_write, "\x0D\x0A");
-    return (0);
+    return (cbuffer_putcmd(&fd->buf_write, "JOIN %*s\x0D\x0A", channel_name_len,
+                           channel_name));
 }
 
 int c2s_join(t_env *e, int cs, t_token *tokens)
 {
     if (e->sock == -1)
-        return logerror("%s\n", "You need to be logged in before any command. Use /connect [server] ?[port]");
+        return logerror("%s\n",
+                        "You need to be logged in before any command. Use "
+                        "/connect [server] ?[port]");
 
     if ((c2s_join_check_command(e, cs, tokens)) != 0)
         return (-1);

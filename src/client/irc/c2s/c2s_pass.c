@@ -18,6 +18,7 @@ static int c2s_pass_check_command(t_env *e, int cs, const t_token *tokens)
 int _c2s_pass(t_env *e, const char *password, size_t password_length)
 {
     memrpl(e->passwd, PASSWDTRSIZE, password, password_length);
+
     return (0);
 }
 
@@ -29,11 +30,12 @@ int c2s_pass(t_env *e, int cs, t_token *tokens)
     if ((c2s_pass_check_command(e, cs, tokens)) < 0)
         return (-1);
 
-    _c2s_pass(e, tokens[1].addr, tokens[1].len);
+    if (_c2s_pass(e, tokens[1].addr, tokens[1].len) < 0)
+        return (-1);
 
-    cbuffer_putstr(&e->fds[cs].buf_write, "PASS ");
-    cbuffer_put(&e->fds[cs].buf_write, (uint8_t*) tokens[1].addr, tokens[1].len);
-    cbuffer_putstr(&e->fds[cs].buf_write, "\x0D\x0A");
+    if (cbuffer_putcmd(&e->fds[cs].buf_write, "PASS %*s\x0D\x0A",
+                       tokens[1].addr, tokens[1].len) < 0)
+        return (-1);
 
     loginfo("_c2s_pass::You changed password\n");
 
