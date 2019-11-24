@@ -236,6 +236,7 @@
         <child>
           <object class="GtkButton" id="button_go">
             <property name="label" translatable="yes">Log in to server</property>
+            <property name="name">#login-button</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>

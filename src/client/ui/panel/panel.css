@@ -1,0 +1,68 @@
+GtkWindow {
+    background-color: white;
+}
+
+#channel_label {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#username_label {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+#status {
+    border-radius: 10px;
+    background-color: red;
+}
+
+#left-pane {
+    background-color: rgb(124, 85, 195);
+}
+
+#channel_label {
+    font-size: 18px;
+}
+
+#channel_list_button {
+    color: black;
+    border-style: solid;
+    padding: 5px;
+}
+
+#channel_list_button:hover {
+    border-radius: 0px;
+    background-image: inherit;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;    
+    transition-property: none;
+    outline-style: none;
+    outline-width: 0px;
+    text-decoration-line: none;
+    font-stretch: normal;
+    font-style: normal;
+}
+
+#channel_list_button:hover GtkLabel {
+    font-weight: bold;
+    background-color: rgb(124, 85, 195);
+    transition: inherit;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+    transition-property: none;
+    outline-style: none;
+    outline-width: 0px;
+    text-decoration-line: none;
+    font-stretch: normal;
+    font-style: normal;
+}
+
+.chat-message {
+    margin-left: 12px;
+    padding: 3px;
+    background-color: #fefefe;
+    border-radius: 4px;
+}

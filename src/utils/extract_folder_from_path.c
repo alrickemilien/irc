@@ -21,10 +21,14 @@
 ** .. => /
 */
 
-char *extract_folder_from_path(const char *path)
+char	*extract_folder_from_path(
+		const char *path)
 {
-    char *tmp;
+	char	*tmp;
+	char	*ret;
 
-    tmp = strdup(path);
-    return (dirname(tmp));
+	tmp = strdup(path);
+	ret = dirname(tmp);
+	free(tmp);
+	return (ret);
 }

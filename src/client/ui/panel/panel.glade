@@ -4,14 +4,15 @@
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkWindow" id="window_panel">
     <property name="can_focus">False</property>
-    <property name="default_width">1920</property>
-    <property name="default_height">1080</property>
     <child>
       <object class="GtkPaned" id="paned1">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
+        <property name="position">140</property>
+        <property name="position_set">True</property>
         <child>
-          <object class="GtkBox" id="left">
+          <object class="GtkBox" id="left-pane">
+            <property name="name">left-pane</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
@@ -21,11 +22,14 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
+                <property name="spacing">5</property>
                 <child>
                   <object class="GtkLabel" id="username_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Je suis la</property>
+                    <property name="label" translatable="yes">User 1</property>
+                    <property name="ellipsize">middle</property>
+                    <property name="xalign">0.20000000298023224</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -39,25 +43,33 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkButton" id="status_button">
-                        <property name="label" translatable="yes">status</property>
+                        <property name="label" translatable="yes">
+</property>
+                        <property name="width_request">5</property>
+                        <property name="height_request">5</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="relief">none</property>
+                        <property name="xalign">0</property>
+                        <property name="yalign">0</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
+                        <property name="expand">True</property>
                         <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="nickname_label">
+                        <property name="width_request">0</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">nickname</property>
+                        <property name="ellipsize">middle</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
+                        <property name="expand">True</property>
                         <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
@@ -65,7 +77,7 @@
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="fill">True</property>
+                    <property name="fill">False</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -83,10 +95,13 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkBox" id="channels_list_header">
+                    <property name="name">channels_list_header</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkLabel" id="channels_list_title">
+                        <property name="width_request">100</property>
+                        <property name="height_request">33</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Channels</property>
@@ -100,6 +115,7 @@
                     <child>
                       <object class="GtkButton" id="channel_list_button">
                         <property name="label" translatable="yes">+</property>
+                        <property name="name">channel_list_button</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -115,13 +131,17 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkListBox" id="listbox1">
+                  <placeholder/>
+                </child>
+                <child>
+                  <object class="GtkListBox" id="channels_box">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="selection_mode">none</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -143,7 +163,8 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="right">
+          <object class="GtkBox" id="right-pane">
+            <property name="name">right-pane</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
@@ -153,9 +174,11 @@
                 <property name="can_focus">False</property>
                 <child>
                   <object class="GtkLabel" id="channel_label">
+                    <property name="name">channel_label</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">channel</property>
+                    <property name="xalign">0.10000000149011612</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -174,7 +197,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkListBox" id="chat_messages_list">
+              <object class="GtkListBox" id="chat_box">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="selection_mode">none</property>

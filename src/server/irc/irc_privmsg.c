@@ -63,7 +63,9 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
                      strncmp(e->channels[e->fds[i].channel].channel,
                              subtokens[j].addr, subtokens[j].len) == 0))
                 {
-                    logdebug("irc_privmsg:: sending message to %ld\n", i);
+                    logdebug("irc_privmsg:: sending message to #%ld :: %s\n", i,
+                             tokens[2].addr[0] == ':' ? tokens[2].addr + 1
+                                                      : tokens[2].addr);
 
                     if (e->fds[i].away)
                     {

@@ -5,14 +5,15 @@ GtkWindow {
             color-stop(0.00, rgb(170, 108, 185)),
             color-stop(0.75, rgb(158, 77, 179)),
             color-stop(1.00, rgb(127, 38, 149))); */
-    background-image: url("../login-1920x1080.jpg");
+    /* background-image: url("../login-1920x1080.jpg"); */
     background-size: cover;
     border-width: 3px;
 }
 
 GtkLabel {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: white;
+    font-size: 10px;
+    color: rgb(41, 41, 41);
 }
 
 GtkEntry:focus {
@@ -21,11 +22,7 @@ GtkEntry:focus {
     border-style: solid;
 }
 
-#image1 {
-    background-image: url("../gmp-auth.png");
-}
-
-GtkButton {
+#login-button {
     background-image: -gtk-gradient (linear,
     left top,
     left bottom,

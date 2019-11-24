@@ -54,22 +54,14 @@ static int c2s_join_check_command(t_env *e, int cs, const t_token *tokens)
 int c2s_join(t_env *e, int cs, t_token *tokens)
 {
     if (e->sock == -1)
-        return logerror("%s\n", "You nee to be logged in before any command. Use /connect [server] ?[port]");
+        return logerror("%s\n", "You need to be logged in before any command. Use /connect [server] ?[port]");
 
     if ((c2s_join_check_command(e, cs, tokens)) != 0)
         return (-1);
 
     cbuffer_putstr(&e->fds[cs].buf_write, "JOIN ");
     cbuffer_put(&e->fds[cs].buf_write, (uint8_t*)tokens[1].addr, tokens[1].len);
-    cbuffer_putstr(&e->fds[cs].buf_write, "\x0A\x0D");
-
-    if (!e->fds[cs].channelname[0])
-        loginfo("You joined %s\n", tokens[1].addr);
-    else
-        loginfo("You leaved %s for %s\n", e->fds[cs].channelname, tokens[1].addr);
-    
-    memset(e->fds[cs].channelname, 0, CHANNELSTRSIZE + 1);
-    memcpy(e->fds[cs].channelname, tokens[1].addr, tokens[1].len);
+    cbuffer_putstr(&e->fds[cs].buf_write, "\x0D\x0A");
 
     return (IRC_JOIN);
 }

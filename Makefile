@@ -26,7 +26,7 @@ $(SERVER): $(SERVER_OBJ)
 
 $(CLIENT): $(CLIENT_OBJ)
 	@mkdir -p $(BUILD_DIR)
-	@gcc $(DEBUG) $^ -o $(BUILD_DIR)$@ $(LINK_LIBFT) $(GTK_DPKG) $(CFLAGS)
+	@gcc $(DEBUG) $^ -o $(BUILD_DIR)$@ $(LINK_LIBFT) $(GTK_DPKG_LIBS) $(CFLAGS)
 
 clean:
 	@rm -rf $(SERVER_OBJ) $(CLIENT_OBJ) $(CLIENT_UI_COPY_FILES) $(ASSETS_COPY_FILES)

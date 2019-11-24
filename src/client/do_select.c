@@ -40,12 +40,12 @@ void check_fd(t_env *e)
     {
         if (FD_ISSET(i, &e->fd_read))
         {
-            logdebug("#%ld:: available data for read\n", i);
+            logdebug("check_fd::#%ld:: available data for read\n", i);
             e->fds[i].read(e, i);
         }
         if (FD_ISSET(i, &e->fd_write))
         {
-            logdebug("#%ld:: available data for write\n", i);
+            logdebug("check_fd::#%ld:: available data for write\n", i);
 
             e->fds[i].write(e, i);
         }
@@ -60,20 +60,17 @@ void do_select(t_env *e)
     struct timeval timeout;
 
     timeout.tv_sec = 0;
-    timeout.tv_usec = 5000;
+    timeout.tv_usec = 500;
 
     (void)timeout;
-    while (1)
-    {
-        init_fd(e);
 
-        // return the number of file descriptors
-        // contained in the three returned descriptor sets
-        e->r = XSAFE(
-            -1,
-            select(e->maxfd, &e->fd_read, &e->fd_write, (void *)0, (void *)0),
-            "do_select::select");
+    init_fd(e);
 
-        check_fd(e);
-    }
+    // return the number of file descriptors
+    // contained in the three returned descriptor sets
+    e->r = XSAFE(
+        -1, select(e->maxfd, &e->fd_read, &e->fd_write, (void *)0, &timeout),
+        "do_select::select");
+
+    check_fd(e);
 }

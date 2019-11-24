@@ -20,8 +20,8 @@ int gtk_provider_load_css(GtkCssProvider *provider,
 
     gtk_css_provider_load_from_path(provider, template_path, NULL);
 
-    free(bin_folder_path);
-    free(template_path);
+    // free(bin_folder_path);
+    // free(template_path);
 
     return (0);
 }

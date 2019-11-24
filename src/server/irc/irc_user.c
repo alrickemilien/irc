@@ -1,5 +1,4 @@
 #include <ctype.h>
-
 #include <server/irc.h>
 
 /*
@@ -62,6 +61,20 @@ static int irc_user_check_command(t_env *e, int cs, const t_token *tokens)
     return (0);
 }
 
+static void irc_user_join_default_channel(t_env *e, int cs)
+{
+    char concat[512];
+
+    memset(concat, 0, sizeof(concat));
+
+    sprintf(concat, "%s!%s@%s JOIN %s\x0D\x0A", e->fds[cs].nickname,
+            e->fds[cs].nickname, e->fds[cs].host,
+            e->channels[e->fds[cs].channel].channel);
+
+    logdebug("irc_user_join_default_channel:: %s\n", concat);
+    cbuffer_putstr(&e->fds[cs].buf_write, concat);
+}
+
 int irc_user(t_env *e, int cs, t_token *tokens)
 {
     if ((irc_user_check_command(e, cs, tokens)) < 0)
@@ -97,6 +110,11 @@ int irc_user(t_env *e, int cs, t_token *tokens)
 
     irc_reply(e, cs, RPL_WELCOME, e->fds[cs].username, e->fds[cs].host,
               e->fds[cs].realname);
+
+    logdebug("irc_user:: USER %s@%s %s join the server\n", e->fds[cs].username,
+             e->fds[cs].host, e->fds[cs].realname);
+
+    irc_user_join_default_channel(e, cs);
 
     return (IRC_USER);
 }

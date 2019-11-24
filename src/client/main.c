@@ -1,22 +1,26 @@
 #include <arpa/inet.h>
 #include <client/irc.h>
+#include <client/ui/login.h>
+#include <client/ui/panel.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "client/ui/login.h"
-#include "client/ui/ui.h"
-
 void init_env(t_env *e)
 {
-    size_t i;
+    size_t        i;
+    struct rlimit rlp;
+
+    // RLIMIT_NOFILE:
+    // This specifies a value one greater than the maximum file
+    // descriptor number that can be opened by this process.
+    XSAFE(-1, getrlimit(RLIMIT_NOFILE, &rlp), "init_env::getrlimit");
 
     // there are three standard file descriptions, STDIN, STDOUT, and STDERR.
     // They are assigned to 0, 1, and 2 respectively.
-    // The last is used for client to server
-    e->maxfd = 4;
+    e->maxfd = rlp.rlim_cur;
     e->fds = (t_fd *)XPSAFE(NULL, malloc(sizeof(*e->fds) * e->maxfd),
                             "init_env::malloc");
 
@@ -45,10 +49,6 @@ static void init_options(t_options *options)
     // Set default port
     if (options->port == 0)
         options->port = 5555;
-
-    // Set default host to connect
-    if (options->host[0] == 0)
-        memcpy(options->host, "127.0.0.1", sizeof(char) * 9);
 
     if (options->ipv6)
         loginfo("Running server ipv6\n");
@@ -84,10 +84,23 @@ static void execute_precommands(t_env *e)
 int gui(t_env *e, int argc, char **argv)
 {
     GtkWidget *window;
-    
+
     gtk_init(&argc, &argv);
 
-    window = login_window(e);
+    // When host has already been set through command line
+
+    if (!e->options.host[0])
+        window = login_window(e);
+
+    if (e->options.host[0] && _c2s_connect(e, NULL, NULL, e->options.host) < 0)
+    {
+        window = login_window(e);
+
+    }
+    else if (e->sock != -1)
+    {
+        window = panel_window(e);
+    }
 
     gtk_widget_show_all(window);
 
@@ -98,10 +111,12 @@ int gui(t_env *e, int argc, char **argv)
 
 int main(int argc, char **argv)
 {
-    int   exit_code;
-    t_env e;
+    int            exit_code;
+    t_env          e;
 
-    exit_code = read_options(argc, (const char**)argv, &e.options);
+    memset(&e, 0, sizeof(t_env));
+
+    exit_code = read_options(argc, (const char **)argv, &e.options);
     if (exit_code != 0)
         return (exit_code);
 
@@ -116,14 +131,14 @@ int main(int argc, char **argv)
     if (e.options.gui)
         return (gui(&e, argc, argv));
 
-    if (e.options.command)
+    if (e.options.command[0])
         loginfo("options.command: %s\n", e.options.command);
 
     init_std(&e);
 
     execute_precommands(&e);
 
-    do_select(&e);
-
+    while (1)
+        do_select(&e);
     return (exit_code);
 }

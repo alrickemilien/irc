@@ -1,12 +1,11 @@
 #include <arpa/inet.h>
+#include <client/irc.h>
+#include <client/ui/login.h>
+#include <client/ui/panel.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-
-#include <client/irc.h>
-#include <client/ui/login.h>
-#include <client/ui/panel.h>
 
 static GtkWidget *host_entry;
 static GtkWidget *port_entry;
@@ -35,16 +34,17 @@ GtkWidget *login_window(t_env *e)
 
     builder = gtk_builder_new();
     if (gtk_builder_load(builder, e->argv_0, "/ui/login/login.glade") < 0)
-        return ((void*)0);
+        return ((void *)0);
 
     cssProvider = gtk_css_provider_new();
     if (gtk_provider_load_css(cssProvider, e->argv_0, "/ui/login/login.css") <
         0)
-        return ((void*)0);
+        return ((void *)0);
 
     window_login = GTK_WIDGET(gtk_builder_get_object(builder, "window_login"));
     gtk_widget_add_events(window_login, GDK_KEY_PRESS_MASK);
-    g_signal_connect(window_login, "key_press_event", G_CALLBACK(on_keypress), NULL);
+    g_signal_connect(window_login, "key_press_event", G_CALLBACK(on_keypress),
+                     NULL);
     g_signal_connect(window_login, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
     host_entry = GTK_WIDGET(gtk_builder_get_object(builder, "entry_host"));
@@ -67,7 +67,6 @@ GtkWidget *login_window(t_env *e)
 void login_connect(GtkWidget *widget, gpointer data)
 {
     t_env *     e;
-    char        hostname[NI_MAXHOST + 1];
     const char *host_data;
     const char *port_data;
     const char *username_data;
@@ -95,12 +94,10 @@ void login_connect(GtkWidget *widget, gpointer data)
     memcpy(e->options.host, host_data[0] ? host_data : "127.0.0.1",
            host_data[0] ? strlen(host_data) : strlen("127.0.0.1"));
 
-    if (gethostname(hostname, sizeof(hostname)) == -1)
-        return;
-
     _c2s_pass(e, pass_data, strlen(pass_data));
 
-    _c2s_connect(e, username_data, hostname, e->options.host);
+    _c2s_connect(e, username_data[0] ? username_data : NULL, NULL,
+                 e->options.host);
 
     if (e->sock != -1)
     {
@@ -108,7 +105,7 @@ void login_connect(GtkWidget *widget, gpointer data)
 
         panel_login = panel_window(e);
 
-    	gtk_widget_show_all(panel_login);
+        gtk_widget_show_all(panel_login);
     }
     else
     {
