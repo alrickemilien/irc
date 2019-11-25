@@ -1,11 +1,4 @@
 GtkWindow {
-    /* background-image: -gtk-gradient (linear,
-            left top,
-            right bottom,
-            color-stop(0.00, rgb(170, 108, 185)),
-            color-stop(0.75, rgb(158, 77, 179)),
-            color-stop(1.00, rgb(127, 38, 149))); */
-    /* background-image: url("../login-1920x1080.jpg"); */
     background-size: cover;
     border-width: 3px;
 }

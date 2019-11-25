@@ -21,6 +21,8 @@
 ** .. => /
 */
 
+#ifdef __APPLE__
+
 char	*extract_folder_from_path(
 		const char *path)
 {
@@ -32,3 +34,13 @@ char	*extract_folder_from_path(
 	free(tmp);
 	return (ret);
 }
+
+#else 
+char *extract_folder_from_path(const char *path)
+{
+    char *tmp;
+
+    tmp = strdup(path);
+    return (dirname(tmp));
+}
+#endif // __APPLE__
