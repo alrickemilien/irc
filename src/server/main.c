@@ -24,6 +24,7 @@ void init_env(t_env *e)
     i = 0;
     while (i < e->maxfd)
     {
+        e->fds[i].ssl = NULL;
         clear_fd(&e->fds[i]);
         cbuffer_reset(&e->fds[i].buf_write);
         cbuffer_reset(&e->fds[i].buf_read);
@@ -63,6 +64,8 @@ int main(int argc, const char **argv)
     int       exit_code;
     t_options options;
     t_env     e;
+
+    memset(&e, 0, sizeof(e));
 
     exit_code = read_options_arguments(argc, argv, &options);
     if (exit_code != 0)

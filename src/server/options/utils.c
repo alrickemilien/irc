@@ -16,6 +16,8 @@ static t_options_map	g_waiting_value_options[] = {
 	{ "port", SERVER_PORT, &read_port_option, },
 	{ "backlog", SERVER_BACKLOG, &read_backlog_option, },
 	{ "bind", SERVER_BIND, &read_bind_option, },
+	{ "ssl-key-file", SERVER_SSL_KEY_FILE, &read_ssl_key_file_option, },
+	{ "ssl-crt-file", SERVER_SSL_CRT_FILE, &read_ssl_crt_file_option, },
 	{ NULL, 0, NULL },
 };
 

@@ -50,13 +50,19 @@ SERVER_SRC+=src/server/irc/irc_command.c \
 			src/server/irc/irc_privmsg.c
 
 #cbuffer
-SERVER_SRC+=src/cbuffer/cbuffer.c
+SERVER_SRC+=src/cbuffer/cbuffer.c \
+			src/cbuffer/cbuffer_ssl.c
+
+# ssl
+SERVER_SRC+=src/server/ssl.c
 
 # options
 SERVER_SRC+=src/server/options/utils.c \
 			src/server/options/read_port_option.c \
 			src/server/options/read_backlog_option.c \
 			src/server/options/read_bind_option.c \
+			src/server/options/read_ssl_key_file_option.c \
+			src/server/options/read_ssl_crt_file_option.c \
 			src/server/options/read_options_arguments.c
 
 SERVER_OBJ=$(SERVER_SRC:.c=.o)

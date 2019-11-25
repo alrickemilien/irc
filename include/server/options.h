@@ -13,7 +13,10 @@ enum {
 	SERVER_BACKLOG,
 	SERVER_BIND,
 	SERVER_IPV6,
-	SERVER_DAEMON,	
+	SERVER_DAEMON,
+	SERVER_SSL,
+	SERVER_SSL_KEY_FILE,
+	SERVER_SSL_CRT_FILE,
 	OPTIONS_NUMBER,
 };
 
@@ -42,9 +45,14 @@ typedef struct	s_options {
 	int			_bind;
 	int			ipv6;
 	int			daemon;
+	int			ssl;
+	int			_ssl_key_file;
+	int			_ssl_crt_file;
 
 	// Metata data related to options
 	char		bind[MAX_ALLOWED_VALUE_SIZE];
+	char		ssl_key_file[MAX_ALLOWED_VALUE_SIZE];
+	char		ssl_crt_file[MAX_ALLOWED_VALUE_SIZE];
 }				t_options;
 
 # pragma pack(pop)
@@ -84,5 +92,9 @@ int				read_port_option(
 int				read_backlog_option(
 	t_options *options, const char *value);
 int				read_bind_option(
+	t_options *options, const char *value);
+int				read_ssl_key_file_option(
+	t_options *options, const char *value);
+int				read_ssl_crt_file_option(
 	t_options *options, const char *value);
 #endif

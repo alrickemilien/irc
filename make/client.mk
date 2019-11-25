@@ -20,7 +20,7 @@ CLIENT_SRC+=src/client/options/utils.c \
 			src/client/options/read_port_option.c \
 			src/client/options/read_host_option.c
 
-#irc client to server
+# irc client to server
 CLIENT_SRC+=src/client/irc/c2s/c2s.c \
 			src/client/irc/c2s/c2s_join.c \
 			src/client/irc/c2s/c2s_nick.c \
@@ -32,7 +32,7 @@ CLIENT_SRC+=src/client/irc/c2s/c2s.c \
 			src/client/irc/c2s/c2s_whois.c \
 			src/client/irc/c2s/c2s_connect.c
 
-#irc server to client
+# irc server to client
 CLIENT_SRC+=src/client/irc/s2c/s2c.c \
 			src/client/irc/s2c/s2c_names.c \
 			src/client/irc/s2c/s2c_nick.c \
@@ -43,11 +43,12 @@ CLIENT_SRC+=src/client/irc/s2c/s2c.c \
 			src/client/irc/s2c/s2c_rpl_whois.c \
 			src/client/irc/s2c/s2c_rpl_welcome.c
 
-#irc s2c
-# CLIENT_SRC+=
+# ssl
+CLIENT_SRC+=src/client/ssl.c
 
 #cbuffer
-CLIENT_SRC+=src/cbuffer/cbuffer.c
+CLIENT_SRC+=src/cbuffer/cbuffer.c \
+			src/cbuffer/cbuffer_ssl.c
 
 # utils
 CLIENT_SRC+=src/utils/safe.c \
@@ -76,7 +77,7 @@ GTK_DPKG_CFLAGS=$(shell pkg-config --cflags gtk+-3.0)
 GTK_DPKG_LIBS=$(shell pkg-config --libs gtk+-3.0)
 
 %.o: %.c
-	@gcc $(DEBUG) -o $@ -c $< $(INCLUDE) $(GTK_DPKG_CFLAGS) $(CFLAGS)
+	@gcc $(DEBUG) -o $@ -c $< $(INCLUDE) $(OPENSSL_CFLAGS) $(GTK_DPKG_CFLAGS) $(CFLAGS)
 
 # glade files
 CLIENT_SRC_GLADE_PREFIX=src/client/ui/

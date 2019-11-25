@@ -26,17 +26,14 @@ void init_env(t_env *e)
 
     // Server's socket connection
     e->sock = -1;
-    e->ipv6 = 0;
 
     XPSAFE(NULL, getcwd(e->cwd, sizeof(e->cwd)), "init_env::getcwd");
 
     i = 0;
     while (i < e->maxfd)
     {
+        memset(&e->fds[i], 0,  sizeof(t_fd));
         clear_fd(&e->fds[i]);
-        memset(&e->fds[i].nickname, 0, NICKNAMESTRSIZE + 1);
-        memset(&e->fds[i].username, 0, USERNAMESTRSIZE + 1);
-        memset(&e->fds[i].channelname, 0, CHANNELSTRSIZE + 1);
         cbuffer_reset(&e->fds[i].buf_read);
         cbuffer_reset(&e->fds[i].buf_write);
 
