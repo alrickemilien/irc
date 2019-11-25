@@ -16,6 +16,7 @@ enum {
 	CLIENT_IPV6,
 	CLIENT_COMMAND,
 	CLIENT_GUI,
+	CLIENT_SSL,
 	OPTIONS_NUMBER,
 };
 
@@ -44,6 +45,7 @@ typedef struct	s_options {
 	int			ipv6;
 	int			_command;
 	int			gui;
+	int			ssl;
 
 	// Metata data related to options
 	char		host[MAX_ALLOWED_VALUE_SIZE];

@@ -49,6 +49,9 @@ int c2s(t_env *e, int cs, char *buffer)
         i++;
     }
 
+    if (e->sock == -1)
+        return (0);
+
     logdebug("Unknow command '%s', treat as a msg to current channel\n",
              buffer);
 

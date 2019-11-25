@@ -6,12 +6,12 @@
 ** between server and clients
 */
 
-#include <stdint.h>
-#include <stddef.h>
 #include <netdb.h>
-#include <sys/time.h>
-#include <sys/resource.h>
 #include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <sys/resource.h>
+#include <sys/time.h>
 
 /*
 ** Utils
@@ -29,17 +29,17 @@ void *xpsafe(void *err, void *res, char *str);
 #define ISOTIMESTRSIZE 25
 void time2iso(char *str);
 
-int     ato32(const char *str, uint32_t *nbr);
-int     i64toa(uint64_t nbr, char *buffer, size_t buffer_size, uint64_t base);
-char    *extract_folder_from_path(const char *path);
-char    *merge_and_extract_folder_from_path(const char *a, const char *b);
-char    *strjoin(char const *s1, char const *s2);
-void    *memrpl(char *dest, size_t dest_size, const char *src, size_t src_size);
+int   ato32(const char *str, uint32_t *nbr);
+int   i64toa(uint64_t nbr, char *buffer, size_t buffer_size, uint64_t base);
+char *extract_folder_from_path(const char *path);
+char *merge_and_extract_folder_from_path(const char *a, const char *b);
+char *strjoin(char const *s1, char const *s2);
+void *memrpl(char *dest, size_t dest_size, const char *src, size_t src_size);
 
 /*
 ** irc utils
 */
-bool    is_valid_chan_name(const char *channel);
+bool is_valid_chan_name(const char *channel);
 
 /*
 ** log
@@ -82,7 +82,7 @@ size_t tokenizechr(char *str, t_token *tokens, size_t len, int c);
 ** CBuffer
 */
 
-# include <cbuffer.h>
+#include <cbuffer.h>
 
 /*
 ** File descriptor
@@ -95,8 +95,8 @@ size_t tokenizechr(char *str, t_token *tokens, size_t len, int c);
 typedef struct s_fd
 {
     int type;
-    void (*read)();
-    void (*write)();
+    int (*read)();
+    int (*write)();
     t_cbuffer buf_read;
     t_cbuffer buf_write;
 
@@ -112,6 +112,7 @@ typedef struct s_fd
     char   channelname[CHANNELSTRSIZE + 1];  // the message to send when away
     int    registered;
     int    away;
+    void * ssl;
 } t_fd;
 
 /*

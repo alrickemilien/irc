@@ -1,7 +1,8 @@
 #include <netdb.h>
 #include <netinet/in.h>
 
-#include "server/irc.h"
+#include <server/irc.h>
+#include <server/ssl.h>
 
 void server_ipv4(const t_options *options, t_env *e)
 {
@@ -66,6 +67,10 @@ void server_ipv4(const t_options *options, t_env *e)
     /* requests.                                                        */
     /********************************************************************/
     XSAFE(-1, listen(sock, options->backlog), "server_ipv4::ipv4::listen");
+
+    if (options->ssl)
+        XSAFE(-1, ssl_init(e, options->ssl_key_file, options->ssl_crt_file),
+              "server_ipv4::ssl_init");
 
     e->fds[sock].type = FD_SERV;
     e->fds[sock].read = on_connect;

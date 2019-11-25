@@ -18,6 +18,7 @@ static t_options_map	g_options_map[] = {
 	{ "ipv6", CLIENT_IPV6, NULL, },
 	{ "command", CLIENT_IPV6, &read_command_option, },
 	{ "gui", CLIENT_GUI, NULL, },
+	{ "ssl", CLIENT_SSL, NULL, },
 	{ NULL, 0, NULL },
 };
 

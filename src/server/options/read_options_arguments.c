@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server/irc.h"
+#include <server/irc.h>
 
 static t_options_map	g_options_map[] = {
 	{ "port", SERVER_PORT, &read_port_option, },
@@ -18,6 +18,9 @@ static t_options_map	g_options_map[] = {
 	{ "bind", SERVER_BIND, &read_bind_option, },
 	{ "ipv6", SERVER_IPV6, NULL, },
 	{ "daemon", SERVER_DAEMON, NULL, },
+	{ "ssl", SERVER_SSL, NULL, },
+	{ "ssl-key-file", SERVER_SSL_KEY_FILE, &read_ssl_key_file_option, },
+	{ "ssl-crt-file", SERVER_SSL_CRT_FILE, &read_ssl_crt_file_option, },
 	{ NULL, 0, NULL },
 };
 

@@ -4,7 +4,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-void stdin_read(t_env *e, size_t cs)
+int stdin_read(t_env *e, size_t cs)
 {
     size_t r;
     size_t index;
@@ -21,7 +21,7 @@ void stdin_read(t_env *e, size_t cs)
 
     // Shoudl never happen
     if (r <= 0)
-        return;
+        return (r);
 
     index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0A");
 
@@ -56,4 +56,6 @@ void stdin_read(t_env *e, size_t cs)
                           1);
         index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0A");
     }
+
+    return (0);
 }

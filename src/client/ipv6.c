@@ -8,12 +8,15 @@
 #include <unistd.h>
 
 #include <client/irc.h>
+#include <client/ssl.h>
 
 void client_ipv6(t_env *e)
 {
     int                 cs;
     struct sockaddr_in6 sin;
     struct protoent *   pe;
+
+    loginfo("client_ipv6::\n");
 
     pe = (struct protoent *)XPSAFE((void *)0, getprotobyname("tcp"),
                                    "ipv6::getprotobyname");
@@ -50,6 +53,9 @@ void client_ipv6(t_env *e)
     /********************************************************************/
     XSAFE(-1, connect(cs, (struct sockaddr *)&sin, sizeof(sin)),
           "ipv6::connect");
+
+    if (e->options.ssl)
+        ssl_connect(e, &e->fds[cs], cs);
 
     e->sock = cs;
     e->fds[cs].type = FD_CLIENT;

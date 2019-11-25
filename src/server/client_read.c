@@ -4,13 +4,14 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include <cbuffer_ssl.h>
 #include <server/irc.h>
 
 /*
 ** Data available on read on the socket cs
 */
 
-void client_read(t_env *e, size_t cs)
+int client_read(t_env *e, size_t cs)
 {
     size_t r;
     size_t index;
@@ -19,19 +20,27 @@ void client_read(t_env *e, size_t cs)
     // printf("databuffer tail BEFORE RECV is %ld\n", e->fds[cs].buf_read.tail);
     // printf("databuffer head BEFORE RECV is %ld\n", e->fds[cs].buf_read.head);
 
+    // cbuffer_debug(&e->fds[cs].buf_read);
+
     index = -1;
     if (cbuffer_size(&e->fds[cs].buf_read) != CBUFFSIZE &&
         (cbuffer_isempty(&e->fds[cs].buf_read) ||
          (index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0D\x0A")) ==
-            (size_t)-1))
+             (size_t)-1))
     {
         // Receiving data from the client cs
-        r = cbuffer_recv(&e->fds[cs].buf_read, cs);
+        if (e->ssl_ctx)
+            r = cbuffer_read_ssl(&e->fds[cs].buf_read, e->fds[cs].ssl);
+        else
+            r = cbuffer_recv(&e->fds[cs].buf_read, cs);
 
         // printf("client_read::%ld bytes has been received for %ld\n", r, cs);
 
         if (r <= 0)
-            return (disconnect(e, cs));
+        {
+            disconnect(e, cs);
+            return (0);
+        }
     }
 
     // printf("data buffer tail is %ld\n", e->fds[cs].buf_read.tail);
@@ -46,10 +55,11 @@ void client_read(t_env *e, size_t cs)
         // The buffer is full without any end of command, flush it
         if (e->fds[cs].buf_read.full)
         {
-            logerror("[!] Buffer is reset because it is full without command\n");
+            logerror(
+                "[!] Buffer is reset because it is full without command\n");
             cbuffer_reset(&e->fds[cs].buf_read);
         }
-        return;
+        return (0);
     }
 
     // Reading each command oof the buffer
@@ -58,7 +68,7 @@ void client_read(t_env *e, size_t cs)
         if (irc_command(e, cs, index) == IRC_QUIT)
         {
             disconnect(e, cs);
-            return;
+            return (0);
         }
 
         // Drop command
@@ -70,4 +80,6 @@ void client_read(t_env *e, size_t cs)
                           2);
         index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0D\x0A");
     }
+
+    return (0);
 }
