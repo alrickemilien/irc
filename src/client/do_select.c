@@ -22,6 +22,8 @@ void init_fd(t_env *e)
         {
             FD_SET(i, &e->fd_read);
 
+            // printf("i:%ld\n", i);
+
             // Add the write fd only if write buffer is available
             if (cbuffer_size(&e->fds[i].buf_write) > 0)
                 FD_SET(i, &e->fd_write);
@@ -40,13 +42,12 @@ void check_fd(t_env *e)
     {
         if (FD_ISSET(i, &e->fd_read))
         {
-            logdebug("check_fd::#%ld:: available data for read\n", i);
+            // logdebug("check_fd::#%ld:: available data for read\n", i);
             e->fds[i].read(e, i);
         }
         if (FD_ISSET(i, &e->fd_write))
         {
-            logdebug("check_fd::#%ld:: available data for write\n", i);
-
+            // logdebug("check_fd::#%ld:: available data for write\n", i);
             e->fds[i].write(e, i);
         }
         if (FD_ISSET(i, &e->fd_read) || FD_ISSET(i, &e->fd_write))

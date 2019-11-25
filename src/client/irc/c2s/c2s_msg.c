@@ -13,8 +13,9 @@ static int c2s_msg_check_command(t_env *e, int cs, const t_token *tokens)
 
 int _c2s_msg(t_fd *fd, const char *dest, size_t dest_len, const char *msg)
 {
-    logdebug("_c2s_msg:: PRIVMSG: %s :%s\n", dest, msg);
-    return (cbuffer_putcmd(&fd->buf_write, "PRIVMSG %*s :%s\x0D\x0A", dest_len,
+    logdebug("PRIVMSG %.*s :%s\x0D\x0A", dest_len, dest, msg);
+
+    return (cbuffer_putcmd(&fd->buf_write, "PRIVMSG %.*s :%s\x0D\x0A", dest_len,
                            dest, msg));
 }
 

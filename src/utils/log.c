@@ -18,13 +18,12 @@ int loginfo(const char *fmt, ...)
         is_tty = isatty(1);
 
     time2iso(t);
-    sprintf(final_fmt,
-            is_tty ? "[%s] "
-                     "\x1b[92m"
-                     "INFO:"
-                     "\x1b[0m"
-                     " %s"
-                   : "[%s] INFO: %s",
+    sprintf(final_fmt, is_tty ? "[%s] "
+                                "\x1b[92m"
+                                "INFO:"
+                                "\x1b[0m"
+                                " %s"
+                              : "[%s] INFO: %s",
             t, fmt);
     va_start(ap, fmt);
     vprintf(final_fmt, ap);
@@ -43,13 +42,12 @@ int logerror(const char *fmt, ...)
         is_tty = isatty(1);
 
     time2iso(t);
-    sprintf(final_fmt,
-            is_tty ? "[%s] "
-                     "\x1b[31m"
-                     "ERROR:"
-                     "\x1b[0m"
-                     " %s"
-                   : "[%s] ERROR: %s",
+    sprintf(final_fmt, is_tty ? "[%s] "
+                                "\x1b[31m"
+                                "ERROR:"
+                                "\x1b[0m"
+                                " %s"
+                              : "[%s] ERROR: %s",
             t, fmt);
     va_start(ap, fmt);
     vprintf(final_fmt, ap);
@@ -68,13 +66,12 @@ int logdebug(const char *fmt, ...)
         is_tty = isatty(1);
 
     time2iso(t);
-    sprintf(final_fmt,
-            is_tty ? "[%s] "
-                     "\x1b[33m"
-                     "DEBUG:"
-                     "\x1b[0m"
-                     " %s"
-                   : "[%s] DEBUG: %s",
+    sprintf(final_fmt, is_tty ? "[%s] "
+                                "\x1b[33m"
+                                "DEBUG:"
+                                "\x1b[0m"
+                                " %s"
+                              : "[%s] DEBUG: %s",
             t, fmt);
     va_start(ap, fmt);
     vprintf(final_fmt, ap);
@@ -97,7 +94,8 @@ int logerrno(const char *str)
                     "\x1b[0m"
                     " %s: %s\n"
                   : "[%s] ERROR: %s: %s\n",
-           t, str, strerror(errno));
+           t, str,
+           errno | h_errno ? strerror(errno | h_errno) : "Unknown error");
 
     return (-1);
 }

@@ -26,7 +26,7 @@ int client_ipv4(t_env *e)
              e->options.port);
 
     if ((hostnm = gethostbyname(e->options.host)) == NULL)
-        return (logerrno("ipv4::gethostbyname\n"));
+        return (logerrno("ipv4::gethostbyname"));
 
     pe = (struct protoent *)XPSAFE((void *)0, getprotobyname("tcp"),
                                    "ipv4::getprotobyname");

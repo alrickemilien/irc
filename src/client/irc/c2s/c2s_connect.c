@@ -54,7 +54,7 @@ int _c2s_connect(t_env *     e,
         client_ipv4(e);
 
     if (e->sock == -1)
-        return (logerrno("c2s_connect::"));
+        return (-1);
 
     cs = e->sock;
     fd = &e->fds[cs];

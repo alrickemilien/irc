@@ -32,11 +32,8 @@ void init_env(t_env *e)
     i = 0;
     while (i < e->maxfd)
     {
-        memset(&e->fds[i], 0,  sizeof(t_fd));
+        memset(&e->fds[i], 0, sizeof(t_fd));
         clear_fd(&e->fds[i]);
-        cbuffer_reset(&e->fds[i].buf_read);
-        cbuffer_reset(&e->fds[i].buf_write);
-
         i++;
     }
 }
@@ -59,7 +56,6 @@ static void init_std(t_env *e)
     stdin_fd = &e->fds[0];
     stdin_fd->type = FD_CLIENT;
     stdin_fd->read = stdin_read;
-    stdin_fd->write = (void *)0;
 }
 
 static void execute_precommands(t_env *e)
