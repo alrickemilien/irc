@@ -1,6 +1,6 @@
 # irc
 
-IRC server RFC1459 complient for the feature it implements.
+IRC server RFC1459 complient for the feature it implements, with tls data encryption.
 
 ## Good doc for startup
 
@@ -11,7 +11,6 @@ IRC server RFC1459 complient for the feature it implements.
 
 - `netstat -avt` let see which port currently runnin on the machine
 - `strace -f -e accept,socket,close,shutdown ./build/server` let see each IO socket operation run by the pid of your program at runtime
-
 
 ## Generate self signed certs
 
@@ -36,8 +35,18 @@ cd -
 
 ## Check packets
 
-Use the following command to check packets :
+For packet tracing, need `sudo` priviledged or `pcap` permission :
 
 ```
-tcpdump -vv -X -i lo port 5555
+sudo groupadd pcap
+sudo usermod -a -G pcap $USER
+sudo chgrp pcap /usr/sbin/tcpdump
+sudo setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump
+sudo ln -s /usr/sbin/tcpdump /usr/bin/tcpdump
+```
+
+Use the following command to check packets
+
+```
+tcpdump -vv -X -i lo port <running port of irc server>
 ```

@@ -20,6 +20,6 @@
 // #define CACERT HOME "/ca.crt"
 
 SSL_CTX *load_ssl();
-int ssl_connect(t_env *e, t_fd *fd, int cs);
+int     ssl_connect(t_env *e, t_fd *fd, int cs);
 
 #endif

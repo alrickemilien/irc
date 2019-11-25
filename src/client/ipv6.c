@@ -16,6 +16,8 @@ void client_ipv6(t_env *e)
     struct sockaddr_in6 sin;
     struct protoent *   pe;
 
+    loginfo("client_ipv6::\n");
+
     pe = (struct protoent *)XPSAFE((void *)0, getprotobyname("tcp"),
                                    "ipv6::getprotobyname");
 

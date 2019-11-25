@@ -24,6 +24,7 @@ void init_env(t_env *e)
     i = 0;
     while (i < e->maxfd)
     {
+        e->fds[i].ssl = NULL;
         clear_fd(&e->fds[i]);
         cbuffer_reset(&e->fds[i].buf_write);
         cbuffer_reset(&e->fds[i].buf_read);

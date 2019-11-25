@@ -18,23 +18,7 @@
 #define CERTF HOME "/server.crt"
 #define KEYF HOME "/server.key"
 
-#define CHK_NULL(x)  \
-    if ((x) == NULL) \
-    exit(1)
-#define CHK_ERR(err, s) \
-    if ((err) == -1)    \
-    {                   \
-        perror(s);      \
-        exit(1);        \
-    }
-#define CHK_SSL(err)                 \
-    if ((err) == -1)                 \
-    {                                \
-        ERR_print_errors_fp(stderr); \
-        exit(2);                     \
-    }
-
-void load_ssl(t_env *e);
-void on_connect_ssl(SSL_CTX *ctx, t_fd *fd, int cs);
+int ssl_init(t_env *e, const char *ssl_key_file, const char *ssl_crt_file);
+int ssl_on_connect(SSL_CTX *ctx, t_fd *fd, int cs);
 
 #endif
