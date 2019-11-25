@@ -22,7 +22,7 @@ static int c2s_whois_check_command(t_env *e, int cs, const t_token *tokens)
 int _c2s_whois(t_fd *fd, const char *nick, size_t nick_len)
 {
     return (
-        cbuffer_putcmd(&fd->buf_write, "WHOIS %*s\x0D\x0A", nick_len, nick));
+        cbuffer_putcmd(&fd->buf_write, "WHOIS %.*s\x0D\x0A", nick_len, nick));
 }
 
 int c2s_whois(t_env *e, int cs, t_token *tokens)

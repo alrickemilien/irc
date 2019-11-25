@@ -33,7 +33,7 @@ int c2s_pass(t_env *e, int cs, t_token *tokens)
     if (_c2s_pass(e, tokens[1].addr, tokens[1].len) < 0)
         return (-1);
 
-    if (cbuffer_putcmd(&e->fds[cs].buf_write, "PASS %*s\x0D\x0A",
+    if (cbuffer_putcmd(&e->fds[cs].buf_write, "PASS %.*s\x0D\x0A",
                        tokens[1].addr, tokens[1].len) < 0)
         return (-1);
 

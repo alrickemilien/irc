@@ -28,7 +28,7 @@ int _c2s_nick(t_env *e, const char *nick, size_t nick_length)
         return (0);
     }
 
-    if (cbuffer_putcmd(&e->fds[e->sock].buf_write, "NICK %*s\x0D\x0A",
+    if (cbuffer_putcmd(&e->fds[e->sock].buf_write, "NICK %.*s\x0D\x0A",
                        nick_length, nick) < 0)
         return (-1);
 
