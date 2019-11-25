@@ -18,7 +18,7 @@ IRC server RFC1459 complient for the feature it implements.
 Ensure `openssl` is installed on the machine.
 
 ```
-mkdir -p.cert
+mkdir -p .cert
 cd .cert
 
 openssl genrsa -des3 -out server.key 1024

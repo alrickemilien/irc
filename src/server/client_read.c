@@ -21,7 +21,7 @@ void client_read(t_env *e, size_t cs)
     // printf("databuffer tail BEFORE RECV is %ld\n", e->fds[cs].buf_read.tail);
     // printf("databuffer head BEFORE RECV is %ld\n", e->fds[cs].buf_read.head);
 
-    cbuffer_debug(&e->fds[cs].buf_read);
+    // cbuffer_debug(&e->fds[cs].buf_read);
 
     index = -1;
     if (cbuffer_size(&e->fds[cs].buf_read) != CBUFFSIZE &&

@@ -20,7 +20,7 @@ CLIENT_SRC+=src/client/options/utils.c \
 			src/client/options/read_port_option.c \
 			src/client/options/read_host_option.c
 
-#irc client to server
+# irc client to server
 CLIENT_SRC+=src/client/irc/c2s/c2s.c \
 			src/client/irc/c2s/c2s_join.c \
 			src/client/irc/c2s/c2s_nick.c \
@@ -32,7 +32,7 @@ CLIENT_SRC+=src/client/irc/c2s/c2s.c \
 			src/client/irc/c2s/c2s_whois.c \
 			src/client/irc/c2s/c2s_connect.c
 
-#irc server to client
+# irc server to client
 CLIENT_SRC+=src/client/irc/s2c/s2c.c \
 			src/client/irc/s2c/s2c_names.c \
 			src/client/irc/s2c/s2c_nick.c \
@@ -44,8 +44,7 @@ CLIENT_SRC+=src/client/irc/s2c/s2c.c \
 			src/client/irc/s2c/s2c_rpl_welcome.c
 
 # ssl
-CLIENT_SRC+=src/client/ssl/connect_ssl.c \
-			src/client/ssl/ssl.c
+CLIENT_SRC+=src/client/ssl.c
 
 #cbuffer
 CLIENT_SRC+=src/cbuffer/cbuffer.c \

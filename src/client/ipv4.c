@@ -80,10 +80,7 @@ void client_ipv4(t_env *e)
         return;
 
     if (e->options.ssl)
-    {
-        load_ssl(e);
-        connect_ssl(e->ssl_ctx, &e->fds[cs], cs);
-    }
+        ssl_connect(e, &e->fds[cs], cs);
 
     e->sock = cs;
     e->fds[cs].type = FD_CLIENT;
