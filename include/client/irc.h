@@ -125,12 +125,12 @@ void            check_fd(t_env *e);
 ** Socket
 */
 
-void            client_ipv4(t_env *e);
+int            client_ipv4(t_env *e);
 void            client_ipv6(t_env *e);
 
-void            server_read(t_env *e, size_t cs);
-void            server_write(t_env *e, size_t cs);
-void            stdin_read(t_env *e, size_t cs);
+int            server_read(t_env *e, size_t cs);
+int            server_write(t_env *e, size_t cs);
+int            stdin_read(t_env *e, size_t cs);
 
 void            do_select(t_env *e);
 #endif

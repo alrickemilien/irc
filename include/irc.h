@@ -95,8 +95,8 @@ size_t tokenizechr(char *str, t_token *tokens, size_t len, int c);
 typedef struct s_fd
 {
     int type;
-    void (*read)();
-    void (*write)();
+    int (*read)();
+    int (*write)();
     t_cbuffer buf_read;
     t_cbuffer buf_write;
 

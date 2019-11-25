@@ -9,15 +9,15 @@
 #include <server/ssl.h>
 
 
-void on_connect(t_env *e, size_t s)
+int on_connect(t_env *e, size_t s)
 {
     int                cs;
     struct sockaddr_in csin;
     socklen_t          csin_len;
 
     csin_len = sizeof(csin);
-    cs = XSAFE(-1, accept(s, (struct sockaddr *)&csin, &csin_len),
-               "on_connect::accept");
+    if ((cs = accept(s, (struct sockaddr *)&csin, &csin_len)) == -1)
+        return (logerrno("on_connect::accept"));
 
     loginfo("New client #%d from %s:%d\n", cs, inet_ntoa(csin.sin_addr),
             ntohs(csin.sin_port));
@@ -34,13 +34,13 @@ void on_connect(t_env *e, size_t s)
     // Clear file descriptor
     memset(&e->fds[cs], 0, sizeof(t_fd));
 
-    if (e->ssl_ctx)
-        ssl_on_connect(e->ssl_ctx, &e->fds[cs], cs);
+    if (e->ssl_ctx && ssl_on_connect(e->ssl_ctx, &e->fds[cs], cs) < 0)
+        return (-1);
 
     // init the new client
     e->fds[cs].type = FD_CLIENT;
     e->fds[cs].read = client_read;
     e->fds[cs].write = client_write;
 
-    return;
+    return (0);
 }

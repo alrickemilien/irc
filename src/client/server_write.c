@@ -3,11 +3,10 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
-#include <string.h>
 
 #include <cbuffer_ssl.h>
 
-void server_write(t_env *e, size_t cs)
+int server_write(t_env *e, size_t cs)
 {
     size_t index;
 
@@ -27,11 +26,11 @@ void server_write(t_env *e, size_t cs)
     {
         if (e->fds[cs].buf_write.full)
         {
-            logerror(
-                "[!] Buffer is reset because it is full without command\n");
             cbuffer_reset(&e->fds[cs].buf_write);
+            return (logerror(
+                "[!] Buffer is reset because it is full without command\n"));
         }
-        return;
+        return (0);
     }
 
     // Reading each output of the buffer
@@ -54,4 +53,6 @@ void server_write(t_env *e, size_t cs)
 
         index = cbuffer_indexof(&e->fds[cs].buf_write, "\x0D\x0A");
     }
+
+    return (0);
 }

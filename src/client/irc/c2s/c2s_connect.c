@@ -48,8 +48,6 @@ int _c2s_connect(t_env *     e,
     if (gethostname(local_hostname, sizeof(local_hostname)) == -1)
         return (logerrno("_c2s_connect::gethostname\n"));
 
-    loginfo("e->ipv6: %d\n", e->ipv6);
-
     if (e->ipv6 == 1)
         client_ipv6(e);
     else

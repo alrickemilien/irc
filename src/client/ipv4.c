@@ -10,7 +10,7 @@
 #include <client/irc.h>
 #include <client/ssl.h>
 
-void client_ipv4(t_env *e)
+int client_ipv4(t_env *e)
 {
     int                cs;
     struct sockaddr_in sin;
@@ -25,8 +25,8 @@ void client_ipv4(t_env *e)
     logdebug("Connecting to %s:%d through ipv4\n", e->options.host,
              e->options.port);
 
-    hostnm = XPSAFE((void *)0, gethostbyname(e->options.host),
-                    "ipv4::gethostbyname");
+    if ((hostnm = gethostbyname(e->options.host)) == NULL)
+        return (logerrno("ipv4::gethostbyname\n"));
 
     pe = (struct protoent *)XPSAFE((void *)0, getprotobyname("tcp"),
                                    "ipv4::getprotobyname");
@@ -36,7 +36,8 @@ void client_ipv4(t_env *e)
     /* an endpoint.  Get a socket for address family AF_INET6 to        */
     /* prepare to accept incoming connections on.                       */
     /********************************************************************/
-    cs = XSAFE(-1, socket(AF_INET, SOCK_STREAM, pe->p_proto), "ipv4::socket");
+    if ((cs = socket(AF_INET, SOCK_STREAM, pe->p_proto)) < 0)
+        return (logerrno("ipv4::socket\n"));
 
     //     /********************************************************************/
     //     /* The setsockopt() function is used to allow the local address to */
@@ -77,13 +78,15 @@ void client_ipv4(t_env *e)
     /********************************************************************/
 
     if (connect(cs, (struct sockaddr *)&sin, sizeof(sin)) < 0)
-        return;
+        return (logerrno("ipv4::connect"));
 
-    if (e->options.ssl)
-        ssl_connect(e, &e->fds[cs], cs);
+    if (e->options.ssl && ssl_connect(e, &e->fds[cs], cs) < 0)
+        return (logerror("ipv4::ssl_connect\n"));
 
     e->sock = cs;
     e->fds[cs].type = FD_CLIENT;
     e->fds[cs].read = server_read;
     e->fds[cs].write = server_write;
+
+    return (0);
 }

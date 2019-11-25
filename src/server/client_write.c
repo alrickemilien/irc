@@ -1,17 +1,17 @@
+#include <cbuffer_ssl.h>
 #include <server/irc.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
-#include <cbuffer_ssl.h>
 
-void client_write(t_env *e, size_t cs)
+int client_write(t_env *e, size_t cs)
 {
     size_t index;
 
     // Send data to all clients
     if (e->fds[cs].type != FD_CLIENT)
-        return;
+        return (0);
 
     index = cbuffer_indexof(&e->fds[cs].buf_write, "\x0D\x0A");
 
@@ -30,7 +30,7 @@ void client_write(t_env *e, size_t cs)
                 "[!] Buffer is reset because it is full without command\n");
             cbuffer_reset(&e->fds[cs].buf_write);
         }
-        return;
+        return (0);
     }
 
     // Reading each output of the buffer
@@ -56,4 +56,5 @@ void client_write(t_env *e, size_t cs)
 
     // printf(":AFTER :\n");
     // cbuffer_debug(&e->fds[cs].buf_write);
+    return (0);
 }

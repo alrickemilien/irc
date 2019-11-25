@@ -4,15 +4,14 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include <server/irc.h>
 #include <cbuffer_ssl.h>
-
+#include <server/irc.h>
 
 /*
 ** Data available on read on the socket cs
 */
 
-void client_read(t_env *e, size_t cs)
+int client_read(t_env *e, size_t cs)
 {
     size_t r;
     size_t index;
@@ -38,7 +37,10 @@ void client_read(t_env *e, size_t cs)
         // printf("client_read::%ld bytes has been received for %ld\n", r, cs);
 
         if (r <= 0)
-            return (disconnect(e, cs));
+        {
+            disconnect(e, cs);
+            return (0);
+        }
     }
 
     // printf("data buffer tail is %ld\n", e->fds[cs].buf_read.tail);
@@ -57,7 +59,7 @@ void client_read(t_env *e, size_t cs)
                 "[!] Buffer is reset because it is full without command\n");
             cbuffer_reset(&e->fds[cs].buf_read);
         }
-        return;
+        return (0);
     }
 
     // Reading each command oof the buffer
@@ -66,7 +68,7 @@ void client_read(t_env *e, size_t cs)
         if (irc_command(e, cs, index) == IRC_QUIT)
         {
             disconnect(e, cs);
-            return;
+            return (0);
         }
 
         // Drop command
@@ -78,4 +80,6 @@ void client_read(t_env *e, size_t cs)
                           2);
         index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0D\x0A");
     }
+
+    return (0);
 }

@@ -65,6 +65,8 @@ int main(int argc, const char **argv)
     t_options options;
     t_env     e;
 
+    memset(&e, 0, sizeof(e));
+
     exit_code = read_options_arguments(argc, argv, &options);
     if (exit_code != 0)
         return (exit_code);

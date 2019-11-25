@@ -6,7 +6,7 @@
 #include <client/irc.h>
 #include <cbuffer_ssl.h>
 
-void server_read(t_env *e, size_t cs)
+int server_read(t_env *e, size_t cs)
 {
     size_t r;
     size_t index;
@@ -35,7 +35,7 @@ void server_read(t_env *e, size_t cs)
         e->sock = -1;
         FD_CLR(cs, &e->fd_read);
         FD_CLR(cs, &e->fd_write);
-        return;
+        return (r);
     }
 
     index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0D\x0A");
@@ -74,4 +74,5 @@ void server_read(t_env *e, size_t cs)
 
         index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0D\x0A");
     }
+    return (0);
 }

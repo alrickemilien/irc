@@ -3,7 +3,7 @@ package ircunittest;
 use strict;
 use warnings;
 
-my $DBUF_BLOCK_SIZE = 5121;
+my $DBUF_BLOCK_SIZE = 512;
 
 sub start_server {
   unless(open(my $pidfd, 'ircserver.pid')) {

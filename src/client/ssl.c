@@ -42,14 +42,27 @@ SSL_CTX *ssl_init()
 
 static int client_ssl_error(void)
 {
-    ERR_print_errors_fp(stderr);
-    return (-1);
+    char err_buf[120];
+
+    ERR_error_string(120, err_buf);
+
+    return (logerror("client_ssl_error:: %s\n", err_buf));
+}
+
+static int logssl(char *str)
+{
+    if (str == (void *)0)
+        return (-1);
+    logdebug("%s\n", str);
+    OPENSSL_free(str);
+    return (0);
 }
 
 int ssl_connect(t_env *e, t_fd *fd, int cs)
 {
-    char *diag;
     X509 *server_cert;
+
+    loginfo("ssl_connect::connecting ...\n");
 
     if ((e->ssl_ctx = ssl_init()) == (void *)0)
         return (client_ssl_error());
@@ -60,7 +73,14 @@ int ssl_connect(t_env *e, t_fd *fd, int cs)
     SSL_set_fd(fd->ssl, cs);
 
     if (SSL_connect(fd->ssl) < 0)
-        return (client_ssl_error());
+    {
+        logdebug("efhzruileghergre::D\n");
+        client_ssl_error();
+
+        return (-1);
+    }
+
+    logdebug("ssl_connect::D\n");
 
     /* Get the cipher - opt */
     logdebug("SSL connection using %s\n", SSL_get_cipher(fd->ssl));
@@ -73,17 +93,11 @@ int ssl_connect(t_env *e, t_fd *fd, int cs)
 
     logdebug("Server certificate:\n");
 
-    if ((diag = X509_NAME_oneline(X509_get_subject_name(server_cert), 0, 0)) ==
-        (void *)0)
+    if (logssl(X509_NAME_oneline(X509_get_subject_name(server_cert), 0, 0)) < 0)
         return (client_ssl_error());
-    logdebug("subject: %s\n", diag);
-    OPENSSL_free(diag);
 
-    if ((diag = X509_NAME_oneline(X509_get_issuer_name(server_cert), 0, 0)) ==
-        (void *)0)
+    if (logssl(X509_NAME_oneline(X509_get_issuer_name(server_cert), 0, 0)) < 0)
         return (client_ssl_error());
-    logdebug("issuer: %s\n", diag);
-    OPENSSL_free(diag);
 
     /* We could do all sorts of certificate verification stuff here before
        deallocating the certificate. */
