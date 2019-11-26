@@ -73,6 +73,9 @@ int irc_part(t_env *e, int cs, t_token *tokens)
         return (-1);
     }
 
+    if (e->fds[cs].channel == 0)
+        return (IRC_PART);
+
     memset(concat, 0, sizeof(concat));
 
     sprintf(concat, "%s leaved %s.\n", e->fds[cs].nickname,
@@ -92,5 +95,5 @@ int irc_part(t_env *e, int cs, t_token *tokens)
     e->fds[cs].channel = 0;
     e->channels[e->fds[cs].channel].clients++;
 
-    return (IRC_JOIN);
+    return (IRC_PART);
 }

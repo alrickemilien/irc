@@ -39,9 +39,8 @@ static int irc_join_check_command(t_env *e, int cs, const t_token *tokens)
     {
         irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
     }
-    else
-        return (0);
-    return (-1);
+    
+    return (0);
 }
 
 int irc_join(t_env *e, int cs, t_token *tokens)
@@ -68,11 +67,9 @@ int irc_join(t_env *e, int cs, t_token *tokens)
     if (i == e->maxchannels)
         i = empty_channel;
 
-    if (i == 0)
-    {
-        irc_reply(e, cs, ERR_NOSUCHCHANNEL, tokens[1].addr);
-        return (-1);
-    }
+    // When channel is the same as actual one
+    if (i == e->fds[cs].channel)
+        return (IRC_JOIN);
 
     memset(e->channels[i].channel, 0, CHANNELSTRSIZE + 1);
     strncpy(e->channels[i].channel, tokens[1].addr, tokens[1].len);

@@ -3,6 +3,8 @@
 
 int _c2s_away(t_fd *fd, const char *msg, size_t msg_len)
 {
+    logdebug("_c2s_away:: %.*s\n", msg_len, msg);
+
     return (cbuffer_putcmd(&fd->buf_write, "AWAY %.*s\x0D\x0A", msg_len, msg));
 }
 
@@ -16,7 +18,7 @@ int c2s_away(t_env *e, int cs, t_token *tokens)
     if (tokens[1].addr == (void *)0)
         return (logerror("c2s_away_check_command::ERR_NEEDMOREPARAMS\n"));
 
-    _c2s_away(&e->fds[cs], tokens[1].addr, tokens[1].len);
+    _c2s_away(&e->fds[cs], tokens[1].addr, strlen(tokens[1].addr));
 
     return (IRC_AWAY);
 }
