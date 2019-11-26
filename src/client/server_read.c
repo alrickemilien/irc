@@ -40,6 +40,9 @@ int server_read(t_env *e, size_t cs)
 
     index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0D\x0A");
 
+        logdebug("server_read::cbuffer_indexof:: %ld\n", index);
+
+
     while (index != (size_t)-1)
     {
         // printf("index: %ld\n", index);
@@ -61,6 +64,8 @@ int server_read(t_env *e, size_t cs)
             memcpy(command + CBUFFSIZE - e->fds[cs].buf_read.tail,
                    e->fds[cs].buf_read.buffer, index);
         }
+
+        logdebug("server_read::command:: %s\n", command);
 
         s2c(e, cs, command);
 

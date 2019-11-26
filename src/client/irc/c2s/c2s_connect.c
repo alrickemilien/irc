@@ -75,6 +75,8 @@ int _c2s_connect(t_env *     e,
     memrpl(fd->username, USERNAMESTRSIZE, name ? name : p->pw_name,
            strlen(name ? name : p->pw_name));
 
+    logdebug("_c2s_connect::e->nick:: %s\n",e->nick );
+
     // Send nickname if local one has been set
     if (e->nick[0])
     {

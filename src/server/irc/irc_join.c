@@ -85,7 +85,7 @@ int irc_join(t_env *e, int cs, t_token *tokens)
     memset(concat, 0, sizeof(concat));
 
     sprintf(concat, "%s!%s@%s JOIN %s\x0D\x0A", e->fds[cs].nickname,
-            e->fds[cs].nickname, e->fds[cs].host,
+            e->fds[cs].username, e->fds[cs].host,
             e->channels[e->fds[cs].channel].channel);
 
     broadcast_all_in_channel(e, concat, IRC_NOTICE, cs);

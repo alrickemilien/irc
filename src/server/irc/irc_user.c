@@ -65,6 +65,8 @@ void irc_user_join_default_channel(t_env *e, int cs)
 {
     char concat[512];
 
+    e->channels[e->fds[cs].channel].clients++;
+
     memset(concat, 0, sizeof(concat));
 
     sprintf(concat, "%s!%s@%s JOIN %s\x0D\x0A", e->fds[cs].nickname,
@@ -104,8 +106,6 @@ int irc_user(t_env *e, int cs, t_token *tokens)
     }
 
     e->fds[cs].registered = 1;
-
-    e->channels[e->fds[cs].channel].clients++;
 
     irc_reply(e, cs, RPL_WELCOME, e->fds[cs].username, e->fds[cs].host,
               e->fds[cs].realname);

@@ -25,5 +25,6 @@ void gtk_set_transparent_window(GtkWidget *w,
                                 float      g,
                                 float      b,
                                 float      a);
+gboolean gtk_do_select(void *e);
 
 #endif

@@ -41,7 +41,7 @@ static bool s2c_join_is_me(t_env *e, const char *user, size_t len)
 
     memset(expected, 0, sizeof(expected));
 
-    sprintf(expected, "%s!%s@%s", cli->nickname, cli->nickname, cli->host);
+    sprintf(expected, "%s!%s@%s", cli->nickname, cli->username, cli->host);
 
     logdebug("s2c_join::cli->nickname:: %s\n", cli->nickname);
     logdebug("s2c_join::user:: %s\n", user);

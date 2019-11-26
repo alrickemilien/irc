@@ -124,13 +124,13 @@ GtkWidget *panel_window(t_env *e)
     // g_object_unref(G_OBJECT(builder));
     g_object_unref(G_OBJECT(cssProvider));
 
-    g_idle_add((GSourceFunc)do_select, e);
-
     chat_entry = GTK_WIDGET(gtk_builder_get_object(builder, "chat_entry"));
 
     g_signal_connect(chat_entry, "activate", G_CALLBACK(chat_entry_send), e);
 
     gtk_set_transparent_window(window_panel, 0.58431, 0.14902, 0.70196, 0.96);
+
+    g_idle_add((GSourceFunc)gtk_do_select, e);
 
     return (window_panel);
 }

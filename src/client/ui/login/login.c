@@ -11,7 +11,7 @@ static GtkWidget *host_entry;
 static GtkWidget *port_entry;
 static GtkWidget *username_entry;
 static GtkWidget *pass_entry;
-// static GtkWidget *nick_entry;
+static GtkWidget *nick_entry;
 static GtkWidget *button_go;
 static GtkWidget *window_login;
 static GtkWidget *panel_login;
@@ -30,8 +30,8 @@ static gboolean on_keypress(GtkWidget *  widget,
 
 GtkWidget *login_window(t_env *e)
 {
-    GtkBuilder *     builder;
-    GtkCssProvider * cssProvider;
+    GtkBuilder *    builder;
+    GtkCssProvider *cssProvider;
 
     builder = gtk_builder_new();
     if (gtk_builder_load(builder, e->argv_0, "/ui/login/login.glade") < 0)
@@ -52,6 +52,7 @@ GtkWidget *login_window(t_env *e)
     port_entry = GTK_WIDGET(gtk_builder_get_object(builder, "entry_port"));
     username_entry = GTK_WIDGET(gtk_builder_get_object(builder, "entry_name"));
     pass_entry = GTK_WIDGET(gtk_builder_get_object(builder, "entry_pass"));
+    nick_entry = GTK_WIDGET(gtk_builder_get_object(builder, "entry_nick"));
 
     button_go = GTK_WIDGET(gtk_builder_get_object(builder, "button_go"));
     g_signal_connect(button_go, "clicked", G_CALLBACK(login_connect), e);
@@ -75,7 +76,7 @@ void login_connect(GtkWidget *widget, gpointer data)
     const char *port_data;
     const char *username_data;
     const char *pass_data;
-    // const char *nick_data;
+    const char *nick_data;
 
     (void)widget;
     e = (t_env *)data;
@@ -86,7 +87,7 @@ void login_connect(GtkWidget *widget, gpointer data)
     port_data = gtk_entry_get_text(GTK_ENTRY(port_entry));
     username_data = gtk_entry_get_text(GTK_ENTRY(username_entry));
     pass_data = gtk_entry_get_text(GTK_ENTRY(pass_entry));
-    // nick_data = gtk_entry_get_text(GTK_ENTRY(nick_entry));
+    nick_data = gtk_entry_get_text(GTK_ENTRY(nick_entry));
 
     if (ato32(port_data[0] ? port_data : "5555",
               (uint32_t *)&e->options.port) != 0 ||
@@ -100,9 +101,11 @@ void login_connect(GtkWidget *widget, gpointer data)
     memcpy(e->options.host, host_data[0] ? host_data : "127.0.0.1",
            host_data[0] ? strlen(host_data) : strlen("127.0.0.1"));
 
+    memcpy(e->nick, nick_data, strlen(nick_data));
+
     _c2s_pass(e, pass_data, strlen(pass_data));
 
-    _c2s_nick(e, "robert" /*nick_data*/, strlen("robert"));
+    _c2s_nick(e, nick_data, strlen(nick_data));
 
     _c2s_connect(e, username_data[0] ? username_data : NULL, NULL,
                  e->options.host);
