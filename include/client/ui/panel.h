@@ -7,5 +7,7 @@ GtkWidget   *panel_window(t_env *e);
 void        new_chat_message(const char *str);
 void        set_channel_name(const char *msg);
 void        set_nick_name(const char *msg);
+void        set_user_name(const char *msg);
+int        set_status(int status);
 
 #endif

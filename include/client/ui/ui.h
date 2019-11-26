@@ -26,5 +26,6 @@ void gtk_set_transparent_window(GtkWidget *w,
                                 float      b,
                                 float      a);
 gboolean gtk_do_select(void *e);
+char *gtk_get_assets(const char *bin_path, const char *path);
 
 #endif

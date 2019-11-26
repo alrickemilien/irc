@@ -70,7 +70,7 @@ void irc_user_join_default_channel(t_env *e, int cs)
     memset(concat, 0, sizeof(concat));
 
     sprintf(concat, "%s!%s@%s JOIN %s\x0D\x0A", e->fds[cs].nickname,
-            e->fds[cs].nickname, e->fds[cs].host,
+            e->fds[cs].username, e->fds[cs].host,
             e->channels[e->fds[cs].channel].channel);
 
     logdebug("irc_user_join_default_channel:: %s\n", concat);
@@ -87,8 +87,8 @@ int irc_user(t_env *e, int cs, t_token *tokens)
            tokens[1].len < USERNAMESTRSIZE ? tokens[1].len : USERNAMESTRSIZE);
 
     // Set hostname
-    memrpl(e->fds[cs].host, HOSTNAMESTRSIZE, tokens[1].addr,
-           tokens[1].len < HOSTNAMESTRSIZE ? tokens[1].len : HOSTNAMESTRSIZE);
+    memrpl(e->fds[cs].host, HOSTNAMESTRSIZE, tokens[2].addr,
+           tokens[2].len < HOSTNAMESTRSIZE ? tokens[2].len : HOSTNAMESTRSIZE);
 
     // Set realname
     memrpl(e->fds[cs].realname, USERNAMESTRSIZE,

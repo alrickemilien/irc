@@ -6,17 +6,17 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 
-// static GtkWidget *host_entry;
-// static GtkWidget *port_entry;
-// static GtkWidget *username_entry;
-// static GtkWidget *pass_entry;
-// static GtkWidget *button_go;
 static GtkWidget * chat_box;
 static GtkWidget * channel_label;
 static GtkWidget * nick_label;
+static GtkWidget * user_label;
+static GtkWidget * status_image;
 static GtkWidget * window_panel;
 static GtkBuilder *builder;
 static GtkWidget * chat_entry;
+char *             status_ok_image;
+char *             status_not_ok_image;
+int                msg_count;
 
 static gboolean on_keypress(GtkWidget *  widget,
                             GdkEventKey *event,
@@ -54,6 +54,8 @@ void new_chat_message(const char *msg)
 
     chat_box = GTK_WIDGET(gtk_builder_get_object(builder, "chat_box"));
 
+    msg_count++;
+
     w = gtk_label_new(msg);
     gtk_set_class(w, "chat-message");
     gtk_label_set_xalign(GTK_LABEL(w), 0);
@@ -77,15 +79,41 @@ void set_nick_name(const char *msg)
 {
     logdebug("ui::set_nick_name:: %s\n", msg);
 
-    nick_label = GTK_WIDGET(gtk_builder_get_object(builder, "nick_label"));
+    nick_label = GTK_WIDGET(gtk_builder_get_object(builder, "nickname_label"));
 
     gtk_label_set_text(GTK_LABEL(nick_label), msg);
     gtk_widget_show_all(nick_label);
 }
 
+void set_user_name(const char *msg)
+{
+    logdebug("ui::set_user_name:: %s\n", msg);
+
+    user_label = GTK_WIDGET(gtk_builder_get_object(builder, "username_label"));
+
+    gtk_label_set_text(GTK_LABEL(user_label), msg);
+    gtk_widget_show_all(user_label);
+}
+
+int set_status(int status)
+{
+    status_image = GTK_WIDGET(gtk_builder_get_object(builder, "status_image"));
+
+    printf("status_ok_image: %s\n", status_ok_image);
+
+    if (status == 0)
+        gtk_image_set_from_file(GTK_IMAGE(status_image), status_ok_image);
+
+    // free(bin_folder_path);
+    // free(template_path);
+
+    return (0);
+}
+
 GtkWidget *panel_window(t_env *e)
 {
     GtkCssProvider *cssProvider;
+
 
     builder = gtk_builder_new();
     if (gtk_builder_load(builder, e->argv_0, "/ui/panel/panel.glade") < 0)
@@ -103,20 +131,13 @@ GtkWidget *panel_window(t_env *e)
                      NULL);
     g_signal_connect(window_panel, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
-    // host_entry = GTK_WIDGET(gtk_builder_get_object(builder, "entry_host"));
-    // port_entry = GTK_WIDGET(gtk_builder_get_object(builder, "entry_port"));
-    // username_entry = GTK_WIDGET(gtk_builder_get_object(builder,
-    // "entry_name"));
-    // pass_entry = GTK_WIDGET(gtk_builder_get_object(builder, "entry_pass"));
-
-    // button_go = GTK_WIDGET(gtk_builder_get_object(builder, "button_go"));
-    // g_signal_connect(button_go, "clicked", G_CALLBACK(login_connect), e);
-
     gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
                                               GTK_STYLE_PROVIDER(cssProvider),
                                               GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     chat_box = GTK_WIDGET(gtk_builder_get_object(builder, "chat_box"));
+
+    msg_count = 0;
 
     new_chat_message("toto: msg number 1");
     new_chat_message("ayya: msg number 2");
@@ -129,6 +150,11 @@ GtkWidget *panel_window(t_env *e)
     g_signal_connect(chat_entry, "activate", G_CALLBACK(chat_entry_send), e);
 
     gtk_set_transparent_window(window_panel, 0.58431, 0.14902, 0.70196, 0.96);
+
+    // Load assets
+    status_ok_image = gtk_get_assets(e->argv_0, "/ui/assets/icons8-ok-16.png");
+    status_not_ok_image =
+        gtk_get_assets(e->argv_0, "/ui/assets/icons8-annuler-16.png");
 
     g_idle_add((GSourceFunc)gtk_do_select, e);
 

@@ -266,7 +266,6 @@
                 <property name="margin_right">20</property>
                 <property name="margin_top">5</property>
                 <property name="max_length">9</property>
-                <property name="visibility">False</property>
               </object>
               <packing>
                 <property name="expand">False</property>

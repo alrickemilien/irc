@@ -72,6 +72,7 @@ CLIENT_SRC+=src/client/ui/gtk_builder_load.c \
 			src/client/ui/gtk_do_select.c \
 			src/client/ui/gtk_provider_load_css.c \
 			src/client/ui/gtk_set_class.c \
+			src/client/ui/gtk_get_assets.c \
 			src/client/ui/login/login.c \
 			src/client/ui/panel/panel.c
 
@@ -94,8 +95,8 @@ $(CLIENT_BUILD_GLADE_PREFIX)%: $(CLIENT_SRC_GLADE_PREFIX)%
 
 # assets files
 CLIENT_SRC_ASSETS_PREFIX=assets/
-CLIENT_BUILD_ASSETS_PREFIX=build/ui/
-CLIENT_SRC_ASSETS=login-1920x1080.jpg gmp-auth.png
+CLIENT_BUILD_ASSETS_PREFIX=build/ui/assets/
+CLIENT_SRC_ASSETS=icons8-annuler-16.png icons8-ok-16.png
 ASSETS_COPY_FILES=$(addprefix $(CLIENT_BUILD_ASSETS_PREFIX), $(CLIENT_SRC_ASSETS))
 
 $(CLIENT_BUILD_ASSETS_PREFIX)%: $(CLIENT_SRC_ASSETS_PREFIX)%

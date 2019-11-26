@@ -1,4 +1,5 @@
 #include <client/irc.h>
+#include <client/ui/panel.h>
 #include <ctype.h>
 
 int s2c_rpl_welcome(t_env *e, int cs, t_token *tokens)
@@ -11,6 +12,13 @@ int s2c_rpl_welcome(t_env *e, int cs, t_token *tokens)
 
     loginfo("%s\n",
             tokens[1].addr[0] == ':' ? tokens[1].addr + 1 : tokens[1].addr);
+
+    if (e->options.gui)
+    {
+        set_nick_name(e->fds[cs].nickname);
+        set_user_name(e->fds[cs].username);
+        set_status(0);
+    }
 
     return (IRC_S2C_RPL_WELCOME);
 }

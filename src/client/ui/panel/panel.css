@@ -130,3 +130,21 @@
 #left-pane {
     background-color: rgba(255, 255, 255, 0.01);
 }
+
+#status_button {
+    background-image: inherit;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+    transition-property: none;
+    outline-style: none;
+    outline-width: 0px;
+    text-decoration-line: none;
+    font-stretch: normal;
+    font-style: normal;
+
+    background-color: red;
+    border-radius: 100px;
+    border-style: solid;
+    /* margin: 20px 20px 20px 20px; */
+}
