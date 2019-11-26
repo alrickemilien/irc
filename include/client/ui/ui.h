@@ -20,4 +20,10 @@ int gtk_provider_load_css(GtkCssProvider *p,
                           
 void gtk_set_class(GtkWidget *w, const char *str);
 
+void gtk_set_transparent_window(GtkWidget *w,
+                                float      r,
+                                float      g,
+                                float      b,
+                                float      a);
+
 #endif

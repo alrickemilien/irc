@@ -16,7 +16,7 @@ static GtkWidget * channel_label;
 static GtkWidget * nick_label;
 static GtkWidget * window_panel;
 static GtkBuilder *builder;
-static GtkWidget *chat_entry;
+static GtkWidget * chat_entry;
 
 static gboolean on_keypress(GtkWidget *  widget,
                             GdkEventKey *event,
@@ -33,9 +33,9 @@ static gboolean on_keypress(GtkWidget *  widget,
 static void chat_entry_send(GtkWidget *widget, gpointer data)
 {
     const char *text;
-    t_env *e;
+    t_env *     e;
 
-    e = (t_env*)data;
+    e = (t_env *)data;
 
     text = gtk_entry_get_text(GTK_ENTRY(widget));
 
@@ -129,6 +129,8 @@ GtkWidget *panel_window(t_env *e)
     chat_entry = GTK_WIDGET(gtk_builder_get_object(builder, "chat_entry"));
 
     g_signal_connect(chat_entry, "activate", G_CALLBACK(chat_entry_send), e);
+
+    gtk_set_transparent_window(window_panel, 0.58431, 0.14902, 0.70196, 0.96);
 
     return (window_panel);
 }

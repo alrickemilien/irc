@@ -17,9 +17,9 @@ GtkEntry:focus {
 
 #login-button {
     background-image: -gtk-gradient (linear,
-    left top,
-    left bottom,
-    color-stop(0.0, rgb(124, 85, 195)),
-    color-stop(1.00, rgb(148, 122, 195)));
+            left top,
+            left bottom,
+            color-stop(0.0, rgb(124, 85, 195)),
+            color-stop(1.00, rgb(148, 122, 195)));
     border-radius: 5px 5px;
 }

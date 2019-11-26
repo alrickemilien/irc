@@ -30,8 +30,8 @@ static gboolean on_keypress(GtkWidget *  widget,
 
 GtkWidget *login_window(t_env *e)
 {
-    GtkBuilder *    builder;
-    GtkCssProvider *cssProvider;
+    GtkBuilder *     builder;
+    GtkCssProvider * cssProvider;
 
     builder = gtk_builder_new();
     if (gtk_builder_load(builder, e->argv_0, "/ui/login/login.glade") < 0)
@@ -59,6 +59,9 @@ GtkWidget *login_window(t_env *e)
     gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
                                               GTK_STYLE_PROVIDER(cssProvider),
                                               GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+    gtk_set_transparent_window(window_login, 1, 1, 1, 0.96);
+
     g_object_unref(G_OBJECT(builder));
     g_object_unref(G_OBJECT(cssProvider));
 
@@ -99,7 +102,7 @@ void login_connect(GtkWidget *widget, gpointer data)
 
     _c2s_pass(e, pass_data, strlen(pass_data));
 
-    _c2s_nick(e, "robert"/*nick_data*/, strlen("robert"));
+    _c2s_nick(e, "robert" /*nick_data*/, strlen("robert"));
 
     _c2s_connect(e, username_data[0] ? username_data : NULL, NULL,
                  e->options.host);
