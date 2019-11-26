@@ -1,4 +1,4 @@
-#include <cbuffer.h>
+#include <cbuffer/cbuffer.h>
 #include <assert.h>
 #include <stdio.h>
 

@@ -82,7 +82,7 @@ size_t tokenizechr(char *str, t_token *tokens, size_t len, int c);
 ** CBuffer
 */
 
-#include <cbuffer.h>
+#include <cbuffer/cbuffer.h>
 
 /*
 ** File descriptor

@@ -4,7 +4,7 @@
 #include <unistd.h>
 
 #include <client/irc.h>
-#include <cbuffer_ssl.h>
+#include <cbuffer/cbuffer_ssl.h>
 
 int server_read(t_env *e, size_t cs)
 {

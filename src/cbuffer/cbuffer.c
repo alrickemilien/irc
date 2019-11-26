@@ -1,4 +1,4 @@
-#include <cbuffer.h>
+#include <cbuffer/cbuffer.h>
 
 void cbuffer_reset(t_cbuffer *cbuf)
 {

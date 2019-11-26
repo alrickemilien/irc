@@ -4,7 +4,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include <cbuffer_ssl.h>
+#include <cbuffer/cbuffer_ssl.h>
 #include <server/irc.h>
 
 /*

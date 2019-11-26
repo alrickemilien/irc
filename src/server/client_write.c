@@ -1,4 +1,4 @@
-#include <cbuffer_ssl.h>
+#include <cbuffer/cbuffer_ssl.h>
 #include <server/irc.h>
 #include <stdio.h>
 #include <string.h>

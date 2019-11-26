@@ -1,5 +1,5 @@
-#include <cbuffer.h>
-#include <cbuffer_ssl.h>
+#include <cbuffer/cbuffer.h>
+#include <cbuffer/cbuffer_ssl.h>
 
 // Receiving data from the client cs
 int cbuffer_read_ssl(t_cbuffer *cbuf, SSL *ssl)

@@ -1,7 +1,7 @@
 #ifndef CBUFFER_SSL_H_
 #define CBUFFER_SSL_H_
 
-#include <cbuffer.h>
+#include <cbuffer/cbuffer.h>
 
 #include <openssl/crypto.h>
 #include <openssl/err.h>
