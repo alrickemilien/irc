@@ -87,14 +87,13 @@ void cbuffer_putstr(t_cbuffer *cbuf, const char *str)
     {
         cbuf->head = cbuf->tail == 0 ? CBUFFSIZE : cbuf->tail - 1;
         count = cbuf->tail;
+        memcpy(cbuf->buffer, str + count, cbuf->tail);
     }
     else
     {
         cbuf->head = (cbuf->head + n) % CBUFFSIZE;
-        count = n - count;
+        memcpy(cbuf->buffer, str + count, n - count);
     }
-    if (count)
-        memcpy(cbuf->buffer, str, n - count);
 }
 
 int cbuffer_putcmd(t_cbuffer *cbuf, const char *fmt, ...)
@@ -110,6 +109,25 @@ int cbuffer_putcmd(t_cbuffer *cbuf, const char *fmt, ...)
     va_start(ap, fmt);
     len = vsnprintf(msg, 512, fmt, ap);
     va_end(ap);
+
+    if (len < 0)
+        return (-1);
+    
+    cbuffer_put(cbuf, (uint8_t *)msg, len);
+
+    return (len);
+}
+
+int cbuffer_putvcmd(t_cbuffer *cbuf, const char *fmt, va_list ap)
+{
+    int  len;
+    char    msg[512];
+
+    assert(cbuf);
+
+    memset(msg, 0, 512);
+
+    len = vsnprintf(msg, 512, fmt, ap);
 
     if (len < 0)
         return (-1);

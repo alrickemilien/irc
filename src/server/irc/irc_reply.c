@@ -1,6 +1,6 @@
 #include <server/irc.h>
 
-const t_irc_reply replys[] = {
+const t_irc_reply g_replys[] = {
     {RPL_WELCOME, TOSTR(RPL_WELCOME),
      ":Welcome to the Internet Relay Network %s!%s@%s"},
     {RPL_AWAY, TOSTR(RPL_AWAY), "%s :%s"},
@@ -42,20 +42,14 @@ int irc_reply(t_env *e, int cs, int code, ...)
     va_list ap;
 
     i = 0;
-    while (i < sizeof(replys) / sizeof(t_irc_reply))
+    while (i < sizeof(g_replys) / sizeof(t_irc_reply))
     {
-        if (replys[i].code == code)
+        if (g_replys[i].code == code)
         {
-            cbuffer_putstr(&e->fds[cs].buf_write, replys[i].name);
-            cbuffer_putstr(&e->fds[cs].buf_write, " ");
-
+            sprintf(msg, "%s %s \x0D\x0A", g_replys[i].name, g_replys[i].fmt);
             va_start(ap, code);
-            vsprintf(msg, replys[i].fmt, ap);
+            cbuffer_putvcmd(&e->fds[cs].buf_write, msg, ap);
             va_end(ap);
-
-            cbuffer_putstr(&e->fds[cs].buf_write, msg);
-            cbuffer_putstr(&e->fds[cs].buf_write, "\x0D\x0A");
-
             return (0);
         }
         i++;

@@ -62,4 +62,6 @@ void cbuffer_debug(const t_cbuffer *cbuf);
 
 int cbuffer_putcmd(t_cbuffer *cbuf, const char *fmt, ...);
 
+int cbuffer_putvcmd(t_cbuffer *cbuf, const char *fmt, va_list ap);
+
 #endif  // CBUFFER_H_
