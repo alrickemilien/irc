@@ -3,7 +3,23 @@
 
 #include <client/ui/ui.h>
 
-GtkWidget *login_window(t_env *e);
-void login_connect(GtkWidget *widget, gpointer data);
+typedef struct  s_ui_login {
+    GtkWidget   *window;
+    GtkBuilder  *builder;
+
+    GtkWidget   *host_entry;
+    GtkWidget   *port_entry;
+    GtkWidget   *username_entry;
+    GtkWidget   *pass_entry;
+    GtkWidget   *nick_entry;
+
+    GtkWidget   *button_go;
+
+    t_env       *e;
+}               t_ui_login;
+
+int             ui_init_login_window(t_env *e, t_ui_login *ui);
+int             ui_clear_login_window(t_env *e, t_ui_login *ui);
+void            ui_login_connect(GtkWidget *widget, gpointer data);
 
 #endif

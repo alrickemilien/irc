@@ -76,26 +76,12 @@ static void execute_precommands(t_env *e)
 
 int gui(t_env *e, int argc, char **argv)
 {
-    GtkWidget *window;
-
     gtk_init(&argc, &argv);
 
-    // When host has already been set through command line
+    e->ui = (t_ui_login *)malloc(sizeof(t_ui_login));
 
-    if (!e->options.host[0])
-        window = login_window(e);
-
-    if (e->options.host[0] && _c2s_connect(e, NULL, NULL, e->options.host) < 0)
-    {
-        window = login_window(e);
-
-    }
-    else if (e->sock != -1)
-    {
-        window = panel_window(e);
-    }
-
-    gtk_widget_show_all(window);
+    if (ui_init_login_window(e, e->ui) < 0)
+        return (-1);
 
     gtk_main();
 
@@ -104,8 +90,8 @@ int gui(t_env *e, int argc, char **argv)
 
 int main(int argc, char **argv)
 {
-    int            exit_code;
-    t_env          e;
+    int   exit_code;
+    t_env e;
 
     memset(&e, 0, sizeof(t_env));
 

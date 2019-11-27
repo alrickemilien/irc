@@ -15,9 +15,9 @@ int s2c_rpl_welcome(t_env *e, int cs, t_token *tokens)
 
     if (e->options.gui)
     {
-        set_nick_name(e->fds[cs].nickname);
-        set_user_name(e->fds[cs].username);
-        set_status(0);
+        set_nick_name(e->ui, e->fds[cs].nickname);
+        set_user_name(e->ui, e->fds[cs].username);
+        set_status(e->ui, 0);
     }
 
     return (IRC_S2C_RPL_WELCOME);
