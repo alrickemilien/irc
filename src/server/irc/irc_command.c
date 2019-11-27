@@ -36,8 +36,8 @@ int irc_command(t_env *e, int cs, size_t end_command_index)
                e->fds[cs].buf_read.buffer, end_command_index);
     }
 
-    logdebug("irc_command::command %s\n", command);
-    logdebug("irc_command::end_command_index %ld\n", end_command_index);
+    // logdebug("irc_command::command %s\n", command);
+    // logdebug("irc_command::end_command_index %ld\n", end_command_index);
 
     // Skip withespaces
     offset = 0;

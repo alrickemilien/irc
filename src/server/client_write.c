@@ -15,8 +15,8 @@ int client_write(t_env *e, size_t cs)
 
     index = cbuffer_indexof(&e->fds[cs].buf_write, "\x0D\x0A");
 
-    logdebug("client_write::cbuffer_debug\n");
-    cbuffer_debug(&e->fds[cs].buf_write);
+    // logdebug("client_write::cbuffer_debug\n");
+    // cbuffer_debug(&e->fds[cs].buf_write);
 
     // if (index != (size_t)-1)
     // printf("client_write::index %ld\n", index);
@@ -37,27 +37,21 @@ int client_write(t_env *e, size_t cs)
     // Reading each output of the buffer
     while (index != (size_t)-1)
     {
-        if (!e->ssl_ctx)
-        {
-            if (cbuffer_send(
-                    cs, &e->fds[cs].buf_write,
-                    (e->fds[cs].buf_write.tail <= index
-                         ? index - e->fds[cs].buf_write.tail
-                         : index + CBUFFSIZE - e->fds[cs].buf_write.tail) +
-                        2,
-                    MSG_NOSIGNAL) <= 0)
-                return (-1);
-        }
-        else
-        {
-            if (cbuffer_write_ssl(
-                    e->fds[cs].ssl, &e->fds[cs].buf_write,
-                    (e->fds[cs].buf_write.tail <= index
-                         ? index - e->fds[cs].buf_write.tail
-                         : index + CBUFFSIZE - e->fds[cs].buf_write.tail) +
-                        2) <= 0)
-                return (-1);
-        }
+        if (!e->ssl_ctx &&
+            cbuffer_send(cs, &e->fds[cs].buf_write,
+                         (e->fds[cs].buf_write.tail <= index
+                              ? index - e->fds[cs].buf_write.tail
+                              : index + CBUFFSIZE - e->fds[cs].buf_write.tail) +
+                             2,
+                         MSG_NOSIGNAL) <= 0)
+            return (-1);
+        else if (e->ssl_ctx && cbuffer_write_ssl(
+                     e->fds[cs].ssl, &e->fds[cs].buf_write,
+                     (e->fds[cs].buf_write.tail <= index
+                          ? index - e->fds[cs].buf_write.tail
+                          : index + CBUFFSIZE - e->fds[cs].buf_write.tail) +
+                         2) <= 0)
+            return (-1);
 
         index = cbuffer_indexof(&e->fds[cs].buf_write, "\x0D\x0A");
     }

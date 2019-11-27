@@ -12,7 +12,7 @@ int server_read(t_env *e, size_t cs)
     size_t index;
     char   command[512];
 
-    cbuffer_debug(&e->fds[cs].buf_read);
+    // cbuffer_debug(&e->fds[cs].buf_read);
 
     // Receiving data from the client cs
     if (e->options.ssl)
@@ -20,11 +20,13 @@ int server_read(t_env *e, size_t cs)
     else
         r = cbuffer_recv(&e->fds[cs].buf_read, cs);
 
-    logdebug("r: %ld\n", r);
+    // logdebug("r: %ld\n", r);
 
     // logdebug("server_read:: %ld\n", cs);
-    // logdebug("server_read:: databuffer tail BEFORE RECV is %ld\n", e->fds[cs].buf_read.tail);
-    // logdebug("server_read:: databuffer head BEFORE RECV is %ld\n", e->fds[cs].buf_read.head);
+    // logdebug("server_read:: databuffer tail BEFORE RECV is %ld\n",
+    // e->fds[cs].buf_read.tail);
+    // logdebug("server_read:: databuffer head BEFORE RECV is %ld\n",
+    // e->fds[cs].buf_read.head);
 
     // logdebug("server_read:: cbuffer_size(&e->fds[cs].buf_read): %ld\n",
     //        cbuffer_size(&e->fds[cs].buf_read));
@@ -40,14 +42,14 @@ int server_read(t_env *e, size_t cs)
         return (r);
     }
 
-    cbuffer_debug(&e->fds[cs].buf_read);
+    // cbuffer_debug(&e->fds[cs].buf_read);
 
     index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0D\x0A");
 
-        logdebug("server_read::cbuffer_indexof:: %ld\n", index);
-        if (e->fds[cs].buf_read.tail == e->fds[cs].buf_read.head)
-            logerror("INFINITE LOOP :: e->fds[cs].buf_read.buffer.tail == e->fds[cs].buf_read.buffer.head\n");
-
+    // logdebug("server_read::cbuffer_indexof:: %ld\n", index);
+    // if (e->fds[cs].buf_read.tail == e->fds[cs].buf_read.head)
+    //     logerror("INFINITE LOOP :: e->fds[cs].buf_read.buffer.tail ==
+    //     e->fds[cs].buf_read.buffer.head\n");
 
     while (index != (size_t)-1)
     {
@@ -71,7 +73,7 @@ int server_read(t_env *e, size_t cs)
                    e->fds[cs].buf_read.buffer, index);
         }
 
-        logdebug("server_read::command:: %s\n", command);
+        // logdebug("server_read::command:: %s\n", command);
 
         s2c(e, cs, command);
 
