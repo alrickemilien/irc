@@ -317,6 +317,10 @@ int cbuffer_send(int cs, t_cbuffer *cbuf, size_t n, int flags)
     if (r < 0)
         return (r);
 
+    // cbuf->tail = (cbuf->tail + n) % CBUFFSIZE;
+
+    if (cbuf->tail + n >= CBUFFSIZE)
+        cbuf->head = (cbuf->tail + n) % CBUFFSIZE;
     cbuf->tail = (cbuf->tail + n) % CBUFFSIZE;
 
     return (r);
@@ -330,7 +334,7 @@ void cbuffer_dropn(t_cbuffer *cbuf, size_t n)
     if (cbuffer_isempty(cbuf))
         return;
 
-    if (cbuf->tail + n > CBUFFSIZE)
+    if (cbuf->tail + n >= CBUFFSIZE)
         cbuf->head = (cbuf->tail + n) % CBUFFSIZE;
     cbuf->tail = (cbuf->tail + n) % CBUFFSIZE;
 }

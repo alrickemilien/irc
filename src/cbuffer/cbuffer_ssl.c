@@ -43,6 +43,8 @@ int cbuffer_write_ssl(SSL *ssl, t_cbuffer *cbuf, size_t n)
     if (r < 0)
         return (r);
 
+    if (cbuf->tail + n >= CBUFFSIZE)
+        cbuf->head = (cbuf->tail + n) % CBUFFSIZE;
     cbuf->tail = (cbuf->tail + n) % CBUFFSIZE;
 
     return (r);

@@ -65,7 +65,10 @@ int ui_init_login_window(t_env *e, t_ui_login *ui)
     gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
                                               GTK_STYLE_PROVIDER(cssProvider),
                                               GTK_STYLE_PROVIDER_PRIORITY_USER);
-    gtk_set_transparent_window(ui->window, 1, 1, 1, 0.96);
+
+    ui->window_color = gtk_new_rgba(1, 1, 1, 0.96);
+
+    gtk_set_transparent_window(ui->window, ui->window_color);
 
     g_object_unref(G_OBJECT(cssProvider));
 
@@ -77,6 +80,7 @@ int ui_init_login_window(t_env *e, t_ui_login *ui)
 int ui_clear_login_window(t_env *e, t_ui_login *ui)
 {
     (void)e;
+    free(ui->window_color);
     g_object_unref(G_OBJECT(ui->builder));
     return (0);
 }

@@ -20,7 +20,8 @@ int client_read(t_env *e, size_t cs)
     // printf("databuffer tail BEFORE RECV is %ld\n", e->fds[cs].buf_read.tail);
     // printf("databuffer head BEFORE RECV is %ld\n", e->fds[cs].buf_read.head);
 
-    // cbuffer_debug(&e->fds[cs].buf_read);
+    logdebug("client_read::cbuffer_debug\n");
+    cbuffer_debug(&e->fds[cs].buf_read);
 
     index = -1;
     if (cbuffer_size(&e->fds[cs].buf_read) != CBUFFSIZE &&
@@ -34,6 +35,7 @@ int client_read(t_env *e, size_t cs)
         else
             r = cbuffer_recv(&e->fds[cs].buf_read, cs);
 
+        logdebug("client_read::r:: %ld\n", r);
         // printf("client_read::%ld bytes has been received for %ld\n", r, cs);
 
         if (r <= 0)

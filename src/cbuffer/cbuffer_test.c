@@ -116,6 +116,25 @@ UNITTEST(test_cbuffer_indexof)
     cbuf.tail = 3;
     cbuf.head = 2;
     assert(cbuffer_indexof(&cbuf, "toto") == CBUFFSIZE - 2);
+
+    // TEST 10
+    cbuffer_reset(&cbuf);
+    const char A[] =
+        ":q\x0D\x0APRIVMSG &hub :q\x0D\x0APRIVMSG &hub :q\x0D\x0APRIVMSG &hub "
+        ":q\x0D\x0APRIVMSG &hub :q\x0D\x0A\x0APRIVMSG &hub :qq\x0D\x0APRIVMSG "
+        "&hub :q\x0D\x0APRIVMSG &hub :q\x0D\x0APRIVMSG &hub :q\x0D\x0APRIVMSG "
+        "&hub :q\x0D\x0APRIVMSG &hub :q\x0D\x0APRIVMSG &hub :q\x0D\x0APRIVMSG "
+        "&hub :q\x0D\x0APRIVMSG &hub :q\x0D\x0APRIVMSG &hub :q\x0D\x0APRIVMSG "
+        "&hub :q\x0D\x0APRIVMSG &hub :q\x0D\x0APRIVMSG &hub :q\x0D\x0APRIVMSG "
+        "&hub :q\x0D\x0APRIVMSG &hub :q\x0D\x0APRIVMSG &hub :q\x0D\x0APRIVMSG "
+        "&hub :q\x0D\x0APRIVMSG &hub :q\x0D\x0APRIVMSG &hub :q\x0D\x0APRIVMSG "
+        "&hub :q\x0D\x0APRIVMSG &hub :q\x0D\x0APRIVMSG &hub :q\x0D\x0APRIVMSG "
+        "&hub :q\x0D\x0APRIVMSG &hub :q\x0D\x0APRIVMSG &hub :q\x0D\x0APRIVMSG "
+        "&hub";
+    memcpy(cbuf.buffer, A, sizeof(A) - 1);
+    cbuf.tail = 73;
+    cbuf.head = 73;
+    assert(cbuffer_indexof(&cbuf, "\x0D\x0A") == -1);
 }
 
 UNITTEST(test_cbuffer_putstr)

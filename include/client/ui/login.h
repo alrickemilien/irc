@@ -5,6 +5,7 @@
 
 typedef struct  s_ui_login {
     GtkWidget   *window;
+    GdkRGBA     *window_color;
     GtkBuilder  *builder;
 
     GtkWidget   *host_entry;

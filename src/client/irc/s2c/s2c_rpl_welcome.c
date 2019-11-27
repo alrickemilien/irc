@@ -1,11 +1,14 @@
 #include <client/irc.h>
 #include <client/ui/panel.h>
+#include <client/ui/login.h>
 #include <ctype.h>
 
 int s2c_rpl_welcome(t_env *e, int cs, t_token *tokens)
 {
     (void)e;
     (void)cs;
+
+    void *tmp;
 
     if (!tokens[1].addr)
         return (-1);
@@ -15,9 +18,18 @@ int s2c_rpl_welcome(t_env *e, int cs, t_token *tokens)
 
     if (e->options.gui)
     {
+        tmp = e->ui;
+
+        e->ui = (t_ui_panel *)malloc(sizeof(t_ui_panel));
+
+        if (e->ui == NULL || ui_init_panel_window(e, e->ui) < 0)
+            return (-1);
+
         set_nick_name(e->ui, e->fds[cs].nickname);
         set_user_name(e->ui, e->fds[cs].username);
         set_status(e->ui, 0);
+
+        gtk_widget_hide(((t_ui_login *)tmp)->window);
     }
 
     return (IRC_S2C_RPL_WELCOME);

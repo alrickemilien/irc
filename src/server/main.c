@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <server/irc.h>
+#include <signal.h>
 
 void init_env(t_env *e)
 {
@@ -66,6 +67,8 @@ int main(int argc, const char **argv)
     t_env     e;
 
     memset(&e, 0, sizeof(e));
+
+    // signal(SIGPIPE, SIG_IGN);
 
     exit_code = read_options_arguments(argc, argv, &options);
     if (exit_code != 0)

@@ -1,5 +1,4 @@
 #include <client/ui/ui.h>
-#include <stdlib.h>
 
 gboolean    supports_alpha = FALSE;
 static void screen_changed(GtkWidget *widget,
@@ -57,24 +56,8 @@ static gboolean draw(GtkWidget *widget, cairo_t *cr, gpointer userdata)
     return FALSE;
 }
 
-void gtk_set_transparent_window(GtkWidget *w,
-                                float      r,
-                                float      g,
-                                float      b,
-                                float      a)
+void gtk_set_transparent_window(GtkWidget *w, GdkRGBA *c)
 {
-    GdkRGBA *c;
-
-    c = (GdkRGBA *)malloc(sizeof(GdkRGBA));
-
-    if (c == NULL)
-        return ;
-
-    c->red = r;
-    c->green = g;
-    c->blue = b;
-    c->alpha = a;
-
     gtk_widget_set_app_paintable(w, TRUE);
 
     g_signal_connect(G_OBJECT(w), "draw", G_CALLBACK(draw), c);

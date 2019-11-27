@@ -52,7 +52,8 @@ void scroll_to_bottom(t_ui_panel *ui)
     gdouble        page_size = 0;
     gdouble        step_size = 0.1;
 
-    ui->scrollwin = GTK_WIDGET(gtk_builder_get_object(ui->builder, "scrollwin"));
+    ui->scrollwin =
+        GTK_WIDGET(gtk_builder_get_object(ui->builder, "scrollwin"));
     gtk_widget_show_all(ui->scrollwin);
 
     verticalAdjust =
@@ -125,7 +126,8 @@ void set_nick_name(t_ui_panel *ui, const char *msg)
 {
     logdebug("ui::set_nick_name:: %s\n", msg);
 
-    ui->nick_label = GTK_WIDGET(gtk_builder_get_object(ui->builder, "nickname_label"));
+    ui->nick_label =
+        GTK_WIDGET(gtk_builder_get_object(ui->builder, "nickname_label"));
 
     gtk_label_set_text(GTK_LABEL(ui->nick_label), msg);
     gtk_widget_show_all(ui->nick_label);
@@ -135,7 +137,8 @@ void set_user_name(t_ui_panel *ui, const char *msg)
 {
     logdebug("ui::set_user_name:: %s\n", msg);
 
-    ui->user_label = GTK_WIDGET(gtk_builder_get_object(ui->builder, "username_label"));
+    ui->user_label =
+        GTK_WIDGET(gtk_builder_get_object(ui->builder, "username_label"));
 
     gtk_label_set_text(GTK_LABEL(ui->user_label), msg);
     gtk_widget_show_all(ui->user_label);
@@ -143,12 +146,14 @@ void set_user_name(t_ui_panel *ui, const char *msg)
 
 int set_status(t_ui_panel *ui, int status)
 {
-    ui->status_image = GTK_WIDGET(gtk_builder_get_object(ui->builder, "status_image"));
+    ui->status_image =
+        GTK_WIDGET(gtk_builder_get_object(ui->builder, "status_image"));
 
     printf("status_ok_image: %s\n", ui->status_ok_image);
 
     if (status == 0)
-        gtk_image_set_from_file(GTK_IMAGE(ui->status_image), ui->status_ok_image);
+        gtk_image_set_from_file(GTK_IMAGE(ui->status_image),
+                                ui->status_ok_image);
 
     // free(bin_folder_path);
     // free(template_path);
@@ -156,6 +161,13 @@ int set_status(t_ui_panel *ui, int status)
     return (0);
 }
 
+int ui_clear_panel_window(t_env *e, t_ui_panel *ui)
+{
+    (void)e;
+    free(ui->window_color);
+    g_object_unref(G_OBJECT(ui->builder));
+    return (0);
+}
 int ui_init_panel_window(t_env *e, t_ui_panel *ui)
 {
     GtkCssProvider *cssProvider;
@@ -200,13 +212,17 @@ int ui_init_panel_window(t_env *e, t_ui_panel *ui)
     g_signal_connect(ui->chat_entry, "activate", G_CALLBACK(chat_entry_send),
                      e);
 
-    gtk_set_transparent_window(ui->window, 0.58431, 0.14902, 0.70196, 0.96);
+    ui->window_color = gtk_new_rgba(0.58431, 0.14902, 0.70196, 0.96);
+
+    gtk_set_transparent_window(ui->window, ui->window_color);
 
     // Load assets
     ui->status_ok_image =
         gtk_get_assets(e->argv_0, "/ui/assets/icons8-ok-16.png");
     ui->status_not_ok_image =
         gtk_get_assets(e->argv_0, "/ui/assets/icons8-annuler-16.png");
+
+    gtk_widget_show_all(ui->window);
 
     return (0);
 }

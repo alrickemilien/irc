@@ -5,6 +5,7 @@
 
 typedef struct  s_ui_panel {
     GtkWidget   *window;
+    GdkRGBA     *window_color;
     GtkBuilder  *builder;
 
     GtkWidget   *channel_label;
