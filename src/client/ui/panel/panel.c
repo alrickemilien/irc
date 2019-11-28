@@ -97,6 +97,10 @@ void ui_new_chat_message(t_ui_panel *ui, const char *msg)
     t_ui_chat_msg_bloc *bloc;
     size_t              i;
     GList *             children;
+    // char                t[ISOTIMESTRSIZE];
+
+    // Message size + ISO date
+    // char label[510 + ISOTIMESTRSIZE];
 
     logdebug("ui::ui_new_chat_message:: %s\n", msg);
 
@@ -153,6 +157,19 @@ void ui_new_chat_message(t_ui_panel *ui, const char *msg)
         bloc = &ui->chat_msg_bloc_list[i];
     }
 
+    // memset(label, msg, strlen(msg));
+    // memset(label, msg, strlen(msg));
+
+    // time2iso(t);
+    // printf(is_tty ? "[%s] "
+    //                 "\x1b[31m"
+    //                 "ERROR:"
+    //                 "\x1b[0m"
+    //                 " %s: %s\n"
+    //               : "[%s] ERROR: %s: %s\n",
+    //        t, str,
+    //        errno | h_errno ? strerror(errno | h_errno) : "Unknown error");
+
     w = gtk_label_new(msg);
     gtk_label_set_xalign(GTK_LABEL(w), 0);
     gtk_widget_set_margin_start(GTK_WIDGET(w), 12);
@@ -205,7 +222,7 @@ void set_user_name(t_ui_panel *ui, const char *msg)
     gtk_widget_show_all(ui->user_label);
 }
 
-int set_status(t_ui_panel *ui, int status)
+int ui_set_status(t_ui_panel *ui, int status)
 {
     ui->status_image =
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "status_image"));
@@ -219,9 +236,6 @@ int set_status(t_ui_panel *ui, int status)
     if (status == 2)
         gtk_image_set_from_file(GTK_IMAGE(ui->status_image),
                                 ui->status_away_image);
-
-    // free(bin_folder_path);
-    // free(template_path);
 
     return (0);
 }
@@ -237,7 +251,7 @@ void ui_join_from_side_channel(GtkWidget *widget, gpointer data)
 
     logdebug("ui::ui_join_from_side_channel:: %s\n", channel);
 
-    // When aklready into channel
+    // When already into channel
     if (memcmp(ui->e->fds[ui->e->sock].channelname, channel, strlen(channel)) ==
         0)
         return;
@@ -306,11 +320,20 @@ int ui_join(t_ui_panel *ui, const char *channel)
     return (0);
 }
 
-int ui_away(t_ui_panel *ui, const char *channel)
+int ui_away(t_ui_panel *ui, const char *msg)
 {
-    logdebug("ui::ui_away:: %s\n", channel);
+    logdebug("ui::ui_away:: %s\n", msg);
 
-    set_status(ui, 2);
+    ui_set_status(ui, 2);
+
+    return (0);
+}
+
+int ui_unaway(t_ui_panel *ui)
+{
+    logdebug("ui::ui_unaway::\n");
+
+    ui_set_status(ui, 0);
 
     return (0);
 }

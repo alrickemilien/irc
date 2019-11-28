@@ -27,7 +27,7 @@ int s2c_rpl_welcome(t_env *e, int cs, t_token *tokens)
 
         ui_set_nick(e->ui, e->fds[cs].nickname);
         set_user_name(e->ui, e->fds[cs].username);
-        set_status(e->ui, 0);
+        ui_set_status(e->ui, 0);
 
         gtk_widget_hide(((t_ui_login *)tmp)->window);
     }

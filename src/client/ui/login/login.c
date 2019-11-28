@@ -106,6 +106,12 @@ void ui_login_connect(GtkWidget *widget, gpointer data)
     pass_data = gtk_entry_get_text(GTK_ENTRY(ui->pass_entry));
     nick_data = gtk_entry_get_text(GTK_ENTRY(ui->nick_entry));
 
+    if (!nick_data || nick_data[0] == 0)
+    {
+        logerror("Nickname must be provided\n");
+        return;
+    }
+
     if (ato32(port_data[0] ? port_data : "5555",
               (uint32_t *)&e->options.port) != 0 ||
         e->options.port < 1000 || e->options.port > 99999)

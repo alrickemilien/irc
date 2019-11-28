@@ -44,8 +44,9 @@ void                    ui_new_chat_message(t_ui_panel *ui, const char *str);
 void                    set_channel_name(t_ui_panel *ui, const char *msg);
 void                    ui_set_nick(t_ui_panel *ui, const char *msg);
 void                    set_user_name(t_ui_panel *ui, const char *msg);
-int                     set_status(t_ui_panel *ui, int status);
+int                     ui_set_status(t_ui_panel *ui, int status);
 int                     ui_join(t_ui_panel *ui, const char *channel);
 int                     ui_away(t_ui_panel *ui, const char *channel);
+int                     ui_unaway(t_ui_panel *ui);
 
 #endif
