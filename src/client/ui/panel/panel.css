@@ -1,20 +1,16 @@
 #channel_label {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
 }
 
 #username_label {
-    font-size: 13px;
+    font-size: 18px;
     font-weight: bold;
 }
 
 #status {
     border-radius: 10px;
     background-color: red;
-}
-
-#channel_label {
-    font-size: 18px;
 }
 
 #channel_list_button {
@@ -43,11 +39,8 @@
 }
 
 #channel_list_button GtkLabel:hover {
-    font-weight: bold;
-    font-size: 12px;
     background-color: rgb(124, 85, 195);
     transition: inherit;
-    border: none;
     box-shadow: none;
     text-shadow: none;
     transition-property: none;
@@ -73,7 +66,6 @@
 }
 
 #channel_list_button GtkLabel:active {
-    font-weight: bold;
     background-color: rgb(124, 85, 195);
     transition: inherit;
     border: none;
@@ -131,20 +123,11 @@
     background-color: rgba(255, 255, 255, 0.01);
 }
 
-#status_button {
-    background-image: inherit;
-    border: none;
-    box-shadow: none;
-    text-shadow: none;
-    transition-property: none;
-    outline-style: none;
-    outline-width: 0px;
-    text-decoration-line: none;
-    font-stretch: normal;
-    font-style: normal;
+.channels-box-item {
+    background-color: none;
+    font-weight: bold;
+}
 
-    background-color: red;
-    border-radius: 100px;
-    border-style: solid;
-    /* margin: 20px 20px 20px 20px; */
+.channels-box-item:hover {
+    cursor: pointer;
 }

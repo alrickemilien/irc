@@ -11,11 +11,10 @@ static gboolean on_keypress(GtkWidget *  widget,
                             gpointer     data)
 {
     (void)widget;
-    (void)data;
 
     if (event->keyval == GDK_KEY_Escape)
     {
-        // ui_clear_login_window();
+        ui_clear_login_window(data);
         gtk_main_quit();
     }
     return FALSE;
@@ -36,7 +35,7 @@ int ui_init_login_window(t_env *e, t_ui_login *ui)
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "window_login"));
     gtk_widget_add_events(ui->window, GDK_KEY_PRESS_MASK);
     g_signal_connect(ui->window, "key_press_event", G_CALLBACK(on_keypress),
-                     NULL);
+                     ui);
     g_signal_connect(ui->window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
     // Set entrys
@@ -77,9 +76,8 @@ int ui_init_login_window(t_env *e, t_ui_login *ui)
     return (0);
 }
 
-int ui_clear_login_window(t_env *e, t_ui_login *ui)
+int ui_clear_login_window(t_ui_login *ui)
 {
-    (void)e;
     free(ui->window_color);
     g_object_unref(G_OBJECT(ui->builder));
     return (0);
@@ -131,7 +129,7 @@ void ui_login_connect(GtkWidget *widget, gpointer data)
 
     if (e->sock != -1)
     {
-        gtk_widget_hide(ui->window);
+        // gtk_widget_hide(ui->window);
 
         // Load loop select
         g_idle_add((GSourceFunc)gtk_do_select, e);

@@ -20,7 +20,7 @@ typedef struct  s_ui_login {
 }               t_ui_login;
 
 int             ui_init_login_window(t_env *e, t_ui_login *ui);
-int             ui_clear_login_window(t_env *e, t_ui_login *ui);
+int             ui_clear_login_window(t_ui_login *ui);
 void            ui_login_connect(GtkWidget *widget, gpointer data);
 
 #endif

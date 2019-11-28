@@ -155,8 +155,58 @@ int set_status(t_ui_panel *ui, int status)
         gtk_image_set_from_file(GTK_IMAGE(ui->status_image),
                                 ui->status_ok_image);
 
+    if (status == 2)
+        gtk_image_set_from_file(GTK_IMAGE(ui->status_image),
+                                ui->status_away_image);
+
     // free(bin_folder_path);
     // free(template_path);
+
+    return (0);
+}
+
+void ui_join_from_side_channel(GtkWidget *widget, gpointer data)
+{
+    const char *channel;
+    t_ui_panel *ui;
+
+    ui = (t_ui_panel*)data;
+
+    channel = gtk_label_get_text(GTK_LABEL(widget));
+
+    _c2s_join(&ui->e->fds[ui->e->sock], channel, strlen(channel));
+}
+
+int ui_join(t_ui_panel *ui, const char *channel)
+{
+    GtkWidget *w;
+
+    logdebug("ui::ui_join:: %s\n", channel);
+
+    set_channel_name(ui, channel);
+
+    ui->channels_box =
+        GTK_WIDGET(gtk_builder_get_object(ui->builder, "channels_box"));
+
+    ui->channels_count++;
+
+    w = gtk_label_new(channel);
+    gtk_set_class(w, "channels-box-item");
+    gtk_label_set_xalign(GTK_LABEL(w), 0);
+    gtk_widget_set_margin_start(GTK_WIDGET(w), 12);
+    g_signal_connect(w, "clicked", G_CALLBACK(ui_join_from_side_channel), ui);
+    gtk_list_box_insert(GTK_LIST_BOX(ui->channels_box), w, -1);
+
+    gtk_widget_show_all(ui->channels_box);
+
+    return (0);
+}
+
+int ui_away(t_ui_panel *ui, const char *channel)
+{
+    logdebug("ui::ui_away:: %s\n", channel);
+
+    set_status(ui, 2);
 
     return (0);
 }
@@ -168,6 +218,7 @@ int ui_clear_panel_window(t_env *e, t_ui_panel *ui)
     g_object_unref(G_OBJECT(ui->builder));
     return (0);
 }
+
 int ui_init_panel_window(t_env *e, t_ui_panel *ui)
 {
     GtkCssProvider *cssProvider;
@@ -221,6 +272,8 @@ int ui_init_panel_window(t_env *e, t_ui_panel *ui)
         gtk_get_assets(e->argv_0, "/ui/assets/icons8-ok-16.png");
     ui->status_not_ok_image =
         gtk_get_assets(e->argv_0, "/ui/assets/icons8-annuler-16.png");
+  ui->status_away_image =
+        gtk_get_assets(e->argv_0, "/ui/assets/icons8-mode-veille-16.png");
 
     gtk_widget_show_all(ui->window);
 

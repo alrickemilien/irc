@@ -18,8 +18,12 @@ typedef struct  s_ui_panel {
     GtkWidget   *scrollwin;
     GtkWidget   *chat_box;
 
+    GtkWidget   *channels_box;
+    int         channels_count;
+
     char        *status_ok_image;
     char        *status_not_ok_image;
+    char        *status_away_image;
     int         msg_count;
 
     t_env       *e;
@@ -31,5 +35,7 @@ void            set_channel_name(t_ui_panel *ui, const char *msg);
 void            set_nick_name(t_ui_panel *ui, const char *msg);
 void            set_user_name(t_ui_panel *ui, const char *msg);
 int             set_status(t_ui_panel *ui, int status);
+int             ui_join(t_ui_panel *ui, const char *channel);
+int             ui_away(t_ui_panel *ui, const char *channel);
 
 #endif

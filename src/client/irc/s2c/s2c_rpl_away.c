@@ -8,8 +8,8 @@ int s2c_rpl_nowaway(t_env *e, int cs, t_token *tokens)
 
     e->fds[cs].away = 1;
 
-    // if (e->options.gui)
-        // set_nick_name(tokens[2].addr);
+    if (e->options.gui)
+        ui_away(e->ui, tokens[0].addr);
 
     return (IRC_S2C_RPL_NOWAWAY);
 }
