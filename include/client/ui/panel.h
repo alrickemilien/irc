@@ -3,39 +3,49 @@
 
 #include <client/ui/ui.h>
 
-typedef struct  s_ui_panel {
-    GtkWidget   *window;
-    GdkRGBA     *window_color;
-    GtkBuilder  *builder;
+#define UI_CHAT_BOX_BLOC_MAX 5
+#define UI_CHAT_BOX_MSG_COUNT_MAX 20
 
-    GtkWidget   *channel_label;
-    GtkWidget   *nick_label;
-    GtkWidget   *user_label;
-    GtkWidget   *chat_entry;
+typedef struct          s_ui_chat_msg_bloc {
+    GtkWidget           *box;
+    int                 count;
+}                       t_ui_chat_msg_bloc;
 
-    GtkWidget   *status_image;
+typedef struct          s_ui_panel {
+    GtkWidget           *window;
+    GdkRGBA             *window_color;
+    GtkBuilder          *builder;
 
-    GtkWidget   *scrollwin;
-    GtkWidget   *chat_box;
+    GtkWidget           *channel_label;
+    GtkWidget           *nick_label;
+    GtkWidget           *user_label;
+    GtkWidget           *chat_entry;
 
-    GtkWidget   *channels_box;
-    int         channels_count;
+    GtkWidget           *status_image;
 
-    char        *status_ok_image;
-    char        *status_not_ok_image;
-    char        *status_away_image;
-    int         msg_count;
+    GtkWidget           *scrollwin;
+    GtkWidget           *chat_box;
 
-    t_env       *e;
-}               t_ui_panel;
+    GtkWidget           *channels_box;
+    int                 channels_count;
 
-int             ui_init_panel_window(t_env *e, t_ui_panel *ui);
-void            new_chat_message(t_ui_panel *ui, const char *str);
-void            set_channel_name(t_ui_panel *ui, const char *msg);
-void            set_nick_name(t_ui_panel *ui, const char *msg);
-void            set_user_name(t_ui_panel *ui, const char *msg);
-int             set_status(t_ui_panel *ui, int status);
-int             ui_join(t_ui_panel *ui, const char *channel);
-int             ui_away(t_ui_panel *ui, const char *channel);
+    char                *status_ok_image;
+    char                *status_not_ok_image;
+    char                *status_away_image;
+    int                 msg_count;
+
+    t_ui_chat_msg_bloc  chat_msg_bloc_list[5]; // 5 arbitrary used
+
+    t_env               *e;
+}                       t_ui_panel;
+
+int                     ui_init_panel_window(t_env *e, t_ui_panel *ui);
+void                    ui_new_chat_message(t_ui_panel *ui, const char *str);
+void                    set_channel_name(t_ui_panel *ui, const char *msg);
+void                    set_nick_name(t_ui_panel *ui, const char *msg);
+void                    set_user_name(t_ui_panel *ui, const char *msg);
+int                     set_status(t_ui_panel *ui, int status);
+int                     ui_join(t_ui_panel *ui, const char *channel);
+int                     ui_away(t_ui_panel *ui, const char *channel);
 
 #endif

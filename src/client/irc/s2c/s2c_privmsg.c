@@ -31,7 +31,7 @@ int s2c_privmsg(t_env *e, int cs, t_token *tokens)
     loginfo("s2c_privmsg::msg:: %s\n", msg);
 
     if (e->options.gui)
-        new_chat_message(e->ui, msg);
+        ui_new_chat_message(e->ui, msg);
 
     return (IRC_S2C_RPL_WELCOME);
 }

@@ -91,24 +91,85 @@ void scroll_to_bottom(t_ui_panel *ui)
     gtk_widget_show_all(ui->scrollwin);
 }
 
-void new_chat_message(t_ui_panel *ui, const char *msg)
+void ui_new_chat_message(t_ui_panel *ui, const char *msg)
 {
-    GtkWidget *w;
+    GtkWidget *         w;
+    t_ui_chat_msg_bloc *bloc;
+    size_t              i;
+    GList *             children;
 
-    logdebug("ui::new_chat_message:: %s\n", msg);
+    logdebug("ui::ui_new_chat_message:: %s\n", msg);
 
     ui->chat_box = GTK_WIDGET(gtk_builder_get_object(ui->builder, "chat_box"));
 
     ui->msg_count++;
 
+    i = 0;
+    while (i < UI_CHAT_BOX_BLOC_MAX && ui->chat_msg_bloc_list[i].box &&
+           ui->chat_msg_bloc_list[i].count == UI_CHAT_BOX_MSG_COUNT_MAX)
+        i++;
+
+    // When bloc msg list is full
+    if (i < UI_CHAT_BOX_BLOC_MAX && ui->chat_msg_bloc_list[i].box == NULL)
+    {
+        ui->chat_msg_bloc_list[i].box = gtk_list_box_new();
+        gtk_set_class(ui->chat_msg_bloc_list[i].box, "chat-message-box");
+        ui->chat_msg_bloc_list[i].count = 0;
+        bloc = &ui->chat_msg_bloc_list[i];
+
+        // Insert into list of bloc message
+        gtk_list_box_insert(GTK_LIST_BOX(ui->chat_box), bloc->box, -1);
+    }
+    else if (i == UI_CHAT_BOX_BLOC_MAX)
+    {
+        // Delete first element
+        children = gtk_container_get_children(GTK_CONTAINER(ui->chat_box));
+        gtk_widget_destroy(GTK_WIDGET(children->data));
+        g_list_free(children);
+
+        i = 0;
+        while (i < (UI_CHAT_BOX_BLOC_MAX - 1))
+        {
+            ui->chat_msg_bloc_list[i].box = ui->chat_msg_bloc_list[i + 1].box;
+            ui->chat_msg_bloc_list[i].count =
+                ui->chat_msg_bloc_list[i + 1].count;
+
+            // // Insert into list of bloc message
+            // gtk_list_box_insert(GTK_LIST_BOX(ui->chat_box),
+            //                     ui->chat_msg_bloc_list[i + 1].box, -1);
+            i++;
+        }
+
+        bloc = &ui->chat_msg_bloc_list[i];
+        bloc->box = gtk_list_box_new();
+        gtk_set_class(bloc->box, "chat-message-box");
+        bloc->count = 0;
+
+        // Insert into list of bloc message
+        gtk_list_box_insert(GTK_LIST_BOX(ui->chat_box), bloc->box, -1);
+    }
+    else
+    {
+        bloc = &ui->chat_msg_bloc_list[i];
+    }
+
     w = gtk_label_new(msg);
-    gtk_set_class(w, "chat-message");
     gtk_label_set_xalign(GTK_LABEL(w), 0);
     gtk_widget_set_margin_start(GTK_WIDGET(w), 12);
-    gtk_list_box_insert(GTK_LIST_BOX(ui->chat_box), w, -1);
-    gtk_widget_show_all(ui->chat_box);
+    gtk_list_box_insert(GTK_LIST_BOX(bloc->box), w, -1);
+    bloc->count++;
 
+    // if (bloc->count == CHAT_BOX_MSG_COUNT_MAX)
+    // {
+    //     w = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
+    //     gtk_set_class(ui->chat_msg_bloc_list[i].box,
+    //                   "chat-message-box-separator");
+    //     gtk_list_box_insert(GTK_LIST_BOX(ui->chat_box), w, -1);
+    // }
+
+    // End by scroll and show
     scroll_to_bottom(ui);
+    gtk_widget_show_all(ui->chat_box);
 }
 
 void set_channel_name(t_ui_panel *ui, const char *msg)
@@ -170,7 +231,7 @@ void ui_join_from_side_channel(GtkWidget *widget, gpointer data)
     const char *channel;
     t_ui_panel *ui;
 
-    ui = (t_ui_panel*)data;
+    ui = (t_ui_panel *)data;
 
     channel = gtk_label_get_text(GTK_LABEL(widget));
 
@@ -250,12 +311,7 @@ int ui_init_panel_window(t_env *e, t_ui_panel *ui)
 
     ui->msg_count = 0;
 
-    new_chat_message(ui, "toto: msg number 1");
-    new_chat_message(ui, "ayya: msg number 2");
-    new_chat_message(ui, "ayya: msg number 2");
-    new_chat_message(ui, "ayya: msg number 2");
-    new_chat_message(ui, "ayya: msg number 2");
-    new_chat_message(ui, "ayya: msg number 2");
+    memset(ui->chat_msg_bloc_list, 0, sizeof(ui->chat_msg_bloc_list));
 
     ui->chat_entry =
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "chat_entry"));
@@ -272,7 +328,7 @@ int ui_init_panel_window(t_env *e, t_ui_panel *ui)
         gtk_get_assets(e->argv_0, "/ui/assets/icons8-ok-16.png");
     ui->status_not_ok_image =
         gtk_get_assets(e->argv_0, "/ui/assets/icons8-annuler-16.png");
-  ui->status_away_image =
+    ui->status_away_image =
         gtk_get_assets(e->argv_0, "/ui/assets/icons8-mode-veille-16.png");
 
     gtk_widget_show_all(ui->window);

@@ -131,3 +131,7 @@
 .channels-box-item:hover {
     cursor: pointer;
 }
+
+.chat-message-box-separator {
+    margin: 5px 5px 5px 5px;
+}
