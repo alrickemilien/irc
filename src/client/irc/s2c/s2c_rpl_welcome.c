@@ -25,7 +25,7 @@ int s2c_rpl_welcome(t_env *e, int cs, t_token *tokens)
         if (e->ui == NULL || ui_init_panel_window(e, e->ui) < 0)
             return (-1);
 
-        set_nick_name(e->ui, e->fds[cs].nickname);
+        ui_set_nick(e->ui, e->fds[cs].nickname);
         set_user_name(e->ui, e->fds[cs].username);
         set_status(e->ui, 0);
 

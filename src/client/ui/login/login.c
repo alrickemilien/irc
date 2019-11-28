@@ -22,7 +22,7 @@ static gboolean on_keypress(GtkWidget *  widget,
 
 int ui_init_login_window(t_env *e, t_ui_login *ui)
 {
-    GtkCssProvider *cssProvider;
+    GtkCssProvider *css_provider;
 
     ui->e = e;
 
@@ -33,6 +33,7 @@ int ui_init_login_window(t_env *e, t_ui_login *ui)
     // Init window and close events
     ui->window =
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "window_login"));
+
     gtk_widget_add_events(ui->window, GDK_KEY_PRESS_MASK);
     g_signal_connect(ui->window, "key_press_event", G_CALLBACK(on_keypress),
                      ui);
@@ -57,19 +58,19 @@ int ui_init_login_window(t_env *e, t_ui_login *ui)
                      ui);
 
     // Apply style to window
-    cssProvider = gtk_css_provider_new();
-    if (gtk_provider_load_css(cssProvider, e->argv_0, "/ui/login/login.css") <
+    css_provider = gtk_css_provider_new();
+    if (gtk_provider_load_css(css_provider, e->argv_0, "/ui/login/login.css") <
         0)
         return (-1);
     gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
-                                              GTK_STYLE_PROVIDER(cssProvider),
+                                              GTK_STYLE_PROVIDER(css_provider),
                                               GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     ui->window_color = gtk_new_rgba(1, 1, 1, 0.96);
 
     gtk_set_transparent_window(ui->window, ui->window_color);
 
-    g_object_unref(G_OBJECT(cssProvider));
+    g_object_unref(G_OBJECT(css_provider));
 
     gtk_widget_show_all(ui->window);
 

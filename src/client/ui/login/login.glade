@@ -79,7 +79,6 @@
                 <property name="margin_right">20</property>
                 <property name="margin_top">5</property>
                 <property name="max_length">40</property>
-                <property name="placeholder_text" translatable="yes">127.0.0.1</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -124,8 +123,6 @@
                 <property name="margin_right">20</property>
                 <property name="margin_top">5</property>
                 <property name="max_length">8</property>
-                <property name="placeholder_text" translatable="yes">5555</property>
-                <property name="input_purpose">digits</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -171,7 +168,6 @@
                 <property name="margin_right">20</property>
                 <property name="margin_top">5</property>
                 <property name="max_length">9</property>
-                <property name="placeholder_text" translatable="yes">Ben_AFK</property>
               </object>
               <packing>
                 <property name="expand">False</property>

@@ -58,6 +58,8 @@ int irc_nick(t_env *e, int cs, t_token *tokens)
         broadcast(e, concat, IRC_NOTICE, cs);
 
         logdebug("%s\n", concat);
+
+        return (IRC_NICK);
     }
 
     logdebug("irc_nick::unregistered\n");

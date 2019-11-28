@@ -13,18 +13,18 @@
     background-color: red;
 }
 
-#channel_list_button {
+.channels-box-item {
     color: black;
     border-style: solid;
     padding: 5px;
 }
 
-#channel_list_button GtkLabel {
+.channels-box-item GtkLabel {
     font-size: 10px;
     text-shadow: none;
 }
 
-#channel_list_button:hover {
+.channels-box-item:hover {
     border-radius: 0px;
     background-image: inherit;
     border: none;
@@ -38,8 +38,8 @@
     font-style: normal;
 }
 
-#channel_list_button GtkLabel:hover {
-    background-color: rgb(124, 85, 195);
+.channels-box-item GtkLabel:hover {
+    background-color: rgba(124, 85, 195, 0);
     transition: inherit;
     box-shadow: none;
     text-shadow: none;
@@ -51,7 +51,7 @@
     font-style: normal;
 }
 
-#channel_list_button:active {
+.channels-box-item:active {
     border-radius: 0px;
     background-image: inherit;
     border: none;
@@ -65,8 +65,8 @@
     font-style: normal;
 }
 
-#channel_list_button GtkLabel:active {
-    background-color: rgb(124, 85, 195);
+.channels-box-item GtkLabel:active {
+    background-color: rgba(124, 85, 195, 0);
     transition: inherit;
     border: none;
     box-shadow: none;
@@ -79,7 +79,7 @@
     font-style: normal;
 }
 
-#channel_list_button:backdrop {
+.channels-box-item:backdrop {
     border-radius: 0px;
     background-image: inherit;
     border: none;
@@ -93,9 +93,9 @@
     font-style: normal;
 }
 
-#channel_list_button GtkLabel:backdrop {
+.channels-box-item GtkLabel:backdrop {
     font-weight: bold;
-    background-color: rgb(124, 85, 195);
+    background-color: rgba(124, 85, 195, 0);
     transition: inherit;
     border: none;
     box-shadow: none;
@@ -124,12 +124,8 @@
 }
 
 .channels-box-item {
-    background-color: none;
+    background-color: rgba(0,0,0,0);
     font-weight: bold;
-}
-
-.channels-box-item:hover {
-    cursor: pointer;
 }
 
 .chat-message-box-separator {

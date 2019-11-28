@@ -1,4 +1,5 @@
 #include <client/irc.h>
+#include <client/ui/panel.h>
 #include <ctype.h>
 
 static int c2s_nick_check_command(t_env *e, int cs, const t_token *tokens)
@@ -45,6 +46,9 @@ int c2s_nick(t_env *e, int cs, t_token *tokens)
         return (-1);
 
     _c2s_nick(e, tokens[1].addr, tokens[1].len);
+
+    if (e->options.gui)
+        ui_set_nick(e->ui, tokens[1].addr);
 
     return (IRC_NICK);
 }
