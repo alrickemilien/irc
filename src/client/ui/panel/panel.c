@@ -91,7 +91,11 @@ void scroll_to_bottom(t_ui_panel *ui)
     gtk_widget_show_all(ui->scrollwin);
 }
 
-void ui_new_chat_message(t_ui_panel *ui, const char *msg)
+typedef enum e_message_type {
+    
+}           t_message_type;
+
+void ui_new_chat_message(t_ui_panel *ui, const char *msg, int type)
 {
     GtkWidget *         w;
     t_ui_chat_msg_bloc *bloc;
@@ -187,6 +191,16 @@ void ui_new_chat_message(t_ui_panel *ui, const char *msg)
     // End by scroll and show
     scroll_to_bottom(ui);
     gtk_widget_show_all(ui->chat_box);
+}
+
+void ui_topic(t_ui_panel *ui, const char *msg) {
+    logdebug("ui::ui_topic:: %s\n", msg);
+
+    ui->channel_label =
+        GTK_WIDGET(gtk_builder_get_object(ui->builder, "channel_label"));
+
+    gtk_label_set_text(GTK_LABEL(ui->channel_label), msg);
+    gtk_widget_show_all(ui->channel_label);
 }
 
 void set_channel_name(t_ui_panel *ui, const char *msg)

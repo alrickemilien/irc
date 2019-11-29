@@ -12,5 +12,7 @@ int s2c_rpl_topic(t_env *e, int cs, t_token *tokens)
     loginfo("TOPIC: %s\n",
             tokens[1].addr[0] == ':' ? tokens[1].addr + 1 : tokens[1].addr);
 
+    ui_topic(e->ui, tokens[1].addr[0] == ':' ? tokens[1].addr + 1 : tokens[1].addr);
+
     return (IRC_S2C_RPL_TOPIC);
 }
