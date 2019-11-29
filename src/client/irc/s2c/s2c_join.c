@@ -65,7 +65,10 @@ int s2c_join(t_env *e, int cs, t_token *tokens)
         loginfo("s2c_privmsg:: You joined %s\n", e->fds[e->sock].channelname);
 
         if (e->options.gui)
+        {
             ui_join(e->ui, e->fds[e->sock].channelname);
+            ui_chat_empty_viewport(e->ui);
+        }
     }
 
     return (IRC_S2C_JOIN);

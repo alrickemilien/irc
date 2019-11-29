@@ -121,29 +121,54 @@
     font-weight: bold;
 }
 
+/* 
 .chat-message-box-separator {
     margin: 5px 5px 5px 5px;
-}
+} */
 
 .chat-message {
     margin-left: 12px;
-    border-radius: 4px;
+    border-radius: 5px;
     padding: 3px;
 }
 
 .topic-message-container {
-    background-color: rgb(242, 211, 109);
-    border-radius: 2px;
+    border-radius: 5px;
     border-color: rgb(201, 176, 94);
+    border-style: solid;
+    border-width: 2px;
+
+    /* background-color: rgb(242, 211, 109); */
+    background-image: -gtk-gradient (linear,
+    left top,
+    left bottom,
+    from(rgb(235, 209, 126)),
+    to (rgb(207, 182, 99)));
 }
 
-.topic-message{
-    background-color: rgb(242, 211, 109);
-    border-radius: 2px;
-    border-color: rgb(201, 176, 94);
+.topic-message {
     font-size: 16px;
 }
 
-.topic-logo {
+/*
+* Error
+*/
 
+
+.error-message-container {
+    border-radius: 5px;
+    border-color: rgb(194, 40, 13);
+    border-style: solid;
+    border-width: 2px;
+
+    /* background-color: rgb(242, 211, 109); */
+    background-image: -gtk-gradient (linear,
+    left top,
+    left bottom,
+    from(rgb(228, 47, 15)),
+    to (rgb(194, 40, 13)));
+}
+
+.error-message {
+    font-size: 16px;
 }

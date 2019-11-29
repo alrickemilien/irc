@@ -34,7 +34,7 @@ typedef struct          s_ui_panel {
     char                *status_not_ok_image;
     char                *status_away_image;
     char                *topic_image;
-
+    char                *error_image;
     int                 msg_count;
 
     t_ui_chat_msg_bloc  chat_msg_bloc_list[5]; // 5 arbitrary used
@@ -58,5 +58,6 @@ int                     ui_join(t_ui_panel *ui, const char *channel);
 int                     ui_away(t_ui_panel *ui, const char *channel);
 int                     ui_unaway(t_ui_panel *ui);
 int                     ui_topic(t_ui_panel *ui, const char *msg);
+void                    ui_chat_empty_viewport(t_ui_panel *ui);
 
 #endif

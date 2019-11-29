@@ -78,7 +78,8 @@ CLIENT_SRC+=src/client/ui/gtk_builder_load.c \
 			
 # ui panel
 CLIENT_SRC+=src/client/ui/panel/panel.c	\
-			src/client/ui/panel/ui_msg.c
+			src/client/ui/panel/ui_join.c \
+			src/client/ui/panel/ui_chat.c
 
 GTK_DPKG_CFLAGS=$(shell pkg-config --cflags gtk+-3.0)
 GTK_DPKG_LIBS=$(shell pkg-config --libs gtk+-3.0)
@@ -101,7 +102,7 @@ $(CLIENT_BUILD_GLADE_PREFIX)%: $(CLIENT_SRC_GLADE_PREFIX)%
 CLIENT_SRC_ASSETS_PREFIX=assets/
 CLIENT_BUILD_ASSETS_PREFIX=build/ui/assets/
 CLIENT_SRC_ASSETS=icons8-annuler-16.png icons8-ok-16.png icons8-mode-veille-16.png \
-				icons8-grand-hashtag-40.png
+				icons8-grand-hashtag-40.png icons8-haute-priorité-100.png
 ASSETS_COPY_FILES=$(addprefix $(CLIENT_BUILD_ASSETS_PREFIX), $(CLIENT_SRC_ASSETS))
 
 $(CLIENT_BUILD_ASSETS_PREFIX)%: $(CLIENT_SRC_ASSETS_PREFIX)%

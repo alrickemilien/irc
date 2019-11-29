@@ -1,4 +1,5 @@
 #include <client/irc.h>
+#include <client/ui/panel.h>
 #include <ctype.h>
 
 static int c2s_whois_check_command(t_env *e, int cs, const t_token *tokens)
@@ -9,12 +10,24 @@ static int c2s_whois_check_command(t_env *e, int cs, const t_token *tokens)
     (void)e;
 
     if (!tokens[1].addr)
+    {
+        if (e->options.gui)
+            ui_new_message(e->ui,
+                           "c2s_whois_check_command::ERR_NONICKNAMEGIVEN",
+                           UI_ERROR_MSG);
         return (logerror("c2s_whois_check_command::ERR_NONICKNAMEGIVEN\n"));
+    }
 
     nick_len = tokens[1].len;
 
     if (nick_len > 9 || !nick_len)
+    {
+        if (e->options.gui)
+            ui_new_message(e->ui,
+                           "c2s_whois_check_command::ERR_ERRONEUSNICKNAME",
+                           UI_ERROR_MSG);
         return (logerror("c2s_whois_check_command::ERR_ERRONEUSNICKNAME\n"));
+    }
 
     return (0);
 }

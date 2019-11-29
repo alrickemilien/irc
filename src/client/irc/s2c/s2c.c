@@ -1,4 +1,5 @@
 #include <client/irc.h>
+#include <client/ui/panel.h>
 
 static const t_irc_cmd g_s2c_replys[IRC_S2C_COMMANDS_NUMBER] = {
     [IRC_S2C_RPL_WELCOME] = {"RPL_WELCOME", &s2c_rpl_welcome},
@@ -56,6 +57,12 @@ int s2c(t_env *e, int cs, char *buffer)
     }
 
     logerror("Unknow command %s\n", buffer);
+
+    if (e->options.gui)
+        ui_new_message(
+            e->ui,
+            tokens[2].addr[0] == ':' ? tokens[2].addr + 1 : tokens[2].addr,
+            UI_ERROR_MSG);
 
     return (-1);
 }
