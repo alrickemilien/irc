@@ -2,6 +2,7 @@
 #define CLIENT_UI_H
 
 #include <gtk/gtk.h>
+#include <client/irc.h>
 
 typedef struct  s_ui_env {
 

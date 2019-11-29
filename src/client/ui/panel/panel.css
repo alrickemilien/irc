@@ -112,13 +112,6 @@
     background-color: #ffffff;
 }
 
-.chat-message {
-    margin-left: 12px;
-    padding: 3px;
-    background-color: #fefefe;
-    border-radius: 4px;
-}
-
 #left-pane {
     background-color: rgba(255, 255, 255, 0.01);
 }
@@ -130,4 +123,27 @@
 
 .chat-message-box-separator {
     margin: 5px 5px 5px 5px;
+}
+
+.chat-message {
+    margin-left: 12px;
+    border-radius: 4px;
+    padding: 3px;
+}
+
+.topic-message-container {
+    background-color: rgb(242, 211, 109);
+    border-radius: 2px;
+    border-color: rgb(201, 176, 94);
+}
+
+.topic-message{
+    background-color: rgb(242, 211, 109);
+    border-radius: 2px;
+    border-color: rgb(201, 176, 94);
+    font-size: 16px;
+}
+
+.topic-logo {
+
 }

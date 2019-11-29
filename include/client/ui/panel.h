@@ -29,9 +29,12 @@ typedef struct          s_ui_panel {
     GtkWidget           *channels_box;
     int                 channels_count;
 
+    // Assets
     char                *status_ok_image;
     char                *status_not_ok_image;
     char                *status_away_image;
+    char                *topic_image;
+
     int                 msg_count;
 
     t_ui_chat_msg_bloc  chat_msg_bloc_list[5]; // 5 arbitrary used
@@ -39,8 +42,14 @@ typedef struct          s_ui_panel {
     t_env               *e;
 }                       t_ui_panel;
 
+typedef enum            e_ui_msg_type {
+    UI_CHAT_MSG,
+    UI_TOPIC_MSG,
+    UI_ERROR_MSG,
+}                       t_ui_msg_type;
+
 int                     ui_init_panel_window(t_env *e, t_ui_panel *ui);
-void                    ui_new_chat_message(t_ui_panel *ui, const char *str);
+void                    ui_new_message(t_ui_panel *ui, const char *str, int type);
 void                    set_channel_name(t_ui_panel *ui, const char *msg);
 void                    ui_set_nick(t_ui_panel *ui, const char *msg);
 void                    set_user_name(t_ui_panel *ui, const char *msg);
@@ -48,5 +57,6 @@ int                     ui_set_status(t_ui_panel *ui, int status);
 int                     ui_join(t_ui_panel *ui, const char *channel);
 int                     ui_away(t_ui_panel *ui, const char *channel);
 int                     ui_unaway(t_ui_panel *ui);
+int                     ui_topic(t_ui_panel *ui, const char *msg);
 
 #endif

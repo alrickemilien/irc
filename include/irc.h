@@ -13,11 +13,20 @@
 #include <sys/resource.h>
 #include <sys/time.h>
 
+// SO_NOSIGPIPE compat OSX
+// See https://github.com/lpeterse/haskell-socket/issues/8#issuecomment-115650974
+#ifdef __APPLE__
+#define MSG_NOSIGNAL 0
+#endif
+
 /*
 ** Utils
 */
 
-#define MAX(a, b) ((a > b) ? a : b)
+#ifndef MAX
+# define MAX(a, b) ((a > b) ? a : b)
+#endif
+
 
 #define TOSTR(x) #x
 

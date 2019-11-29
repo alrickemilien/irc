@@ -34,175 +34,6 @@ static void chat_entry_send(GtkWidget *widget, gpointer data)
     gtk_entry_set_text(GTK_ENTRY(widget), "");
 }
 
-// void on_full(GtkWidget *widget, GtkAllocation *allocation, void *data) {
-//     printf("width = %d, height = %d\n", allocation->width,
-//     allocation->height);
-// }
-
-// g_signal_connect(mywidget, "size-allocate", G_CALLBACK(my_getsize), NULL);
-
-void scroll_to_bottom(t_ui_panel *ui)
-{
-    static gdouble last_upper = 0;
-
-    GtkAdjustment *verticalAdjust;
-    gdouble        adjust = 0;
-    gdouble        lower = 0;
-    gdouble        upper = 0;
-    gdouble        page_size = 0;
-    gdouble        step_size = 0.1;
-
-    ui->scrollwin =
-        GTK_WIDGET(gtk_builder_get_object(ui->builder, "scrollwin"));
-    gtk_widget_show_all(ui->scrollwin);
-
-    verticalAdjust =
-        gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(ui->scrollwin));
-    upper = gtk_adjustment_get_upper(verticalAdjust);
-
-    if (last_upper == 0)
-        last_upper = upper;
-    else if (last_upper == upper)
-        return;
-
-    lower = gtk_adjustment_get_lower(verticalAdjust);
-    upper = gtk_adjustment_get_upper(verticalAdjust);
-    page_size = gtk_adjustment_get_page_size(verticalAdjust);
-    step_size = ((upper - page_size) - lower) / page_size;
-
-    logdebug("lower: %f\n", lower);
-    logdebug("upper: %f\n", upper);
-    logdebug("page_size: %f\n", page_size);
-    logdebug("step_size: %f\n", step_size);
-    logdebug("last_upper: %f\n", last_upper);
-
-    adjust = upper - page_size - 1;
-
-    logdebug("adjust: %f\n", adjust);
-    logdebug("new adjust: %f\n",
-             upper - page_size + (2 * upper - 2 * last_upper));
-
-    gtk_adjustment_set_value(verticalAdjust,
-                             upper - page_size + (upper - last_upper));
-    gtk_scrolled_window_set_vadjustment(GTK_SCROLLED_WINDOW(ui->scrollwin),
-                                        verticalAdjust);
-
-    last_upper = upper;
-    gtk_widget_show_all(ui->scrollwin);
-}
-
-typedef enum e_message_type {
-    
-}           t_message_type;
-
-void ui_new_chat_message(t_ui_panel *ui, const char *msg, int type)
-{
-    GtkWidget *         w;
-    t_ui_chat_msg_bloc *bloc;
-    size_t              i;
-    GList *             children;
-    // char                t[ISOTIMESTRSIZE];
-
-    // Message size + ISO date
-    // char label[510 + ISOTIMESTRSIZE];
-
-    logdebug("ui::ui_new_chat_message:: %s\n", msg);
-
-    ui->chat_box = GTK_WIDGET(gtk_builder_get_object(ui->builder, "chat_box"));
-
-    ui->msg_count++;
-
-    i = 0;
-    while (i < UI_CHAT_BOX_BLOC_MAX && ui->chat_msg_bloc_list[i].box &&
-           ui->chat_msg_bloc_list[i].count == UI_CHAT_BOX_MSG_COUNT_MAX)
-        i++;
-
-    // When bloc msg list is full
-    if (i < UI_CHAT_BOX_BLOC_MAX && ui->chat_msg_bloc_list[i].box == NULL)
-    {
-        ui->chat_msg_bloc_list[i].box = gtk_list_box_new();
-        gtk_set_class(ui->chat_msg_bloc_list[i].box, "chat-message-box");
-        ui->chat_msg_bloc_list[i].count = 0;
-        bloc = &ui->chat_msg_bloc_list[i];
-
-        // Insert into list of bloc message
-        gtk_list_box_insert(GTK_LIST_BOX(ui->chat_box), bloc->box, -1);
-    }
-    else if (i == UI_CHAT_BOX_BLOC_MAX)
-    {
-        // Delete first element
-        children = gtk_container_get_children(GTK_CONTAINER(ui->chat_box));
-        gtk_widget_destroy(GTK_WIDGET(children->data));
-        g_list_free(children);
-
-        i = 0;
-        while (i < (UI_CHAT_BOX_BLOC_MAX - 1))
-        {
-            ui->chat_msg_bloc_list[i].box = ui->chat_msg_bloc_list[i + 1].box;
-            ui->chat_msg_bloc_list[i].count =
-                ui->chat_msg_bloc_list[i + 1].count;
-
-            // // Insert into list of bloc message
-            // gtk_list_box_insert(GTK_LIST_BOX(ui->chat_box),
-            //                     ui->chat_msg_bloc_list[i + 1].box, -1);
-            i++;
-        }
-
-        bloc = &ui->chat_msg_bloc_list[i];
-        bloc->box = gtk_list_box_new();
-        gtk_set_class(bloc->box, "chat-message-box");
-        bloc->count = 0;
-
-        // Insert into list of bloc message
-        gtk_list_box_insert(GTK_LIST_BOX(ui->chat_box), bloc->box, -1);
-    }
-    else
-    {
-        bloc = &ui->chat_msg_bloc_list[i];
-    }
-
-    // memset(label, msg, strlen(msg));
-    // memset(label, msg, strlen(msg));
-
-    // time2iso(t);
-    // printf(is_tty ? "[%s] "
-    //                 "\x1b[31m"
-    //                 "ERROR:"
-    //                 "\x1b[0m"
-    //                 " %s: %s\n"
-    //               : "[%s] ERROR: %s: %s\n",
-    //        t, str,
-    //        errno | h_errno ? strerror(errno | h_errno) : "Unknown error");
-
-    w = gtk_label_new(msg);
-    gtk_label_set_xalign(GTK_LABEL(w), 0);
-    gtk_widget_set_margin_start(GTK_WIDGET(w), 12);
-    gtk_list_box_insert(GTK_LIST_BOX(bloc->box), w, -1);
-    bloc->count++;
-
-    // if (bloc->count == CHAT_BOX_MSG_COUNT_MAX)
-    // {
-    //     w = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
-    //     gtk_set_class(ui->chat_msg_bloc_list[i].box,
-    //                   "chat-message-box-separator");
-    //     gtk_list_box_insert(GTK_LIST_BOX(ui->chat_box), w, -1);
-    // }
-
-    // End by scroll and show
-    scroll_to_bottom(ui);
-    gtk_widget_show_all(ui->chat_box);
-}
-
-void ui_topic(t_ui_panel *ui, const char *msg) {
-    logdebug("ui::ui_topic:: %s\n", msg);
-
-    ui->channel_label =
-        GTK_WIDGET(gtk_builder_get_object(ui->builder, "channel_label"));
-
-    gtk_label_set_text(GTK_LABEL(ui->channel_label), msg);
-    gtk_widget_show_all(ui->channel_label);
-}
-
 void set_channel_name(t_ui_panel *ui, const char *msg)
 {
     logdebug("ui::set_channel_name:: %s\n", msg);
@@ -360,6 +191,20 @@ int ui_clear_panel_window(t_env *e, t_ui_panel *ui)
     return (0);
 }
 
+int ui_init_panel_assets(t_env *e,t_ui_panel *ui)
+{
+    ui->status_ok_image =
+        gtk_get_assets(e->argv_0, "/ui/assets/icons8-ok-16.png");
+    ui->status_not_ok_image =
+        gtk_get_assets(e->argv_0, "/ui/assets/icons8-annuler-16.png");
+    ui->status_away_image =
+        gtk_get_assets(e->argv_0, "/ui/assets/icons8-mode-veille-16.png");
+    ui->topic_image =
+        gtk_get_assets(e->argv_0, "/ui/assets/icons8-grand-hashtag-40.png");
+    
+    return (0);
+}
+
 int ui_init_panel_window(t_env *e, t_ui_panel *ui)
 {
     GtkCssProvider *cssProvider;
@@ -404,12 +249,7 @@ int ui_init_panel_window(t_env *e, t_ui_panel *ui)
     gtk_set_transparent_window(ui->window, ui->window_color);
 
     // Load assets
-    ui->status_ok_image =
-        gtk_get_assets(e->argv_0, "/ui/assets/icons8-ok-16.png");
-    ui->status_not_ok_image =
-        gtk_get_assets(e->argv_0, "/ui/assets/icons8-annuler-16.png");
-    ui->status_away_image =
-        gtk_get_assets(e->argv_0, "/ui/assets/icons8-mode-veille-16.png");
+    ui_init_panel_assets(e, ui);
 
     ui->e = e;
 

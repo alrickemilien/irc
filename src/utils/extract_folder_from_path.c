@@ -20,23 +20,9 @@
 ** ./ => /
 ** . => /
 ** .. => /
+** dirname not used, see https://www.jefftk.com/p/dirname-is-evil
 */
 
-#ifdef __APPLE__
-
-char *extract_folder_from_path(const char *path)
-{
-    char *tmp;
-    char *ret;
-
-    tmp = strdup(path);
-    ret = dirname(tmp);
-    free(tmp);
-    return (ret);
-}
-
-#else
-// See https://www.jefftk.com/p/dirname-is-evil
 static const char *_dirname(const char *path)
 {
     static char       buffer[PATH_MAX];
@@ -64,4 +50,3 @@ char *extract_folder_from_path(const char *path)
 {
     return (strdup(_dirname(path)));
 }
-#endif  // __APPLE__
