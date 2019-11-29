@@ -42,6 +42,7 @@ void set_channel_name(t_ui_panel *ui, const char *msg)
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "channel_label"));
 
     gtk_label_set_text(GTK_LABEL(ui->channel_label), msg);
+    gtk_label_set_selectable(GTK_LABEL(ui->channel_label), TRUE);
     gtk_widget_show_all(ui->channel_label);
 }
 
@@ -53,6 +54,7 @@ void ui_set_nick(t_ui_panel *ui, const char *msg)
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "nickname_label"));
 
     gtk_label_set_text(GTK_LABEL(ui->nick_label), msg);
+    gtk_label_set_selectable(GTK_LABEL(ui->nick_label), TRUE);
     gtk_widget_show_all(ui->nick_label);
 }
 
@@ -64,6 +66,7 @@ void set_user_name(t_ui_panel *ui, const char *msg)
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "username_label"));
 
     gtk_label_set_text(GTK_LABEL(ui->user_label), msg);
+    gtk_label_set_selectable(GTK_LABEL(ui->user_label), TRUE);
     gtk_widget_show_all(ui->user_label);
 }
 
@@ -164,7 +167,7 @@ int ui_init_panel_window(t_env *e, t_ui_panel *ui)
     g_signal_connect(ui->chat_entry, "activate", G_CALLBACK(chat_entry_send),
                      e);
 
-    ui->window_color = gtk_new_rgba(0.58431, 0.14902, 0.70196, 0.96);
+    ui->window_color = gtk_new_rgba(169.0f / 255.0f, 113.0f / 255.0f, 165.0f / 255.0f, 0.96);
 
     gtk_set_transparent_window(ui->window, ui->window_color);
 

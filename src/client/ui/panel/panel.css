@@ -1,3 +1,7 @@
+#left-pane {
+    background-color: transparent;
+}
+
 #channel_label {
     font-size: 16px;
     font-weight: bold;
@@ -13,15 +17,33 @@
     background-color: red;
 }
 
+/***
+ *     ██████╗██╗  ██╗ █████╗ ███╗   ██╗███╗   ██╗███████╗██╗     ███████╗
+ *    ██╔════╝██║  ██║██╔══██╗████╗  ██║████╗  ██║██╔════╝██║     ██╔════╝
+ *    ██║     ███████║███████║██╔██╗ ██║██╔██╗ ██║█████╗  ██║     ███████╗
+ *    ██║     ██╔══██║██╔══██║██║╚██╗██║██║╚██╗██║██╔══╝  ██║     ╚════██║
+ *    ╚██████╗██║  ██║██║  ██║██║ ╚████║██║ ╚████║███████╗███████╗███████║
+ *     ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝╚══════╝╚══════╝
+ */
+
+#channels_box {
+    background-color: transparent;
+}
+
 .channels-box-item {
-    color: black;
+    background-image: inherit;
     border-style: solid;
     padding: 5px;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+    transition-property: none;
 }
 
 .channels-box-item GtkLabel {
+    font-weight: bold;
+    color: #fdfdfd;
     font-size: 10px;
-    text-shadow: none;
 }
 
 .channels-box-item:hover {
@@ -31,21 +53,13 @@
     box-shadow: none;
     text-shadow: none;
     transition-property: none;
-    outline-style: none;
-    outline-width: 0px;
-    text-decoration-line: none;
-    font-stretch: normal;
-    font-style: normal;
 }
 
 .channels-box-item GtkLabel:hover {
-    background-color: rgba(124, 85, 195, 0);
-    transition: inherit;
+    background-color: transparent;
     box-shadow: none;
     text-shadow: none;
     transition-property: none;
-    outline-style: none;
-    outline-width: 0px;
     text-decoration-line: none;
     font-stretch: normal;
     font-style: normal;
@@ -59,21 +73,15 @@
     text-shadow: none;
     transition-property: none;
     outline-style: none;
-    outline-width: 0px;
-    text-decoration-line: none;
-    font-stretch: normal;
-    font-style: normal;
 }
 
 .channels-box-item GtkLabel:active {
-    background-color: rgba(124, 85, 195, 0);
-    transition: inherit;
+    background-color: transparent;
     border: none;
     box-shadow: none;
     text-shadow: none;
     transition-property: none;
     outline-style: none;
-    outline-width: 0px;
     text-decoration-line: none;
     font-stretch: normal;
     font-style: normal;
@@ -87,44 +95,32 @@
     text-shadow: none;
     transition-property: none;
     outline-style: none;
-    outline-width: 0px;
-    text-decoration-line: none;
     font-stretch: normal;
     font-style: normal;
 }
 
 .channels-box-item GtkLabel:backdrop {
     font-weight: bold;
-    background-color: rgba(124, 85, 195, 0);
-    transition: inherit;
+    background-color: transparent;
     border: none;
     box-shadow: none;
     text-shadow: none;
     transition-property: none;
     outline-style: none;
-    outline-width: 0px;
-    text-decoration-line: none;
-    font-stretch: normal;
-    font-style: normal;
 }
 
-#right-pane {
+/***
+ *     ██████╗██╗  ██╗ █████╗ ████████╗██████╗  ██████╗ ██╗  ██╗
+ *    ██╔════╝██║  ██║██╔══██╗╚══██╔══╝██╔══██╗██╔═══██╗╚██╗██╔╝
+ *    ██║     ███████║███████║   ██║   ██████╔╝██║   ██║ ╚███╔╝ 
+ *    ██║     ██╔══██║██╔══██║   ██║   ██╔══██╗██║   ██║ ██╔██╗ 
+ *    ╚██████╗██║  ██║██║  ██║   ██║   ██████╔╝╚██████╔╝██╔╝ ██╗
+ *     ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
+ */
+
+ #right-pane {
     background-color: #ffffff;
 }
-
-#left-pane {
-    background-color: rgba(255, 255, 255, 0.01);
-}
-
-.channels-box-item {
-    background-color: rgba(0,0,0,0);
-    font-weight: bold;
-}
-
-/* 
-.chat-message-box-separator {
-    margin: 5px 5px 5px 5px;
-} */
 
 .chat-message {
     margin-left: 12px;
@@ -137,8 +133,6 @@
     border-color: rgb(201, 176, 94);
     border-style: solid;
     border-width: 2px;
-
-    /* background-color: rgb(242, 211, 109); */
     background-image: -gtk-gradient (linear,
     left top,
     left bottom,
@@ -154,14 +148,11 @@
 * Error
 */
 
-
 .error-message-container {
     border-radius: 5px;
     border-color: rgb(194, 40, 13);
     border-style: solid;
     border-width: 2px;
-
-    /* background-color: rgb(242, 211, 109); */
     background-image: -gtk-gradient (linear,
     left top,
     left bottom,

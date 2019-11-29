@@ -13,6 +13,7 @@ void ui_push_chat_message(t_ui_panel *        ui,
     // Specific: it seems that text alignment / justification
     // of GtkLabel can not be set through CSS (yet)
     gtk_label_set_xalign(GTK_LABEL(w), 0);
+    gtk_label_set_selectable(GTK_LABEL(w), TRUE);
     gtk_list_box_insert(GTK_LIST_BOX(bloc->box), w, -1);
     bloc->count++;
 }
@@ -25,6 +26,8 @@ void ui_push_topic_message(t_ui_panel *        ui,
     GtkWidget *logo;
     GtkWidget *label;
 
+    logdebug("ui::ui_push_topic_message\n");
+
     container = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
     gtk_set_class(container, "topic-message-container");
     gtk_box_set_homogeneous(GTK_BOX(container), FALSE);
@@ -36,6 +39,7 @@ void ui_push_topic_message(t_ui_panel *        ui,
 
     // Message content
     label = gtk_label_new(msg);
+    gtk_label_set_selectable(GTK_LABEL(label), TRUE);
     // gtk_label_set_xalign(GTK_LABEL(label), 0);
     gtk_set_class(label, "topic-message");
 
@@ -43,8 +47,12 @@ void ui_push_topic_message(t_ui_panel *        ui,
     gtk_box_pack_start(GTK_BOX(container), logo, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(container), label, FALSE, FALSE, 0);
 
+    printf("1\n");
+
     // Finally insert
     gtk_list_box_insert(GTK_LIST_BOX(bloc->box), container, -1);
+
+    printf("2\n");
 
     bloc->count++;
 }
@@ -68,6 +76,7 @@ void ui_push_error_message(t_ui_panel *        ui,
 
     // Message content
     label = gtk_label_new(msg);
+    gtk_label_set_selectable(GTK_LABEL(label), TRUE);
     // gtk_label_set_xalign(GTK_LABEL(label), 0);
     gtk_set_class(label, "error-message");
 
@@ -81,23 +90,16 @@ void ui_push_error_message(t_ui_panel *        ui,
     bloc->count++;
 }
 
-// void on_full(GtkWidget *widget, GtkAllocation *allocation, void *data) {
-//     printf("width = %d, height = %d\n", allocation->width,
-//     allocation->height);
-// }
-
-// g_signal_connect(mywidget, "size-allocate", G_CALLBACK(my_getsize), NULL);
-
 void ui_chat_scroll_to_bottom(t_ui_panel *ui)
 {
     static gdouble last_upper = 0;
 
     GtkAdjustment *verticalAdjust;
-    gdouble        adjust = 0;
-    gdouble        lower = 0;
-    gdouble        upper = 0;
-    gdouble        page_size = 0;
-    gdouble        step_size = 0.1;
+    // gdouble        adjust = 0;
+    // gdouble        lower = 0;
+    gdouble upper = 0;
+    gdouble page_size = 0;
+    // gdouble        step_size = 0.1;
 
     ui->scrollwin =
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "scrollwin"));
@@ -112,10 +114,10 @@ void ui_chat_scroll_to_bottom(t_ui_panel *ui)
     else if (last_upper == upper)
         return;
 
-    lower = gtk_adjustment_get_lower(verticalAdjust);
+    // lower = gtk_adjustment_get_lower(verticalAdjust);
     upper = gtk_adjustment_get_upper(verticalAdjust);
     page_size = gtk_adjustment_get_page_size(verticalAdjust);
-    step_size = ((upper - page_size) - lower) / page_size;
+    // step_size = ((upper - page_size) - lower) / page_size;
 
     // logdebug("lower: %f\n", lower);
     // logdebug("upper: %f\n", upper);
@@ -123,7 +125,7 @@ void ui_chat_scroll_to_bottom(t_ui_panel *ui)
     // logdebug("step_size: %f\n", step_size);
     // logdebug("last_upper: %f\n", last_upper);
 
-    adjust = upper - page_size - 1;
+    // adjust = upper - page_size - 1;
 
     // logdebug("adjust: %f\n", adjust);
     // logdebug("new adjust: %f\n",
@@ -140,24 +142,30 @@ void ui_chat_scroll_to_bottom(t_ui_panel *ui)
 
 void ui_chat_empty_viewport(t_ui_panel *ui)
 {
-    // GList *children;
-    // GList *item;
+    GList *children;
+    GList *item;
 
-    // ui->chat_box = GTK_WIDGET(gtk_builder_get_object(ui->builder, "chat_box"));
+    logdebug("ui::ui_chat_empty_viewport\n");
 
-    // if (ui->chat_box == NULL)
-    //     return;
+    ui->chat_box = GTK_WIDGET(gtk_builder_get_object(ui->builder, "chat_box"));
 
-    // // Delete first element
-    // children = gtk_container_get_children(GTK_CONTAINER(ui->chat_box));
-    // item = children;
-    // while (item)
-    // {
-    //     gtk_widget_destroy(GTK_WIDGET(item->data));
-    //     item = item->next;
-    // }
-    // g_list_free(children);
-    // gtk_widget_show_all(ui->chat_box);
+    if (ui->chat_box == NULL)
+        return;
+
+    // Delete first element
+    children = gtk_container_get_children(GTK_CONTAINER(ui->chat_box));
+    item = children;
+    while (item)
+    {
+        gtk_widget_destroy(GTK_WIDGET(item->data));
+        item = g_list_next(item);
+    }
+
+    memset(ui->chat_msg_bloc_list, 0, sizeof(ui->chat_msg_bloc_list));
+    ui->msg_count = 0;
+
+    g_list_free(children);
+    gtk_widget_show_all(ui->chat_box);
 }
 
 void ui_new_message(t_ui_panel *ui, const char *msg, int type)
