@@ -8,7 +8,7 @@ static int s2c_privmsg_check_command(t_env *e, int cs, const t_token *tokens)
     (void)e;
 
     if (!tokens[1].addr || !tokens[2].addr)
-        return logerror("s2c_privmsg_check_command::ERR_NEEDMOREPARAMS\n");
+        return (irc_error(e, ERR_NEEDMOREPARAMS));
     return (0);
 }
 

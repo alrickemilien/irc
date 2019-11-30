@@ -4,7 +4,7 @@
 
 int s2c_rpl_nowaway(t_env *e, int cs, t_token *tokens)
 {
-    logdebug("s2c_nowaway:: %s\n", tokens[0].addr);
+    logdebug("s2c_nowaway:: %s", tokens[0].addr);
 
     e->fds[cs].away = 1;
 
@@ -17,7 +17,7 @@ int s2c_rpl_nowaway(t_env *e, int cs, t_token *tokens)
 
 int s2c_rpl_unaway(t_env *e, int cs, t_token *tokens)
 {
-    logdebug("s2c_unaway:: %s\n", tokens[0].addr);
+    logdebug("s2c_unaway:: %s", tokens[0].addr);
 
     e->fds[cs].away = 0;
 

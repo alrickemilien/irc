@@ -75,6 +75,16 @@ typedef struct  s_irc_cmd
     int         (*f)(t_env *e, int cs, t_token *tokens);
 }               t_irc_cmd;
 
+typedef struct  s_s2c_error
+{
+    int         id;
+    char        *fmt;
+    int         (*f)(
+        t_env *e,
+        int cs,
+        t_token *tokens);
+}               t_s2c_error;
+
 int             c2s(t_env *e, int cs, char *buffer);
 int             c2s_join(t_env *e, int cs, t_token *tokens);
 int             c2s_msg(t_env *e, int cs, t_token *tokens);
@@ -113,6 +123,8 @@ int             s2c_rpl_topic(t_env *e, int cs, t_token *tokens);
 int             s2c_rpl_whoisuser(t_env *e, int cs, t_token *tokens);
 int             s2c_rpl_whoischannels(t_env *e, int cs, t_token *tokens);
 int             s2c_rpl_endofwhois(t_env *e, int cs, t_token *tokens);
+
+int             irc_error(t_env *e, int err_code, ...);
 
 /*
 ** fd 

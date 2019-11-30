@@ -165,11 +165,10 @@ enum e_irc_reply
     ERR_ALREADYREGISTRED = 462,
 };
 
-typedef struct s_irc_reply
-{
-    int   code;
-    char *name;
-    char *fmt;
-} t_irc_reply;
+typedef struct  s_irc_reply {
+    int         code;
+    char        *name;
+    char        *fmt;
+}               t_irc_reply;
 
 #endif

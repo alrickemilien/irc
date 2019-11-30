@@ -16,7 +16,7 @@ int c2s_away(t_env *e, int cs, t_token *tokens)
                         "/connect [server] ?[port]");
 
     if (tokens[1].addr == (void *)0)
-        return (logerror("c2s_away_check_command::ERR_NEEDMOREPARAMS\n"));
+        return (irc_error(e, ERR_NEEDMOREPARAMS, tokens[0].addr));
 
     _c2s_away(&e->fds[cs], tokens[1].addr, strlen(tokens[1].addr));
 

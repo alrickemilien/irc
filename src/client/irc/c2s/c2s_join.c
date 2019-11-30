@@ -17,20 +17,20 @@ static int c2s_join_check_command(t_env *e, int cs, const t_token *tokens)
     (void)e;
 
     if (!tokens[1].addr || tokens[2].addr)
-        return logerror("c2s_join_check_command::ERR_NEEDMOREPARAMS\n");
+        return (irc_error(e, ERR_NEEDMOREPARAMS, tokens[0].addr));
 
     channel = tokens[1].addr;
     channel_len = tokens[1].len;
 
     if (strpbrk(channel, "\x07\x2C"))
-        return logerror("c2s_join_check_command::ERR_NOSUCHCHANNEL\n");
+        return (irc_error(e, ERR_NOSUCHCHANNEL, tokens[1].addr));
     else if (channel_len - 1 > CHANNELSTRSIZE)
-        return logerror("c2s_join_check_command::ERR_NOSUCHCHANNEL\n");
+        return (irc_error(e, ERR_NOSUCHCHANNEL, tokens[1].addr));
     else if ((channel[0] != '#' && channel[0] != '&') ||
              !is_valid_chan_name(channel))
-        return logerror("c2s_join_check_command::ERR_NOSUCHCHANNEL\n");
+        return (irc_error(e, ERR_NOSUCHCHANNEL, tokens[1].addr));
     else if (channel_len < 1)
-        return logerror("c2s_join_check_command::ERR_NOSUCHCHANNEL\n");
+        return (irc_error(e, ERR_NOSUCHCHANNEL, ""));
     else
         return (0);
     return (-1);

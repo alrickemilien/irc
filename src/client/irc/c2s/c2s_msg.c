@@ -7,7 +7,7 @@ static int c2s_msg_check_command(t_env *e, int cs, const t_token *tokens)
     (void)e;
 
     if (!tokens[1].addr || !tokens[2].addr)
-        return logerror("c2s_msg_check_command::ERR_NEEDMOREPARAMS\n");
+        return (irc_error(e, ERR_NEEDMOREPARAMS, tokens[0].addr));
     return (0);
 }
 

@@ -56,7 +56,7 @@ int s2c(t_env *e, int cs, char *buffer)
         i++;
     }
 
-    logerror("Unknow command %s\n", buffer);
+    logerror("Unknow command %s", buffer);
 
     if (e->options.gui)
         ui_new_message(

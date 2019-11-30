@@ -1,6 +1,6 @@
 #include <client/irc.h>
-#include <client/ui/panel.h>
 #include <client/ui/login.h>
+#include <client/ui/panel.h>
 #include <ctype.h>
 
 int s2c_rpl_welcome(t_env *e, int cs, t_token *tokens)
@@ -13,8 +13,7 @@ int s2c_rpl_welcome(t_env *e, int cs, t_token *tokens)
     if (!tokens[1].addr)
         return (-1);
 
-    loginfo("%s\n",
-            tokens[1].addr[0] == ':' ? tokens[1].addr + 1 : tokens[1].addr);
+    loginfo(tokens[1].addr[0] == ':' ? tokens[1].addr + 1 : tokens[1].addr);
 
     if (e->options.gui)
     {

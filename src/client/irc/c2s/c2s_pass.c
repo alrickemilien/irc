@@ -6,10 +6,10 @@ static int c2s_pass_check_command(t_env *e, int cs, const t_token *tokens)
     (void)cs;
     (void)e;
 
-    if (!tokens[1].addr)
-        return (logerror("c2s_pass_check_command::Missing password\n"));
+    if (!tokens[1].addr || !tokens[1].len)
+        return (irc_error(e, ERR_NEEDMOREPARAMS));
 
-    if (tokens[1].len > 200 || !tokens[1].len)
+    if (tokens[1].len > 200)
         return (logerror("c2s_pass_check_command::Missing password\n"));
 
     return (0);

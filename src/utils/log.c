@@ -22,8 +22,8 @@ int loginfo(const char *fmt, ...)
                                 "\x1b[92m"
                                 "INFO:"
                                 "\x1b[0m"
-                                " %s"
-                              : "[%s] INFO: %s",
+                                " %s\n"
+                              : "[%s] INFO: %s\n",
             t, fmt);
     va_start(ap, fmt);
     vprintf(final_fmt, ap);
@@ -46,8 +46,8 @@ int logerror(const char *fmt, ...)
                                 "\x1b[31m"
                                 "ERROR:"
                                 "\x1b[0m"
-                                " %s"
-                              : "[%s] ERROR: %s",
+                                " %s\n"
+                              : "[%s] ERROR: %s\n",
             t, fmt);
     va_start(ap, fmt);
     vprintf(final_fmt, ap);
@@ -70,8 +70,8 @@ int logdebug(const char *fmt, ...)
                                 "\x1b[33m"
                                 "DEBUG:"
                                 "\x1b[0m"
-                                " %s"
-                              : "[%s] DEBUG: %s",
+                                " %s\n"
+                              : "[%s] DEBUG: %s\n",
             t, fmt);
     va_start(ap, fmt);
     vprintf(final_fmt, ap);
