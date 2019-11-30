@@ -19,7 +19,7 @@ static int write_pidfile(pid_t pid)
         0)
         return (logerrno("write_pidfile::open"));
 
-    if ((pidstr_len = i64toa(pid, pidstr, 100, 10)) < 0)
+    if ((pidstr_len = i64toa(pid, pidstr, 100, 10)) == (size_t)-1)
         return (logerror("write_pidfile::i64toa"));
 
     if (write(fd, pidstr, pidstr_len) < 0)

@@ -6,7 +6,7 @@ void ui_chat_scroll_to_bottom(t_ui_panel *ui)
 
     GtkAdjustment *verticalAdjust;
     // gdouble        adjust = 0;
-    gdouble        lower;
+    // gdouble        lower;
     gdouble upper;
     gdouble page_size;
     // gdouble        step_size = 0.1;
@@ -24,7 +24,7 @@ void ui_chat_scroll_to_bottom(t_ui_panel *ui)
     else if (last_upper == upper)
         return;
 
-    lower = gtk_adjustment_get_lower(verticalAdjust);
+    // lower = gtk_adjustment_get_lower(verticalAdjust);
     upper = gtk_adjustment_get_upper(verticalAdjust);
     page_size = gtk_adjustment_get_page_size(verticalAdjust);
     // step_size = ((upper - page_size) - lower) / page_size;

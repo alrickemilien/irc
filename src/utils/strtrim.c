@@ -9,13 +9,16 @@ size_t strlentrim(const char *str)
     while (str[i] == ' ' || str[i] == '\n')
         i++;
 
-    if (str[0] == 0)
-        j = 0;
-    else
-        j = strlen(str) - 1;
-    while (j && str[j] != ' ' && str[j] != '\n')
+    if (str[i] == 0)
+        return (0);
+
+    j = strlen(str) - 1;
+    while (j && str[j] == ' ' && str[j] == '\n')
+    {
         j--;
-    return (j - i);
+        i++;
+    }
+    return (strlen(str) - i);
 }
 
 const char *strtrim(const char *str)

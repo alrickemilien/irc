@@ -36,12 +36,11 @@ int cbuffer_write_ssl(SSL *ssl, t_cbuffer *cbuf, size_t n)
     if (count < n)
         memcpy(to_send + count, cbuf->buffer, n - count);
 
-    printf("cbuffer_write_ssl:: %s", to_send);
-
+    // printf("cbuffer_write_ssl:: %s", to_send);
+    
     r = SSL_write(ssl, to_send, n);
 
-    printf("cbuffer_write_ssl:: send ok");
-
+    // printf("cbuffer_write_ssl:: send ok");
 
     if (r < 0)
         return (r);
