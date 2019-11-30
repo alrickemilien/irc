@@ -70,40 +70,6 @@ void set_user_name(t_ui_panel *ui, const char *msg)
     gtk_widget_show_all(ui->user_label);
 }
 
-int ui_set_status(t_ui_panel *ui, int status)
-{
-    ui->status_image =
-        GTK_WIDGET(gtk_builder_get_object(ui->builder, "status_image"));
-
-    if (status == 0)
-        gtk_image_set_from_file(GTK_IMAGE(ui->status_image),
-                                ui->status_ok_image);
-
-    if (status == 2)
-        gtk_image_set_from_file(GTK_IMAGE(ui->status_image),
-                                ui->status_away_image);
-
-    return (0);
-}
-
-int ui_away(t_ui_panel *ui, const char *msg)
-{
-    logdebug("ui::ui_away:: %s\n", msg);
-
-    ui_set_status(ui, 2);
-
-    return (0);
-}
-
-int ui_unaway(t_ui_panel *ui)
-{
-    logdebug("ui::ui_unaway::\n");
-
-    ui_set_status(ui, 0);
-
-    return (0);
-}
-
 int ui_clear_panel_window(t_env *e, t_ui_panel *ui)
 {
     (void)e;
@@ -124,6 +90,8 @@ int ui_init_panel_assets(t_env *e, t_ui_panel *ui)
         gtk_get_assets(e->argv_0, "/ui/assets/icons8-grand-hashtag-40.png");
     ui->error_image =
         gtk_get_assets(e->argv_0, "/ui/assets/icons8-haute-priorité-100.png");
+    ui->info_image =
+        gtk_get_assets(e->argv_0, "/ui/assets/icons8-info-carré-16.png");
 
     return (0);
 }

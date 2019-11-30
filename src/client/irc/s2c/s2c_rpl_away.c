@@ -14,7 +14,6 @@ int s2c_rpl_nowaway(t_env *e, int cs, t_token *tokens)
     return (IRC_S2C_RPL_NOWAWAY);
 }
 
-
 int s2c_rpl_unaway(t_env *e, int cs, t_token *tokens)
 {
     logdebug("s2c_unaway:: %s", tokens[0].addr);

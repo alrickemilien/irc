@@ -35,6 +35,7 @@ typedef struct          s_ui_panel {
     char                *status_away_image;
     char                *topic_image;
     char                *error_image;
+    char                *info_image;
     int                 msg_count;
 
     t_ui_chat_msg_bloc  chat_msg_bloc_list[5]; // 5 arbitrary used
@@ -46,6 +47,7 @@ typedef enum            e_ui_msg_type {
     UI_CHAT_MSG,
     UI_TOPIC_MSG,
     UI_ERROR_MSG,
+    UI_INFO_MSG,
 }                       t_ui_msg_type;
 
 int                     ui_init_panel_window(t_env *e, t_ui_panel *ui);
@@ -59,5 +61,6 @@ int                     ui_away(t_ui_panel *ui, const char *channel);
 int                     ui_unaway(t_ui_panel *ui);
 int                     ui_topic(t_ui_panel *ui, const char *msg);
 void                    ui_chat_empty_viewport(t_ui_panel *ui);
+int                     ui_whois(t_ui_panel *ui, const char *msg);
 
 #endif

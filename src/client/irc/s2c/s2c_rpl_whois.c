@@ -1,4 +1,5 @@
 #include <client/irc.h>
+#include <client/ui/panel.h>
 #include <ctype.h>
 
 static int  s2c_rpl_whois_state = 0;
@@ -57,8 +58,8 @@ int s2c_rpl_endofwhois(t_env *e, int cs, t_token *tokens)
 
     s2c_rpl_whois_state = 0;
 
-    // if (e->options.gui)
-    // set_nick_name(tokens[2].addr);
+    if (e->options.gui)
+        ui_whois(e->ui, s2c_rpl_whois_buffer);
 
     return (IRC_S2C_RPL_ENDOFWHOIS);
 }

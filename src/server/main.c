@@ -60,7 +60,7 @@ static void init_options(t_options *options)
 
     if (options->ipv6)
     {
-        loginfo("Running server ipv6\n");
+        loginfo("Running server ipv6");
     }
 }
 
@@ -80,7 +80,7 @@ int main(int argc, const char **argv)
 
     init_options(&options);
 
-    loginfo("Running at %s:%d\n", options.bind, options.port);
+    loginfo("Running at %s:%d", options.bind, options.port);
 
     init_env(&e);
 

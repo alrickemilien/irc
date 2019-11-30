@@ -163,3 +163,23 @@
 .error-message {
     font-size: 16px;
 }
+
+/*
+* Info
+*/
+
+.info-message-container {
+    border-radius: 5px;
+    border-color: rgb(10, 124, 58);
+    border-style: solid;
+    border-width: 2px;
+    background-image: -gtk-gradient (linear,
+    left top,
+    left bottom,
+    from(rgb(16, 173, 81)),
+    to (rgb(10, 124, 58)));
+}
+
+.info-message {
+    font-size: 14px;
+}
