@@ -127,9 +127,16 @@ void ui_login_connect(GtkWidget *widget, gpointer data)
     memcpy(e->options.host, host_data && host_data[0] ? host_data : "127.0.0.1",
            host_data && host_data[0] ? strlen(host_data) : strlen("127.0.0.1"));
 
-    _c2s_pass(e, pass_data, strlen(pass_data));
+    printf("pass_data: %s\n", pass_data);
+    printf("strtrim(pass_data): %s\n", strtrim(pass_data));
+    printf("len(pass_data): %ld\n", strlentrim(pass_data));
+    printf("nick_data: %s\n", nick_data);
+    printf("strtrim(nick_data): %s\n", strtrim(nick_data));
+    printf("len(nick_data): %ld\n", strlentrim(nick_data));
 
-    _c2s_nick(e, nick_data, strlen(nick_data));
+    _c2s_pass(e, strtrim(pass_data), strlentrim(pass_data));
+
+    _c2s_nick(e, strtrim(nick_data), strlentrim(nick_data));
 
     _c2s_connect(e, username_data[0] ? username_data : NULL, NULL,
                  e->options.host);

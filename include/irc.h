@@ -38,6 +38,8 @@ char    *merge_and_extract_folder_from_path(const char *a, const char *b);
 char    *strjoin(char const *s1, char const *s2);
 void    *memrpl(char *dest, size_t dest_size, const char *src, size_t src_size);
 int     fmttime(char* str, const char *fmt);
+size_t  strlentrim(const char *str);
+const char  *strtrim(const char *str);
 
 /*
 ** irc utils
