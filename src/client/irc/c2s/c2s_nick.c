@@ -33,7 +33,7 @@ int _c2s_nick(t_env *e, const char *nick, size_t nick_length)
                        nick_length, nick) < 0)
         return (-1);
 
-    loginfo("You changed nickname to %s\n", nick);
+    loginfo("You changed nickname to %s", nick);
 
     memrpl(e->fds[e->sock].nickname, NICKNAMESTRSIZE, nick, nick_length);
 

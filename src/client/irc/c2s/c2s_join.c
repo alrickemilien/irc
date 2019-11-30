@@ -38,16 +38,16 @@ static int c2s_join_check_command(t_env *e, int cs, const t_token *tokens)
 
 int _c2s_join(t_fd *fd, const char *channel_name, size_t channel_name_len)
 {
-    return (cbuffer_putcmd(&fd->buf_write, "JOIN %.*s\x0D\x0A", channel_name_len,
-                           channel_name));
+    return (cbuffer_putcmd(&fd->buf_write, "JOIN %.*s\x0D\x0A",
+                           channel_name_len, channel_name));
 }
 
 int c2s_join(t_env *e, int cs, t_token *tokens)
 {
     if (e->sock == -1)
-        return logerror("%s\n",
-                        "You need to be logged in before any command. Use "
-                        "/connect [server] ?[port]");
+        return logerror(
+            "You need to be logged in before any command. Use "
+            "/connect [server] ?[port]");
 
     if ((c2s_join_check_command(e, cs, tokens)) != 0)
         return (-1);

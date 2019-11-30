@@ -54,8 +54,7 @@ CLIENT_SRC+=src/cbuffer/cbuffer.c \
 			src/cbuffer/cbuffer_ssl.c
 
 # utils
-CLIENT_SRC+=src/utils/safe.c \
-			src/utils/log.c \
+CLIENT_SRC+=src/utils/log.c \
 			src/utils/ato32.c \
 			src/utils/extract_folder_from_path.c \
 			src/utils/merge_and_extract_folder_from_path.c \

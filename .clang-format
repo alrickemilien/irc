@@ -1,5 +1,6 @@
 BasedOnStyle: Chromium
 IndentWidth: 4
+ColumnLimit: 80
 AllowShortFunctionsOnASingleLine: None
 KeepEmptyLinesAtTheStartOfBlocks: false
 BreakBeforeBraces: Allman

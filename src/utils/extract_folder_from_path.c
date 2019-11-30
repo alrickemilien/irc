@@ -25,10 +25,10 @@
 
 static const char *_dirname(const char *path)
 {
-    static char       buffer[PATH_MAX];
-    static const char dot[] = ".";
-    int            last_slash_pos = -1;
-    size_t            i;
+    static char         buffer[PATH_MAX];
+    static const char   dot[] = ".";
+    int                 last_slash_pos = -1;
+    size_t              i;
 
     if (!path)
         return (dot);

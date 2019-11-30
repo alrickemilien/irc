@@ -1,4 +1,6 @@
 #include <arpa/inet.h>
+#include <client/irc.h>
+#include <client/ssl.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -7,27 +9,24 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <client/irc.h>
-#include <client/ssl.h>
-
-void client_ipv6(t_env *e)
+int client_ipv6(t_env *e)
 {
     int                 cs;
     struct sockaddr_in6 sin;
     struct protoent *   pe;
 
-    loginfo("client_ipv6::\n");
+    loginfo("client_ipv6::");
 
-    pe = (struct protoent *)XPSAFE((void *)0, getprotobyname("tcp"),
-                                   "ipv6::getprotobyname");
+    if ((pe = (struct protoent *)getprotobyname("tcp")) == (void *)0)
+        return (logerrno("ipv6::getprotobyname"));
 
     /********************************************************************/
     /* The socket() function returns a socket descriptor, which represents   */
     /* an endpoint.  Get a socket for address family AF_INET6 to        */
     /* prepare to accept incoming connections on.                       */
     /********************************************************************/
-
-    cs = XSAFE(-1, socket(AF_INET6, SOCK_STREAM, pe->p_proto), "ipv6::socket");
+    if ((cs = socket(AF_INET6, SOCK_STREAM, pe->p_proto)) < 0)
+        return (logerrno("ipv6::socket"));
 
     /*********************************************************************/
     /* After the socket descriptor is created, a bind() function gets a  */
@@ -51,8 +50,9 @@ void client_ipv6(t_env *e)
     /* requests before the system starts rejecting the incoming         */
     /* requests.                                                        */
     /********************************************************************/
-    XSAFE(-1, connect(cs, (struct sockaddr *)&sin, sizeof(sin)),
-          "ipv6::connect");
+
+    if (connect(cs, (struct sockaddr *)&sin, sizeof(sin) < 0))
+        return (logerrno("ipv6::connect"));
 
     if (e->options.ssl)
         ssl_connect(e, &e->fds[cs], cs);
@@ -61,4 +61,6 @@ void client_ipv6(t_env *e)
     e->fds[cs].type = FD_CLIENT;
     e->fds[cs].read = server_read;
     e->fds[cs].write = server_write;
+
+    return (0);
 }

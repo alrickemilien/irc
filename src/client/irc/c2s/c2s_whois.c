@@ -32,7 +32,6 @@ int c2s_whois(t_env *e, int cs, t_token *tokens)
 
     if (e->sock == -1)
         return logerror(
-            "%s\n",
             "You nee to be logged in before any command. Use /connect [server] "
             "?[port]");
 

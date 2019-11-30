@@ -10,7 +10,7 @@ static int c2s_pass_check_command(t_env *e, int cs, const t_token *tokens)
         return (irc_error(e, ERR_NEEDMOREPARAMS));
 
     if (tokens[1].len > 200)
-        return (logerror("c2s_pass_check_command::Missing password\n"));
+        return (logerror("c2s_pass_check_command::Missing password"));
 
     return (0);
 }
@@ -25,7 +25,7 @@ int _c2s_pass(t_env *e, const char *password, size_t password_length)
 int c2s_pass(t_env *e, int cs, t_token *tokens)
 {
     if (e->sock != -1)
-        return logerror("You are already logged in\n");
+        return logerror("You are already logged in");
 
     if ((c2s_pass_check_command(e, cs, tokens)) < 0)
         return (-1);
@@ -37,7 +37,7 @@ int c2s_pass(t_env *e, int cs, t_token *tokens)
                        tokens[1].addr, tokens[1].len) < 0)
         return (-1);
 
-    loginfo("_c2s_pass::You changed password\n");
+    loginfo("_c2s_pass::You changed password");
 
     return (IRC_PASS);
 }

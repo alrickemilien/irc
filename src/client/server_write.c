@@ -1,9 +1,9 @@
-#include <client/irc.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include <client/irc.h>
 #include <cbuffer/cbuffer_ssl.h>
 
 int server_write(t_env *e, size_t cs)
@@ -29,7 +29,7 @@ int server_write(t_env *e, size_t cs)
         {
             cbuffer_reset(&e->fds[cs].buf_write);
             return (logerror(
-                "[!] Buffer is reset because it is full without command\n"));
+                "[!] Buffer is reset because it is full without command"));
         }
         return (0);
     }

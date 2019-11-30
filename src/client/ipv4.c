@@ -1,4 +1,6 @@
 #include <arpa/inet.h>
+#include <client/irc.h>
+#include <client/ssl.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -6,9 +8,6 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
-
-#include <client/irc.h>
-#include <client/ssl.h>
 
 int client_ipv4(t_env *e)
 {
@@ -28,8 +27,8 @@ int client_ipv4(t_env *e)
     if ((hostnm = gethostbyname(e->options.host)) == NULL)
         return (logerrno("ipv4::gethostbyname"));
 
-    pe = (struct protoent *)XPSAFE((void *)0, getprotobyname("tcp"),
-                                   "ipv4::getprotobyname");
+    if ((pe = (struct protoent *)getprotobyname("tcp")) == (void *)0)
+        return (logerrno("ipv4::getprotobyname"));
 
     /********************************************************************/
     /* The socket() function returns a socket descriptor, which represents   */

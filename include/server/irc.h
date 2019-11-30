@@ -94,14 +94,13 @@ void disconnect(t_env *e, size_t cs);
 void serv(t_env *e);
 
 int on_connect(t_env *e, size_t sock);
-void server_create(t_env *e, int port);
 int server_ipv6(const t_options *options, t_env *e);
-void server_ipv4(const t_options *options, t_env *e);
+int server_ipv4(const t_options *options, t_env *e);
 
 int client_write(t_env *e, size_t cs);
 int client_read(t_env *e, size_t cs);
 
-void do_select(t_env *e);
-void daemonize(void);
+int do_select(t_env *e);
+int daemonize(void);
 
 #endif

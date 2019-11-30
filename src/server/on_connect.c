@@ -2,12 +2,10 @@
 #include <netdb.h>
 #include <netinet/in.h>
 #include <server/irc.h>
+#include <server/ssl.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
-
-#include <server/ssl.h>
-
 
 int on_connect(t_env *e, size_t s)
 {
@@ -19,13 +17,14 @@ int on_connect(t_env *e, size_t s)
     if ((cs = accept(s, (struct sockaddr *)&csin, &csin_len)) == -1)
         return (logerrno("on_connect::accept"));
 
-    loginfo("New client #%d from %s:%d\n", cs, inet_ntoa(csin.sin_addr),
+    loginfo("New client #%d from %s:%d", cs, inet_ntoa(csin.sin_addr),
             ntohs(csin.sin_port));
 
-    logdebug("e->fds[cs].host: %s\n", e->fds[cs].host);
+    logdebug("e->fds[cs].host: %s", e->fds[cs].host);
 
     // if (getnameinfo((struct sockaddr *)&csin, csin_len, e->fds[cs].host,
-    //                 NI_MAXHOST, e->fds[cs].serv, NI_MAXSERV, NI_NAMEREQD) < 0)
+    //                 NI_MAXHOST, e->fds[cs].serv, NI_MAXSERV, NI_NAMEREQD) <
+    //                 0)
     // {
     //     logerrno("on_connect::getnameinfo");
     //     return;

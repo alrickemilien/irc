@@ -28,7 +28,7 @@ int client_write(t_env *e, size_t cs)
         if (e->fds[cs].buf_write.full)
         {
             logerror(
-                "[!] Buffer is reset because it is full without command\n");
+                "[!] Buffer is reset because it is full without command");
             cbuffer_reset(&e->fds[cs].buf_write);
         }
         return (0);

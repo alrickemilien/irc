@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-void init_env(t_env *e)
+int init_env(t_env *e)
 {
     size_t        i;
     struct rlimit rlp;
@@ -16,18 +16,20 @@ void init_env(t_env *e)
     // RLIMIT_NOFILE:
     // This specifies a value one greater than the maximum file
     // descriptor number that can be opened by this process.
-    XSAFE(-1, getrlimit(RLIMIT_NOFILE, &rlp), "init_env::getrlimit");
+    if (getrlimit(RLIMIT_NOFILE, &rlp) < 0)
+        return (logerrno("init_env::getrlimit"));
 
     // there are three standard file descriptions, STDIN, STDOUT, and STDERR.
     // They are assigned to 0, 1, and 2 respectively.
     e->maxfd = rlp.rlim_cur;
-    e->fds = (t_fd *)XPSAFE(NULL, malloc(sizeof(*e->fds) * e->maxfd),
-                            "init_env::malloc");
+    if ((e->fds = (t_fd *)malloc(sizeof(*e->fds) * e->maxfd)) == (void*)0)
+        return (logerror("init_env::malloc"));
 
     // Server's socket connection
     e->sock = -1;
 
-    XPSAFE(NULL, getcwd(e->cwd, sizeof(e->cwd)), "init_env::getcwd");
+    if (getcwd(e->cwd, sizeof(e->cwd)) == (void *)0)
+        return (logerrno("init_env::getcwd"));
 
     i = 0;
     while (i < e->maxfd)
@@ -36,6 +38,8 @@ void init_env(t_env *e)
         clear_fd(&e->fds[i]);
         i++;
     }
+
+    return (0);
 }
 
 static void init_options(t_options *options)
@@ -111,7 +115,7 @@ int main(int argc, char **argv)
         return (gui(&e, argc, argv));
 
     if (e.options.command[0])
-        loginfo("options.command: %s\n", e.options.command);
+        loginfo("options.command: %s", e.options.command);
 
     init_std(&e);
 

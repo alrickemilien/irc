@@ -35,7 +35,7 @@ int server_read(t_env *e, size_t cs)
     {
         close(cs);
         clear_fd(&e->fds[cs]);
-        logerror("Connection between client hand server has been lost\n");
+        logerror("Connection between client hand server has been lost");
         e->sock = -1;
         FD_CLR(cs, &e->fd_read);
         FD_CLR(cs, &e->fd_write);

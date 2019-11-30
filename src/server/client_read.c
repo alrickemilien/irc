@@ -58,7 +58,7 @@ int client_read(t_env *e, size_t cs)
         if (e->fds[cs].buf_read.full)
         {
             logerror(
-                "[!] Buffer is reset because it is full without command\n");
+                "[!] Buffer is reset because it is full without command");
             cbuffer_reset(&e->fds[cs].buf_read);
         }
         return (0);

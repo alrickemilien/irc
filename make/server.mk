@@ -16,8 +16,7 @@ SERVER_SRC=src/server/main.c \
 			src/server/client_write.c
 
 # Utils
-SERVER_SRC+=src/utils/safe.c \
-			src/utils/log.c \
+SERVER_SRC+=src/utils/log.c \
 			src/utils/ato32.c \
 			src/utils/i64toa.c \
 			src/utils/memrpl.c \

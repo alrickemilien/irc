@@ -56,7 +56,7 @@ void check_fd(t_env *e)
     }
 }
 
-void do_select(t_env *e)
+int do_select(t_env *e)
 {
     struct timeval timeout;
 
@@ -69,9 +69,10 @@ void do_select(t_env *e)
 
     // return the number of file descriptors
     // contained in the three returned descriptor sets
-    e->r = XSAFE(
-        -1, select(e->maxfd, &e->fd_read, &e->fd_write, (void *)0, &timeout),
-        "do_select::select");
+    if ((e->r = select(e->maxfd, &e->fd_read, &e->fd_write, (void *)0, &timeout)) < 0)
+        return (logerrno("do_select::select"));
 
     check_fd(e);
+
+    return (0);
 }
