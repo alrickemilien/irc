@@ -30,14 +30,14 @@
 #define TOSTR(x) #x
 
 #define ISOTIMESTRSIZE 25
-void    time2iso(char *str);
-
+int     time2iso(char *str);
 int     ato32(const char *str, uint32_t *nbr);
 int     i64toa(uint64_t nbr, char *buffer, size_t buffer_size, uint64_t base);
 char    *extract_folder_from_path(const char *path);
 char    *merge_and_extract_folder_from_path(const char *a, const char *b);
 char    *strjoin(char const *s1, char const *s2);
 void    *memrpl(char *dest, size_t dest_size, const char *src, size_t src_size);
+int     fmttime(char* str, const char *fmt);
 
 /*
 ** irc utils

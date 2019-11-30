@@ -29,9 +29,9 @@ void ui_chat_scroll_to_bottom(t_ui_panel *ui)
     page_size = gtk_adjustment_get_page_size(verticalAdjust);
     // step_size = ((upper - page_size) - lower) / page_size;
 
-    logdebug("lower: %f", lower);
-    logdebug("upper: %f", upper);
-    logdebug("page_size: %f", page_size);
+    // logdebug("lower: %f", lower);
+    // logdebug("upper: %f", upper);
+    // logdebug("page_size: %f", page_size);
     // logdebug("step_size: %f", step_size);
     // logdebug("last_upper: %f", last_upper);
 
@@ -41,10 +41,10 @@ void ui_chat_scroll_to_bottom(t_ui_panel *ui)
     // logdebug("new adjust: %f\n",
     //          upper - page_size + (2 * upper - 2 * last_upper));
 
-    gtk_adjustment_set_upper(verticalAdjust, lower);
+    // gtk_adjustment_set_upper(verticalAdjust, lower);
 
-    // gtk_adjustment_set_value(verticalAdjust,
-    //                          upper - page_size );
+    gtk_adjustment_set_value(verticalAdjust,
+                             upper - page_size );
     gtk_scrolled_window_set_vadjustment(GTK_SCROLLED_WINDOW(ui->scrollwin),
                                         verticalAdjust);
 

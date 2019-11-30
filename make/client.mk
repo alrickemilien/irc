@@ -61,6 +61,7 @@ CLIENT_SRC+=src/utils/log.c \
 			src/utils/strjoin.c \
 			src/utils/i64toa.c \
 			src/utils/memrpl.c \
+			src/utils/fmttime.c \
 			src/utils/time2iso.c
 
 # irc utils

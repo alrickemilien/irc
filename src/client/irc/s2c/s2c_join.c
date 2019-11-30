@@ -70,8 +70,8 @@ int s2c_join(t_env *e, int cs, t_token *tokens)
             ui_chat_empty_chat_box(e->ui);
 
             // TO REMOVE
-            for (size_t i = 0; i < 20; i++)
-                ui_new_message(e->ui, "empty", UI_CHAT_MSG);
+            // for (size_t i = 0; i < 20; i++)
+            //     ui_new_message(e->ui, "empty", UI_CHAT_MSG);
         }
     }
 

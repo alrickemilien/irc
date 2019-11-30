@@ -127,6 +127,10 @@
     padding: 3px;
 }
 
+.chat-message-hour {
+    color: #aaaaaa;
+}
+
 /*
 * Topic
 */
