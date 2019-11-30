@@ -11,6 +11,8 @@
 #include <irc.h>
 #include <server/options.h>
 
+#define PIDFILE "./ircserver.pid"
+
 #define FD_FREE 0
 #define FD_SERV 1
 #define FD_CLIENT 2

@@ -13,12 +13,12 @@ use ircunittest;
 # ############################################# #
 
 # Start server
-ircunittest::start_server();
+# ircunittest::start_server();
 
 my $HOST = '127.0.0.1';
 my $PORT = '5555';
-my $CLIENTS_NUMBER = 10;
-my $POOLS_NUMBER = 2;
+my $CLIENTS_NUMBER = 20;
+my $POOLS_NUMBER = 1;
 
 my @s;
 for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
@@ -32,7 +32,7 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
     
     $tmp_s->setsockopt(SOL_SOCKET, SO_RCVTIMEO, pack('l!l!', 10, 0));
 
-    $tmp_s->send("NICK client_$i\x0D\x0AUSER client$i microsoft.com :Client $i\x0D\x0A");
+    $tmp_s->send("USER client$i microsoft.com :Client $i\x0D\x0ANICK client_$i\x0D\x0A");
 
     push @s, $tmp_s
 }
@@ -40,15 +40,24 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
 # Wait clients connection
 sleep(2);
 
+# Wait 1 sec between each pool in order to let server empty the buffer
 for (my $k = 0; $k <= $POOLS_NUMBER; $k++) {
     print "Sending data\n";
     for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
-        $s[$i]->send("PRIVMSG client_0 :I say: $i\x0D\x0A");
+        $s[$i]->send("PRIVMSG &hub :I say: $i\x0D\x0A");
     }
-
-    # Wait full messages reception on the server
-    sleep(1);
+    sleep(1); 
 }
+
+# Do not wait 1 sec between each pool in order to let server empty the buffer
+for (my $k = 0; $k <= $POOLS_NUMBER; $k++) {
+    print "Sending data\n";
+    for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
+        $s[$i]->send("PRIVMSG &hub :I say: $i\x0D\x0A");
+    }
+}
+
+# sleep(5);
 
 #
 # Terminate clients

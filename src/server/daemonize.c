@@ -9,8 +9,6 @@
 #include <syslog.h>
 #include <unistd.h>
 
-#define PIDFILE "./ircserver.pid"
-
 static int write_pidfile(pid_t pid)
 {
     int    fd;

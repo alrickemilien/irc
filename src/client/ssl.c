@@ -1,7 +1,6 @@
+#include <client/ssl.h>
 #include <netdb.h>
 #include <netinet/in.h>
-
-#include <client/ssl.h>
 
 SSL_CTX *ssl_init()
 {

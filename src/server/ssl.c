@@ -6,7 +6,7 @@
 #include <string.h>
 #include <sys/socket.h>
 
-#define CACERT HOME "/ca.crt"
+// #define CACERT HOME "/ca.crt"
 
 static int ssl_server_error(void)
 {
@@ -19,9 +19,9 @@ int ssl_init(t_env *e, const char *ssl_key_file, const char *ssl_crt_file)
     SSL_CTX *         ctx;
     const SSL_METHOD *method;
 
-    loginfo("load_ssl::ssl_key_file:: %s\n",
+    loginfo("load_ssl::ssl_key_file:: %s",
             ssl_key_file[0] ? ssl_key_file : KEYF);
-    loginfo("load_ssl::ssl_crt_file:: %s\n",
+    loginfo("load_ssl::ssl_crt_file:: %s",
             ssl_crt_file[0] ? ssl_crt_file : CERTF);
 
     SSL_load_error_strings();

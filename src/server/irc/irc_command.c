@@ -1,4 +1,4 @@
-#include "server/irc.h"
+#include <server/irc.h>
 
 static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
     [IRC_JOIN] = {"JOIN", &irc_join},
@@ -63,9 +63,7 @@ int irc_command(t_env *e, int cs, size_t end_command_index)
         i++;
     }
 
-    logerror("Unknow command %s\n", command);
-
-    exit (1);
+    logerror("Unknow command %s", command);
 
     return (-1);
 }

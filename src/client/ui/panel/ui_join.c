@@ -36,7 +36,8 @@ int ui_join_channel_list_index_of(GtkWidget * list,
         label = gtk_button_get_label(
             GTK_BUTTON(gtk_bin_get_child(GTK_BIN(iter->data))));
 
-        if (memcmp(label, needle, needle_size) == 0)
+        if (memcmp(label, needle, needle_size) == 0 &&
+            (label[needle_size] == ' ' || label[needle_size] == 0))
         {
             g_list_free(children);
             return (i);

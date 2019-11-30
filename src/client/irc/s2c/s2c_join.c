@@ -52,17 +52,22 @@ static bool s2c_join_is_me(t_env *e, const char *user, size_t len)
 
 int s2c_join(t_env *e, int cs, t_token *tokens)
 {
+    char log[512];
+
     logdebug("s2c_join:: %s", tokens[0].addr);
 
     if (s2c_join_check_command(e, cs, tokens) < 0)
         return (-1);
+
+    memset(log, 0, sizeof(log));
+    sprintf(log, "%.*s joined the channel.", (int)tokens[0].len, tokens[0].addr);
 
     if (s2c_join_is_me(e, tokens[0].addr, tokens[0].len))
     {
         memrpl(e->fds[e->sock].channelname, CHANNELSTRSIZE, tokens[2].addr,
                tokens[2].len);
 
-        loginfo("s2c_privmsg:: You joined %s", e->fds[e->sock].channelname);
+        loginfo(log);
 
         if (e->options.gui)
         {
@@ -73,7 +78,11 @@ int s2c_join(t_env *e, int cs, t_token *tokens)
             // for (size_t i = 0; i < 20; i++)
             //     ui_new_message(e->ui, "empty", UI_CHAT_MSG);
         }
+        return (IRC_S2C_JOIN);
     }
+
+    if (e->options.gui)
+        ui_new_message(e->ui, log, UI_CHAT_MSG);
 
     return (IRC_S2C_JOIN);
 }
