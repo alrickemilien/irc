@@ -60,7 +60,20 @@ int                     ui_join(t_ui_panel *ui, const char *channel);
 int                     ui_away(t_ui_panel *ui, const char *channel);
 int                     ui_unaway(t_ui_panel *ui);
 int                     ui_topic(t_ui_panel *ui, const char *msg);
-void                    ui_chat_empty_viewport(t_ui_panel *ui);
+void                    ui_chat_empty_chat_box(t_ui_panel *ui);
 int                     ui_whois(t_ui_panel *ui, const char *msg);
+
+void                    ui_push_chat_message(t_ui_panel *ui,
+                          t_ui_chat_msg_bloc *bloc,
+                          const char *        msg);
+void                    ui_push_topic_message(t_ui_panel *ui,
+                           t_ui_chat_msg_bloc *bloc,
+                           const char *        msg);
+void                    ui_push_error_message(t_ui_panel *ui,
+                           t_ui_chat_msg_bloc *bloc,
+                           const char *        msg);
+void                    ui_push_info_message(t_ui_panel *ui,
+                          t_ui_chat_msg_bloc *bloc,
+                          const char *        msg);
 
 #endif

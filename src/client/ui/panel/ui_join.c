@@ -70,7 +70,7 @@ int ui_join(t_ui_panel *ui, const char *channel)
     ui->channels_count++;
 
     w = gtk_button_new();
-    gtk_widget_set_app_paintable(w, TRUE);
+    // gtk_widget_set_app_paintable(w, TRUE);
 
     gtk_button_set_label(GTK_BUTTON(w), channel);
     gtk_set_class(w, "channels-box-item");

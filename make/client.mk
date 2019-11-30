@@ -83,6 +83,7 @@ CLIENT_SRC+=src/client/ui/panel/panel.c	\
 			src/client/ui/panel/ui_join.c \
 			src/client/ui/panel/ui_status.c \
 			src/client/ui/panel/ui_who.c \
+			src/client/ui/panel/ui_message.c \
 			src/client/ui/panel/ui_chat.c
 
 GTK_DPKG_CFLAGS=$(shell pkg-config --cflags gtk+-3.0)
