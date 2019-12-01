@@ -1,4 +1,3 @@
-#include <ctype.h>
 #include <server/irc.h>
 
 static int irc_nick_check_command(t_env *e, int cs, const t_token *tokens)
@@ -14,10 +13,7 @@ static int irc_nick_check_command(t_env *e, int cs, const t_token *tokens)
     nick_len = tokens[1].len;
 
     if (nick_len > 9 || !nick_len || nick[0] == '#' || nick[0] == '&')
-    {
-        irc_reply(e, cs, ERR_ERRONEUSNICKNAME, nick);
-        return (-1);
-    }
+        return (irc_err(e, cs, ERR_ERRONEUSNICKNAME, nick));
 
     i = 0;
     while (i <= e->max)

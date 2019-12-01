@@ -1,4 +1,3 @@
-#include <ctype.h>
 #include <server/irc.h>
 
 static int irc_whois_check_command(t_env *e, int cs, const t_token *tokens)

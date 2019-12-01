@@ -4,6 +4,9 @@
 
 CLIENT=client
 
+GTK_DPKG_CFLAGS=$(shell pkg-config --cflags gtk+-3.0)
+GTK_DPKG_LIBS=$(shell pkg-config --libs gtk+-3.0)
+
 CLIENT_SRC=src/client/main.c \
 			src/client/ipv4.c \
 			src/client/ipv6.c \
@@ -52,6 +55,9 @@ CLIENT_SRC+=src/client/ssl.c
 
 #cbuffer
 CLIENT_SRC+=src/cbuffer/cbuffer.c \
+			src/cbuffer/cbuffer_io.c \
+			src/cbuffer/cbuffer_utils.c \
+			src/cbuffer/cbuffer_debug.c \
 			src/cbuffer/cbuffer_ssl.c
 
 # utils
@@ -93,9 +99,6 @@ CLIENT_SRC+=src/client/ui/panel/panel.c	\
 			src/client/ui/panel/ui_events.c \
 			src/client/ui/panel/ui_set.c \
 			src/client/ui/panel/ui_chat.c
-
-GTK_DPKG_CFLAGS=$(shell pkg-config --cflags gtk+-3.0)
-GTK_DPKG_LIBS=$(shell pkg-config --libs gtk+-3.0)
 
 %.o: %.c
 	@gcc $(DEBUG) -o $@ -c $< $(INCLUDE) $(OPENSSL_CFLAGS) $(GTK_DPKG_CFLAGS) $(CFLAGS)

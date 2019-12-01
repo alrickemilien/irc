@@ -1,5 +1,10 @@
 #include <server/irc.h>
 
+/*
+** select returns the number of file descriptors
+** contained in the three returned descriptor sets
+*/
+
 int do_select(t_env *e)
 {
     struct timeval timeout;
@@ -13,8 +18,6 @@ int do_select(t_env *e)
     {
         init_fd(e);
 
-        // return the number of file descriptors
-        // contained in the three returned descriptor sets
         if ((e->r = select(e->max + 1, &e->fd_read, &e->fd_write, (void *)0,
                            (void *)0)) < 0)
             return (logerrno("do_select::select"));
