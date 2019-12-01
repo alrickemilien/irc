@@ -8,6 +8,7 @@ GTK_DPKG_CFLAGS=$(shell pkg-config --cflags gtk+-3.0)
 GTK_DPKG_LIBS=$(shell pkg-config --libs gtk+-3.0)
 
 CLIENT_SRC=src/client/main.c \
+			src/client/gui.c \
 			src/client/ipv4.c \
 			src/client/ipv6.c \
 			src/client/irc/tokenize.c \

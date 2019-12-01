@@ -1,7 +1,5 @@
 #include <arpa/inet.h>
 #include <client/irc.h>
-#include <client/ui/login.h>
-#include <client/ui/panel.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
@@ -76,20 +74,6 @@ static void execute_precommands(t_env *e)
         if (ptr)
             ptr += 2;
     }
-}
-
-int gui(t_env *e, int argc, char **argv)
-{
-    gtk_init(&argc, &argv);
-
-    e->ui = (t_ui_login *)malloc(sizeof(t_ui_login));
-
-    if (ui_init_login_window(e, e->ui) < 0)
-        return (-1);
-
-    gtk_main();
-
-    return (0);
 }
 
 int main(int argc, char **argv)
