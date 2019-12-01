@@ -31,9 +31,7 @@ static int c2s_leave_check_command(t_env *e, int cs, const t_token *tokens)
         return (irc_error(e, ERR_NOSUCHCHANNEL, channel));
     else if (channel_len < 1)
         return (irc_error(e, ERR_NOSUCHCHANNEL, channel));
-    else
-        return (0);
-    return (-1);
+    return (0);
 }
 
 int _c2s_leave(t_fd *fd, const char *channel_name, size_t channel_name_len)
