@@ -24,6 +24,7 @@ typedef struct          s_ui_panel {
     GtkWidget           *status_image;
 
     GtkWidget           *scrollwin;
+    GtkWidget           *chat_box_viewport;
     GtkWidget           *chat_box;
 
     GtkWidget           *channels_box;
@@ -51,6 +52,9 @@ typedef enum            e_ui_msg_type {
 }                       t_ui_msg_type;
 
 int                     ui_init_panel_window(t_env *e, t_ui_panel *ui);
+
+// void                    ui_chat_scroll_to_bottom(t_ui_panel *ui);
+gboolean                ui_chat_scroll_to_bottom(gpointer w);
 void                    ui_new_message(t_ui_panel *ui, const char *str, int type);
 void                    set_channel_name(t_ui_panel *ui, const char *msg);
 void                    ui_set_nick(t_ui_panel *ui, const char *msg);

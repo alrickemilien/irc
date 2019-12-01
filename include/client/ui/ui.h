@@ -4,10 +4,6 @@
 #include <gtk/gtk.h>
 #include <client/irc.h>
 
-typedef struct  s_ui_env {
-
-}               t_ui_env;
-
 int             gtk_builder_load(
     GtkBuilder *b, const char *bin_path, const char *ui_path);
 

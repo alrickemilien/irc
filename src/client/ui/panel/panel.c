@@ -135,13 +135,20 @@ int ui_init_panel_window(t_env *e, t_ui_panel *ui)
     g_signal_connect(ui->chat_entry, "activate", G_CALLBACK(chat_entry_send),
                      e);
 
-    ui->window_color = gtk_new_rgba(169.0f / 255.0f, 113.0f / 255.0f, 165.0f / 255.0f, 0.96);
+    ui->window_color =
+        gtk_new_rgba(163.0f / 255.0f, 88.0f / 255.0f, 136.0f / 255.0f, 0.96);
 
     gtk_set_transparent_window(ui->window, ui->window_color);
 
     // Load assets
     ui_init_panel_assets(e, ui);
 
+    /***/
+    /*** Init scroll window ***/
+    /*** We call ScrollToEnd() if scroll receives the size-allocate signal. ***/
+    /***/
+    ui->scrollwin =
+        GTK_WIDGET(gtk_builder_get_object(ui->builder, "scrollwin"));
     ui->e = e;
 
     gtk_widget_show_all(ui->window);

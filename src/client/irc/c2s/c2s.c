@@ -61,7 +61,7 @@ int c2s(t_env *e, int cs, char *buffer)
     if (e->sock == -1 || buffer[0] == '/')
         return (0);
 
-    logdebug("Unknow command '%s', treat as a msg to current channel", buffer);
+    // logdebug("Unknow command '%s', treat as a msg to current channel", buffer);
 
     _c2s_msg(&e->fds[e->sock], e->fds[e->sock].channelname,
              strlen(e->fds[e->sock].channelname), buffer);

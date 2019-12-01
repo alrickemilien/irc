@@ -1,55 +1,17 @@
 #include <client/ui/panel.h>
 
-void ui_chat_scroll_to_bottom(t_ui_panel *ui)
+gboolean ui_chat_scroll_to_bottom(gpointer w)
 {
-    static gdouble last_upper = 0;
+    GtkAdjustment *adjust;
 
-    GtkAdjustment *verticalAdjust;
-    // gdouble        adjust = 0;
-    // gdouble        lower;
-    gdouble upper;
-    gdouble page_size;
-    // gdouble        step_size = 0.1;
+    adjust = gtk_scrolled_window_get_vadjustment
+        (GTK_SCROLLED_WINDOW (w));
+    gtk_adjustment_set_value (adjust, gtk_adjustment_get_upper (adjust));
 
-    ui->scrollwin =
-        GTK_WIDGET(gtk_builder_get_object(ui->builder, "scrollwin"));
-    gtk_widget_show_all(ui->scrollwin);
+    gtk_widget_show_all(w);
 
-    verticalAdjust =
-        gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(ui->scrollwin));
-    upper = gtk_adjustment_get_upper(verticalAdjust);
+    return (FALSE);
 
-    if (last_upper == 0)
-        last_upper = upper;
-    else if (last_upper == upper)
-        return;
-
-    // lower = gtk_adjustment_get_lower(verticalAdjust);
-    upper = gtk_adjustment_get_upper(verticalAdjust);
-    page_size = gtk_adjustment_get_page_size(verticalAdjust);
-    // step_size = ((upper - page_size) - lower) / page_size;
-
-    // logdebug("lower: %f", lower);
-    // logdebug("upper: %f", upper);
-    // logdebug("page_size: %f", page_size);
-    // logdebug("step_size: %f", step_size);
-    // logdebug("last_upper: %f", last_upper);
-
-    // adjust = upper - page_size - 1;
-
-    // logdebug("adjust: %f\n", adjust);
-    // logdebug("new adjust: %f\n",
-    //          upper - page_size + (2 * upper - 2 * last_upper));
-
-    // gtk_adjustment_set_upper(verticalAdjust, lower);
-
-    gtk_adjustment_set_value(verticalAdjust,
-                             upper - page_size );
-    gtk_scrolled_window_set_vadjustment(GTK_SCROLLED_WINDOW(ui->scrollwin),
-                                        verticalAdjust);
-
-    last_upper = upper;
-    gtk_widget_show_all(ui->scrollwin);
 }
 
 void ui_chat_empty_chat_box(t_ui_panel *ui)
@@ -87,10 +49,6 @@ void ui_new_message(t_ui_panel *ui, const char *msg, int type)
     t_ui_chat_msg_bloc *bloc;
     size_t              i;
     GList *             children;
-    // char                t[ISOTIMESTRSIZE];
-
-    // Message size + ISO date
-    // char label[510 + ISOTIMESTRSIZE];
 
     logdebug("ui::ui_new_chat_message:: %s\n", msg);
 
@@ -127,10 +85,6 @@ void ui_new_message(t_ui_panel *ui, const char *msg, int type)
             ui->chat_msg_bloc_list[i].box = ui->chat_msg_bloc_list[i + 1].box;
             ui->chat_msg_bloc_list[i].count =
                 ui->chat_msg_bloc_list[i + 1].count;
-
-            // // Insert into list of bloc message
-            // gtk_list_box_insert(GTK_LIST_BOX(ui->chat_box),
-            //                     ui->chat_msg_bloc_list[i + 1].box, -1);
             i++;
         }
 
@@ -146,19 +100,6 @@ void ui_new_message(t_ui_panel *ui, const char *msg, int type)
     {
         bloc = &ui->chat_msg_bloc_list[i];
     }
-
-    // memset(label, msg, strlen(msg));
-    // memset(label, msg, strlen(msg));
-
-    // time2iso(t);
-    // printf(is_tty ? "[%s] "
-    //                 "\x1b[31m"
-    //                 "ERROR:"
-    //                 "\x1b[0m"
-    //                 " %s: %s\n"
-    //               : "[%s] ERROR: %s: %s\n",
-    //        t, str,
-    //        errno | h_errno ? strerror(errno | h_errno) : "Unknown error");
 
     switch (type)
     {
@@ -178,17 +119,11 @@ void ui_new_message(t_ui_panel *ui, const char *msg, int type)
             break;
     }
 
-    // if (bloc->count == CHAT_BOX_MSG_COUNT_MAX)
-    // {
-    //     w = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
-    //     gtk_set_class(ui->chat_msg_bloc_list[i].box,
-    //                   "chat-message-box-separator");
-    //     gtk_list_box_insert(GTK_LIST_BOX(ui->chat_box), w, -1);
-    // }
+    g_timeout_add(50, ui_chat_scroll_to_bottom, ui->scrollwin);
 
     gtk_widget_show_all(ui->chat_box);
-
+    gtk_widget_show_all(ui->scrollwin);
 
     // End by scroll and show
-    ui_chat_scroll_to_bottom(ui);
+    // ui_chat_scroll_to_bottom(ui);
 }

@@ -206,15 +206,13 @@
                 <property name="shadow_type">in</property>
                 <property name="overlay_scrolling">False</property>
                 <child>
-                  <object class="GtkViewport" id="viewport2">
+                  <object class="GtkViewport" id="chat_box_viewport">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkListBox" id="chat_box">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="selection_mode">none</property>
-                        <property name="activate_on_single_click">False</property>
                       </object>
                     </child>
                   </object>

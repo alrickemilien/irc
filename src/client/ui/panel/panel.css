@@ -8,13 +8,9 @@
 }
 
 #username_label {
+    color: #fdfdfd;
     font-size: 18px;
     font-weight: bold;
-}
-
-#status {
-    border-radius: 10px;
-    background-color: red;
 }
 
 /***
@@ -31,6 +27,7 @@
 }
 
 .channels-box-item {
+    color: #fdfdfd;
     background-image: inherit;
     border-style: solid;
     border: none;
@@ -189,4 +186,78 @@
 
 .info-message {
     font-size: 14px;
+}
+
+/***
+ *    ███████╗ ██████╗██████╗  ██████╗ ██╗     ██╗     ██████╗  █████╗ ██████╗ 
+ *    ██╔════╝██╔════╝██╔══██╗██╔═══██╗██║     ██║     ██╔══██╗██╔══██╗██╔══██╗
+ *    ███████╗██║     ██████╔╝██║   ██║██║     ██║     ██████╔╝███████║██████╔╝
+ *    ╚════██║██║     ██╔══██╗██║   ██║██║     ██║     ██╔══██╗██╔══██║██╔══██╗
+ *    ███████║╚██████╗██║  ██║╚██████╔╝███████╗███████╗██████╔╝██║  ██║██║  ██║
+ *    ╚══════╝ ╚═════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚══════╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+ */
+
+scrollbar,
+.scrollbar {
+    background-color: transparent;
+    transition: all 600ms ease-out;
+    /* -GtkScrollbar-has-backward-stepper: false; */
+    /* -GtkScrollbar-has-forward-stepper: false; */
+    min-width: 3px;
+}
+
+/* trough {
+}
+
+slider {
+} */
+
+scrollbar:hover,
+.scrollbar:hover {
+    transition: all 200ms ease-in-out;
+    /* -GtkRange-slider-width: 10; */
+}
+
+scrollbar button,
+.scrollbar.button,
+.scrollbar.button:active,
+.scrollbar.button:active:hover,
+.scrollbar.button:hover:backdrop,
+.scrollbar.button:active:hover:backdrop {
+    border: none;
+    background-image: none;
+    background-color: transparent;
+}
+
+/* scrollbar.overlay-indicator slider,
+.slider {
+    border: 1px solid alpha (@bg_highlight_color, 0.25);
+    background-color: alpha (@text_color, 0.6);
+    border-radius: 10px;
+} */
+
+scrollbar.overlay-indicator slider:hover,
+.slider:hover {
+    border-radius: 20px;
+}
+
+scrollbar trough,
+.scrollbar.trough {
+    padding: 0;
+}
+
+scrollbar.overlay-indicator trough,
+.scrollbar.overlay-indicator.trough {
+    background-color: transparent;
+}
+
+scrollbar.overlay-indicator:hover trough,
+.scrollbar.overlay-indicator.trough:hover {
+    background-color: alpha (#000, 0.1);
+}
+
+scrollbar:hover trough,
+.scrollbar:hover.trough {
+    background-color: transparent;
+    border-radius: 0;
 }
