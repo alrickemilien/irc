@@ -21,8 +21,7 @@ static const t_irc_reply g_replys[] = {
     {RPL_WHOISUSER, "RPL_WHOISUSER", "%s %s %s * :%s"},
     {RPL_ENDOFWHOIS, "RPL_ENDOFWHOIS", "%s :End of /WHOIS list"},
     {RPL_WHOISCHANNELS, "RPL_WHOISCHANNELS", "%s :%s"},
-    {RPL_WHOREPLY, "RPL_WHOREPLY",
-     "%s %s %s %s %s %s" /*"%s %s %s %s %s :%d %s"*/},
+    {RPL_WHOREPLY, "RPL_WHOREPLY", "%s %s %s %s %s %s"},
     {RPL_ENDOFWHO, "RPL_ENDOFWHO", "%s :End of /WHO list"},
     {RPL_TOPIC, "RPL_TOPIC", "%s :%s"},
 };

@@ -65,7 +65,7 @@ void irc_user_join_default_channel(t_env *e, int cs)
             e->fds[cs].username, e->fds[cs].host,
             e->channels[e->fds[cs].channel].channel);
 
-    logdebug("irc_user_join_default_channel:: %s\n", concat);
+    logdebug("irc_user_join_default_channel:: %s", concat);
     cbuffer_putstr(&e->fds[cs].buf_write, concat);
 }
 
