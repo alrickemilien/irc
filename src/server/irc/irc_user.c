@@ -14,7 +14,8 @@
 
 static int irc_user_check_command(t_env *e, int cs, const t_token *tokens)
 {
-    char *username;
+    size_t i;
+    char * username;
     // char *hostname;
     // char *servername;
     // char *realname;
@@ -24,14 +25,9 @@ static int irc_user_check_command(t_env *e, int cs, const t_token *tokens)
     // size_t servername_len;
     // size_t realname_len;
 
-    size_t i;
-
     if (!tokens[1].addr || !tokens[2].addr || !tokens[3].addr ||
         !tokens[4].addr)
-    {
-        irc_reply(e, cs, ERR_NEEDMOREPARAMS, "USER");
-        return (-1);
-    }
+        return (irc_err(e, cs, ERR_NEEDMOREPARAMS, "USER"));
 
     username = tokens[1].addr;
     username_len = tokens[1].len;
@@ -51,10 +47,7 @@ static int irc_user_check_command(t_env *e, int cs, const t_token *tokens)
     {
         if (e->fds[i].type == FD_CLIENT &&
             strncmp(e->fds[i].username, username, username_len) == 0)
-        {
-            irc_reply(e, cs, ERR_ALREADYREGISTRED, NULL);
-            return (-1);
-        }
+            return (irc_err(e, cs, ERR_ALREADYREGISTRED, NULL));
         i++;
     }
 

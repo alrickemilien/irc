@@ -14,34 +14,21 @@ static int irc_part_check_command(t_env *e, int cs, const t_token *tokens)
     size_t      channel_len;
 
     if (!tokens[1].addr || tokens[2].addr)
-    {
-        irc_reply(e, cs, ERR_NEEDMOREPARAMS, NULL);
-        return (-1);
-    }
+        return (irc_err(e, cs, ERR_NEEDMOREPARAMS, NULL));
 
     channel = tokens[1].addr;
     channel_len = tokens[1].len;
 
     if (strpbrk(channel, "\x07\x2C"))
-    {
-        irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
-    }
+        return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
     else if (channel_len - 1 > CHANNELSTRSIZE)
-    {
-        irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
-    }
+        return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
     else if ((channel[0] != '#' && channel[0] != '&') ||
              !is_valid_chan_name(channel))
-    {
-        irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
-    }
+        return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
     else if (channel_len < 1)
-    {
-        irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
-    }
-    else
-        return (0);
-    return (-1);
+        return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
+    return (0);
 }
 
 int irc_part(t_env *e, int cs, t_token *tokens)
@@ -49,29 +36,28 @@ int irc_part(t_env *e, int cs, t_token *tokens)
     char   concat[CHANNELSTRSIZE + NICKNAMESTRSIZE + 11];
     size_t i;
 
-    if ((irc_part_check_command(e, cs, tokens)) != 0)
+    logdebug("irc_part:: %s\n", tokens[0].addr);
+    logdebug("irc_part:: leaving %s\n", tokens[1].addr);
+
+    if ((irc_part_check_command(e, cs, tokens)) < 0)
         return (-1);
 
     // Look for already existing channel or create it
     i = 0;
     while (i < e->maxchannels)
     {
-        if (strncmp(e->channels[i].channel, tokens[1].addr, tokens[1].len) == 0)
+        if (strncmp(e->channels[i].channel, tokens[1].addr, tokens[1].len) ==
+                0 &&
+            e->channels[i].channel[tokens[1].len] == 0)
             break;
         i++;
     }
 
     if (i == e->maxchannels)
-    {
-        irc_reply(e, cs, ERR_NOSUCHCHANNEL, tokens[1].addr);
-        return (-1);
-    }
+        return (irc_err(e, cs, ERR_NOSUCHCHANNEL, tokens[1].addr));
 
     if (e->fds[cs].channel != i)
-    {
-        irc_reply(e, cs, ERR_NOTONCHANNEL, tokens[1].addr);
-        return (-1);
-    }
+        return (irc_err(e, cs, ERR_NOTONCHANNEL, tokens[1].addr));
 
     if (e->fds[cs].channel == 0)
         return (IRC_PART);

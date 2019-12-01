@@ -4,25 +4,13 @@
 static int irc_notice_check_command(t_env *e, int cs, const t_token *tokens)
 {
     if (!tokens[1].addr || !tokens[1].len)
-    {
-        irc_reply(e, cs, ERR_NOSUCHNICK, NULL);
-        return (-1);
-    }
-
+        return (irc_err(e, cs, ERR_NOSUCHNICK, NULL));
     if (!tokens[2].addr)
-    {
-        irc_reply(e, cs, ERR_NOTEXTTOSEND, NULL);
-        return (-1);
-    }
-
+        return (irc_err(e, cs, ERR_NOTEXTTOSEND, NULL));
     if (tokens[2].addr[0] == ':' &&
         (tokens[2].addr[1] == 0 ||
          tokens[2].addr + 1 == strstr(tokens[2].addr, "\x0D\x0A")))
-    {
-        irc_reply(e, cs, ERR_NOTEXTTOSEND, NULL);
-        return (-1);
-    }
-
+        return (irc_err(e, cs, ERR_NOTEXTTOSEND, NULL));
     return (0);
 }
 
@@ -33,7 +21,7 @@ int irc_notice(t_env *e, int cs, t_token *tokens)
     size_t  subtoken_count;
     t_token subtokens[30];
 
-    if ((irc_notice_check_command(e, cs, tokens)) != 0)
+    if ((irc_notice_check_command(e, cs, tokens)) < 0)
         return (-1);
 
     memset(subtokens, 0, sizeof(t_token) * 30);

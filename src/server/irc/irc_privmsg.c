@@ -4,25 +4,13 @@
 static int irc_privmsg_check_command(t_env *e, int cs, const t_token *tokens)
 {
     if (!tokens[1].addr || !tokens[1].len)
-    {
-        irc_reply(e, cs, ERR_NOSUCHNICK, NULL);
-        return (-1);
-    }
-
+        return (irc_err(e, cs, ERR_NOSUCHNICK, NULL));
     if (!tokens[2].addr)
-    {
-        irc_reply(e, cs, ERR_NOTEXTTOSEND, NULL);
-        return (-1);
-    }
-
+        return (irc_err(e, cs, ERR_NOTEXTTOSEND, NULL));
     if (tokens[2].addr[0] == ':' &&
         (tokens[2].addr[1] == 0 ||
          tokens[2].addr + 1 == strstr(tokens[2].addr, "\x0D\x0A")))
-    {
-        irc_reply(e, cs, ERR_NOTEXTTOSEND, NULL);
-        return (-1);
-    }
-
+        return (irc_err(e, cs, ERR_NOTEXTTOSEND, NULL));
     return (0);
 }
 
@@ -100,7 +88,7 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
     {
         if (subtokens[j].addr != NULL && subtokens[j].addr[0] != '&' &&
             subtokens[j].addr[0] != '#')
-            irc_reply(e, cs, ERR_NOSUCHNICK, subtokens[j].addr);
+            irc_err(e, cs, ERR_NOSUCHNICK, subtokens[j].addr);
         j++;
     }
 

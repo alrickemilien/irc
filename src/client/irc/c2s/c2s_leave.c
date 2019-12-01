@@ -1,5 +1,5 @@
 #include <client/irc.h>
-#include <ctype.h>
+#include <client/ui/panel.h>
 
 /*
 ** the only restriction on a
@@ -53,6 +53,9 @@ int c2s_leave(t_env *e, int cs, t_token *tokens)
         return (-1);
 
     _c2s_leave(&e->fds[e->sock], tokens[1].addr, tokens[1].len);
+
+    if (e->options.gui)
+        ui_leave(e->ui, tokens[1].addr);
 
     return (IRC_LEAVE);
 }

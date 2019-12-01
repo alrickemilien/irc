@@ -14,32 +14,20 @@ static int irc_join_check_command(t_env *e, int cs, const t_token *tokens)
     size_t      channel_len;
 
     if (!tokens[1].addr || tokens[2].addr)
-    {
-        irc_reply(e, cs, ERR_NEEDMOREPARAMS, NULL);
-        return (-1);
-    }
+        return (irc_err(e, cs, ERR_NEEDMOREPARAMS, NULL));
 
     channel = tokens[1].addr;
     channel_len = tokens[1].len;
 
     if (strpbrk(channel, "\x07\x2C"))
-    {
-        irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
-    }
+        return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
     else if (channel_len - 1 > CHANNELSTRSIZE)
-    {
-        irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
-    }
+        return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
     else if ((channel[0] != '#' && channel[0] != '&') ||
              !is_valid_chan_name(channel))
-    {
-        irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
-    }
+        return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
     else if (channel_len < 1)
-    {
-        irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
-    }
-    
+        return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
     return (0);
 }
 

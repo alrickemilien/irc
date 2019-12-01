@@ -4,11 +4,7 @@
 static int irc_whois_check_command(t_env *e, int cs, const t_token *tokens)
 {
     if (!tokens[1].addr)
-    {
-        irc_reply(e, cs, ERR_NONICKNAMEGIVEN, NULL);
-        return (-1);
-    }
-
+        return (irc_err(e, cs, ERR_NONICKNAMEGIVEN, NULL));
     return (0);
 }
 
@@ -65,7 +61,7 @@ int irc_whois(t_env *e, int cs, t_token *tokens)
     while (j < subtoken_count)
     {
         if (subtokens[j].addr != NULL)
-            irc_reply(e, cs, ERR_NOSUCHNICK, subtokens[j].addr);
+            irc_err(e, cs, ERR_NOSUCHNICK, subtokens[j].addr);
         j++;
     }
 

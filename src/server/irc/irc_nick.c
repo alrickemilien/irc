@@ -8,10 +8,7 @@ static int irc_nick_check_command(t_env *e, int cs, const t_token *tokens)
     size_t      i;
 
     if (!tokens[1].addr || tokens[2].addr)
-    {
-        irc_reply(e, cs, ERR_NONICKNAMEGIVEN, NULL);
-        return (-1);
-    }
+        return (irc_err(e, cs, ERR_NONICKNAMEGIVEN, NULL));
 
     nick = tokens[1].addr;
     nick_len = tokens[1].len;
@@ -27,10 +24,7 @@ static int irc_nick_check_command(t_env *e, int cs, const t_token *tokens)
     {
         if (i != (size_t)cs && e->fds[i].type == FD_CLIENT &&
             strcmp(e->fds[i].nickname, nick) == 0)
-        {
-            irc_reply(e, cs, ERR_NICKNAMEINUSE, nick);
-            return (-1);
-        }
+            return (irc_err(e, cs, ERR_NICKNAMEINUSE, nick));
 
         i++;
     }
