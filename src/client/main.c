@@ -49,7 +49,7 @@ static void init_options(t_options *options)
         options->port = 5555;
 
     if (options->ipv6)
-        loginfo("Running server ipv6\n");
+        loginfo("Running server ipv6");
 }
 
 static void init_std(t_env *e)

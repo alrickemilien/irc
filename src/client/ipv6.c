@@ -12,7 +12,7 @@
 int client_ipv6(t_env *e)
 {
     int                 cs;
-    struct sockaddr_in6 sin;
+    struct sockaddr_in6 addr;
     struct protoent *   pe;
 
     loginfo("client_ipv6::");
@@ -37,13 +37,10 @@ int client_ipv6(t_env *e)
     /* stacks).  This behavior can be modified using the IPPROTO_IPV6    */
     /* level socket option IPV6_V6ONLY if required.                      */
     /*********************************************************************/
-    memset(&sin, 0, sizeof(sin));
-
-    logdebug("e->options.host: %s\n", e->options.host);
-
-    sin.sin6_family = AF_INET6;
-    sin.sin6_port = htons(e->options.port);
-    inet_pton(AF_INET6, e->options.host, &sin.sin6_addr);
+    memset(&addr, 0, sizeof(addr));
+    addr.sin6_family = AF_INET6;
+    addr.sin6_port = htons(e->options.port);
+    inet_pton(AF_INET6, e->options.host, &addr.sin6_addr);
 
     /********************************************************************/
     /* The listen() function allows the server to accept incoming       */
@@ -53,7 +50,7 @@ int client_ipv6(t_env *e)
     /* requests.                                                        */
     /********************************************************************/
 
-    if (connect(cs, (struct sockaddr *)&sin, sizeof(sin) < 0))
+    if (connect(cs, (struct sockaddr *)&addr, sizeof(addr)) < 0)
         return (logerrno("ipv6::connect"));
 
     if (e->options.ssl)

@@ -19,6 +19,7 @@ int				read_port_option(
 		return (-1);
 	if (ato32(value, (uint32_t*)&options->port) != 0 || options->port < 1000 || options->port > 99999)
 		return (fprintf(stderr,
-			"for the --port option: port must be a vakue between 1000 an 99999'%s'.\n", value));
+			"for the --port option: port must be a value between 1000 an 99999'%s'.\n", value));
+	memcpy(options->str_port, value, strlen(value));
 	return (0);	
 }
