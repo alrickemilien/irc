@@ -50,6 +50,7 @@ typedef struct	s_options {
 	// Metata data related to options
 	char		host[MAX_ALLOWED_VALUE_SIZE];
 	char		command[BUF_SIZE];
+	char		str_port[12];
 }				t_options;
 
 # pragma pack(pop)
