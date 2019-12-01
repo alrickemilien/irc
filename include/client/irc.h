@@ -31,6 +31,7 @@ typedef struct  s_env
     char        nick[NICKNAMESTRSIZE + 1];
     int         registered;
     void        *ssl_ctx;
+    void        *ui;
     t_options   options;
 }               t_env;
 
@@ -65,6 +66,8 @@ typedef enum    e_irc_s2c {
     IRC_S2C_RPL_WHOISUSER,
     IRC_S2C_RPL_WHOISCHANNELS,
     IRC_S2C_RPL_ENDOFWHOIS,
+    IRC_S2C_RPL_WHOREPLY,
+    IRC_S2C_RPL_ENDOFWHO,
     IRC_S2C_COMMANDS_NUMBER,
 }               t_irc_s2c;
 
@@ -73,6 +76,16 @@ typedef struct  s_irc_cmd
     char        *command;
     int         (*f)(t_env *e, int cs, t_token *tokens);
 }               t_irc_cmd;
+
+typedef struct  s_s2c_error
+{
+    int         id;
+    char        *fmt;
+    int         (*f)(
+        t_env *e,
+        int cs,
+        t_token *tokens);
+}               t_s2c_error;
 
 int             c2s(t_env *e, int cs, char *buffer);
 int             c2s_join(t_env *e, int cs, t_token *tokens);
@@ -112,6 +125,10 @@ int             s2c_rpl_topic(t_env *e, int cs, t_token *tokens);
 int             s2c_rpl_whoisuser(t_env *e, int cs, t_token *tokens);
 int             s2c_rpl_whoischannels(t_env *e, int cs, t_token *tokens);
 int             s2c_rpl_endofwhois(t_env *e, int cs, t_token *tokens);
+int             s2c_rpl_whoreply(t_env *e, int cs, t_token *tokens);
+int             s2c_rpl_endofwho(t_env *e, int cs, t_token *tokens);
+
+int             irc_error(t_env *e, int err_code, ...);
 
 /*
 ** fd 
@@ -125,12 +142,12 @@ void            check_fd(t_env *e);
 ** Socket
 */
 
-int            client_ipv4(t_env *e);
-void            client_ipv6(t_env *e);
+int             client_ipv4(t_env *e);
+int             client_ipv6(t_env *e);
 
-int            server_read(t_env *e, size_t cs);
-int            server_write(t_env *e, size_t cs);
-int            stdin_read(t_env *e, size_t cs);
+int             server_read(t_env *e, size_t cs);
+int             server_write(t_env *e, size_t cs);
+int             stdin_read(t_env *e, size_t cs);
 
-void            do_select(t_env *e);
+int             do_select(t_env *e);
 #endif

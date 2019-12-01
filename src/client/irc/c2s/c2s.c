@@ -1,4 +1,5 @@
 #include <client/irc.h>
+#include <client/ui/panel.h>
 
 static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
     [IRC_JOIN] = {"/join", &c2s_join},
@@ -13,6 +14,11 @@ static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
     [IRC_WHOIS] = {"/whois", &c2s_whois},
 };
 
+static int is_valid_termination(const char *buffer, size_t len)
+{
+    return (buffer[len] == ' ' || buffer[len] == '\n' || buffer[len] == 0);
+}
+
 int c2s(t_env *e, int cs, char *buffer)
 {
     size_t i;
@@ -20,15 +26,18 @@ int c2s(t_env *e, int cs, char *buffer)
     t_token tokens[30];
 
     // Skip withespaces
-    while (*buffer == 0x20)
+    while (*buffer == 0x20 || *buffer == 0x0A)
         buffer++;
+
+    if (*buffer == 0)
+        return (0);
 
     i = 0;
     while (i < IRC_COMMANDS_NUMBER)
     {
         if (strncmp(buffer, g_irc_commands[i].command,
                     strlen(g_irc_commands[i].command)) == 0 &&
-            buffer[strlen(g_irc_commands[i].command)] == ' ')
+            is_valid_termination(buffer, strlen(g_irc_commands[i].command)))
         {
             // printf("buffer: %s\n", buffer);
 
@@ -49,11 +58,10 @@ int c2s(t_env *e, int cs, char *buffer)
         i++;
     }
 
-    if (e->sock == -1)
+    if (e->sock == -1 || buffer[0] == '/')
         return (0);
 
-    logdebug("Unknow command '%s', treat as a msg to current channel\n",
-             buffer);
+    // logdebug("Unknow command '%s', treat as a msg to current channel", buffer);
 
     _c2s_msg(&e->fds[e->sock], e->fds[e->sock].channelname,
              strlen(e->fds[e->sock].channelname), buffer);

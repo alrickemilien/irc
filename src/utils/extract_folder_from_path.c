@@ -3,6 +3,7 @@
 #include <string.h>
 #include <libgen.h>
 #include <stdlib.h>
+#include <limits.h>
 
 /*
 ** This function extract the folder from the provided path
@@ -19,16 +20,33 @@
 ** ./ => /
 ** . => /
 ** .. => /
+** dirname not used, see https://www.jefftk.com/p/dirname-is-evil
 */
 
-char	*extract_folder_from_path(
-		const char *path)
+static const char *_dirname(const char *path)
 {
-	char	*tmp;
-	char	*ret;
+    static char         buffer[PATH_MAX];
+    static const char   dot[] = ".";
+    int                 last_slash_pos = -1;
+    size_t              i;
 
-	tmp = strdup(path);
-	ret = dirname(tmp);
-	free(tmp);
-	return (ret);
+    if (!path)
+        return (dot);
+    for (i = 0; path[i]; i++)
+    {
+        if (i >= PATH_MAX)
+            return dot;
+        if (path[i] == '/')
+            last_slash_pos = i;
+    }
+    if (last_slash_pos == -1)
+        return (dot);
+    strncpy(buffer, path, last_slash_pos);
+    buffer[last_slash_pos] = '\0';
+    return (buffer);
+}
+
+char *extract_folder_from_path(const char *path)
+{
+    return (strdup(_dirname(path)));
 }

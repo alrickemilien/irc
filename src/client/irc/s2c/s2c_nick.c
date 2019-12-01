@@ -1,6 +1,5 @@
 #include <client/irc.h>
 #include <client/ui/panel.h>
-#include <ctype.h>
 
 static int s2c_nick_check_command(t_env *e, int cs, const t_token *tokens)
 {
@@ -10,12 +9,12 @@ static int s2c_nick_check_command(t_env *e, int cs, const t_token *tokens)
     (void)e;
 
     if (!tokens[0].addr || !tokens[1].addr || tokens[2].addr)
-        return (logerror("s2c_nick_check_command:: ERR_NONICKNAMEGIVEN\n"));
+        return (irc_error(e, ERR_NONICKNAMEGIVEN));
 
     nick_len = tokens[2].len;
 
     if (nick_len > 9 || !nick_len)
-        return (logerror("s2c_nick_check_command:: ERR_ERRONEUSNICKNAME\n"));
+        return (irc_error(e, ERR_ERRONEUSNICKNAME, tokens[2].addr));
 
     return (0);
 }
@@ -31,7 +30,7 @@ static bool s2c_nick_is_me(t_env *e, const char *nick, size_t len)
 
 int s2c_nick(t_env *e, int cs, t_token *tokens)
 {
-    logdebug("s2c_nick:: %s\n", tokens[0].addr);
+    logdebug("s2c_nick:: %s", tokens[0].addr);
 
     if (s2c_nick_check_command(e, cs, tokens) < 0)
         return (-1);
@@ -42,10 +41,10 @@ int s2c_nick(t_env *e, int cs, t_token *tokens)
     {
         memrpl(e->fds[e->sock].nickname, NICKNAMESTRSIZE, tokens[2].addr,
                tokens[2].len);
-        loginfo("s2c_nick_is_me:: You changed nickname to %s\n",
+        loginfo("s2c_nick_is_me:: You changed nickname to %s",
                 e->fds[e->sock].channelname);
         if (e->options.gui)
-            set_nick_name(tokens[2].addr);
+            ui_set_nick(e->ui, tokens[2].addr);
     }
 
     return (IRC_S2C_NICK);

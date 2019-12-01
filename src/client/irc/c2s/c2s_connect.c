@@ -43,10 +43,10 @@ int _c2s_connect(t_env *     e,
     struct passwd *p;
 
     if ((p = getpwuid(getuid())) == NULL)
-        return (logerrno("_c2s_connect::getpwuid\n"));
+        return (logerrno("_c2s_connect::getpwuid"));
 
     if (gethostname(local_hostname, sizeof(local_hostname)) == -1)
-        return (logerrno("_c2s_connect::gethostname\n"));
+        return (logerrno("_c2s_connect::gethostname"));
 
     if (e->ipv6 == 1)
         client_ipv6(e);
@@ -54,7 +54,7 @@ int _c2s_connect(t_env *     e,
         client_ipv4(e);
 
     if (e->sock == -1)
-        return (logerrno("c2s_connect::"));
+        return (-1);
 
     cs = e->sock;
     fd = &e->fds[cs];
@@ -75,6 +75,8 @@ int _c2s_connect(t_env *     e,
     memrpl(fd->username, USERNAMESTRSIZE, name ? name : p->pw_name,
            strlen(name ? name : p->pw_name));
 
+    logdebug("_c2s_connect::e->nick:: %s",e->nick );
+
     // Send nickname if local one has been set
     if (e->nick[0])
     {
@@ -93,7 +95,7 @@ int c2s_connect(t_env *e, int cs, t_token *tokens)
     // Leave when socket already set
     // @TODO reset whole file descriptor
     if (e->sock != -1)
-        return logerror("Already connected\n");
+        return logerror("Already connected");
 
     if ((c2s_connect_check_command(e, tokens)) < 0)
         return (-1);

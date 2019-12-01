@@ -43,10 +43,7 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
     push @s, $tmp_s
 }
 
-my $response = "";
-
-# Skip welcome message
-$s[0]->recv($response, 1024);
+my $response;
 
 # Wait all client connections
 sleep(2);
@@ -58,7 +55,7 @@ sleep(2);
 
 # Get all connected people to the channel
 $s[0]->send("NAMES #meeting\x0D\x0A");
-$s[0]->recv($response, 1024);
+$s[0]->recv($response, 2048); # 2048 bytes fits RPL_WELCOME + TOPIC + (10 - 1) clients JOIN messages
 print $response;
 
 #
@@ -90,12 +87,12 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
 }
 
 # Wait all client leave channel
-sleep(3);
+sleep(2);
 
 # Get all connected people to the all channels
 $s[0]->send("NAMES\x0D\x0A");
 $s[0]->recv($response, 2048);
-print "end:" . $response;
+print $response;
 
 #
 # Terminate clients

@@ -13,33 +13,38 @@
 #include <sys/resource.h>
 #include <sys/time.h>
 
+// SO_NOSIGPIPE compat OSX
+// https://github.com/lpeterse/haskell-socket/issues/8#issuecomment-115650974
+#ifdef __APPLE__
+#define MSG_NOSIGNAL 0
+#endif
+
 /*
 ** Utils
 */
 
-#define MAX(a, b) ((a > b) ? a : b)
+#ifndef MAX
+# define MAX(a, b) ((a > b) ? a : b)
+#endif
 
 #define TOSTR(x) #x
 
-int xsafe(int err, int res, char *str);
-#define XSAFE(err, res, str) (xsafe(err, res, str))
-void *xpsafe(void *err, void *res, char *str);
-#define XPSAFE(err, res, str) (xpsafe(err, res, str))
-
 #define ISOTIMESTRSIZE 25
-void time2iso(char *str);
-
-int   ato32(const char *str, uint32_t *nbr);
-int   i64toa(uint64_t nbr, char *buffer, size_t buffer_size, uint64_t base);
-char *extract_folder_from_path(const char *path);
-char *merge_and_extract_folder_from_path(const char *a, const char *b);
-char *strjoin(char const *s1, char const *s2);
-void *memrpl(char *dest, size_t dest_size, const char *src, size_t src_size);
+int     time2iso(char *str);
+int     ato32(const char *str, uint32_t *nbr);
+int     i64toa(uint64_t nbr, char *buffer, size_t buffer_size, uint64_t base);
+char    *extract_folder_from_path(const char *path);
+char    *merge_and_extract_folder_from_path(const char *a, const char *b);
+char    *strjoin(char const *s1, char const *s2);
+void    *memrpl(char *dest, size_t dest_size, const char *src, size_t src_size);
+int     fmttime(char* str, const char *fmt);
+size_t  strlentrim(const char *str);
+const char  *strtrim(const char *str);
 
 /*
 ** irc utils
 */
-bool is_valid_chan_name(const char *channel);
+bool    is_valid_chan_name(const char *channel);
 
 /*
 ** log
@@ -48,10 +53,10 @@ bool is_valid_chan_name(const char *channel);
 #include <stdarg.h>
 #include <time.h>
 
-int loginfo(const char *fmt, ...);
-int logerror(const char *fmt, ...);
-int logerrno(const char *str);
-int logdebug(const char *fmt, ...);
+int     loginfo(const char *fmt, ...);
+int     logerror(const char *fmt, ...);
+int     logerrno(const char *str);
+int     logdebug(const char *fmt, ...);
 
 /*
 ** IRC specific
@@ -69,20 +74,21 @@ int logdebug(const char *fmt, ...);
 ** Tokenize
 */
 
-typedef struct s_token
-{
-    char * addr;
-    size_t len;
-} t_token;
+typedef struct  s_token {
+    char        *addr;
+    size_t      len;
+}               t_token;
 
-size_t tokenize(char *str, t_token *tokens, size_t len);
-size_t tokenizechr(char *str, t_token *tokens, size_t len, int c);
+size_t          tokenize(
+    char *str, t_token *tokens, size_t len);
+size_t          tokenizechr(
+    char *str, t_token *tokens, size_t len, int c);
 
 /*
 ** CBuffer
 */
 
-#include <cbuffer.h>
+#include <cbuffer/cbuffer.h>
 
 /*
 ** File descriptor
@@ -92,39 +98,49 @@ size_t tokenizechr(char *str, t_token *tokens, size_t len, int c);
 #define FD_SERV 1
 #define FD_CLIENT 2
 
-typedef struct s_fd
-{
-    int type;
-    int (*read)();
-    int (*write)();
-    t_cbuffer buf_read;
-    t_cbuffer buf_write;
+/*
+** Description of the t_fd structure
+** char   nickname;
+** char   host;         // the real name of the running on
+** char   serv;
+** char   username;     // the username on that host
+** char   realname;     // the username on that host
+** char   passwd;       // the username on that host
+** char   awaymessage;  // the message to send when away
+** char   channelname;  // the message to send when away
+*/
 
-    // User data
-    size_t channel;
-    char   nickname[NICKNAMESTRSIZE + 1];
-    char   host[NI_MAXHOST + 1];  // the real name of the running on
-    char   serv[NI_MAXSERV + 1];
-    char   username[USERNAMESTRSIZE + 1];    // the username on that host
-    char   realname[USERNAMESTRSIZE + 1];    // the username on that host
-    char   passwd[PASSWDTRSIZE + 1];         // the username on that host
-    char   awaymessage[BUF_SIZE + 1];        // the message to send when away
-    char   channelname[CHANNELSTRSIZE + 1];  // the message to send when away
-    int    registered;
-    int    away;
-    void * ssl;
-} t_fd;
+typedef struct  s_fd
+{
+    int         type;
+    int         (*read)();
+    int         (*write)();
+    t_cbuffer   buf_read;
+    t_cbuffer   buf_write;
+
+    size_t      channel;
+    char        nickname[NICKNAMESTRSIZE + 1];
+    char        host[NI_MAXHOST + 1];
+    char        serv[NI_MAXSERV + 1];
+    char        username[USERNAMESTRSIZE + 1];
+    char        realname[USERNAMESTRSIZE + 1];
+    char        passwd[PASSWDTRSIZE + 1];
+    char        awaymessage[BUF_SIZE + 1];
+    char        channelname[CHANNELSTRSIZE + 1];
+    int         registered;
+    int         away;
+    void        *ssl;
+}               t_fd;
 
 /*
 ** Channel
 */
 
-typedef struct s_channel
-{
-    char   channel[CHANNELSTRSIZE + 1];
-    int    chop;
-    size_t clients;
-} t_channel;
+typedef struct  s_channel {
+    char        channel[CHANNELSTRSIZE + 1];
+    int         chop;
+    size_t      clients;
+}               t_channel;
 
 /*
 ** Replys and errors
@@ -156,11 +172,10 @@ enum e_irc_reply
     ERR_ALREADYREGISTRED = 462,
 };
 
-typedef struct s_irc_reply
-{
-    int   code;
-    char *name;
-    char *fmt;
-} t_irc_reply;
+typedef struct  s_irc_reply {
+    int         code;
+    char        *name;
+    char        *fmt;
+}               t_irc_reply;
 
 #endif

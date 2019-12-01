@@ -1,4 +1,3 @@
-#include <ctype.h>
 #include <server/irc.h>
 
 /*
@@ -14,7 +13,8 @@
 
 static int irc_user_check_command(t_env *e, int cs, const t_token *tokens)
 {
-    char *username;
+    size_t i;
+    char * username;
     // char *hostname;
     // char *servername;
     // char *realname;
@@ -24,14 +24,9 @@ static int irc_user_check_command(t_env *e, int cs, const t_token *tokens)
     // size_t servername_len;
     // size_t realname_len;
 
-    size_t i;
-
     if (!tokens[1].addr || !tokens[2].addr || !tokens[3].addr ||
         !tokens[4].addr)
-    {
-        irc_reply(e, cs, ERR_NEEDMOREPARAMS, "USER");
-        return (-1);
-    }
+        return (irc_err(e, cs, ERR_NEEDMOREPARAMS, "USER"));
 
     username = tokens[1].addr;
     username_len = tokens[1].len;
@@ -51,10 +46,7 @@ static int irc_user_check_command(t_env *e, int cs, const t_token *tokens)
     {
         if (e->fds[i].type == FD_CLIENT &&
             strncmp(e->fds[i].username, username, username_len) == 0)
-        {
-            irc_reply(e, cs, ERR_ALREADYREGISTRED, NULL);
-            return (-1);
-        }
+            return (irc_err(e, cs, ERR_ALREADYREGISTRED, NULL));
         i++;
     }
 
@@ -65,10 +57,12 @@ void irc_user_join_default_channel(t_env *e, int cs)
 {
     char concat[512];
 
+    e->channels[e->fds[cs].channel].clients++;
+
     memset(concat, 0, sizeof(concat));
 
     sprintf(concat, "%s!%s@%s JOIN %s\x0D\x0A", e->fds[cs].nickname,
-            e->fds[cs].nickname, e->fds[cs].host,
+            e->fds[cs].username, e->fds[cs].host,
             e->channels[e->fds[cs].channel].channel);
 
     logdebug("irc_user_join_default_channel:: %s\n", concat);
@@ -85,8 +79,8 @@ int irc_user(t_env *e, int cs, t_token *tokens)
            tokens[1].len < USERNAMESTRSIZE ? tokens[1].len : USERNAMESTRSIZE);
 
     // Set hostname
-    memrpl(e->fds[cs].host, HOSTNAMESTRSIZE, tokens[1].addr,
-           tokens[1].len < HOSTNAMESTRSIZE ? tokens[1].len : HOSTNAMESTRSIZE);
+    memrpl(e->fds[cs].host, HOSTNAMESTRSIZE, tokens[2].addr,
+           tokens[2].len < HOSTNAMESTRSIZE ? tokens[2].len : HOSTNAMESTRSIZE);
 
     // Set realname
     memrpl(e->fds[cs].realname, USERNAMESTRSIZE,
@@ -104,8 +98,6 @@ int irc_user(t_env *e, int cs, t_token *tokens)
     }
 
     e->fds[cs].registered = 1;
-
-    e->channels[e->fds[cs].channel].clients++;
 
     irc_reply(e, cs, RPL_WELCOME, e->fds[cs].username, e->fds[cs].host,
               e->fds[cs].realname);

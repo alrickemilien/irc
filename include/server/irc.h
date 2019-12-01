@@ -11,6 +11,8 @@
 #include <irc.h>
 #include <server/options.h>
 
+#define PIDFILE "./ircserver.pid"
+
 #define FD_FREE 0
 #define FD_SERV 1
 #define FD_CLIENT 2
@@ -81,6 +83,7 @@ int irc_part(t_env *e, int cs, t_token *tokens);
 int irc_whois(t_env *e, int cs, t_token *tokens);
 int irc_who(t_env *e, int cs, t_token *tokens);
 int irc_reply(t_env *e, int cs, int code, ...);
+int irc_err(t_env *e, int cs, int code, ...);
 
 void irc_user_join_default_channel(t_env *e, int cs);
 
@@ -94,14 +97,13 @@ void disconnect(t_env *e, size_t cs);
 void serv(t_env *e);
 
 int on_connect(t_env *e, size_t sock);
-void server_create(t_env *e, int port);
 int server_ipv6(const t_options *options, t_env *e);
-void server_ipv4(const t_options *options, t_env *e);
+int server_ipv4(const t_options *options, t_env *e);
 
 int client_write(t_env *e, size_t cs);
 int client_read(t_env *e, size_t cs);
 
-void do_select(t_env *e);
-void daemonize(void);
+int do_select(t_env *e);
+int daemonize(void);
 
 #endif

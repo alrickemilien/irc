@@ -1,7 +1,8 @@
 BasedOnStyle: Chromium
 IndentWidth: 4
+ColumnLimit: 80
+PointerAlignment: Right
 AllowShortFunctionsOnASingleLine: None
 KeepEmptyLinesAtTheStartOfBlocks: false
 BreakBeforeBraces: Allman
 AlignConsecutiveDeclarations: true
-PointerAlignment: Right

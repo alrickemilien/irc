@@ -1,5 +1,5 @@
 #include <client/irc.h>
-#include <ctype.h>
+#include <client/ui/panel.h>
 
 /*
 ** the only restriction on a
@@ -17,39 +17,40 @@ static int c2s_leave_check_command(t_env *e, int cs, const t_token *tokens)
     (void)e;
 
     if (!tokens[1].addr || tokens[2].addr)
-        return logerror("c2s_leave_check_command::ERR_NEEDMOREPARAMS\n");
+        return (irc_error(e, ERR_NEEDMOREPARAMS, tokens[0].addr));
 
     channel = tokens[1].addr;
     channel_len = tokens[1].len;
 
     if (strpbrk(channel, "\x07\x2C"))
-        return logerror("c2s_leave_check_command::ERR_NOSUCHCHANNEL\n");
+        return (irc_error(e, ERR_NOSUCHCHANNEL, channel));
     else if (channel_len - 1 > CHANNELSTRSIZE)
-        return logerror("c2s_leave_check_command::ERR_NOSUCHCHANNEL\n");
+        return (irc_error(e, ERR_NOSUCHCHANNEL, channel));
     else if ((channel[0] != '#' && channel[0] != '&') ||
              !is_valid_chan_name(channel))
-        return logerror("c2s_leave_check_command::ERR_NOSUCHCHANNEL\n");
+        return (irc_error(e, ERR_NOSUCHCHANNEL, channel));
     else if (channel_len < 1)
-        return logerror("c2s_leave_check_command::ERR_NOSUCHCHANNEL\n");
-    else
-        return (0);
-    return (-1);
+        return (irc_error(e, ERR_NOSUCHCHANNEL, channel));
+    return (0);
 }
 
 int _c2s_leave(t_fd *fd, const char *channel_name, size_t channel_name_len)
 {
-    return (cbuffer_putcmd(&fd->buf_write, "PART %*s\x0D\x0A", channel_name_len,
-                           channel_name));
+    return (cbuffer_putcmd(&fd->buf_write, "PART %.*s\x0D\x0A",
+                           channel_name_len, channel_name));
 }
 
 int c2s_leave(t_env *e, int cs, t_token *tokens)
 {
     if (e->sock == -1)
-        return logerror("%s\n",
-                        "You need to be logged in before any command. Use "
-                        "/connect [server] ?[port]");
+        return logerror(
+            "You need to be logged in before any command. Use "
+            "/connect [server] ?[port]");
 
     if ((c2s_leave_check_command(e, cs, tokens)) != 0)
+        return (-1);
+
+    if (e->options.gui && ui_leave(e->ui, tokens[1].addr) < 0)
         return (-1);
 
     _c2s_leave(&e->fds[e->sock], tokens[1].addr, tokens[1].len);

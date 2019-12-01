@@ -1,4 +1,5 @@
 #include <client/irc.h>
+#include <client/ui/panel.h>
 #include <ctype.h>
 
 static int c2s_whois_check_command(t_env *e, int cs, const t_token *tokens)
@@ -9,12 +10,12 @@ static int c2s_whois_check_command(t_env *e, int cs, const t_token *tokens)
     (void)e;
 
     if (!tokens[1].addr)
-        return (logerror("c2s_whois_check_command::ERR_NONICKNAMEGIVEN\n"));
+        return (irc_error(e, ERR_NONICKNAMEGIVEN));
 
     nick_len = tokens[1].len;
 
     if (nick_len > 9 || !nick_len)
-        return (logerror("c2s_whois_check_command::ERR_ERRONEUSNICKNAME\n"));
+        return (irc_error(e, ERR_ERRONEUSNICKNAME, tokens[1].addr));
 
     return (0);
 }
@@ -22,7 +23,7 @@ static int c2s_whois_check_command(t_env *e, int cs, const t_token *tokens)
 int _c2s_whois(t_fd *fd, const char *nick, size_t nick_len)
 {
     return (
-        cbuffer_putcmd(&fd->buf_write, "WHOIS %*s\x0D\x0A", nick_len, nick));
+        cbuffer_putcmd(&fd->buf_write, "WHOIS %.*s\x0D\x0A", nick_len, nick));
 }
 
 int c2s_whois(t_env *e, int cs, t_token *tokens)
@@ -31,7 +32,6 @@ int c2s_whois(t_env *e, int cs, t_token *tokens)
 
     if (e->sock == -1)
         return logerror(
-            "%s\n",
             "You nee to be logged in before any command. Use /connect [server] "
             "?[port]");
 

@@ -112,19 +112,16 @@ $s1->send("JOIN #ערוץ1\x0D\x0A");
 $s2->send("JOIN #ערוץ1\x0D\x0A");
 $s3->send("JOIN #ערוץ1\x0D\x0A");
 
-ok(ircunittest::recv_eq $s1, "JOIN #ערוץ1");
+ok(ircunittest::recv_ne $s4, "JOIN #ערוץ1");
+ok(ircunittest::recv_eq $s3, "JOIN #ערוץ1");
 ok(ircunittest::recv_eq $s2, "JOIN #ערוץ1");
-ok(ircunittest::recv_ne $s3, "JOIN #ערוץ1");
-
-diag "JOIN #ערוץ1";
+ok(ircunittest::recv_eq $s1, "JOIN #ערוץ1");
 
 $s3->send("PRIVMSG client_2,client_1 :איפה הביבליוטקה\x0D\x0A");
 
 ok(ircunittest::recv_eq $s1, "לקוח3 PRIVMSG :איפה הביבליוטקה");
 ok(ircunittest::recv_eq $s2, "לקוח3 PRIVMSG :איפה הביבליוטקה");
 ok(ircunittest::recv_ne $s3, "לקוח3 PRIVMSG :איפה הביבליוטקה");
-
-exit 1;
 
 #
 # Test PRIVMSG to all clients in the channel
@@ -161,7 +158,7 @@ $s1->send("QUIT :bye\x0D\x0A");
 ok(ircunittest::recv_eq $s2, "client_1 QUIT :bye");
 ok(ircunittest::recv_eq $s3, "client_1 QUIT :bye");
 
-diag "Closing clients";
+diag "Closing clients ...";
 $s1->close();
 $s2->close();
 $s3->close();

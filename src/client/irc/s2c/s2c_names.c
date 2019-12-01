@@ -34,7 +34,7 @@ int s2c_rpl_endofnames(t_env *e, int cs, t_token *tokens)
 
     s2c_rpl_namreply_state = 0;
 
-    loginfo("%s\n", s2c_rpl_namreply_buffer);
+    loginfo(s2c_rpl_namreply_buffer);
 
     return (IRC_S2C_RPL_ENDOFNAMES);
 }

@@ -1,6 +1,5 @@
 #include <netdb.h>
 #include <netinet/in.h>
-
 #include <server/irc.h>
 #include <server/ssl.h>
 
@@ -15,15 +14,16 @@ int server_ipv6(const t_options *options, t_env *e)
 #endif  // __APPLE__
     // struct hostent      *hp;
 
-    pe = (struct protoent *)XPSAFE((void *)0, getprotobyname("tcp"),
-                                   "server_ipv6::getprotobyname");
+    if ((pe = (struct protoent *)getprotobyname("tcp")) == (void *)0)
+        return (logerrno("server_ipv6::getprotobyname"));
+
     /********************************************************************/
     /* The socket() function returns a socket descriptor, which represents   */
     /* an endpoint.  Get a socket for address family AF_INET6 to        */
     /* prepare to accept incoming connections on.                       */
     /********************************************************************/
-    sock = XSAFE(-1, socket(AF_INET6, SOCK_STREAM, pe->p_proto),
-                 "server_ipv6::socket");
+    if ((sock = socket(AF_INET6, SOCK_STREAM, pe->p_proto)) == -1)
+        return (logerrno("server_ipv6::socket"));
 
     /********************************************************************/
     /* The setsockopt() function is used to allow the local address to  */
@@ -60,8 +60,8 @@ int server_ipv6(const t_options *options, t_env *e)
     // hp->h_length);
     sin.sin6_addr = in6addr_any;
     sin.sin6_port = htons(options->port);
-    XSAFE(-1, bind(sock, (struct sockaddr *)&sin, sizeof(struct sockaddr_in6)),
-          "server_ipv6::bind");
+    if (bind(sock, (struct sockaddr *)&sin, sizeof(struct sockaddr_in6)) == -1)
+        return (logerrno("server_ipv6::bind"));
 
     /********************************************************************/
     /* The listen() function allows the server to accept incoming       */
@@ -70,11 +70,12 @@ int server_ipv6(const t_options *options, t_env *e)
     /* requests before the system starts rejecting the incoming         */
     /* requests.                                                        */
     /********************************************************************/
-    XSAFE(-1, listen(sock, options->backlog), "server_ipv6::listen");
+    if (listen(sock, options->backlog) == -1)
+        return (logerrno("server_ipv6::listen"));
 
-    if (options->ssl)
-        XSAFE(-1, ssl_init(e, options->ssl_key_file, options->ssl_crt_file),
-              "server_ipv6::ssl_init");
+    if (options->ssl &&
+        ssl_init(e, options->ssl_key_file, options->ssl_crt_file) < 0)
+        return (logerrno("server_ipv6::ssl_init"));
 
     e->fds[sock].type = FD_SERV;
     e->fds[sock].read = on_connect;

@@ -4,7 +4,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include <cbuffer_ssl.h>
+#include <cbuffer/cbuffer_ssl.h>
 #include <server/irc.h>
 
 /*
@@ -20,6 +20,7 @@ int client_read(t_env *e, size_t cs)
     // printf("databuffer tail BEFORE RECV is %ld\n", e->fds[cs].buf_read.tail);
     // printf("databuffer head BEFORE RECV is %ld\n", e->fds[cs].buf_read.head);
 
+    // logdebug("client_read::cbuffer_debug\n");
     // cbuffer_debug(&e->fds[cs].buf_read);
 
     index = -1;
@@ -34,6 +35,7 @@ int client_read(t_env *e, size_t cs)
         else
             r = cbuffer_recv(&e->fds[cs].buf_read, cs);
 
+        // logdebug("client_read::r:: %ld\n", r);
         // printf("client_read::%ld bytes has been received for %ld\n", r, cs);
 
         if (r <= 0)
@@ -56,7 +58,7 @@ int client_read(t_env *e, size_t cs)
         if (e->fds[cs].buf_read.full)
         {
             logerror(
-                "[!] Buffer is reset because it is full without command\n");
+                "[!] Buffer is reset because it is full without command");
             cbuffer_reset(&e->fds[cs].buf_read);
         }
         return (0);

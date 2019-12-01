@@ -12,7 +12,7 @@ use ircunittest;
 # ############################################# #
 
 # Start server
-ircunittest::start_server();
+# ircunittest::start_server();
 
 #
 # Test clients connections
@@ -53,19 +53,15 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
     # All clients joining their created channel
     $s[$i]->send("JOIN #channel_$i\x0D\x0A");
 }
-sleep(2);
+sleep(2); # Waiting for joining
 
 # Test WHOIS query
 $s[0]->send("WHOIS client_3\x0D\x0AWHOIS client_5,client_8\x0D\x0A");
-sleep(4);
-
 $s[0]->recv(my $response, 2048);
 print $response;
 
 # Test WHO query
 $s[0]->send("WHO client_3\x0D\x0AWHO\x0D\x0A");
-sleep(4);
-
 $s[0]->recv($response, 2048);
 print $response;
 

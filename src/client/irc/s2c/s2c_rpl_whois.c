@@ -1,5 +1,5 @@
 #include <client/irc.h>
-#include <ctype.h>
+#include <client/ui/panel.h>
 
 static int  s2c_rpl_whois_state = 0;
 static char s2c_rpl_whois_buffer[512];
@@ -9,7 +9,7 @@ int s2c_rpl_whoisuser(t_env *e, int cs, t_token *tokens)
     (void)e;
     (void)cs;
 
-    logdebug("s2c_rpl_whoisuser:: %s\n", tokens[0].addr);
+    logdebug("s2c_rpl_whoisuser:: %s", tokens[0].addr);
 
     if (s2c_rpl_whois_state == 0)
     {
@@ -31,7 +31,7 @@ int s2c_rpl_whoischannels(t_env *e, int cs, t_token *tokens)
     (void)e;
     (void)cs;
 
-    logdebug("s2c_rpl_whoischannels:: %s\n", tokens[0].addr);
+    logdebug("s2c_rpl_whoischannels:: %s", tokens[0].addr);
 
     if (s2c_rpl_whois_state == 0)
         return (-1);
@@ -48,17 +48,17 @@ int s2c_rpl_endofwhois(t_env *e, int cs, t_token *tokens)
     (void)cs;
     (void)tokens;
 
-    logdebug("s2c_rpl_endofwhois:: %s\n", tokens[0].addr);
+    logdebug("s2c_rpl_endofwhois:: %s", tokens[0].addr);
 
     if (s2c_rpl_whois_state == 0)
         return (-1);
 
-    loginfo("%s\n", s2c_rpl_whois_buffer);
+    loginfo(s2c_rpl_whois_buffer);
 
     s2c_rpl_whois_state = 0;
 
-    // if (e->options.gui)
-    // set_nick_name(tokens[2].addr);
+    if (e->options.gui)
+        ui_whois(e->ui, s2c_rpl_whois_buffer);
 
     return (IRC_S2C_RPL_ENDOFWHOIS);
 }

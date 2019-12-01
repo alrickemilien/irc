@@ -1,134 +1,104 @@
-#include <arpa/inet.h>
 #include <client/irc.h>
 #include <client/ui/panel.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <sys/types.h>
 
-// static GtkWidget *host_entry;
-// static GtkWidget *port_entry;
-// static GtkWidget *username_entry;
-// static GtkWidget *pass_entry;
-// static GtkWidget *button_go;
-static GtkWidget * chat_box;
-static GtkWidget * channel_label;
-static GtkWidget * nick_label;
-static GtkWidget * window_panel;
-static GtkBuilder *builder;
-static GtkWidget *chat_entry;
-
-static gboolean on_keypress(GtkWidget *  widget,
-                            GdkEventKey *event,
-                            gpointer     data)
+int ui_clear_panel_window(t_env *e, t_ui_panel *ui)
 {
-    (void)widget;
-    (void)data;
+    (void)e;
+    free(ui->window_color);
 
-    if (event->keyval == GDK_KEY_Escape)
-        gtk_main_quit();
-    return FALSE;
+    // Destroy assets path allocated
+    free(ui->status_ok_image);
+    free(ui->status_not_ok_image);
+    free(ui->status_away_image);
+    free(ui->topic_image);
+    free(ui->error_image);
+    free(ui->info_image);
+
+    g_object_unref(G_OBJECT(ui->builder));
+
+    return (0);
 }
 
-static void chat_entry_send(GtkWidget *widget, gpointer data)
+static int ui_init_panel_assets(t_env *e, t_ui_panel *ui)
 {
-    const char *text;
-    t_env *e;
+    ui->status_ok_image =
+        gtk_get_assets(e->argv_0, "/ui/assets/icons8-ok-16.png");
+    ui->status_not_ok_image =
+        gtk_get_assets(e->argv_0, "/ui/assets/icons8-annuler-16.png");
+    ui->status_away_image =
+        gtk_get_assets(e->argv_0, "/ui/assets/icons8-mode-veille-16.png");
+    ui->topic_image =
+        gtk_get_assets(e->argv_0, "/ui/assets/icons8-grand-hashtag-40.png");
+    ui->error_image =
+        gtk_get_assets(e->argv_0, "/ui/assets/icons8-haute-priorité-100.png");
+    ui->info_image =
+        gtk_get_assets(e->argv_0, "/ui/assets/icons8-info-carré-16.png");
 
-    e = (t_env*)data;
-
-    text = gtk_entry_get_text(GTK_ENTRY(widget));
-
-    printf("Entry contents: %s\n", text);
-
-    c2s(e, e->sock, strdup(text));
-
-    gtk_entry_set_text(GTK_ENTRY(widget), "");
+    return (0);
 }
 
-void new_chat_message(const char *msg)
+static int ui_init_panel_window(t_ui_panel *ui)
 {
-    GtkWidget *w;
-
-    logdebug("ui::new_chat_message:: %s\n", msg);
-
-    chat_box = GTK_WIDGET(gtk_builder_get_object(builder, "chat_box"));
-
-    w = gtk_label_new(msg);
-    gtk_set_class(w, "chat-message");
-    gtk_label_set_xalign(GTK_LABEL(w), 0);
-    gtk_widget_set_margin_start(GTK_WIDGET(w), 12);
-    gtk_list_box_insert(GTK_LIST_BOX(chat_box), w, -1);
-    gtk_widget_show_all(chat_box);
-}
-
-void set_channel_name(const char *msg)
-{
-    logdebug("ui::set_channel_name:: %s\n", msg);
-
-    channel_label =
-        GTK_WIDGET(gtk_builder_get_object(builder, "channel_label"));
-
-    gtk_label_set_text(GTK_LABEL(channel_label), msg);
-    gtk_widget_show_all(channel_label);
-}
-
-void set_nick_name(const char *msg)
-{
-    logdebug("ui::set_nick_name:: %s\n", msg);
-
-    nick_label = GTK_WIDGET(gtk_builder_get_object(builder, "nick_label"));
-
-    gtk_label_set_text(GTK_LABEL(nick_label), msg);
-    gtk_widget_show_all(nick_label);
-}
-
-GtkWidget *panel_window(t_env *e)
-{
-    GtkCssProvider *cssProvider;
-
-    builder = gtk_builder_new();
-    if (gtk_builder_load(builder, e->argv_0, "/ui/panel/panel.glade") < 0)
-        return ((void *)0);
-
-    cssProvider = gtk_css_provider_new();
-    if (gtk_provider_load_css(cssProvider, e->argv_0, "/ui/panel/panel.css") <
-        0)
-        return ((void *)0);
-
-    window_panel = GTK_WIDGET(gtk_builder_get_object(builder, "window_panel"));
-
-    gtk_widget_add_events(window_panel, GDK_KEY_PRESS_MASK);
-    g_signal_connect(window_panel, "key_press_event", G_CALLBACK(on_keypress),
+    ui->window =
+        GTK_WIDGET(gtk_builder_get_object(ui->builder, "window_panel"));
+    gtk_widget_add_events(ui->window, GDK_KEY_PRESS_MASK);
+    g_signal_connect(ui->window, "key_press_event", G_CALLBACK(on_keypress),
                      NULL);
-    g_signal_connect(window_panel, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+    g_signal_connect(ui->window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+    ui->window_color =
+        gtk_new_rgba(163.0f / 255.0f, 88.0f / 255.0f, 136.0f / 255.0f, 0.96);
+    gtk_set_transparent_window(ui->window, ui->window_color);
+    return (0);
+}
 
-    // host_entry = GTK_WIDGET(gtk_builder_get_object(builder, "entry_host"));
-    // port_entry = GTK_WIDGET(gtk_builder_get_object(builder, "entry_port"));
-    // username_entry = GTK_WIDGET(gtk_builder_get_object(builder,
-    // "entry_name"));
-    // pass_entry = GTK_WIDGET(gtk_builder_get_object(builder, "entry_pass"));
+static int ui_init_panel_chatbox(t_env *e, t_ui_panel *ui)
+{
+    // init chatbox
+    ui->chat_box = GTK_WIDGET(gtk_builder_get_object(ui->builder, "chat_box"));
 
-    // button_go = GTK_WIDGET(gtk_builder_get_object(builder, "button_go"));
-    // g_signal_connect(button_go, "clicked", G_CALLBACK(login_connect), e);
+    ui->channels_count = 0;
+    ui->msg_count = 0;
 
+    memset(ui->chat_msg_bloc_list, 0, sizeof(ui->chat_msg_bloc_list));
+
+    ui->chat_entry =
+        GTK_WIDGET(gtk_builder_get_object(ui->builder, "chat_entry"));
+
+    g_signal_connect(ui->chat_entry, "activate", G_CALLBACK(on_entry), e);
+
+    // Init scroll window
+    ui->scrollwin =
+        GTK_WIDGET(gtk_builder_get_object(ui->builder, "scrollwin"));
+    return (0);
+}
+
+int ui_init_panel(t_env *e, t_ui_panel *ui)
+{
+    GtkCssProvider *css;
+
+    // Init builder
+    ui->builder = gtk_builder_new();
+    if (gtk_builder_load(ui->builder, e->argv_0, "/ui/panel/panel.glade") < 0)
+        return (-1);
+
+    // Init style css
+    css = gtk_css_provider_new();
+    if (gtk_provider_load_css(css, e->argv_0, "/ui/panel/panel.css") < 0)
+        return (-1);
     gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
-                                              GTK_STYLE_PROVIDER(cssProvider),
+                                              GTK_STYLE_PROVIDER(css),
                                               GTK_STYLE_PROVIDER_PRIORITY_USER);
+    g_object_unref(G_OBJECT(css));
 
-    chat_box = GTK_WIDGET(gtk_builder_get_object(builder, "chat_box"));
+    ui_init_panel_window(ui);
 
-    new_chat_message("toto: msg number 1");
-    new_chat_message("ayya: msg number 2");
+    ui_init_panel_assets(e, ui);
 
-    // g_object_unref(G_OBJECT(builder));
-    g_object_unref(G_OBJECT(cssProvider));
+    ui_init_panel_chatbox(e, ui);
 
-    g_idle_add((GSourceFunc)do_select, e);
+    ui->e = e;
 
-    chat_entry = GTK_WIDGET(gtk_builder_get_object(builder, "chat_entry"));
+    gtk_widget_show_all(ui->window);
 
-    g_signal_connect(chat_entry, "activate", G_CALLBACK(chat_entry_send), e);
-
-    return (window_panel);
+    return (0);
 }

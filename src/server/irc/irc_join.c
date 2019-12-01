@@ -14,34 +14,21 @@ static int irc_join_check_command(t_env *e, int cs, const t_token *tokens)
     size_t      channel_len;
 
     if (!tokens[1].addr || tokens[2].addr)
-    {
-        irc_reply(e, cs, ERR_NEEDMOREPARAMS, NULL);
-        return (-1);
-    }
+        return (irc_err(e, cs, ERR_NEEDMOREPARAMS, NULL));
 
     channel = tokens[1].addr;
     channel_len = tokens[1].len;
 
     if (strpbrk(channel, "\x07\x2C"))
-    {
-        irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
-    }
+        return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
     else if (channel_len - 1 > CHANNELSTRSIZE)
-    {
-        irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
-    }
+        return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
     else if ((channel[0] != '#' && channel[0] != '&') ||
              !is_valid_chan_name(channel))
-    {
-        irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
-    }
+        return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
     else if (channel_len < 1)
-    {
-        irc_reply(e, cs, ERR_NOSUCHCHANNEL, channel);
-    }
-    else
-        return (0);
-    return (-1);
+        return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
+    return (0);
 }
 
 int irc_join(t_env *e, int cs, t_token *tokens)
@@ -68,11 +55,9 @@ int irc_join(t_env *e, int cs, t_token *tokens)
     if (i == e->maxchannels)
         i = empty_channel;
 
-    if (i == 0)
-    {
-        irc_reply(e, cs, ERR_NOSUCHCHANNEL, tokens[1].addr);
-        return (-1);
-    }
+    // When channel is the same as actual one
+    if (i == e->fds[cs].channel)
+        return (IRC_JOIN);
 
     memset(e->channels[i].channel, 0, CHANNELSTRSIZE + 1);
     strncpy(e->channels[i].channel, tokens[1].addr, tokens[1].len);
@@ -88,7 +73,7 @@ int irc_join(t_env *e, int cs, t_token *tokens)
     memset(concat, 0, sizeof(concat));
 
     sprintf(concat, "%s!%s@%s JOIN %s\x0D\x0A", e->fds[cs].nickname,
-            e->fds[cs].nickname, e->fds[cs].host,
+            e->fds[cs].username, e->fds[cs].host,
             e->channels[e->fds[cs].channel].channel);
 
     broadcast_all_in_channel(e, concat, IRC_NOTICE, cs);

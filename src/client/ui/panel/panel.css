@@ -1,68 +1,263 @@
-GtkWindow {
-    background-color: white;
+#left-pane {
+    background-color: transparent;
 }
 
 #channel_label {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
 }
 
 #username_label {
-    font-size: 13px;
+    color: #fdfdfd;
+    font-size: 18px;
     font-weight: bold;
 }
 
-#status {
-    border-radius: 10px;
-    background-color: red;
+/***
+ *     ██████╗██╗  ██╗ █████╗ ███╗   ██╗███╗   ██╗███████╗██╗     ███████╗
+ *    ██╔════╝██║  ██║██╔══██╗████╗  ██║████╗  ██║██╔════╝██║     ██╔════╝
+ *    ██║     ███████║███████║██╔██╗ ██║██╔██╗ ██║█████╗  ██║     ███████╗
+ *    ██║     ██╔══██║██╔══██║██║╚██╗██║██║╚██╗██║██╔══╝  ██║     ╚════██║
+ *    ╚██████╗██║  ██║██║  ██║██║ ╚████║██║ ╚████║███████╗███████╗███████║
+ *     ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝╚══════╝╚══════╝
+ */
+
+#channels_box {
+    background-color: transparent;
 }
 
-#left-pane {
-    background-color: rgb(124, 85, 195);
-}
-
-#channel_label {
-    font-size: 18px;
-}
-
-#channel_list_button {
-    color: black;
+.channels-box-item {
+    color: #fdfdfd;
+    background-image: inherit;
     border-style: solid;
-    padding: 5px;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+    transition-property: none;
 }
 
-#channel_list_button:hover {
+.channels-box-item GtkLabel {
+    font-weight: bold;
+    color: #fdfdfd;
+    font-size: 10px;
+}
+
+.channels-box-item:hover {
     border-radius: 0px;
     background-image: inherit;
     border: none;
     box-shadow: none;
-    text-shadow: none;    
+    text-shadow: none;
     transition-property: none;
-    outline-style: none;
-    outline-width: 0px;
+}
+
+.channels-box-item GtkLabel:hover {
+    background-color: transparent;
+    box-shadow: none;
+    text-shadow: none;
+    transition-property: none;
     text-decoration-line: none;
     font-stretch: normal;
     font-style: normal;
 }
 
-#channel_list_button:hover GtkLabel {
-    font-weight: bold;
-    background-color: rgb(124, 85, 195);
-    transition: inherit;
+.channels-box-item:active {
+    border-radius: 0px;
+    background-image: inherit;
     border: none;
     box-shadow: none;
     text-shadow: none;
     transition-property: none;
     outline-style: none;
-    outline-width: 0px;
+}
+
+.channels-box-item GtkLabel:active {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+    transition-property: none;
+    outline-style: none;
     text-decoration-line: none;
     font-stretch: normal;
     font-style: normal;
 }
 
+.channels-box-item:backdrop {
+    border-radius: 0px;
+    background-image: inherit;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+    transition-property: none;
+    outline-style: none;
+    font-stretch: normal;
+    font-style: normal;
+}
+
+.channels-box-item GtkLabel:backdrop {
+    font-weight: bold;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+    transition-property: none;
+    outline-style: none;
+}
+
+/***
+ *     ██████╗██╗  ██╗ █████╗ ████████╗██████╗  ██████╗ ██╗  ██╗
+ *    ██╔════╝██║  ██║██╔══██╗╚══██╔══╝██╔══██╗██╔═══██╗╚██╗██╔╝
+ *    ██║     ███████║███████║   ██║   ██████╔╝██║   ██║ ╚███╔╝ 
+ *    ██║     ██╔══██║██╔══██║   ██║   ██╔══██╗██║   ██║ ██╔██╗ 
+ *    ╚██████╗██║  ██║██║  ██║   ██║   ██████╔╝╚██████╔╝██╔╝ ██╗
+ *     ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
+ */
+
+ #right-pane {
+    background-color: #ffffff;
+}
+
 .chat-message {
     margin-left: 12px;
+    border-radius: 5px;
     padding: 3px;
-    background-color: #fefefe;
-    border-radius: 4px;
+}
+
+.chat-message-hour {
+    color: #aaaaaa;
+}
+
+/*
+* Topic
+*/
+
+.topic-message-container {
+    border-radius: 5px;
+    border-color: rgb(201, 176, 94);
+    border-style: solid;
+    border-width: 2px;
+    background-image: -gtk-gradient (linear,
+    left top,
+    left bottom,
+    from(rgb(235, 209, 126)),
+    to (rgb(207, 182, 99)));
+}
+
+.topic-message {
+    font-size: 14px;
+}
+
+/*
+* Error
+*/
+
+.error-message-container {
+    border-radius: 5px;
+    border-color: rgb(194, 40, 13);
+    border-style: solid;
+    border-width: 2px;
+    background-image: -gtk-gradient (linear,
+    left top,
+    left bottom,
+    from(rgb(228, 47, 15)),
+    to (rgb(194, 40, 13)));
+}
+
+.error-message {
+    font-size: 14px;
+}
+
+/*
+* Info
+*/
+
+.info-message-container {
+    border-radius: 5px;
+    border-color: rgb(10, 124, 58);
+    border-style: solid;
+    border-width: 2px;
+    background-image: -gtk-gradient (linear,
+    left top,
+    left bottom,
+    from(rgb(16, 173, 81)),
+    to (rgb(10, 124, 58)));
+}
+
+.info-message {
+    font-size: 14px;
+}
+
+/***
+ *    ███████╗ ██████╗██████╗  ██████╗ ██╗     ██╗     ██████╗  █████╗ ██████╗ 
+ *    ██╔════╝██╔════╝██╔══██╗██╔═══██╗██║     ██║     ██╔══██╗██╔══██╗██╔══██╗
+ *    ███████╗██║     ██████╔╝██║   ██║██║     ██║     ██████╔╝███████║██████╔╝
+ *    ╚════██║██║     ██╔══██╗██║   ██║██║     ██║     ██╔══██╗██╔══██║██╔══██╗
+ *    ███████║╚██████╗██║  ██║╚██████╔╝███████╗███████╗██████╔╝██║  ██║██║  ██║
+ *    ╚══════╝ ╚═════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚══════╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+ */
+
+scrollbar,
+.scrollbar {
+    background-color: transparent;
+    transition: all 600ms ease-out;
+    /* -GtkScrollbar-has-backward-stepper: false; */
+    /* -GtkScrollbar-has-forward-stepper: false; */
+    min-width: 3px;
+}
+
+/* trough {
+}
+
+slider {
+} */
+
+scrollbar:hover,
+.scrollbar:hover {
+    transition: all 200ms ease-in-out;
+    /* -GtkRange-slider-width: 10; */
+}
+
+scrollbar button,
+.scrollbar.button,
+.scrollbar.button:active,
+.scrollbar.button:active:hover,
+.scrollbar.button:hover:backdrop,
+.scrollbar.button:active:hover:backdrop {
+    border: none;
+    background-image: none;
+    background-color: transparent;
+}
+
+/* scrollbar.overlay-indicator slider,
+.slider {
+    border: 1px solid alpha (@bg_highlight_color, 0.25);
+    background-color: alpha (@text_color, 0.6);
+    border-radius: 10px;
+} */
+
+scrollbar.overlay-indicator slider:hover,
+.slider:hover {
+    border-radius: 20px;
+}
+
+scrollbar trough,
+.scrollbar.trough {
+    padding: 0;
+}
+
+scrollbar.overlay-indicator trough,
+.scrollbar.overlay-indicator.trough {
+    background-color: transparent;
+}
+
+scrollbar.overlay-indicator:hover trough,
+.scrollbar.overlay-indicator.trough:hover {
+    background-color: alpha (#000, 0.1);
+}
+
+scrollbar:hover trough,
+.scrollbar:hover.trough {
+    background-color: transparent;
+    border-radius: 0;
 }

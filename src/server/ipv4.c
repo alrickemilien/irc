@@ -1,10 +1,9 @@
 #include <netdb.h>
 #include <netinet/in.h>
-
 #include <server/irc.h>
 #include <server/ssl.h>
 
-void server_ipv4(const t_options *options, t_env *e)
+int server_ipv4(const t_options *options, t_env *e)
 {
     int                sock;
     struct sockaddr_in sin;
@@ -15,16 +14,16 @@ void server_ipv4(const t_options *options, t_env *e)
 #endif  // __APPLE__
     // struct hostent *hp;
 
-    pe = (struct protoent *)XPSAFE((void *)0, getprotobyname("tcp"),
-                                   "getprotobyname");
+    if ((pe = (struct protoent *)getprotobyname("tcp")) == (void *)0)
+        return (logerrno("server_ipv4::getprotobyname"));
 
     /********************************************************************/
     /* The socket() function returns a socket descriptor, which represents   */
     /* an endpoint.  Get a socket for address family AF_INET6 to        */
     /* prepare to accept incoming connections on.                       */
     /********************************************************************/
-    sock = XSAFE(-1, socket(PF_INET, SOCK_STREAM, pe->p_proto),
-                 "server_ipv4::socket");
+    if ((sock = socket(PF_INET, SOCK_STREAM, pe->p_proto)) == -1)
+        return (logerrno("server_ipv4::socket"));
 
     /********************************************************************/
     /* The setsockopt() function is used to allow the local address to  */
@@ -56,8 +55,8 @@ void server_ipv4(const t_options *options, t_env *e)
     // memcpy(&sin.sin_addr, hp->h_addr_list[0], hp->h_length);
     sin.sin_port = htons(options->port);
 
-    XSAFE(-1, bind(sock, (struct sockaddr *)&sin, sizeof(struct sockaddr_in)),
-          "server_ipv4::ipv4::bind");
+    if (bind(sock, (struct sockaddr *)&sin, sizeof(struct sockaddr_in)) == -1)
+        return (logerrno("server_ipv4::bind"));
 
     /********************************************************************/
     /* The listen() function allows the server to accept incoming       */
@@ -66,12 +65,16 @@ void server_ipv4(const t_options *options, t_env *e)
     /* requests before the system starts rejecting the incoming         */
     /* requests.                                                        */
     /********************************************************************/
-    XSAFE(-1, listen(sock, options->backlog), "server_ipv4::ipv4::listen");
 
-    if (options->ssl)
-        XSAFE(-1, ssl_init(e, options->ssl_key_file, options->ssl_crt_file),
-              "server_ipv4::ssl_init");
+    if (listen(sock, options->backlog) == -1)
+        return (logerrno("server_ipv4::listen"));
+
+    if (options->ssl &&
+        ssl_init(e, options->ssl_key_file, options->ssl_crt_file) < 0)
+        return (logerrno("server_ipv4::ssl_init"));
 
     e->fds[sock].type = FD_SERV;
     e->fds[sock].read = on_connect;
+
+    return (0);
 }

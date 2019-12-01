@@ -1,20 +1,11 @@
-#include <ctype.h>
 #include <server/irc.h>
 
 static int irc_pass_check_command(t_env *e, int cs, const t_token *tokens)
 {
     if (e->fds[cs].registered)
-    {
-        irc_reply(e, cs, ERR_ALREADYREGISTRED, NULL);
-        return (-1);
-    }
-
+        return (irc_err(e, cs, ERR_ALREADYREGISTRED, NULL));
     if (!tokens[1].addr)
-    {
-        irc_reply(e, cs, ERR_NEEDMOREPARAMS, "PASS");
-        return (-1);
-    }
-
+        return (irc_err(e, cs, ERR_NEEDMOREPARAMS, "PASS"));
     return (0);
 }
 
