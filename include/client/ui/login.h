@@ -19,6 +19,14 @@ typedef struct  s_ui_login {
     t_env       *e;
 }               t_ui_login;
 
+typedef struct  s_ui_credentials {
+    const char  *host;
+    const char  *port;
+    const char  *username;
+    const char  *pass;
+    const char  *nick;
+}               t_ui_credentials;
+
 int             ui_init_login_window(t_env *e, t_ui_login *ui);
 int             ui_clear_login_window(t_ui_login *ui);
 void            ui_login_connect(GtkWidget *widget, gpointer data);

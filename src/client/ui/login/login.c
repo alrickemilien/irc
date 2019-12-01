@@ -86,13 +86,9 @@ int ui_clear_login_window(t_ui_login *ui)
 
 void ui_login_connect(GtkWidget *widget, gpointer data)
 {
-    t_ui_login *ui;
-    t_env *     e;
-    const char *host_data;
-    const char *port_data;
-    const char *username_data;
-    const char *pass_data;
-    const char *nick_data;
+    t_env *          e;
+    t_ui_login *     ui;
+    t_ui_credentials crd;
 
     (void)widget;
     ui = (t_ui_login *)data;
@@ -100,45 +96,45 @@ void ui_login_connect(GtkWidget *widget, gpointer data)
 
     gtk_button_set_label(GTK_BUTTON(ui->button_go), "Connecting ...");
 
-    host_data = gtk_entry_get_text(GTK_ENTRY(ui->host_entry));
-    port_data = gtk_entry_get_text(GTK_ENTRY(ui->port_entry));
-    username_data = gtk_entry_get_text(GTK_ENTRY(ui->username_entry));
-    pass_data = gtk_entry_get_text(GTK_ENTRY(ui->pass_entry));
-    nick_data = gtk_entry_get_text(GTK_ENTRY(ui->nick_entry));
+    crd.host = gtk_entry_get_text(GTK_ENTRY(ui->host_entry));
+    crd.port = gtk_entry_get_text(GTK_ENTRY(ui->port_entry));
+    crd.username = gtk_entry_get_text(GTK_ENTRY(ui->username_entry));
+    crd.pass = gtk_entry_get_text(GTK_ENTRY(ui->pass_entry));
+    crd.nick = gtk_entry_get_text(GTK_ENTRY(ui->nick_entry));
 
-    if (!nick_data || nick_data[0] == 0)
+    if (!crd.nick || crd.nick[0] == 0)
     {
         logerror("Nickname must be provided\n");
         return;
     }
 
-    if (ato32(port_data[0] ? port_data : "5555",
-              (uint32_t *)&e->options.port) != 0 ||
+    if (ato32(crd.port[0] ? crd.port : "5555", (uint32_t *)&e->options.port) !=
+            0 ||
         e->options.port < 1000 || e->options.port > 99999)
     {
         logerror("port must be a vakue between 1000 an 99999'%s'.\n",
-                 port_data ? port_data : "5555");
+                 crd.port ? crd.port : "5555");
         return;
     }
 
     logdebug("e->options.host: %s\n", e->options.host);
-    logdebug("host_data: %s\n", host_data);
+    logdebug("host_data: %s\n", crd.host);
 
-    memcpy(e->options.host, host_data && host_data[0] ? host_data : "127.0.0.1",
-           host_data && host_data[0] ? strlen(host_data) : strlen("127.0.0.1"));
+    memcpy(e->options.host, crd.host && crd.host[0] ? crd.host : "127.0.0.1",
+           crd.host && crd.host[0] ? strlen(crd.host) : strlen("127.0.0.1"));
 
-    printf("pass_data: %s\n", pass_data);
-    printf("strtrim(pass_data): %s\n", strtrim(pass_data));
-    printf("len(pass_data): %ld\n", strlentrim(pass_data));
-    printf("nick_data: %s\n", nick_data);
-    printf("strtrim(nick_data): %s\n", strtrim(nick_data));
-    printf("len(nick_data): %ld\n", strlentrim(nick_data));
+    // printf("pass_data: %s\n", crd.pass);
+    // printf("strtrim(pass_data): %s\n", strtrim(crd.pass));
+    // printf("len(pass_data): %ld\n", strlentrim(crd.pass));
+    // printf("nick_data: %s\n", crd.nick);
+    // printf("strtrim(nick_data): %s\n", strtrim(crd.nick));
+    // printf("len(nick_data): %ld\n", strlentrim(crd.nick));
 
-    _c2s_pass(e, strtrim(pass_data), strlentrim(pass_data));
+    _c2s_pass(e, strtrim(crd.pass), strlentrim(crd.pass));
 
-    _c2s_nick(e, strtrim(nick_data), strlentrim(nick_data));
+    _c2s_nick(e, strtrim(crd.nick), strlentrim(crd.nick));
 
-    _c2s_connect(e, username_data[0] ? username_data : NULL, NULL,
+    _c2s_connect(e, crd.username[0] ? crd.username : NULL, NULL,
                  e->options.host);
 
     if (e->sock != -1)

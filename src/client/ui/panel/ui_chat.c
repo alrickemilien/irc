@@ -4,14 +4,10 @@ gboolean ui_chat_scroll_to_bottom(gpointer w)
 {
     GtkAdjustment *adjust;
 
-    adjust = gtk_scrolled_window_get_vadjustment
-        (GTK_SCROLLED_WINDOW (w));
-    gtk_adjustment_set_value (adjust, gtk_adjustment_get_upper (adjust));
-
+    adjust = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(w));
+    gtk_adjustment_set_value(adjust, gtk_adjustment_get_upper(adjust));
     gtk_widget_show_all(w);
-
     return (FALSE);
-
 }
 
 void ui_chat_empty_chat_box(t_ui_panel *ui)
