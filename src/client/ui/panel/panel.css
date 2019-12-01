@@ -203,7 +203,6 @@ scrollbar,
     transition: all 600ms ease-out;
     /* -GtkScrollbar-has-backward-stepper: false; */
     /* -GtkScrollbar-has-forward-stepper: false; */
-    min-width: 3px;
 }
 
 /* trough {
