@@ -17,8 +17,8 @@ use ircunittest;
 
 my $HOST = '127.0.0.1';
 my $PORT = '5555';
-my $CLIENTS_NUMBER = 20;
-my $POOLS_NUMBER = 1;
+my $CLIENTS_NUMBER = 50;
+my $POOLS_NUMBER = 5;
 
 my @s;
 for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
@@ -56,8 +56,6 @@ for (my $k = 0; $k <= $POOLS_NUMBER; $k++) {
         $s[$i]->send("PRIVMSG &hub :I say: $i\x0D\x0A");
     }
 }
-
-# sleep(5);
 
 #
 # Terminate clients

@@ -59,10 +59,7 @@ int s2c(t_env *e, int cs, char *buffer)
     logerror("Unknow command %s", buffer);
 
     if (e->options.gui)
-        ui_new_message(
-            e->ui,
-            tokens[2].addr[0] == ':' ? tokens[2].addr + 1 : tokens[2].addr,
-            UI_ERROR_MSG);
+        ui_new_message(e->ui, buffer, UI_ERROR_MSG);
 
     return (-1);
 }

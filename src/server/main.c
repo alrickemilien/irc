@@ -72,7 +72,7 @@ int main(int argc, const char **argv)
 
     memset(&e, 0, sizeof(e));
 
-    // signal(SIGPIPE, SIG_IGN);
+    signal(SIGPIPE, SIG_IGN);
 
     exit_code = read_options_arguments(argc, argv, &options);
     if (exit_code != 0)

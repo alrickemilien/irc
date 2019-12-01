@@ -78,6 +78,8 @@ void ui_chat_empty_chat_box(t_ui_panel *ui)
 
     g_list_free(children);
     gtk_widget_show_all(ui->chat_box);
+
+    logdebug("ui::ui_chat_empty_chat_box::leave\n");
 }
 
 void ui_new_message(t_ui_panel *ui, const char *msg, int type)
