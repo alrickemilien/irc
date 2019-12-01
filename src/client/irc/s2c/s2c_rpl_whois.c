@@ -1,6 +1,5 @@
 #include <client/irc.h>
 #include <client/ui/panel.h>
-#include <ctype.h>
 
 static int  s2c_rpl_whois_state = 0;
 static char s2c_rpl_whois_buffer[512];
@@ -54,7 +53,7 @@ int s2c_rpl_endofwhois(t_env *e, int cs, t_token *tokens)
     if (s2c_rpl_whois_state == 0)
         return (-1);
 
-    loginfo("%s\n", s2c_rpl_whois_buffer);
+    loginfo(s2c_rpl_whois_buffer);
 
     s2c_rpl_whois_state = 0;
 

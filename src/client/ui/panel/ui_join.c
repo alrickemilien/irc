@@ -97,6 +97,13 @@ int ui_leave(t_ui_panel *ui, const char *channel)
     ui->channels_box =
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "channels_box"));
 
+    logdebug("ui->channels_count: %ld\n", ui->channels_count);
+    if (ui->channels_count == 1)
+    {
+        ui_new_message(ui, "You can't leave primary channel", UI_ERROR_MSG);
+        return (-1);
+    }
+
     if (ui_leave_channel_list(ui->channels_box, channel, strlen(channel)) < 0)
         return (-1);
     
@@ -108,7 +115,7 @@ int ui_leave(t_ui_panel *ui, const char *channel)
         GTK_BUTTON(gtk_bin_get_child(GTK_BIN(children->data))));
     g_list_free(children);
 
-    ui_join(ui, label);
+    _c2s_join(&ui->e->fds[ui->e->sock], label, strlen(label));
 
     return (0);
 }

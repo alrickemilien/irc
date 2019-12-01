@@ -52,10 +52,10 @@ int c2s_leave(t_env *e, int cs, t_token *tokens)
     if ((c2s_leave_check_command(e, cs, tokens)) != 0)
         return (-1);
 
-    _c2s_leave(&e->fds[e->sock], tokens[1].addr, tokens[1].len);
+    if (e->options.gui && ui_leave(e->ui, tokens[1].addr) < 0)
+        return (-1);
 
-    if (e->options.gui)
-        ui_leave(e->ui, tokens[1].addr);
+    _c2s_leave(&e->fds[e->sock], tokens[1].addr, tokens[1].len);
 
     return (IRC_LEAVE);
 }

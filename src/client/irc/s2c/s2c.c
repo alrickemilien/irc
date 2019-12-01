@@ -14,6 +14,8 @@ static const t_irc_cmd g_s2c_replys[IRC_S2C_COMMANDS_NUMBER] = {
     [IRC_S2C_RPL_WHOISUSER] = {"RPL_WHOISUSER", &s2c_rpl_whoisuser},
     [IRC_S2C_RPL_WHOISCHANNELS] = {"RPL_WHOISCHANNELS", &s2c_rpl_whoischannels},
     [IRC_S2C_RPL_ENDOFWHOIS] = {"RPL_ENDOFWHOIS", &s2c_rpl_endofwhois},
+    [IRC_S2C_RPL_WHOREPLY] = {"RPL_WHOREPLY", &s2c_rpl_whoreply},
+    [IRC_S2C_RPL_ENDOFWHO] = {"RPL_ENDOFWHO", &s2c_rpl_endofwho},
 };
 
 int s2c(t_env *e, int cs, char *buffer)
