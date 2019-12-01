@@ -28,8 +28,10 @@ rm -rf server.key.org
 
 openssl req -new -key server.key -out server.csr
 
-openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
-
+openssl x509 -req -days 365 -in server.csr -signkey server.key \
+    -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.example.com" \
+    -keyout www.example.com.key  -out www.example.com.cert \
+    -out server.crt
 cd -
 ```
 
@@ -48,5 +50,5 @@ sudo ln -s /usr/sbin/tcpdump /usr/bin/tcpdump
 Use the following command to check packets
 
 ```
-tcpdump -vv -X -i lo port <running port of irc server>
+tcpdump -vv -A -i <network interface of binding ip server> port <running port of irc server>
 ```

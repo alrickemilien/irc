@@ -20,7 +20,7 @@ int on_connect(t_env *e, size_t s)
     loginfo("New client #%d from %s:%d", cs, inet_ntoa(csin.sin_addr),
             ntohs(csin.sin_port));
 
-    logdebug("e->fds[cs].host: %s", e->fds[cs].host);
+    // logdebug("e->fds[cs].host: %s", e->fds[cs].host);
 
     // if (getnameinfo((struct sockaddr *)&csin, csin_len, e->fds[cs].host,
     //                 NI_MAXHOST, e->fds[cs].serv, NI_MAXSERV, NI_NAMEREQD) <

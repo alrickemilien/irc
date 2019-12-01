@@ -77,15 +77,20 @@ CLIENT_SRC+=src/client/ui/gtk_builder_load.c \
 			src/client/ui/gtk_provider_load_css.c \
 			src/client/ui/gtk_set_class.c \
 			src/client/ui/gtk_new_rgba.c \
-			src/client/ui/gtk_get_assets.c \
-			src/client/ui/login/login.c
-			
+			src/client/ui/gtk_get_assets.c
+
+# ui login
+CLIENT_SRC+=src/client/ui/login/login.c	\
+			src/client/ui/login/ui_login_connect.c	\
+
 # ui panel
 CLIENT_SRC+=src/client/ui/panel/panel.c	\
 			src/client/ui/panel/ui_join.c \
 			src/client/ui/panel/ui_status.c \
 			src/client/ui/panel/ui_who.c \
 			src/client/ui/panel/ui_message.c \
+			src/client/ui/panel/ui_events.c \
+			src/client/ui/panel/ui_set.c \
 			src/client/ui/panel/ui_chat.c
 
 GTK_DPKG_CFLAGS=$(shell pkg-config --cflags gtk+-3.0)

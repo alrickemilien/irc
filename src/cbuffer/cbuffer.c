@@ -99,7 +99,7 @@ void cbuffer_putstr(t_cbuffer *cbuf, const char *str)
 int cbuffer_putcmd(t_cbuffer *cbuf, const char *fmt, ...)
 {
     va_list ap;
-    int  len;
+    int     len;
     char    msg[512];
 
     assert(cbuf);
@@ -112,7 +112,7 @@ int cbuffer_putcmd(t_cbuffer *cbuf, const char *fmt, ...)
 
     if (len < 0)
         return (-1);
-    
+
     cbuffer_put(cbuf, (uint8_t *)msg, len);
 
     return (len);
@@ -121,7 +121,7 @@ int cbuffer_putcmd(t_cbuffer *cbuf, const char *fmt, ...)
 int cbuffer_putvcmd(t_cbuffer *cbuf, const char *fmt, va_list ap)
 {
     int  len;
-    char    msg[512];
+    char msg[512];
 
     assert(cbuf);
 
@@ -131,7 +131,7 @@ int cbuffer_putvcmd(t_cbuffer *cbuf, const char *fmt, va_list ap)
 
     if (len < 0)
         return (-1);
-    
+
     cbuffer_put(cbuf, (uint8_t *)msg, len);
 
     return (len);
@@ -342,6 +342,9 @@ void cbuffer_dropn(t_cbuffer *cbuf, size_t n)
 // Drop n bytes of the buffer from tail
 void cbuffer_debug(const t_cbuffer *cbuf)
 {
+    size_t i;
+
+    i = 0;
     printf(
         "cbuf->tail: %ld\n"
         "cbuf->head: %ld\n"
@@ -350,7 +353,8 @@ void cbuffer_debug(const t_cbuffer *cbuf)
 
     printf("cbuf->data:\n");
 
-    for (size_t i = 0; i < CBUFFSIZE; i++)
+    i = 0;
+    while (i < CBUFFSIZE)
     {
         if (cbuf->buffer[i] == 0)
             printf("%c", '.');
@@ -360,6 +364,7 @@ void cbuffer_debug(const t_cbuffer *cbuf)
             printf("%s", "\\x0A");
         else
             printf("%c", cbuf->buffer[i]);
+        i++;
     }
     printf("\n");
 }

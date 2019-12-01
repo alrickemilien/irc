@@ -39,6 +39,8 @@ int client_ipv6(t_env *e)
     /*********************************************************************/
     memset(&sin, 0, sizeof(sin));
 
+    logdebug("e->options.host: %s\n", e->options.host);
+
     sin.sin6_family = AF_INET6;
     sin.sin6_port = htons(e->options.port);
     inet_pton(AF_INET6, e->options.host, &sin.sin6_addr);

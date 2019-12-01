@@ -59,7 +59,7 @@ int ui_join(t_ui_panel *ui, const char *channel)
 
     logdebug("ui::ui_join:: %s\n", channel);
 
-    set_channel_name(ui, channel);
+    ui_set_channel_name(ui, channel);
 
     ui->channels_box =
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "channels_box"));
