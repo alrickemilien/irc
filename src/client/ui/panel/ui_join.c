@@ -106,7 +106,7 @@ int ui_leave(t_ui_panel *ui, const char *channel)
 
     if (ui_leave_channel_list(ui->channels_box, channel, strlen(channel)) < 0)
         return (-1);
-    
+
     ui->channels_count--;
 
     children = gtk_container_get_children(GTK_CONTAINER(ui->channels_box));

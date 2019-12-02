@@ -16,8 +16,8 @@ static int c2s_leave_check_command(t_env *e, int cs, const t_token *tokens)
     (void)cs;
     (void)e;
 
-    if (!tokens[1].addr || tokens[2].addr)
-        return (irc_error(e, ERR_NEEDMOREPARAMS, tokens[0].addr));
+    if (!tokens[1].addr)
+        return (0);
 
     channel = tokens[1].addr;
     channel_len = tokens[1].len;
@@ -50,10 +50,15 @@ int c2s_leave(t_env *e, int cs, t_token *tokens)
     if ((c2s_leave_check_command(e, cs, tokens)) != 0)
         return (-1);
 
-    if (e->options.gui && ui_leave(e->ui, tokens[1].addr) < 0)
+    if (e->options.gui &&
+        ui_leave(e->ui, tokens[1].addr ? tokens[1].addr
+                                       : e->fds[e->sock].channelname) < 0)
         return (-1);
 
-    _c2s_leave(&e->fds[e->sock], tokens[1].addr, tokens[1].len);
+    _c2s_leave(
+        &e->fds[e->sock],
+        tokens[1].addr ? tokens[1].addr : e->fds[e->sock].channelname,
+        tokens[1].addr ? tokens[1].len : strlen(e->fds[e->sock].channelname));
 
     return (IRC_LEAVE);
 }
