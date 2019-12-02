@@ -69,6 +69,7 @@ int                     ui_topic(t_ui_panel *ui, const char *msg);
 void                    ui_chat_empty_chat_box(t_ui_panel *ui);
 int                     ui_leave(t_ui_panel *ui, const char *channel);
 int                     ui_whois(t_ui_panel *ui, const char *msg);
+int                     ui_names(t_ui_panel *ui, const char *msg);
 
 /*
 * Chat messages
