@@ -3,8 +3,8 @@
 
 int time2iso(char* str)
 {
-    time_t     timer;
-    struct tm *tm_info;
+    time_t	timer;
+    struct tm	*tm_info;
 
     time(&timer);
     tm_info = localtime(&timer);

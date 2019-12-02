@@ -1,6 +1,6 @@
 #include <irc.h>
 
-int		ato32(const char *str, uint32_t *nbr)
+int	ato32(const char *str, uint32_t *nbr)
 {
 	*nbr = 0;
 	while (*str == ' ' || *str == '\t' || *str == '\n'
