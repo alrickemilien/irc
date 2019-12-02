@@ -15,7 +15,6 @@ int ui_join_channels_index_of(t_ui_panel *ui,
             return (i);
         i++;
     }
-
     return (-1);
 }
 
@@ -66,15 +65,24 @@ int ui_join_channel_list_index_of(GtkWidget * list,
     return (-1);
 }
 
-int ui_join(t_ui_panel *ui, const char *channel)
+void insert_channel_left_panel(t_ui_panel *ui, const char *channel)
 {
     GtkWidget *w;
-    int        index;
+
+    // push label clickable on left side
+    w = gtk_button_new();
+    gtk_button_set_label(GTK_BUTTON(w), channel);
+    gtk_set_class(w, "channels-box-item");
+    g_signal_connect(w, "clicked", G_CALLBACK(ui_join_from_side_channel), ui);
+    gtk_list_box_insert(GTK_LIST_BOX(ui->channels_box), w, -1);
+    gtk_widget_show_all(ui->channels_box);
+}
+
+int ui_join(t_ui_panel *ui, const char *channel)
+{
+    int index;
 
     logdebug("ui::ui_join:: %s", channel);
-
-    if (ui->channels_count == UI_CHAT_MAX)
-        return (logerror("Channel count max has been reached"));
 
     ui_set_channel_name(ui, channel);
 
@@ -88,27 +96,19 @@ int ui_join(t_ui_panel *ui, const char *channel)
     {
         if (ui->channel_index == index)
             return (0);
-        logdebug("a");
         gtk_container_remove(GTK_CONTAINER(ui->chat_box_viewport),
                              ui->channels[ui->channel_index].chat_box);
-        logdebug("b");
         ui->channel_index = index;
-        logdebug("c");
         gtk_container_add(GTK_CONTAINER(ui->chat_box_viewport),
                           ui->channels[ui->channel_index].chat_box);
-        logdebug("d");
         g_object_ref(ui->channels[ui->channel_index].chat_box);
-        logdebug("e");
         return (0);
     }
 
-    // push label clickable on left side
-    w = gtk_button_new();
-    gtk_button_set_label(GTK_BUTTON(w), channel);
-    gtk_set_class(w, "channels-box-item");
-    g_signal_connect(w, "clicked", G_CALLBACK(ui_join_from_side_channel), ui);
-    gtk_list_box_insert(GTK_LIST_BOX(ui->channels_box), w, -1);
-    gtk_widget_show_all(ui->channels_box);
+    if (ui->channels_count == UI_CHAT_MAX)
+        return (logerror("Channel count max has been reached"));
+
+    insert_channel_left_panel(ui, channel);
 
     // create the chatbox
     if (ui->channel_index != -1)
@@ -123,8 +123,6 @@ int ui_join(t_ui_panel *ui, const char *channel)
     strcpy(ui->channels[ui->channel_index].label, channel);
 
     ui->channels_count++;
-
-    gtk_widget_show_all(ui->channels[ui->channel_index].chat_box);
 
     return (0);
 }
