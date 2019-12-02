@@ -23,10 +23,10 @@ static int irc_privmsg_to_client(t_fd *fd, t_fd *fd_client, const char *msg)
     return (0);
 }
 
-static void irc_privmsg_nomatch_nick(t_env *  e,
-                                     int      cs,
-                                     t_token *subtokens,
-                                     size_t   subtoken_count)
+void irc_privmsg_nomatch_nick(t_env *  e,
+                              int      cs,
+                              t_token *subtokens,
+                              size_t   subtoken_count)
 {
     size_t j;
 

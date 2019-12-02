@@ -1,9 +1,3 @@
-
-#include <stdio.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <unistd.h>
-
 #include <cbuffer/cbuffer_ssl.h>
 #include <server/irc.h>
 
@@ -19,10 +13,6 @@ int client_read(t_env *e, size_t cs)
 
     fd = &e->fds[cs];
 
-    // printf("client_read::%ld\n", cs);
-    // printf("databuffer tail BEFORE RECV is %ld\n", fd->buf_read.tail);
-    // printf("databuffer head BEFORE RECV is %ld\n", fd->buf_read.head);
-
     // logdebug("client_read::cbuffer_debug\n");
     // cbuffer_debug(&fd->buf_read);
 
@@ -37,19 +27,12 @@ int client_read(t_env *e, size_t cs)
         else
             r = cbuffer_recv(&fd->buf_read, cs);
 
-        // logdebug("client_read::r:: %ld\n", r);
-        // printf("client_read::%ld bytes has been received for %ld\n", r, cs);
-
         if (r <= 0)
         {
             disconnect(e, cs);
             return (0);
         }
     }
-
-    // printf("data buffer tail is %ld\n", fd->buf_read.tail);
-    // printf("data buffer head is %ld\n", fd->buf_read.head);
-    // printf("data buffer is: %s\n", fd->buf_read.buffer);
 
     if (index == (size_t)-1)
         index = cbuffer_indexof(&fd->buf_read, "\x0D\x0A");

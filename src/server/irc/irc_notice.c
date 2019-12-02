@@ -27,10 +27,6 @@ int irc_notice(t_env *e, int cs, t_token *tokens)
 
     subtoken_count = tokenizechr(tokens[1].addr, subtokens, 30, ',');
 
-    // printf("subtokens ret:%ld\n", tokenizechr(tokens[1].addr, subtokens, 30,
-    // ',')); j = 0; while (j < 30 && subtokens[j].addr)
-    //     printf("subtokens:%s\n", subtokens[j++].addr);
-
     // Find client to send private message
     i = 0;
     while (i <= e->max)
@@ -73,16 +69,6 @@ int irc_notice(t_env *e, int cs, t_token *tokens)
         }
         i++;
     }
-
-    // Error on nick that match nothing
-    j = 0;
-    while (j < subtoken_count)
-    {
-        if (subtokens[j].addr != NULL && subtokens[j].addr[0] != '&' &&
-            subtokens[j].addr[0] != '#')
-            irc_reply(e, cs, ERR_NOSUCHNICK, subtokens[j].addr);
-        j++;
-    }
-
+    irc_privmsg_nomatch_nick(e, cs, sub, subtoken_count);
     return (IRC_PRIVMSG);
 }

@@ -1,9 +1,5 @@
 #include <cbuffer/cbuffer_ssl.h>
 #include <server/irc.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <unistd.h>
 
 int client_write(t_env *e, size_t cs)
 {
@@ -20,9 +16,6 @@ int client_write(t_env *e, size_t cs)
 
     // logdebug("client_write::cbuffer_debug\n");
     // cbuffer_debug(&fd->buf_write);
-
-    // if (index != (size_t)-1)
-    // printf("client_write::index %ld\n", index);
 
     // The buffer is full without any end of command, flush it
     if ((index = cbuffer_indexof(&fd->buf_write, "\x0D\x0A")) == (size_t)-1)

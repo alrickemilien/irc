@@ -5,7 +5,7 @@ static void screen_changed(GtkWidget *widget,
                            GdkScreen *old_screen,
                            gpointer   userdata)
 {
-    /* To check if the display supports alpha channels, get the visual */
+    // To check if the display supports alpha channels, get the visual
     GdkScreen *screen = gtk_widget_get_screen(widget);
     GdkVisual *visual = gdk_screen_get_rgba_visual(screen);
 
@@ -14,13 +14,11 @@ static void screen_changed(GtkWidget *widget,
 
     if (!visual)
     {
-        // printf("Your screen does not support alpha channels!\n");
         visual = gdk_screen_get_system_visual(screen);
         supports_alpha = FALSE;
     }
     else
     {
-        // printf("Your screen supports alpha channels!\n");
         supports_alpha = TRUE;
     }
 
@@ -40,14 +38,14 @@ static gboolean draw(GtkWidget *widget, cairo_t *cr, gpointer userdata)
     if (supports_alpha)
     {
         cairo_set_source_rgba(cr, c->red, c->green, c->blue,
-                              c->alpha); /* transparent */
+                              c->alpha);
     }
     else
     {
-        cairo_set_source_rgb(cr, c->red, c->green, c->blue); /* opaque white */
+        cairo_set_source_rgb(cr, c->red, c->green, c->blue);
     }
 
-    /* draw the background */
+    // draw the background
     cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     cairo_paint(cr);
 
