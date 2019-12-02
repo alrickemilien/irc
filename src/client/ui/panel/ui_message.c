@@ -153,7 +153,7 @@ void ui_push_away_message(t_ui_panel *        ui,
 
     // Logo
     logo = gtk_image_new();
-    gtk_image_set_from_file(GTK_IMAGE(logo), ui->info_image);
+    gtk_image_set_from_file(GTK_IMAGE(logo), ui->rpl_away_image);
     gtk_set_class(logo, "away-logo");
 
     // Message content

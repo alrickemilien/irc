@@ -37,6 +37,8 @@ typedef struct          s_ui_panel {
     char                *topic_image;
     char                *error_image;
     char                *info_image;
+    char                *rpl_away_image;
+
     int                 msg_count;
 
     t_ui_chat_msg_bloc  chat_msg_bloc_list[UI_CHAT_BOX_BLOC_MAX];

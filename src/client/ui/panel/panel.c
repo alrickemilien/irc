@@ -13,6 +13,7 @@ int ui_clear_panel_window(t_env *e, t_ui_panel *ui)
     free(ui->topic_image);
     free(ui->error_image);
     free(ui->info_image);
+    free(ui->rpl_away_image);
 
     g_object_unref(G_OBJECT(ui->builder));
 
@@ -33,6 +34,8 @@ static int ui_init_panel_assets(t_env *e, t_ui_panel *ui)
         gtk_get_assets(e->argv_0, "/ui/assets/icons8-haute-priorité-100.png");
     ui->info_image =
         gtk_get_assets(e->argv_0, "/ui/assets/icons8-info-carré-16.png");
+    ui->rpl_away_image =
+        gtk_get_assets(e->argv_0, "/ui/assets/icons8-dormir-16.png");
 
     return (0);
 }

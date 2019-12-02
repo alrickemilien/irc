@@ -47,7 +47,7 @@ static int ui_login_connect_fetch_entrys_content(t_env *           e,
     // Default port
     if (ato32(crd->port[0] ? crd->port : "5555",
               (uint32_t *)&e->options.port) != 0 ||
-        e->options.port < 1000 || e->options.port > 99999)
+        e->options.port < 3 || e->options.port > 99999)
     {
         logerror("port must be a vakue between 1000 an 99999'%s'.\n",
                  crd->port ? crd->port : "5555");
