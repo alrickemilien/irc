@@ -77,8 +77,10 @@ int irc_part(t_env *e, int cs, t_token *tokens)
     if (e->fds[cs].channel != 0 && e->channels[e->fds[cs].channel].clients == 0)
         memset(&e->channels[e->fds[cs].channel], 0, sizeof(t_channel));
 
-    e->fds[cs].channel = 0;
-    e->channels[e->fds[cs].channel].clients++;
+    // e->fds[cs].channel = 0;
+    // e->channels[e->fds[cs].channel].clients++;
+
+    irc_user_join_default_channel(e, cs);
 
     return (IRC_PART);
 }

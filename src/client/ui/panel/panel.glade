@@ -210,13 +210,11 @@
                 <property name="overlay_scrolling">False</property>
                 <child>
                   <object class="GtkViewport" id="chat_box_viewport">
+                    <property name="name">chat_box_viewport</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkListBox" id="chat_box">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                      </object>
+                      <placeholder/>
                     </child>
                   </object>
                 </child>

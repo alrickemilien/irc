@@ -100,6 +100,10 @@ void                    ui_push_away_message(t_ui_panel *ui,
                           t_ui_chat_msg_bloc *bloc,
                           const char *        msg);
 
+int                     ui_join_channels_index_of(t_ui_panel *ui,
+                              const char *needle,
+                              size_t      needle_size);
+
 /*
 * Events
 */

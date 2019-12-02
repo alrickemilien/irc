@@ -61,6 +61,12 @@ static int ui_init_panel_chatbox(t_env *e, t_ui_panel *ui)
 
     memset(ui->channels, 0, sizeof(ui->channels));
 
+    ui->channels_box =
+        GTK_WIDGET(gtk_builder_get_object(ui->builder, "channels_box"));
+
+    ui->chat_box_viewport =
+        GTK_WIDGET(gtk_builder_get_object(ui->builder, "chat_box_viewport"));
+
     ui->chat_entry =
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "chat_entry"));
 

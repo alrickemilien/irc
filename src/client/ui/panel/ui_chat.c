@@ -53,7 +53,7 @@ void ui_new_message(t_ui_panel *ui, const char *msg, int type)
     if (ui->channel_index == -1)
         return ;
 
-    ch = &ui->channels[++ui->channel_index];
+    ch = &ui->channels[ui->channel_index];
 
     ui->chat_box = ch->chat_box;
 

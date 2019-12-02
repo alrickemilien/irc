@@ -100,6 +100,7 @@ CLIENT_SRC+=src/client/ui/panel/panel.c	\
 			src/client/ui/panel/ui_message.c \
 			src/client/ui/panel/ui_events.c \
 			src/client/ui/panel/ui_set.c \
+			src/client/ui/panel/ui_leave.c \
 			src/client/ui/panel/ui_chat.c
 
 %.o: %.c
