@@ -63,12 +63,11 @@ int irc_notice(t_env *e, int cs, t_token *tokens)
 
                     break;
                 }
-
                 j++;
             }
         }
         i++;
     }
-    irc_privmsg_nomatch_nick(e, cs, sub, subtoken_count);
+    irc_privmsg_nomatch_nick(e, cs, subtokens, subtoken_count);
     return (IRC_PRIVMSG);
 }
