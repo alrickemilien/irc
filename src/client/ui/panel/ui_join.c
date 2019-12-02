@@ -12,8 +12,7 @@ void ui_join_from_side_channel(GtkWidget *widget, gpointer data)
     logdebug("ui::ui_join_from_side_channel:: %s\n", channel);
 
     // When already into channel
-    if (memcmp(ui->e->fds[ui->e->sock].channelname, channel, strlen(channel)) ==
-        0)
+    if (strcmp(ui->e->fds[ui->e->sock].channelname, channel) == 0)
         return;
 
     _c2s_join(&ui->e->fds[ui->e->sock], channel, strlen(channel));

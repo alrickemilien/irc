@@ -3,6 +3,7 @@
 
 #include <client/ui/ui.h>
 
+#define UI_CHAT_MAX 10
 #define UI_CHAT_BOX_BLOC_MAX 5
 #define UI_CHAT_BOX_MSG_COUNT_MAX 20
 
@@ -10,6 +11,13 @@ typedef struct          s_ui_chat_msg_bloc {
     GtkWidget           *box;
     int                 count;
 }                       t_ui_chat_msg_bloc;
+
+typedef struct          s_ui_channel {
+    char                label[CHANNELSTRSIZE];
+    t_ui_chat_msg_bloc  chat_msg_bloc_list[UI_CHAT_BOX_BLOC_MAX];
+    int                 msg_count;
+    GtkWidget           *chat_box;
+}                       t_ui_channel;
 
 typedef struct          s_ui_panel {
     GtkWidget           *window;
@@ -27,6 +35,8 @@ typedef struct          s_ui_panel {
     GtkWidget           *chat_box_viewport;
     GtkWidget           *chat_box;
 
+    // Channels
+    t_ui_channel        channels[UI_CHAT_MAX];
     GtkWidget           *channels_box;
     int                 channels_count;
 
@@ -40,8 +50,6 @@ typedef struct          s_ui_panel {
     char                *rpl_away_image;
 
     int                 msg_count;
-
-    t_ui_chat_msg_bloc  chat_msg_bloc_list[UI_CHAT_BOX_BLOC_MAX];
 
     t_env               *e;
 }                       t_ui_panel;
