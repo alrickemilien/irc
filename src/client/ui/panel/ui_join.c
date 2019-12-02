@@ -155,6 +155,8 @@ int ui_join(t_ui_panel *ui, const char *channel)
 
     logdebug("A");
 
+    ui->channels_box = 
+
     // push button on left side
     w = gtk_button_new();
     gtk_button_set_label(GTK_BUTTON(w), channel);
