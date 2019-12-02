@@ -5,10 +5,11 @@
 
 int s2c_rpl_welcome(t_env *e, int cs, t_token *tokens)
 {
+    void *tmp;
+
     (void)e;
     (void)cs;
-
-    void *tmp;
+    (void)tmp;
 
     if (!tokens[1].addr)
         return (-1);
@@ -28,7 +29,7 @@ int s2c_rpl_welcome(t_env *e, int cs, t_token *tokens)
         ui_set_username(e->ui, e->fds[cs].username);
         ui_set_status(e->ui, 0);
 
-        gtk_widget_hide(((t_ui_login *)tmp)->window);
+        // free(tmp);
     }
 
     return (IRC_S2C_RPL_WELCOME);

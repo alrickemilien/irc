@@ -39,6 +39,7 @@ typedef struct          s_ui_panel {
     t_ui_channel        channels[UI_CHAT_MAX];
     GtkWidget           *channels_box;
     int                 channels_count;
+    int                 channel_index;
 
     // Assets
     char                *status_ok_image;
