@@ -59,7 +59,6 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
 
     if ((irc_privmsg_check_command(e, cs, tokens)) != 0)
         return (-1);
-    logdebug("irc_privmsg::tokens: %s", tokens[0].addr);
     memset(sub, 0, sizeof(sub));
     subtoken_count = tokenizechr(tokens[1].addr, sub, 30, ',');
     i = 0;
@@ -69,7 +68,6 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
         while (e->fds[i].type == FD_CLIENT && e->fds[i].registered == 1 &&
                j < subtoken_count)
         {
-            logdebug("e->channels[e->fds[i].channel].channel: %s", e->channels[e->fds[i].channel].channel);
             if (is_nick_or_chan_matching(e->channels[e->fds[i].channel].channel,
                                          e->fds[i].nickname, sub[j].addr,
                                          sub[j].len))

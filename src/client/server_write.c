@@ -1,33 +1,23 @@
-#include <stdio.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <unistd.h>
-
 #include <client/irc.h>
 #include <cbuffer/cbuffer_ssl.h>
 
 int server_write(t_env *e, size_t cs)
 {
     size_t index;
+    t_fd * fd;
 
-    // logdebug("server_write::welcome, there is data to send at #%ld\n", cs);
-    // logdebug("server_write::buf_write has %ld bytes\n",
-    //          cbuffer_size(&e->fds[cs].buf_write));
+    fd = &e->fds[cs];
 
-    index = cbuffer_indexof(&e->fds[cs].buf_write, "\x0D\x0A");
-    // logdebug("server_write::index:: %ld\n", index);
+    index = cbuffer_indexof(&fd->buf_write, "\x0D\x0A");
 
     // cbuffer_debug(&e->fds[cs].buf_write);
-
-    // if (index != (size_t)-1)
-    // logdebug("client_write::index %ld\n", index);
 
     // The buffer is full without any end of command, flush it
     if (index == (size_t)-1)
     {
-        if (e->fds[cs].buf_write.full)
+        if (fd->buf_write.full)
         {
-            cbuffer_reset(&e->fds[cs].buf_write);
+            cbuffer_reset(&fd->buf_write);
             return (logerror(
                 "[!] Buffer is reset because it is full without command"));
         }
@@ -37,23 +27,21 @@ int server_write(t_env *e, size_t cs)
     // Reading each output of the buffer
     while (index != (size_t)-1)
     {
-        // logdebug("server_write::index:: %ld\n", index);
         if (e->options.ssl)
-            cbuffer_write_ssl(
-                e->fds[cs].ssl, &e->fds[cs].buf_write,
-                (e->fds[cs].buf_write.tail < index
-                     ? index - e->fds[cs].buf_write.tail
-                     : index + CBUFFSIZE - e->fds[cs].buf_write.tail) +
-                    2);
+            cbuffer_write_ssl(fd->ssl, &fd->buf_write,
+                              (fd->buf_write.tail < index
+                                   ? index - fd->buf_write.tail
+                                   : index + CBUFFSIZE - fd->buf_write.tail) +
+                                  2);
         else
-            cbuffer_send(cs, &e->fds[cs].buf_write,
-                         (e->fds[cs].buf_write.tail < index
-                              ? index - e->fds[cs].buf_write.tail
-                              : index + CBUFFSIZE - e->fds[cs].buf_write.tail) +
+            cbuffer_send(cs, &fd->buf_write,
+                         (fd->buf_write.tail < index
+                              ? index - fd->buf_write.tail
+                              : index + CBUFFSIZE - fd->buf_write.tail) +
                              2,
                          0);
 
-        index = cbuffer_indexof(&e->fds[cs].buf_write, "\x0D\x0A");
+        index = cbuffer_indexof(&fd->buf_write, "\x0D\x0A");
     }
 
     return (0);

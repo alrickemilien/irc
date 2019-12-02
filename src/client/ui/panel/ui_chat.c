@@ -18,7 +18,8 @@ void ui_chat_empty_chat_box(t_ui_panel *ui)
 
     // logdebug("ui::ui_chat_empty_chat_box\n");
 
-    // ui->chat_box = GTK_WIDGET(gtk_builder_get_object(ui->builder, "chat_box"));
+    // ui->chat_box = GTK_WIDGET(gtk_builder_get_object(ui->builder,
+    // "chat_box"));
 
     // if (ui->chat_box == NULL)
     //     return;
@@ -43,7 +44,7 @@ void ui_chat_empty_chat_box(t_ui_panel *ui)
 
 void ui_new_message(t_ui_panel *ui, const char *msg, int type)
 {
-    t_ui_channel *ch;
+    t_ui_channel *      ch;
     t_ui_chat_msg_bloc *bloc;
     size_t              i;
     GList *             children;
@@ -51,7 +52,7 @@ void ui_new_message(t_ui_panel *ui, const char *msg, int type)
     logdebug("ui::ui_new_chat_message:: %s\n", msg);
 
     if (ui->channel_index == -1)
-        return ;
+        return;
 
     ch = &ui->channels[ui->channel_index];
 
