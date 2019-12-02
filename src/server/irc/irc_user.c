@@ -57,7 +57,7 @@ void irc_user_join_default_channel(t_env *e, int cs)
 {
     char concat[512];
 
-    e->channels[e->fds[cs].channel].clients++;
+    e->channels[0].clients++;
 
     memset(concat, 0, sizeof(concat));
 

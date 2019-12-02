@@ -111,6 +111,9 @@ void ui_new_message(t_ui_panel *ui, const char *msg, int type)
         case UI_INFO_MSG:
             ui_push_info_message(ui, bloc, msg);
             break;
+        case UI_AWAY_MSG:
+            ui_push_away_message(ui, bloc, msg);
+            break;
         default:
             break;
     }

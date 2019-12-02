@@ -25,14 +25,9 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
 
     memset(subtokens, 0, sizeof(subtokens));
 
-    logdebug("irc_privmsg:: %s\n", tokens[0].addr);
+    // logdebug("irc_privmsg:: %s\n", tokens[0].addr);
 
     subtoken_count = tokenizechr(tokens[1].addr, subtokens, 30, ',');
-
-    logdebug("subtoken_count: %ld", subtoken_count);
-
-    logdebug("subtokens[0]: %s", subtokens[0]);
-    logdebug("subtokens[1]: %s", subtokens[1]);
 
     // printf("subtokens ret:%ld\n", tokenizechr(tokens[1].addr, subtokens, 30,
     // ',')); j = 0; while (j < 30 && subtokens[j].addr)
@@ -42,12 +37,12 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
     i = 0;
     while (i <= e->max)
     {
-        logdebug("e->fds[i == %ld].registered: %d", i, e->fds[i].registered);
+        // logdebug("e->fds[i == %ld].registered: %d", i, e->fds[i].registered);
 
         // logdebug("#%ld - registered: %d\n", i, e->fds[i].registered);
         if (e->fds[i].type == FD_CLIENT && e->fds[i].registered == 1)
         {
-            logdebug("e->fds[i == %ld].nickname: %s", i, e->fds[i].nickname);
+            // logdebug("e->fds[i == %ld].nickname: %s", i, e->fds[i].nickname);
 
             j = 0;
             while (j < subtoken_count)
@@ -83,7 +78,7 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
                         subtokens[j].addr[0] != '#')
                         subtokens[j].addr = (void *)0;
 
-                    logdebug("Breaking");
+                    // logdebug("Breaking");
 
                     break;
                 }
