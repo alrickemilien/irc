@@ -12,6 +12,7 @@ static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
     [IRC_UNAWAY] = {"/unaway", &c2s_unaway},
     [IRC_LEAVE] = {"/leave", &c2s_leave},
     [IRC_WHOIS] = {"/whois", &c2s_whois},
+    [IRC_LIST] = {"/list", &c2s_list},
 };
 
 static int is_valid_termination(const char *buffer, size_t len)

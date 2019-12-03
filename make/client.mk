@@ -34,6 +34,7 @@ CLIENT_SRC+=src/client/irc/c2s/c2s.c \
 			src/client/irc/c2s/c2s_away.c \
 			src/client/irc/c2s/c2s_leave.c \
 			src/client/irc/c2s/c2s_whois.c \
+			src/client/irc/c2s/c2s_list.c \
 			src/client/irc/c2s/c2s_connect.c
 
 # irc server to client
@@ -47,6 +48,7 @@ CLIENT_SRC+=src/client/irc/s2c/s2c.c \
 			src/client/irc/s2c/s2c_rpl_whois.c \
 			src/client/irc/s2c/s2c_rpl_who.c \
 			src/client/irc/s2c/s2c_rpl_away.c \
+			src/client/irc/s2c/s2c_rpl_list.c \
 			src/client/irc/s2c/s2c_rpl_welcome.c
 
 # irc error

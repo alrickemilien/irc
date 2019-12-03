@@ -50,6 +50,7 @@ typedef enum    e_irc {
     IRC_UNAWAY,
     IRC_LEAVE,
     IRC_WHOIS,
+    IRC_LIST,
     IRC_COMMANDS_NUMBER
 }               t_irc_enum;
 
@@ -69,6 +70,9 @@ typedef enum    e_irc_s2c {
     IRC_S2C_RPL_WHOREPLY,
     IRC_S2C_RPL_ENDOFWHO,
     IRC_S2C_RPL_AWAY,
+    IRC_S2C_RPL_LISTSTART,
+    IRC_S2C_RPL_LISTEND,
+    IRC_S2C_RPL_LIST,
     IRC_S2C_COMMANDS_NUMBER,
 }               t_irc_s2c;
 
@@ -101,6 +105,7 @@ int             c2s_away(t_env *e, int cs, t_token *tokens);
 int             c2s_unaway(t_env *e, int cs, t_token *tokens);
 int             c2s_leave(t_env *e, int cs, t_token *tokens);
 int             c2s_whois(t_env *e, int cs, t_token *tokens);
+int             c2s_list(t_env *e, int cs, t_token *tokens);
 
 int             _c2s_nick(t_env *e, const char *nick, size_t nick_length);
 int             _c2s_pass(t_env *e, const char *password, size_t password_length);
@@ -131,6 +136,9 @@ int             s2c_rpl_whoischannels(t_env *e, int cs, t_token *tokens);
 int             s2c_rpl_endofwhois(t_env *e, int cs, t_token *tokens);
 int             s2c_rpl_whoreply(t_env *e, int cs, t_token *tokens);
 int             s2c_rpl_endofwho(t_env *e, int cs, t_token *tokens);
+int             s2c_rpl_liststart(t_env *e, int cs, t_token *tokens);
+int             s2c_rpl_listend(t_env *e, int cs, t_token *tokens);
+int             s2c_rpl_list(t_env *e, int cs, t_token *tokens);
 
 int             irc_error(t_env *e, int err_code, ...);
 

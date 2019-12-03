@@ -24,6 +24,9 @@ static const t_irc_reply g_replys[] = {
     {RPL_WHOREPLY, "RPL_WHOREPLY", "%s %s %s %s %s %s"},
     {RPL_ENDOFWHO, "RPL_ENDOFWHO", "%s :End of /WHO list"},
     {RPL_TOPIC, "RPL_TOPIC", "%s :%s"},
+    {RPL_LISTSTART, "RPL_LISTSTART", "Channel :Users  Name"},
+    {RPL_LIST, "RPL_LIST", "%s :" /*"<channel> <# visible> :<topic>"*/},
+    {RPL_LISTEND, "RPL_LISTEND", ":End of /LIST"},
 };
 
 int irc_reply(t_env *e, int cs, int code, ...)
