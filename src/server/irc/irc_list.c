@@ -25,8 +25,6 @@ int irc_list(t_env *e, int cs, t_token *tokens)
         return (IRC_LIST);
     }
 
-    memset(subtokens, 0, sizeof(t_token) * 30);
-
     subtoken_count = tokenizechr(tokens[1].addr, subtokens, 30, ',');
 
     i = 0;

@@ -5,6 +5,8 @@ size_t tokenize(char *str, t_token *tokens, size_t len)
     size_t i;
     size_t count;
 
+    memset(tokens, 0, sizeof(t_token) * len);
+
     i = 0;
     count = 0;
     while (str[i] && str[i] != 0x0A && str[i] != 0x0D && count < len)

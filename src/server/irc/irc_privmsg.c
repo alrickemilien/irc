@@ -59,8 +59,9 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
 
     if ((irc_privmsg_check_command(e, cs, tokens)) != 0)
         return (-1);
-    memset(sub, 0, sizeof(sub));
+
     subtoken_count = tokenizechr(tokens[1].addr, sub, 30, ',');
+    
     i = 0;
     while (i <= e->max)
     {
@@ -87,6 +88,8 @@ int irc_privmsg(t_env *e, int cs, t_token *tokens)
         }
         i++;
     }
+    
     irc_privmsg_nomatch_nick(e, cs, sub, subtoken_count);
+    
     return (IRC_PRIVMSG);
 }

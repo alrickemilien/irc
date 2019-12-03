@@ -40,10 +40,6 @@ int c2s(t_env *e, int cs, char *buffer)
                     strlen(g_irc_commands[i].command)) == 0 &&
             is_valid_termination(buffer, strlen(g_irc_commands[i].command)))
         {
-            // printf("buffer: %s\n", buffer);
-
-            memset(tokens, 0, sizeof(t_token) * 30);
-
             tokenize(buffer, tokens, 30);
 
             // logdebug("ret:%ld\n", tokenize(buffer, tokens, 30));

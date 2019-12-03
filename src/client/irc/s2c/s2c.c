@@ -32,8 +32,6 @@ int s2c(t_env *e, int cs, char *buffer)
     while (*buffer == 0x20)
         buffer++;
 
-    memset(tokens, 0, sizeof(t_token) * 30);
-
     tokenize(buffer, tokens, 30);
 
     // logdebug("ret:%ld\n", tokenize(buffer, tokens, 30));

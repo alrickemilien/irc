@@ -36,7 +36,6 @@ int ssl_init(t_env *e, const char *ssl_key_file, const char *ssl_crt_file)
         return (ssl_server_error());
 
     // SSL_CTX_set_ecdh_auto(ctx, 1);
-
     // SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
     // SSL_CTX_load_verify_locations(ctx, CACERT, NULL);
 
@@ -73,10 +72,10 @@ int ssl_on_connect(SSL_CTX *ctx, t_fd *fd, int cs)
     if ((err = SSL_accept(fd->ssl)) < 0)
         return (ssl_server_error());
 
-    /* Get the cipher - opt */
+    // Get the cipher - opt
     logdebug("SSL connection using %s", SSL_get_cipher(fd->ssl));
 
-    /* Get client's certificate (note: beware of dynamic allocation) - opt */
+    // Get client's certificate (note: beware of dynamic allocation) - opt
     client_cert = SSL_get_peer_certificate(fd->ssl);
     if (client_cert != NULL)
     {
@@ -101,8 +100,10 @@ int ssl_on_connect(SSL_CTX *ctx, t_fd *fd, int cs)
         logdebug("Issuer: %s", str);
         OPENSSL_free(str);
 
-        /* We could do all sorts of certificate verification stuff here before
-           deallocating the certificate. */
+        /* 
+        ** We could do all sorts of certificate verification stuff here before
+        ** deallocating the certificate.
+        */
 
         X509_free(client_cert);
     }
