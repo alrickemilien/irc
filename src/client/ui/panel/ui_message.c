@@ -7,7 +7,6 @@ void ui_push_chat_message(t_ui_panel *        ui,
     GtkWidget *container;
     GtkWidget *label;
     GtkWidget *hour;
-    char       h[ISOTIMESTRSIZE];
 
     (void)ui;
 
@@ -16,18 +15,11 @@ void ui_push_chat_message(t_ui_panel *        ui,
     gtk_set_class(container, "chat-message-container");
     gtk_box_set_homogeneous(GTK_BOX(container), FALSE);
 
-    // Hour content
-    fmttime(h, "%H:%M %p");
-    hour = gtk_label_new(h);
-    gtk_label_set_selectable(GTK_LABEL(hour), TRUE);
-    gtk_label_set_xalign(GTK_LABEL(hour), 0);
-    gtk_set_class(hour, "chat-message-hour");
+    // Hour
+    hour = ui_util_new_hour_label("%H:%M %p", "chat-message-hour");
 
     // Message content
-    label = gtk_label_new(msg);
-    gtk_label_set_selectable(GTK_LABEL(label), TRUE);
-    gtk_label_set_xalign(GTK_LABEL(label), 0);
-    gtk_set_class(label, "chat-message");
+    label = ui_util_new_chat_label(msg, "chat-message");
 
     // Fill container
     gtk_box_pack_start(GTK_BOX(container), hour, FALSE, FALSE, 0);
@@ -42,7 +34,6 @@ void ui_push_topic_message(t_ui_panel *        ui,
                            const char *        msg)
 {
     GtkWidget *container;
-    GtkWidget *logo;
     GtkWidget *label;
 
     logdebug("ui::ui_push_topic_message\n");
@@ -52,19 +43,13 @@ void ui_push_topic_message(t_ui_panel *        ui,
     gtk_set_class(container, "topic-message-container");
     gtk_box_set_homogeneous(GTK_BOX(container), FALSE);
 
-    // Logo
-    logo = gtk_image_new();
-    gtk_image_set_from_file(GTK_IMAGE(logo), ui->topic_image);
-    gtk_set_class(logo, "topic-logo");
-
     // Message content
-    label = gtk_label_new(msg);
-    gtk_label_set_selectable(GTK_LABEL(label), TRUE);
-    // gtk_label_set_xalign(GTK_LABEL(label), 0);
-    gtk_set_class(label, "topic-message");
+    label = ui_util_new_chat_label(msg, "topic-message");
 
     // Fill container
-    gtk_box_pack_start(GTK_BOX(container), logo, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(container),
+                       ui_util_new_logo(ui->topic_image, "topic-logo"), FALSE,
+                       FALSE, 0);
     gtk_box_pack_start(GTK_BOX(container), label, FALSE, FALSE, 0);
 
     // Finally insert
@@ -78,23 +63,15 @@ void ui_push_error_message(t_ui_panel *        ui,
                            const char *        msg)
 {
     GtkWidget *container;
-    GtkWidget *logo;
+    GtkWidget *logo = ui_util_new_logo(ui->error_image, "error-logo");
     GtkWidget *label;
 
     container = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
     gtk_set_class(container, "error-message-container");
     gtk_box_set_homogeneous(GTK_BOX(container), FALSE);
 
-    // Logo
-    logo = gtk_image_new();
-    gtk_image_set_from_file(GTK_IMAGE(logo), ui->error_image);
-    gtk_set_class(logo, "error-logo");
-
     // Message content
-    label = gtk_label_new(msg);
-    gtk_label_set_selectable(GTK_LABEL(label), TRUE);
-    // gtk_label_set_xalign(GTK_LABEL(label), 0);
-    gtk_set_class(label, "error-message");
+    label = ui_util_new_chat_label(msg, "error-message");
 
     // Fill container
     gtk_box_pack_start(GTK_BOX(container), logo, FALSE, FALSE, 0);
@@ -110,31 +87,37 @@ void ui_push_info_message(t_ui_panel *        ui,
                           t_ui_chat_msg_bloc *bloc,
                           const char *        msg)
 {
-    GtkWidget *container;
-    GtkWidget *logo;
+    GtkWidget *container_1;
+    GtkWidget *container_2;
     GtkWidget *label;
 
-    container = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
-    gtk_set_class(container, "info-message-container");
-    gtk_box_set_homogeneous(GTK_BOX(container), FALSE);
+    // Container 1
+    container_1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
+    // gtk_set_class(container_1, "info-message-container");
+    gtk_box_set_homogeneous(GTK_BOX(container_1), FALSE);
 
-    // Logo
-    logo = gtk_image_new();
-    gtk_image_set_from_file(GTK_IMAGE(logo), ui->info_image);
-    gtk_set_class(logo, "info-logo");
+    // Container 2
+    container_2 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
+    gtk_set_class(container_2, "info-message-container");
+    gtk_box_set_homogeneous(GTK_BOX(container_2), FALSE);
 
     // Message content
-    label = gtk_label_new(msg);
-    gtk_label_set_selectable(GTK_LABEL(label), TRUE);
-    // gtk_label_set_xalign(GTK_LABEL(label), 0);
-    gtk_set_class(label, "info-message");
+    label = ui_util_new_chat_label(msg, "info-message");
 
-    // Fill container
-    gtk_box_pack_start(GTK_BOX(container), logo, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(container), label, FALSE, FALSE, 0);
+    // Fill container 1
+    gtk_box_pack_start(GTK_BOX(container_1),
+                       ui_util_new_hour_label("%H:%M %p", "chat-message-hour"),
+                       FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(container_1), label, FALSE, FALSE, 0);
+
+    // Fill container 2
+    gtk_box_pack_start(GTK_BOX(container_2),
+                       ui_util_new_logo(ui->info_image, "info-logo"), FALSE,
+                       FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(container_2), container_1, FALSE, FALSE, 0);
 
     // Finally insert
-    gtk_list_box_insert(GTK_LIST_BOX(bloc->box), container, -1);
+    gtk_list_box_insert(GTK_LIST_BOX(bloc->box), container_2, -1);
 
     bloc->count++;
 }
@@ -144,23 +127,15 @@ void ui_push_away_message(t_ui_panel *        ui,
                           const char *        msg)
 {
     GtkWidget *container;
-    GtkWidget *logo;
+    GtkWidget *logo = ui_util_new_logo(ui->rpl_away_image, "away-logo");
     GtkWidget *label;
 
     container = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
     gtk_set_class(container, "away-message-container");
     gtk_box_set_homogeneous(GTK_BOX(container), FALSE);
 
-    // Logo
-    logo = gtk_image_new();
-    gtk_image_set_from_file(GTK_IMAGE(logo), ui->rpl_away_image);
-    gtk_set_class(logo, "away-logo");
-
     // Message content
-    label = gtk_label_new(msg);
-    gtk_label_set_selectable(GTK_LABEL(label), TRUE);
-    // gtk_label_set_xalign(GTK_LABEL(label), 0);
-    gtk_set_class(label, "away-message");
+    label = ui_util_new_chat_label(msg, "away-message");
 
     // Fill container
     gtk_box_pack_start(GTK_BOX(container), logo, FALSE, FALSE, 0);
