@@ -24,27 +24,27 @@
 */
 
 #ifndef MAX
-# define MAX(a, b) ((a > b) ? a : b)
+#define MAX(a, b) ((a > b) ? a : b)
 #endif
 
 #define TOSTR(x) #x
 
 #define ISOTIMESTRSIZE 25
-int     time2iso(char *str);
-int     ato32(const char *str, uint32_t *nbr);
-int     i64toa(uint64_t nbr, char *buffer, size_t buffer_size, uint64_t base);
-char    *extract_folder_from_path(const char *path);
-char    *merge_and_extract_folder_from_path(const char *a, const char *b);
-char    *strjoin(char const *s1, char const *s2);
-void    *memrpl(char *dest, size_t dest_size, const char *src, size_t src_size);
-int     fmttime(char* str, const char *fmt);
-size_t  strlentrim(const char *str);
-const char  *strtrim(const char *str);
+int    time2iso(char *str);
+int    ato32(const char *str, uint32_t *nbr);
+int    i64toa(uint64_t nbr, char *buffer, size_t buffer_size, uint64_t base);
+char * extract_folder_from_path(const char *path);
+char * merge_and_extract_folder_from_path(const char *a, const char *b);
+char * strjoin(char const *s1, char const *s2);
+void * memrpl(char *dest, size_t dest_size, const char *src, size_t src_size);
+int    fmttime(char *str, const char *fmt);
+size_t strlentrim(const char *str);
+const char *strtrim(const char *str);
 
 /*
 ** irc utils
 */
-bool    is_valid_chan_name(const char *channel);
+bool is_valid_chan_name(const char *channel);
 
 /*
 ** log
@@ -53,10 +53,10 @@ bool    is_valid_chan_name(const char *channel);
 #include <stdarg.h>
 #include <time.h>
 
-int     loginfo(const char *fmt, ...);
-int     logerror(const char *fmt, ...);
-int     logerrno(const char *str);
-int     logdebug(const char *fmt, ...);
+int loginfo(const char *fmt, ...);
+int logerror(const char *fmt, ...);
+int logerrno(const char *str);
+int logdebug(const char *fmt, ...);
 
 /*
 ** IRC specific
@@ -74,15 +74,14 @@ int     logdebug(const char *fmt, ...);
 ** Tokenize
 */
 
-typedef struct  s_token {
-    char        *addr;
-    size_t      len;
-}               t_token;
+typedef struct s_token
+{
+    char * addr;
+    size_t len;
+} t_token;
 
-size_t          tokenize(
-    char *str, t_token *tokens, size_t len);
-size_t          tokenizechr(
-    char *str, t_token *tokens, size_t len, int c);
+size_t tokenize(char *str, t_token *tokens, size_t len);
+size_t tokenizechr(char *str, t_token *tokens, size_t len, int c);
 
 /*
 ** CBuffer
@@ -110,37 +109,38 @@ size_t          tokenizechr(
 ** char   channelname;  // the message to send when away
 */
 
-typedef struct  s_fd
+typedef struct s_fd
 {
-    int         type;
-    int         (*read)();
-    int         (*write)();
-    t_cbuffer   buf_read;
-    t_cbuffer   buf_write;
+    int type;
+    int (*read)();
+    int (*write)();
+    t_cbuffer buf_read;
+    t_cbuffer buf_write;
 
-    size_t      channel;
-    char        nickname[NICKNAMESTRSIZE + 1];
-    char        host[NI_MAXHOST + 1];
-    char        serv[NI_MAXSERV + 1];
-    char        username[USERNAMESTRSIZE + 1];
-    char        realname[USERNAMESTRSIZE + 1];
-    char        passwd[PASSWDTRSIZE + 1];
-    char        awaymessage[BUF_SIZE + 1];
-    char        channelname[CHANNELSTRSIZE + 1];
-    int         registered;
-    int         away;
-    void        *ssl;
-}               t_fd;
+    size_t channel;
+    char   nickname[NICKNAMESTRSIZE + 1];
+    char   host[NI_MAXHOST + 1];
+    char   serv[NI_MAXSERV + 1];
+    char   username[USERNAMESTRSIZE + 1];
+    char   realname[USERNAMESTRSIZE + 1];
+    char   passwd[PASSWDTRSIZE + 1];
+    char   awaymessage[BUF_SIZE + 1];
+    char   channelname[CHANNELSTRSIZE + 1];
+    int    registered;
+    int    away;
+    void * ssl;
+} t_fd;
 
 /*
 ** Channel
 */
 
-typedef struct  s_channel {
-    char        channel[CHANNELSTRSIZE + 1];
-    int         chop;
-    size_t      clients;
-}               t_channel;
+typedef struct s_channel
+{
+    char   channel[CHANNELSTRSIZE + 1];
+    int    chop;
+    size_t clients;
+} t_channel;
 
 /*
 ** Replys and errors
@@ -156,6 +156,9 @@ enum e_irc_reply
     RPL_ENDOFWHO = 315,
     RPL_ENDOFWHOIS = 318,
     RPL_WHOISCHANNELS = 319,
+    RPL_LISTSTART = 321,
+    RPL_LIST = 322,
+    RPL_LISTEND = 323,
     RPL_TOPIC = 332,
     RPL_WHOREPLY = 352,
     RPL_NAMREPLY = 353,
@@ -172,10 +175,11 @@ enum e_irc_reply
     ERR_ALREADYREGISTRED = 462,
 };
 
-typedef struct  s_irc_reply {
-    int         code;
-    char        *name;
-    char        *fmt;
-}               t_irc_reply;
+typedef struct s_irc_reply
+{
+    int   code;
+    char *name;
+    char *fmt;
+} t_irc_reply;
 
 #endif

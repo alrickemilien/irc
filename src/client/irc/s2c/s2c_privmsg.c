@@ -1,6 +1,5 @@
 #include <client/irc.h>
 #include <client/ui/panel.h>
-#include <ctype.h>
 
 static int s2c_privmsg_check_command(t_env *e, int cs, const t_token *tokens)
 {
@@ -28,7 +27,7 @@ int s2c_privmsg(t_env *e, int cs, t_token *tokens)
     strcat(msg, ": ");
     strcat(msg, tokens[2].addr[0] == ':' ? tokens[2].addr + 1 : tokens[2].addr);
 
-    // loginfo("s2c_privmsg::msg:: %s", msg);
+    loginfo("s2c_privmsg::msg:: %s", msg);
 
     if (e->options.gui)
         ui_new_message(e->ui, msg, UI_CHAT_MSG);

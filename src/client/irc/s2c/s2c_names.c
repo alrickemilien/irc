@@ -1,5 +1,5 @@
 #include <client/irc.h>
-#include <ctype.h>
+#include <client/ui/panel.h>
 
 static int  s2c_rpl_namreply_state = 0;
 static char s2c_rpl_namreply_buffer[512];
@@ -35,6 +35,9 @@ int s2c_rpl_endofnames(t_env *e, int cs, t_token *tokens)
     s2c_rpl_namreply_state = 0;
 
     loginfo(s2c_rpl_namreply_buffer);
+
+    if (e->options.gui)
+        ui_names(e->ui, s2c_rpl_namreply_buffer);
 
     return (IRC_S2C_RPL_ENDOFNAMES);
 }

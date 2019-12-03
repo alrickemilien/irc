@@ -1,6 +1,5 @@
 #include <client/irc.h>
 #include <client/ui/panel.h>
-#include <ctype.h>
 
 int s2c_rpl_topic(t_env *e, int cs, t_token *tokens)
 {

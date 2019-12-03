@@ -7,6 +7,7 @@ size_t tokenizechr(char *str, t_token *tokens, size_t len, int c)
     size_t count;
     char * end;
 
+    memset(tokens, 0, sizeof(t_token) * len);
     end = strstr(str, "\x0D\x0A");
     count = 0;
 

@@ -1,7 +1,5 @@
 #include <arpa/inet.h>
 #include <client/irc.h>
-#include <client/ui/login.h>
-#include <client/ui/panel.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
@@ -19,7 +17,7 @@ int init_env(t_env *e)
     if (getrlimit(RLIMIT_NOFILE, &rlp) < 0)
         return (logerrno("init_env::getrlimit"));
 
-    // there are three standard file descriptions, STDIN, STDOUT, and STDERR.
+    // Three standard file descriptions, STDIN, STDOUT, and STDERR.
     // They are assigned to 0, 1, and 2 respectively.
     e->maxfd = rlp.rlim_cur;
     if ((e->fds = (t_fd *)malloc(sizeof(*e->fds) * e->maxfd)) == (void*)0)
@@ -49,7 +47,7 @@ static void init_options(t_options *options)
         options->port = 5555;
 
     if (options->ipv6)
-        loginfo("Running server ipv6\n");
+        loginfo("Running server ipv6");
 }
 
 static void init_std(t_env *e)
@@ -76,20 +74,6 @@ static void execute_precommands(t_env *e)
         if (ptr)
             ptr += 2;
     }
-}
-
-int gui(t_env *e, int argc, char **argv)
-{
-    gtk_init(&argc, &argv);
-
-    e->ui = (t_ui_login *)malloc(sizeof(t_ui_login));
-
-    if (ui_init_login_window(e, e->ui) < 0)
-        return (-1);
-
-    gtk_main();
-
-    return (0);
 }
 
 int main(int argc, char **argv)

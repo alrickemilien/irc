@@ -41,8 +41,8 @@ int s2c_rpl_endofwho(t_env *e, int cs, t_token *tokens)
 
     s2c_rpl_who_state = 0;
 
-    // if (e->options.gui)
-        // ui_whois(e->ui, s2c_rpl_who_buffer);
+    if (e->options.gui)
+        ui_names(e->ui, s2c_rpl_who_buffer);
 
     return (IRC_S2C_RPL_ENDOFWHO);
 }

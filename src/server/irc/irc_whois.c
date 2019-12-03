@@ -19,8 +19,6 @@ int irc_whois(t_env *e, int cs, t_token *tokens)
     if (irc_whois_check_command(e, cs, tokens) < 0)
         return (-1);
 
-    memset(subtokens, 0, sizeof(t_token) * 30);
-
     subtoken_count = tokenizechr(tokens[1].addr, subtokens, 30, ',');
 
     i = 0;
