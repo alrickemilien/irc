@@ -14,6 +14,11 @@ endif
 OPENSSL_CFLAGS=$(shell pkg-config --cflags openssl)
 OPENSSL_LIBS=$(shell pkg-config --libs openssl)
 
+IS_OPENSSL_DEV_INSTALLED=$(shell dpkg --status openssl 2>/dev/null 1>&2 ; echo $$?)
+ifneq ($(IS_OPENSSL_DEV_INSTALLED), 0)
+$(error openssl dev ibrary required for build)
+endif
+
 include make/client.mk
 include make/server.mk
 
