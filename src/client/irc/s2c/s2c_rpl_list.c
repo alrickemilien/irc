@@ -35,6 +35,9 @@ int s2c_rpl_list(t_env *e, int cs, t_token *tokens)
     if (!tokens[1].addr)
         return (-1);
 
+    if (s2c_rpl_listrply_buffer[0] != 0)
+        strcat(s2c_rpl_listrply_buffer, "\n");
+
     strcat(s2c_rpl_listrply_buffer, tokens[1].addr);
 
     return (IRC_S2C_RPL_LIST);

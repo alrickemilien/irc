@@ -17,7 +17,7 @@ int irc_list(t_env *e, int cs, t_token *tokens)
         i = 0;
         while (i < e->maxchannels)
         {
-            if (e->channels[i].channel[0])
+            if (i == 0 || (e->channels[i].channel[0] && e->channels[i].clients > 0))
                 irc_reply(e, cs, RPL_LIST, e->channels[i].channel);
             i++;
         }
