@@ -1,6 +1,6 @@
 #include <client/irc.h>
 #include <client/ui/panel.h>
-
+#include <glib/gi18n.h>
 int ui_clear_panel_window(t_env *e, t_ui_panel *ui)
 {
     (void)e;
@@ -75,6 +75,13 @@ static int ui_init_panel_chatbox(t_env *e, t_ui_panel *ui)
     // Init scroll window
     ui->scrollwin =
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "scrollwin"));
+
+    GtkWidget *w;
+
+    w = GTK_WIDGET(gtk_builder_get_object(ui->builder, "channels_list_title"));
+    gtk_label_set_text(GTK_LABEL(w), gettext("Channels"));
+    gtk_widget_show_all(w);
+
     return (0);
 }
 

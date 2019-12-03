@@ -21,6 +21,8 @@ int gtk_builder_load(GtkBuilder *b, const char *bin_path, const char *ui_path)
     if (!template_path)
         return (-1);
 
+    gtk_builder_set_translation_domain(b, GETTEXT_PACKAGE);
+
     if (gtk_builder_add_from_file(b, template_path, &gerror) == 0)
     {
         logerror("gtk_builder_load:: Unable to read file :: %s\n",
@@ -28,6 +30,7 @@ int gtk_builder_load(GtkBuilder *b, const char *bin_path, const char *ui_path)
         g_error_free(gerror);
         err = -1;
     }
+
 
     free(bin_folder_path);
     free(template_path);

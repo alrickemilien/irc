@@ -79,8 +79,6 @@ CLIENT_SRC+=src/utils/log.c \
 # irc utils
 CLIENT_SRC+=src/utils/irc/is_valid_channel.c
 
-CLIENT_OBJ=$(CLIENT_SRC:.c=.o)
-
 # ui
 CLIENT_SRC+=src/client/ui/gtk_builder_load.c \
 			src/client/ui/gtk_set_transparent_window.c \
@@ -106,8 +104,10 @@ CLIENT_SRC+=src/client/ui/panel/panel.c	\
 			src/client/ui/panel/ui_leave.c \
 			src/client/ui/panel/ui_chat.c
 
+CLIENT_OBJ=$(CLIENT_SRC:.c=.o)
+
 %.o: %.c
-	@gcc $(DEBUG) -o $@ -c $< $(INCLUDE) $(OPENSSL_CFLAGS) $(GTK_DPKG_CFLAGS) $(CFLAGS)
+	gcc $(DEBUG) -o $@ -c $< $(INCLUDE) $(OPENSSL_CFLAGS) $(GTK_DPKG_CFLAGS) $(CFLAGS)
 
 # glade files
 CLIENT_SRC_GLADE_PREFIX=src/client/ui/

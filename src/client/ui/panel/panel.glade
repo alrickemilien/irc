@@ -53,7 +53,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">5</property>
-                        <property name="label" translatable="yes">User 1</property>
                         <property name="ellipsize">middle</property>
                         <property name="xalign">0.25</property>
                       </object>
@@ -78,7 +77,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_left">8</property>
-                    <property name="label" translatable="yes">nickname</property>
                     <property name="ellipsize">middle</property>
                     <property name="xalign">0.10000000149011612</property>
                   </object>
@@ -107,11 +105,14 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkLabel" id="channels_list_title">
+                        <property name="name">channels_list_title</property>
                         <property name="width_request">100</property>
                         <property name="height_request">33</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Channels</property>
+                        <property name="pattern">Channels</property>
+                        <property name="lines">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -176,7 +177,6 @@
                         <property name="width_request">100</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">channel</property>
                         <property name="xalign">0.10000000149011612</property>
                       </object>
                       <packing>

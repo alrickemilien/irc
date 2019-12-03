@@ -20,7 +20,7 @@ int init_env(t_env *e)
     // Three standard file descriptions, STDIN, STDOUT, and STDERR.
     // They are assigned to 0, 1, and 2 respectively.
     e->maxfd = rlp.rlim_cur;
-    if ((e->fds = (t_fd *)malloc(sizeof(*e->fds) * e->maxfd)) == (void*)0)
+    if ((e->fds = (t_fd *)malloc(sizeof(*e->fds) * e->maxfd)) == (void *)0)
         return (logerror("init_env::malloc"));
 
     // Server's socket connection
@@ -38,6 +38,16 @@ int init_env(t_env *e)
     }
 
     return (0);
+}
+
+static void init_i18n(void)
+{
+    // LC_ALL decided by environment
+    setlocale(LC_ALL, "");
+    
+    bindtextdomain(GETTEXT_PACKAGE, LOCALE_DIR);
+    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+    textdomain(GETTEXT_PACKAGE);
 }
 
 static void init_options(t_options *options)
@@ -82,6 +92,8 @@ int main(int argc, char **argv)
     t_env e;
 
     memset(&e, 0, sizeof(t_env));
+
+    init_i18n();
 
     exit_code = read_options(argc, (const char **)argv, &e.options);
     if (exit_code != 0)
