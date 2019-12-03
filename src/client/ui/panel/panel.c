@@ -17,6 +17,7 @@ int ui_clear_panel_window(t_env *e, t_ui_panel *ui)
 
     g_object_unref(G_OBJECT(ui->builder));
 
+    free(ui);
     return (0);
 }
 
@@ -36,7 +37,6 @@ static int ui_init_panel_assets(t_env *e, t_ui_panel *ui)
         gtk_get_assets(e->argv_0, "/ui/assets/icons8-info-carré-16.png");
     ui->rpl_away_image =
         gtk_get_assets(e->argv_0, "/ui/assets/icons8-dormir-16.png");
-
     return (0);
 }
 

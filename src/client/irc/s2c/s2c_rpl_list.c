@@ -16,11 +16,6 @@ int s2c_rpl_liststart(t_env *e, int cs, t_token *tokens)
         s2c_rpl_listrply_state = 1;
     }
 
-    // if (!tokens[1].addr)
-    // return (-1);
-
-    // strcat(s2c_rpl_listrply_buffer, tokens[1].addr);
-
     return (IRC_S2C_RPL_LISTSTART);
 }
 

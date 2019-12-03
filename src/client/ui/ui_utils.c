@@ -22,7 +22,6 @@ GtkWidget *ui_util_new_logo(const char *path, const char *class)
 
     logo = gtk_image_new();
     gtk_image_set_from_file(GTK_IMAGE(logo), path);
-    // gtk_label_set_xalign(GTK_LABEL(label), 0);
 
     if (class)
         gtk_set_class(logo, class);
@@ -35,6 +34,7 @@ GtkWidget *ui_util_new_chat_label(const char *msg, const char *class)
 
     label = gtk_label_new(msg);
     gtk_label_set_selectable(GTK_LABEL(label), TRUE);
+
     if (class)
         gtk_set_class(label, class);
     return label;

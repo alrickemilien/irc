@@ -1,5 +1,5 @@
 #left-pane {
-    background-color: transparent;
+    /* background-color: transparent; */
 }
 
 #channel_label {
@@ -11,6 +11,11 @@
     color: #fdfdfd;
     font-size: 18px;
     font-weight: bold;
+}
+
+#nickname_label {
+    color: #fdfdfd;
+    font-size: 14px;
 }
 
 /***
@@ -134,14 +139,14 @@
 
 .topic-message-container {
     border-radius: 5px;
-    border-color: rgb(201, 176, 94);
+    border-color: rgb(226, 201, 119);
     border-style: solid;
     border-width: 2px;
     background-image: -gtk-gradient (linear,
     left top,
     left bottom,
-    from(rgb(235, 209, 126)),
-    to (rgb(207, 182, 99)));
+    from(rgba(235, 209, 126, 20)),
+    to (rgba(207, 182, 99, 20)));
 }
 
 .topic-message {
@@ -205,11 +210,13 @@ scrollbar,
     /* -GtkScrollbar-has-forward-stepper: false; */
 }
 
-/* trough {
+/*
+trough {
 }
 
 slider {
-} */
+} 
+*/
 
 scrollbar:hover,
 .scrollbar:hover {
@@ -217,6 +224,8 @@ scrollbar:hover,
     /* -GtkRange-slider-width: 10; */
 }
 
+
+/* 
 scrollbar button,
 .scrollbar.button,
 .scrollbar.button:active,
@@ -228,12 +237,6 @@ scrollbar button,
     background-color: transparent;
 }
 
-/* scrollbar.overlay-indicator slider,
-.slider {
-    border: 1px solid alpha (@bg_highlight_color, 0.25);
-    background-color: alpha (@text_color, 0.6);
-    border-radius: 10px;
-} */
 
 scrollbar.overlay-indicator slider:hover,
 .slider:hover {
@@ -260,3 +263,4 @@ scrollbar:hover trough,
     background-color: transparent;
     border-radius: 0;
 }
+*/

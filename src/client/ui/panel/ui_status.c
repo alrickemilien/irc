@@ -5,13 +5,19 @@ int ui_set_status(t_ui_panel *ui, int status)
     ui->status_image =
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "status_image"));
 
-    if (status == 0)
-        gtk_image_set_from_file(GTK_IMAGE(ui->status_image),
-                                ui->status_ok_image);
-
-    if (status == 2)
-        gtk_image_set_from_file(GTK_IMAGE(ui->status_image),
-                                ui->status_away_image);
+    switch (status)
+    {
+        case 0:
+            gtk_image_set_from_file(GTK_IMAGE(ui->status_image),
+                                    ui->status_ok_image);
+            break;
+        case 2:
+            gtk_image_set_from_file(GTK_IMAGE(ui->status_image),
+                                    ui->status_away_image);
+            break;
+        default:
+            break;
+    }
 
     return (0);
 }

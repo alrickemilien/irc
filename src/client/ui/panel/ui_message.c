@@ -20,6 +20,7 @@ void ui_push_chat_message(t_ui_panel *        ui,
 
     // Message content
     label = ui_util_new_chat_label(msg, "chat-message");
+    gtk_label_set_xalign(GTK_LABEL(label), 0);
 
     // Fill container
     gtk_box_pack_start(GTK_BOX(container), hour, FALSE, FALSE, 0);

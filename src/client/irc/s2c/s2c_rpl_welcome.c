@@ -28,9 +28,7 @@ int s2c_rpl_welcome(t_env *e, int cs, t_token *tokens)
         ui_set_username(e->ui, e->fds[cs].username);
         ui_set_status(e->ui, 0);
 
-        // ui_clear_login_window(tmp);
-
-        free(tmp);
+        ui_clear_login_window(tmp);
     }
 
     return (IRC_S2C_RPL_WELCOME);
