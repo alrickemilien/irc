@@ -7,6 +7,7 @@ size_t tokenize(char *str, t_token *tokens, size_t len)
     size_t count;
     char * end;
 
+    memset(tokens, 0, sizeof(t_token) * len);
     end = strstr(str, "\x0D\x0A");
 
     if (end == (void*)0)

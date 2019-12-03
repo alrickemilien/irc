@@ -16,6 +16,10 @@ static const t_irc_cmd g_s2c_replys[IRC_S2C_COMMANDS_NUMBER] = {
     [IRC_S2C_RPL_ENDOFWHOIS] = {"RPL_ENDOFWHOIS", &s2c_rpl_endofwhois},
     [IRC_S2C_RPL_WHOREPLY] = {"RPL_WHOREPLY", &s2c_rpl_whoreply},
     [IRC_S2C_RPL_ENDOFWHO] = {"RPL_ENDOFWHO", &s2c_rpl_endofwho},
+    [IRC_S2C_RPL_AWAY] = {"RPL_AWAY", &s2c_rpl_away},
+    [IRC_S2C_RPL_LISTSTART] = {"RPL_LISTSTART", &s2c_rpl_liststart},
+    [IRC_S2C_RPL_LISTEND] = {"RPL_LISTEND", &s2c_rpl_listend},
+    [IRC_S2C_RPL_LIST] = {"RPL_LIST", &s2c_rpl_list},
 };
 
 int s2c(t_env *e, int cs, char *buffer)
@@ -27,8 +31,6 @@ int s2c(t_env *e, int cs, char *buffer)
     // Skip withespaces
     while (*buffer == 0x20)
         buffer++;
-
-    memset(tokens, 0, sizeof(t_token) * 30);
 
     tokenize(buffer, tokens, 30);
 

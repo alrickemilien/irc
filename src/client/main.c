@@ -17,7 +17,7 @@ int init_env(t_env *e)
     if (getrlimit(RLIMIT_NOFILE, &rlp) < 0)
         return (logerrno("init_env::getrlimit"));
 
-    // there are three standard file descriptions, STDIN, STDOUT, and STDERR.
+    // Three standard file descriptions, STDIN, STDOUT, and STDERR.
     // They are assigned to 0, 1, and 2 respectively.
     e->maxfd = rlp.rlim_cur;
     if ((e->fds = (t_fd *)malloc(sizeof(*e->fds) * e->maxfd)) == (void*)0)

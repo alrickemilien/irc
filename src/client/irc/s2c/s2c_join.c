@@ -1,6 +1,5 @@
 #include <client/irc.h>
 #include <client/ui/panel.h>
-#include <ctype.h>
 
 static int s2c_join_check_command(t_env *e, int cs, const t_token *tokens)
 {

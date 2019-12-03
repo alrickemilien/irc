@@ -13,6 +13,7 @@ static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
     [IRC_PART] = {"PART", &irc_part},
     [IRC_WHOIS] = {"WHOIS", &irc_whois},
     [IRC_WHO] = {"WHO", &irc_who},
+    [IRC_LIST] = {"LIST", &irc_list},
 };
 
 int irc_command(t_env *e, int cs, size_t end_command_index)
@@ -50,8 +51,6 @@ int irc_command(t_env *e, int cs, size_t end_command_index)
         if (strncmp(command + offset, g_irc_commands[i].command,
                     strlen(g_irc_commands[i].command)) == 0)
         {
-            memset(tokens, 0, sizeof(t_token) * 30);
-
             // printf("ret:%ld\n", tokenize(command + offset, tokens, 30));
             // j = 0;
             // while (j < 30 && tokens[j].addr)

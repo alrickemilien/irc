@@ -57,13 +57,14 @@ void irc_user_join_default_channel(t_env *e, int cs)
 {
     char concat[512];
 
-    e->channels[e->fds[cs].channel].clients++;
+    e->fds[cs].channel = 0;
+    e->channels[0].clients++;
 
     memset(concat, 0, sizeof(concat));
 
     sprintf(concat, "%s!%s@%s JOIN %s\x0D\x0A", e->fds[cs].nickname,
             e->fds[cs].username, e->fds[cs].host,
-            e->channels[e->fds[cs].channel].channel);
+            e->channels[0].channel);
 
     logdebug("irc_user_join_default_channel:: %s", concat);
     cbuffer_putstr(&e->fds[cs].buf_write, concat);

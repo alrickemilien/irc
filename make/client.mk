@@ -34,6 +34,7 @@ CLIENT_SRC+=src/client/irc/c2s/c2s.c \
 			src/client/irc/c2s/c2s_away.c \
 			src/client/irc/c2s/c2s_leave.c \
 			src/client/irc/c2s/c2s_whois.c \
+			src/client/irc/c2s/c2s_list.c \
 			src/client/irc/c2s/c2s_connect.c
 
 # irc server to client
@@ -46,6 +47,8 @@ CLIENT_SRC+=src/client/irc/s2c/s2c.c \
 			src/client/irc/s2c/s2c_rpl_topic.c \
 			src/client/irc/s2c/s2c_rpl_whois.c \
 			src/client/irc/s2c/s2c_rpl_who.c \
+			src/client/irc/s2c/s2c_rpl_away.c \
+			src/client/irc/s2c/s2c_rpl_list.c \
 			src/client/irc/s2c/s2c_rpl_welcome.c
 
 # irc error
@@ -99,6 +102,7 @@ CLIENT_SRC+=src/client/ui/panel/panel.c	\
 			src/client/ui/panel/ui_message.c \
 			src/client/ui/panel/ui_events.c \
 			src/client/ui/panel/ui_set.c \
+			src/client/ui/panel/ui_leave.c \
 			src/client/ui/panel/ui_chat.c
 
 %.o: %.c
@@ -119,7 +123,7 @@ $(CLIENT_BUILD_GLADE_PREFIX)%: $(CLIENT_SRC_GLADE_PREFIX)%
 CLIENT_SRC_ASSETS_PREFIX=assets/
 CLIENT_BUILD_ASSETS_PREFIX=build/ui/assets/
 CLIENT_SRC_ASSETS=icons8-annuler-16.png icons8-ok-16.png icons8-mode-veille-16.png \
-				icons8-grand-hashtag-40.png icons8-haute-priorité-100.png icons8-info-carré-16.png
+				icons8-grand-hashtag-40.png icons8-haute-priorité-100.png icons8-info-carré-16.png icons8-dormir-16.png
 ASSETS_COPY_FILES=$(addprefix $(CLIENT_BUILD_ASSETS_PREFIX), $(CLIENT_SRC_ASSETS))
 
 $(CLIENT_BUILD_ASSETS_PREFIX)%: $(CLIENT_SRC_ASSETS_PREFIX)%

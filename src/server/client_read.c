@@ -1,9 +1,3 @@
-
-#include <stdio.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <unistd.h>
-
 #include <cbuffer/cbuffer_ssl.h>
 #include <server/irc.h>
 
@@ -15,28 +9,23 @@ int client_read(t_env *e, size_t cs)
 {
     size_t r;
     size_t index;
+    t_fd * fd;
 
-    // printf("client_read::%ld\n", cs);
-    // printf("databuffer tail BEFORE RECV is %ld\n", e->fds[cs].buf_read.tail);
-    // printf("databuffer head BEFORE RECV is %ld\n", e->fds[cs].buf_read.head);
+    fd = &e->fds[cs];
 
     // logdebug("client_read::cbuffer_debug\n");
-    // cbuffer_debug(&e->fds[cs].buf_read);
+    // cbuffer_debug(&fd->buf_read);
 
     index = -1;
-    if (cbuffer_size(&e->fds[cs].buf_read) != CBUFFSIZE &&
-        (cbuffer_isempty(&e->fds[cs].buf_read) ||
-         (index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0D\x0A")) ==
-             (size_t)-1))
+    if (cbuffer_size(&fd->buf_read) != CBUFFSIZE &&
+        (cbuffer_isempty(&fd->buf_read) ||
+         (index = cbuffer_indexof(&fd->buf_read, "\x0D\x0A")) == (size_t)-1))
     {
         // Receiving data from the client cs
         if (e->ssl_ctx)
-            r = cbuffer_read_ssl(&e->fds[cs].buf_read, e->fds[cs].ssl);
+            r = cbuffer_read_ssl(&fd->buf_read, fd->ssl);
         else
-            r = cbuffer_recv(&e->fds[cs].buf_read, cs);
-
-        // logdebug("client_read::r:: %ld\n", r);
-        // printf("client_read::%ld bytes has been received for %ld\n", r, cs);
+            r = cbuffer_recv(&fd->buf_read, cs);
 
         if (r <= 0)
         {
@@ -45,21 +34,16 @@ int client_read(t_env *e, size_t cs)
         }
     }
 
-    // printf("data buffer tail is %ld\n", e->fds[cs].buf_read.tail);
-    // printf("data buffer head is %ld\n", e->fds[cs].buf_read.head);
-    // printf("data buffer is: %s\n", e->fds[cs].buf_read.buffer);
-
     if (index == (size_t)-1)
-        index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0D\x0A");
+        index = cbuffer_indexof(&fd->buf_read, "\x0D\x0A");
 
     if (index == (size_t)-1)
     {
         // The buffer is full without any end of command, flush it
-        if (e->fds[cs].buf_read.full)
+        if (fd->buf_read.full)
         {
-            logerror(
-                "[!] Buffer is reset because it is full without command");
-            cbuffer_reset(&e->fds[cs].buf_read);
+            logerror("[!] Buffer is reset because it is full without command");
+            cbuffer_reset(&fd->buf_read);
         }
         return (0);
     }
@@ -75,12 +59,12 @@ int client_read(t_env *e, size_t cs)
 
         // Drop command
         // +2 because of "\x0D\x0A" skipping
-        cbuffer_dropn(&e->fds[cs].buf_read,
-                      (e->fds[cs].buf_read.tail < index
-                           ? index - e->fds[cs].buf_read.tail
-                           : index + CBUFFSIZE - e->fds[cs].buf_read.tail) +
+        cbuffer_dropn(&fd->buf_read,
+                      (fd->buf_read.tail < index
+                           ? index - fd->buf_read.tail
+                           : index + CBUFFSIZE - fd->buf_read.tail) +
                           2);
-        index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0D\x0A");
+        index = cbuffer_indexof(&fd->buf_read, "\x0D\x0A");
     }
 
     return (0);

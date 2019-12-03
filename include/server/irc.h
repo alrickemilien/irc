@@ -32,7 +32,7 @@ typedef struct s_env
     fd_set     fd_read;
     fd_set     fd_write;
     char       isotime[ISOTIMESTRSIZE];
-    void        *ssl_ctx;
+    void *     ssl_ctx;
 } t_env;
 
 /*
@@ -60,6 +60,7 @@ typedef enum e_irc {
     IRC_WHOIS,
     IRC_WHO,
     IRC_NOTICE,
+    IRC_LIST,
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
 
@@ -82,10 +83,15 @@ int irc_pass(t_env *e, int cs, t_token *tokens);
 int irc_part(t_env *e, int cs, t_token *tokens);
 int irc_whois(t_env *e, int cs, t_token *tokens);
 int irc_who(t_env *e, int cs, t_token *tokens);
+int irc_list(t_env *e, int cs, t_token *tokens);
 int irc_reply(t_env *e, int cs, int code, ...);
 int irc_err(t_env *e, int cs, int code, ...);
 
 void irc_user_join_default_channel(t_env *e, int cs);
+void irc_privmsg_nomatch_nick(t_env *  e,
+                              int      cs,
+                              t_token *subtokens,
+                              size_t   subtoken_count);
 
 void broadcast(t_env *e, const char *msg, int type, size_t cs);
 void broadcast_all_in_channel(t_env *     e,

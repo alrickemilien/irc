@@ -46,6 +46,7 @@ SERVER_SRC+=src/server/irc/irc_command.c \
 			src/server/irc/irc_part.c \
 			src/server/irc/irc_who.c \
 			src/server/irc/irc_whois.c \
+			src/server/irc/irc_list.c \
 			src/server/irc/irc_privmsg.c
 
 #cbuffer

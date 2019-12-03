@@ -2,7 +2,6 @@
 
 int irc_away(t_env *e, int cs, t_token *tokens)
 {
-    // When no AWAY message set
     if (!tokens[1].addr)
     {
         memset(e->fds[cs].awaymessage, 0, sizeof(e->fds[cs].awaymessage));

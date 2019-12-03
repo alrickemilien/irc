@@ -138,3 +138,36 @@ void ui_push_info_message(t_ui_panel *        ui,
 
     bloc->count++;
 }
+
+void ui_push_away_message(t_ui_panel *        ui,
+                          t_ui_chat_msg_bloc *bloc,
+                          const char *        msg)
+{
+    GtkWidget *container;
+    GtkWidget *logo;
+    GtkWidget *label;
+
+    container = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
+    gtk_set_class(container, "away-message-container");
+    gtk_box_set_homogeneous(GTK_BOX(container), FALSE);
+
+    // Logo
+    logo = gtk_image_new();
+    gtk_image_set_from_file(GTK_IMAGE(logo), ui->rpl_away_image);
+    gtk_set_class(logo, "away-logo");
+
+    // Message content
+    label = gtk_label_new(msg);
+    gtk_label_set_selectable(GTK_LABEL(label), TRUE);
+    // gtk_label_set_xalign(GTK_LABEL(label), 0);
+    gtk_set_class(label, "away-message");
+
+    // Fill container
+    gtk_box_pack_start(GTK_BOX(container), logo, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(container), label, FALSE, FALSE, 0);
+
+    // Finally insert
+    gtk_list_box_insert(GTK_LIST_BOX(bloc->box), container, -1);
+
+    bloc->count++;
+}
