@@ -17,4 +17,12 @@ GdkRGBA         *gtk_new_rgba(float r, float g, float b, float a);
 gboolean        gtk_do_select(void *e);
 char            *gtk_get_assets(const char *bin_path, const char *path);
 
+/*
+** utils
+*/
+
+GtkWidget       *ui_util_new_hour_label(const char *fmt, const char *class);
+GtkWidget       *ui_util_new_logo(const char *path, const char *class);
+GtkWidget       *ui_util_new_chat_label(const char *msg, const char *class);
+
 #endif

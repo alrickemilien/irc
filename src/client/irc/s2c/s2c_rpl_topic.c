@@ -1,10 +1,9 @@
 #include <client/irc.h>
 #include <client/ui/panel.h>
 
-int s2c_rpl_topic(t_env *e, int cs, t_token *tokens)
+int s2c_rpl_topic(t_env *e, t_token *tokens)
 {
     (void)e;
-    (void)cs;
 
     if (!tokens[1].addr)
         return (-1);

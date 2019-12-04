@@ -20,7 +20,7 @@ int init_env(t_env *e)
     // Three standard file descriptions, STDIN, STDOUT, and STDERR.
     // They are assigned to 0, 1, and 2 respectively.
     e->maxfd = rlp.rlim_cur;
-    if ((e->fds = (t_fd *)malloc(sizeof(*e->fds) * e->maxfd)) == (void*)0)
+    if ((e->fds = (t_fd *)malloc(sizeof(*e->fds) * e->maxfd)) == (void *)0)
         return (logerror("init_env::malloc"));
 
     // Server's socket connection
@@ -40,9 +40,18 @@ int init_env(t_env *e)
     return (0);
 }
 
+static void init_i18n(void)
+{
+    // LC_ALL decided by environment
+    setlocale(LC_ALL, "");
+    
+    bindtextdomain(GETTEXT_PACKAGE, LOCALE_DIR);
+    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+    textdomain(GETTEXT_PACKAGE);
+}
+
 static void init_options(t_options *options)
 {
-    // Set default port
     if (options->port == 0)
         options->port = 5555;
 
@@ -53,7 +62,6 @@ static void init_options(t_options *options)
 static void init_std(t_env *e)
 {
     t_fd *stdin_fd;
-    // t_fd *stdout_fd;
 
     stdin_fd = &e->fds[0];
     stdin_fd->type = FD_CLIENT;
@@ -67,7 +75,7 @@ static void execute_precommands(t_env *e)
     ptr = e->options.command;
     while (ptr && *ptr)
     {
-        c2s(e, e->sock, ptr);
+        c2s(e, ptr);
 
         ptr = strstr(ptr, "\x0D\x0A");
 
@@ -82,6 +90,8 @@ int main(int argc, char **argv)
     t_env e;
 
     memset(&e, 0, sizeof(t_env));
+
+    init_i18n();
 
     exit_code = read_options(argc, (const char **)argv, &e.options);
     if (exit_code != 0)

@@ -22,8 +22,6 @@ void init_fd(t_env *e)
         {
             FD_SET(i, &e->fd_read);
 
-            // printf("i:%ld\n", i);
-
             // Add the write fd only if write buffer is available
             if (cbuffer_size(&e->fds[i].buf_write) > 0)
                 FD_SET(i, &e->fd_write);
@@ -62,8 +60,6 @@ int do_select(t_env *e)
 
     timeout.tv_sec = 0;
     timeout.tv_usec = 500;
-
-    (void)timeout;
 
     init_fd(e);
 

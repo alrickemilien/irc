@@ -1,13 +1,9 @@
 #include <client/irc.h>
 #include <client/ui/panel.h>
-#include <ctype.h>
 
-static int c2s_nick_check_command(t_env *e, int cs, const t_token *tokens)
+static int c2s_nick_check_command(t_env *e, const t_token *tokens)
 {
     size_t nick_len;
-
-    (void)cs;
-    (void)e;
 
     if (!tokens[1].addr || tokens[2].addr)
         return (irc_error(e, ERR_NONICKNAMEGIVEN));
@@ -29,20 +25,20 @@ int _c2s_nick(t_env *e, const char *nick, size_t nick_length)
         return (0);
     }
 
-    if (cbuffer_putcmd(&e->fds[e->sock].buf_write, "NICK %.*s\x0D\x0A",
+    if (cbuffer_putcmd(&e->self->buf_write, "NICK %.*s\x0D\x0A",
                        nick_length, nick) < 0)
         return (-1);
 
     loginfo("You changed nickname to %s", nick);
 
-    memrpl(e->fds[e->sock].nickname, NICKNAMESTRSIZE, nick, nick_length);
+    memrpl(e->self->nickname, NICKNAMESTRSIZE, nick, nick_length);
 
     return (0);
 }
 
-int c2s_nick(t_env *e, int cs, t_token *tokens)
+int c2s_nick(t_env *e, t_token *tokens)
 {
-    if ((c2s_nick_check_command(e, cs, tokens)) < 0)
+    if ((c2s_nick_check_command(e, tokens)) < 0)
         return (-1);
 
     _c2s_nick(e, tokens[1].addr, tokens[1].len);

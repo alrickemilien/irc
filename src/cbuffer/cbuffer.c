@@ -47,10 +47,10 @@ void cbuffer_put(t_cbuffer *cbuf, const uint8_t *data, size_t n)
     }
 }
 
-void cbuffer_putstr(t_cbuffer *cbuf, const char *str)
+int cbuffer_putstr(t_cbuffer *cbuf, const char *str)
 {
-    size_t count;
-    size_t n;
+    int count;
+    int n;
 
     n = strlen(str);
     count = CBUFFSIZE - cbuf->head;
@@ -64,7 +64,7 @@ void cbuffer_putstr(t_cbuffer *cbuf, const char *str)
     if (count >= n)
     {
         cbuf->head += n;
-        return;
+        return (n);
     }
 
     if ((cbuf->head + n) % CBUFFSIZE >= cbuf->tail)
@@ -78,6 +78,8 @@ void cbuffer_putstr(t_cbuffer *cbuf, const char *str)
         cbuf->head = (cbuf->head + n) % CBUFFSIZE;
         memcpy(cbuf->buffer, str + count, n - count);
     }
+
+    return (n);
 }
 
 int cbuffer_putcmd(t_cbuffer *cbuf, const char *fmt, ...)

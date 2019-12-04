@@ -3,8 +3,6 @@
 
 void ui_set_channel_name(t_ui_panel *ui, const char *msg)
 {
-    logdebug("ui::ui_set_channel_name:: %s\n", msg);
-
     ui->channel_label =
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "channel_label"));
 
@@ -15,8 +13,6 @@ void ui_set_channel_name(t_ui_panel *ui, const char *msg)
 
 void ui_set_nick(t_ui_panel *ui, const char *msg)
 {
-    logdebug("ui::ui_set_nick:: %s\n", msg);
-
     ui->nick_label =
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "nickname_label"));
 
@@ -27,8 +23,6 @@ void ui_set_nick(t_ui_panel *ui, const char *msg)
 
 void ui_set_username(t_ui_panel *ui, const char *msg)
 {
-    logdebug("ui::ui_set_username:: %s\n", msg);
-
     ui->user_label =
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "username_label"));
 

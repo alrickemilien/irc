@@ -17,14 +17,16 @@ static gboolean close_login(GtkWidget *  widget,
 
 int ui_clear_login_window(t_ui_login *ui)
 {
+    gtk_widget_hide(ui->window);
     free(ui->window_color);
     g_object_unref(G_OBJECT(ui->builder));
+    free(ui);
     return (0);
 }
 
 int ui_init_login_window(t_env *e, t_ui_login *ui)
 {
-    GtkCssProvider *css_provider;
+    GtkCssProvider *css;
 
     ui->e = e;
 
@@ -48,19 +50,15 @@ int ui_init_login_window(t_env *e, t_ui_login *ui)
                      ui);
 
     // Apply style to window
-    css_provider = gtk_css_provider_new();
-    if (gtk_provider_load_css(css_provider, e->argv_0, "/ui/login/login.css") <
-        0)
+    css = gtk_css_provider_new();
+    if (gtk_provider_load_css(css, e->argv_0, "/ui/login/login.css") < 0)
         return (-1);
     gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
-                                              GTK_STYLE_PROVIDER(css_provider),
+                                              GTK_STYLE_PROVIDER(css),
                                               GTK_STYLE_PROVIDER_PRIORITY_USER);
-
+    g_object_unref(G_OBJECT(css));
     ui->window_color = gtk_new_rgba(1, 1, 1, 0.96);
-
     gtk_set_transparent_window(ui->window, ui->window_color);
-
-    g_object_unref(G_OBJECT(css_provider));
 
     gtk_widget_show_all(ui->window);
 
