@@ -12,40 +12,24 @@ gboolean ui_chat_scroll_to_bottom(gpointer w)
 
 void ui_chat_empty_chat_box(t_ui_panel *ui)
 {
-    (void)ui;
-    // t_channel *ch;
-    // GList *    children;
-    // GList *    sub_children;
-    // GList *    item;
-    // GList *    sub_item;
+    t_ui_channel *ch;
+    GList *       children;
+    GList *       item;
 
-    // logdebug("ui::ui_chat_empty_chat_box\n");
-
-    // ch = &ui->channels[ui->channel_index];
-
-    // if (w == NULL)
-    //     return;
-
-    // // Delete first element
-    // children = gtk_container_get_children(GTK_CONTAINER(ch->chat_box));
-    // item = children;
-    // while (item)
-    // {
-    //     children = gtk_container_get_children(GTK_CONTAINER(ch->chat_box));
-    //     item = children;
-    //     while (item)
-    //     {
-    //         gtk_widget_destroy(GTK_WIDGET(item->data));
-    //         item = g_list_next(item);
-    //     }
-    // }
-
-    // ui->channels[ui->channel_index].msg_count = 0;
-
-    // g_list_free(children);
-    // gtk_widget_show_all(w);
-
-    // logdebug("ui::ui_chat_empty_chat_box::leave\n");
+    logdebug("ui::ui_chat_empty_chat_box\n");
+    if (ui->channel_index == -1)
+        return;
+    ch = &ui->channels[ui->channel_index];
+    ch->msg_count = 0;
+    children = gtk_container_get_children(GTK_CONTAINER(ui->chat_box));
+    item = children;
+    while (item)
+    {
+        gtk_widget_destroy(GTK_WIDGET(item->data));
+        item = g_list_next(item);
+    }
+    g_list_free(children);
+    memset(&ch->chat_msg_bloc_list, 0, sizeof(ch->chat_msg_bloc_list));
 }
 
 void ui_new_message(t_ui_panel *ui, const char *msg, int type)
@@ -55,7 +39,7 @@ void ui_new_message(t_ui_panel *ui, const char *msg, int type)
     size_t              i;
     GList *             children;
 
-    logdebug("ui::ui_new_chat_message:: %s\n", msg);
+    // logdebug("ui::ui_new_chat_message:: %s\n", msg);
 
     if (ui->channel_index == -1)
         return;

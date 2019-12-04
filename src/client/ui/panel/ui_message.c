@@ -111,6 +111,7 @@ void ui_push_info_message(t_ui_panel *        ui,
     GtkWidget *container_1;
     GtkWidget *container_2;
     GtkWidget *label;
+    GtkWidget *logo;
 
     // Container 1
     container_1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
@@ -132,9 +133,8 @@ void ui_push_info_message(t_ui_panel *        ui,
     gtk_box_pack_start(GTK_BOX(container_1), label, FALSE, FALSE, 0);
 
     // Fill container 2
-    gtk_box_pack_start(GTK_BOX(container_2),
-                       ui_util_new_logo(ui->info_image, "info-logo"), FALSE,
-                       FALSE, 0);
+    logo = ui_util_new_logo(ui->info_image, "info-logo");
+    gtk_box_pack_start(GTK_BOX(container_2), logo, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(container_2), container_1, FALSE, FALSE, 0);
 
     // Finally insert

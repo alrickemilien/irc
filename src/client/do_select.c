@@ -61,8 +61,6 @@ int do_select(t_env *e)
     timeout.tv_sec = 0;
     timeout.tv_usec = 500;
 
-    (void)timeout;
-
     init_fd(e);
 
     // return the number of file descriptors

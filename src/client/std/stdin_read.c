@@ -13,13 +13,6 @@ int stdin_read(t_env *e, size_t cs)
     // Receiving data from the client cs
     r = cbuffer_read(&e->fds[cs].buf_read, cs);
 
-    //     logdebug("stdin_read::%ld\n", cs);
-    //     logdebug("stdin_read::r : %ld\n", r);
-
-    //     logdebug("stdin_read cbuffer_size(&e->fds[cs].buf_read): %ld\n",
-    //            cbuffer_size(&e->fds[cs].buf_read));
-
-    // Shoudl never happen
     if (r <= 0)
         return (r);
 
