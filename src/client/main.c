@@ -52,7 +52,6 @@ static void init_i18n(void)
 
 static void init_options(t_options *options)
 {
-    // Set default port
     if (options->port == 0)
         options->port = 5555;
 

@@ -24,8 +24,7 @@ int ui_set_status(t_ui_panel *ui, int status)
 
 int ui_nowaway(t_ui_panel *ui, const char *msg)
 {
-    logdebug("ui::ui_away:: %s\n", msg);
-
+    (void)msg;
     ui_set_status(ui, 2);
 
     return (0);
@@ -33,8 +32,6 @@ int ui_nowaway(t_ui_panel *ui, const char *msg)
 
 int ui_unaway(t_ui_panel *ui)
 {
-    logdebug("ui::ui_unaway::\n");
-
     ui_set_status(ui, 0);
 
     return (0);

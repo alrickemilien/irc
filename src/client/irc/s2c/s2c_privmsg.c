@@ -15,8 +15,6 @@ int s2c_privmsg(t_env *e, int cs, t_token *tokens)
 {
     char msg[512];
 
-    // loginfo("s2c_privmsg:: %s", tokens[0].addr);
-
     if (s2c_privmsg_check_command(e, cs, tokens) < 0)
         return (-1);
 

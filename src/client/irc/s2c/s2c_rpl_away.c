@@ -3,8 +3,6 @@
 
 int s2c_rpl_nowaway(t_env *e, int cs, t_token *tokens)
 {
-    logdebug("s2c_nowaway:: %s", tokens[0].addr);
-
     e->fds[cs].away = 1;
 
     if (e->options.gui)
@@ -15,8 +13,6 @@ int s2c_rpl_nowaway(t_env *e, int cs, t_token *tokens)
 
 int s2c_rpl_unaway(t_env *e, int cs, t_token *tokens)
 {
-    logdebug("s2c_unaway:: %s", tokens[0].addr);
-
     e->fds[cs].away = 0;
 
     if (e->options.gui)
@@ -27,8 +23,6 @@ int s2c_rpl_unaway(t_env *e, int cs, t_token *tokens)
 
 int s2c_rpl_away(t_env *e, int cs, t_token *tokens)
 {
-    loginfo("s2c_away:: %s", tokens[1].addr);
-
     (void)cs;
 
     if (e->options.gui)

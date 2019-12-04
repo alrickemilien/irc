@@ -16,7 +16,6 @@ void ui_chat_empty_chat_box(t_ui_panel *ui)
     GList *       children;
     GList *       item;
 
-    logdebug("ui::ui_chat_empty_chat_box\n");
     if (ui->channel_index == -1)
         return;
     ch = &ui->channels[ui->channel_index];
@@ -38,8 +37,6 @@ void ui_new_message(t_ui_panel *ui, const char *msg, int type)
     t_ui_chat_msg_bloc *bloc;
     size_t              i;
     GList *             children;
-
-    // logdebug("ui::ui_new_chat_message:: %s\n", msg);
 
     if (ui->channel_index == -1)
         return;

@@ -23,7 +23,6 @@ static int is_valid_termination(const char *buffer, size_t len)
 int c2s(t_env *e, int cs, char *buffer)
 {
     size_t i;
-    // size_t  j;
     t_token tokens[30];
 
     // Skip withespaces
@@ -41,24 +40,13 @@ int c2s(t_env *e, int cs, char *buffer)
             is_valid_termination(buffer, strlen(g_irc_commands[i].command)))
         {
             tokenize(buffer, tokens, 30);
-
-            // logdebug("ret:%ld\n", tokenize(buffer, tokens, 30));
-            // j = 0;
-            // while (j < 30 && tokens[j].addr)
-            // {
-            //     logdebug("token:%s - token_len:%ld\n",
-            //     tokens[j].addr,tokens[j].len); j++;
-            // }
-
             return (g_irc_commands[i].f(e, cs, tokens));
         }
         i++;
     }
 
     if (e->sock == -1 || buffer[0] == '/')
-        return (0);
-
-    // logdebug("Unknow command '%s', treat as a msg to current channel", buffer);
+        return (irc_error(e, ERR_UNRECOGNIZED_COMMAND, buffer));
 
     _c2s_msg(&e->fds[e->sock], e->fds[e->sock].channelname,
              strlen(e->fds[e->sock].channelname), buffer);

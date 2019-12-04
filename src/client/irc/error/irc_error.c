@@ -7,6 +7,7 @@ static const t_s2c_error g_s2c_error[] = {
     {ERR_NICKNAMEINUSE, "Nickname '%s' already in use", NULL},
     {ERR_NONICKNAMEGIVEN, "No nickname provided to /nick command", NULL},
     {ERR_ERRONEUSNICKNAME, "Invalid character in nickname '%s'", NULL},
+    {ERR_UNRECOGNIZED_COMMAND, "Unrecognized command '%s'", NULL},
     {0, NULL, NULL},
 };
 

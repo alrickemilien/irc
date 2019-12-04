@@ -173,6 +173,9 @@ enum e_irc_reply
     ERR_NOTONCHANNEL = 442,
     ERR_NEEDMOREPARAMS = 461,
     ERR_ALREADYREGISTRED = 462,
+
+    // Custom one for internal purpose
+    ERR_UNRECOGNIZED_COMMAND = 42,
 };
 
 typedef struct s_irc_reply
