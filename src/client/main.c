@@ -62,7 +62,6 @@ static void init_options(t_options *options)
 static void init_std(t_env *e)
 {
     t_fd *stdin_fd;
-    // t_fd *stdout_fd;
 
     stdin_fd = &e->fds[0];
     stdin_fd->type = FD_CLIENT;

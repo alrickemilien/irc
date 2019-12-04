@@ -1,6 +1,5 @@
 #include <client/irc.h>
 #include <client/ui/panel.h>
-#include <ctype.h>
 
 static int c2s_whois_check_command(t_env *e, const t_token *tokens)
 {
@@ -25,12 +24,8 @@ int _c2s_whois(t_fd *fd, const char *nick, size_t nick_len)
 
 int c2s_whois(t_env *e, t_token *tokens)
 {
-    loginfo("c2s_whois:: %s\n", tokens[0].addr);
-
     if (e->sock == -1)
-        return logerror(
-            "You nee to be logged in before any command. Use /connect [server] "
-            "?[port]");
+        return (irc_error(e, ERR_NOT_CONNECTED));
 
     if (c2s_whois_check_command(e, tokens) < 0)
         return (-1);

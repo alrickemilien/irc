@@ -1,8 +1,7 @@
-#include <client/irc.h>
-#include <ctype.h>
 #include <netdb.h>
 #include <pwd.h>
 #include <sys/types.h>
+#include <client/irc.h>
 
 static int c2s_connect_check_command(t_env *e, const t_token *tokens)
 {

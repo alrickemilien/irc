@@ -6,6 +6,16 @@
 #include <client/irc.h>
 #include <cbuffer/cbuffer_ssl.h>
 
+void disconnect(t_env *e, int cs)
+{
+    close(cs);
+    clear_fd(&e->fds[cs]);
+    logerror("Connection between client and server has been lost");
+    e->sock = -1;
+    FD_CLR(cs, &e->fd_read);
+    FD_CLR(cs, &e->fd_write);
+}
+
 int server_read(t_env *e, size_t cs)
 {
     size_t r;
@@ -25,12 +35,7 @@ int server_read(t_env *e, size_t cs)
 
     if (r <= 0)
     {
-        close(cs);
-        clear_fd(fd);
-        logerror("Connection between client and server has been lost");
-        e->sock = -1;
-        FD_CLR(cs, &e->fd_read);
-        FD_CLR(cs, &e->fd_write);
+        disconnect(e, cs);
         return (r);
     }
 

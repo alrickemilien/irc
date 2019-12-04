@@ -30,9 +30,7 @@ int c2s_unaway(t_env *e, t_token *tokens)
     (void)tokens;
 
     if (e->sock == -1)
-        return logerror(
-            "You need to be logged in before any command. Use "
-            "/connect [server] ?[port]");
+        return (irc_error(e, ERR_NOT_CONNECTED));
 
     _c2s_unaway(e->self);
 

@@ -84,7 +84,8 @@ typedef enum    e_irc_s2c {
 
 // Custom one for internal purpose
 typedef enum    e_irc_reply_client {
-    ERR_UNRECOGNIZED_COMMAND = 42,
+    ERR_UNRECOGNIZED_COMMAND = 1001,
+    ERR_NOT_CONNECTED = 1002,
 }               t_irc_reply_client;
 
 typedef struct  s_irc_cmd

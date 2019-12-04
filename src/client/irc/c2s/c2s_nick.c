@@ -1,6 +1,5 @@
 #include <client/irc.h>
 #include <client/ui/panel.h>
-#include <ctype.h>
 
 static int c2s_nick_check_command(t_env *e, const t_token *tokens)
 {

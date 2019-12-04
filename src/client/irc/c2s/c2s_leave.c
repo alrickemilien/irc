@@ -42,9 +42,7 @@ int _c2s_leave(t_fd *fd, const char *channel_name, size_t channel_name_len)
 int c2s_leave(t_env *e, t_token *tokens)
 {
     if (e->sock == -1)
-        return logerror(
-            "You need to be logged in before any command. Use "
-            "/connect [server] ?[port]");
+        return (irc_error(e, ERR_NOT_CONNECTED));
 
     if ((c2s_leave_check_command(e, tokens)) != 0)
         return (-1);

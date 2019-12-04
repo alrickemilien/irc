@@ -1,8 +1,4 @@
 #include <client/irc.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <unistd.h>
 
 int stdin_read(t_env *e, size_t cs)
 {

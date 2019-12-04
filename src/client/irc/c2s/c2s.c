@@ -15,7 +15,11 @@ static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
         [IRC_LIST] = {"/list", &c2s_list},
 };
 
-static int is_valid_termination(const char *buffer, size_t len)
+/*
+** eow stands for end of word
+*/
+
+static int is_eow(const char *buffer, size_t len)
 {
     return (buffer[len] == ' ' || buffer[len] == '\n' || buffer[len] == 0);
 }
@@ -37,7 +41,7 @@ int c2s(t_env *e, char *buffer)
     {
         if (strncmp(buffer, g_irc_commands[i].command,
                     strlen(g_irc_commands[i].command)) == 0 &&
-            is_valid_termination(buffer, strlen(g_irc_commands[i].command)))
+            is_eow(buffer, strlen(g_irc_commands[i].command)))
         {
             tokenize(buffer, tokens, 30);
             return (g_irc_commands[i].f(e, tokens));

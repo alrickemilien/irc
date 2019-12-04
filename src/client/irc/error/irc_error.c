@@ -8,6 +8,10 @@ static const t_s2c_error g_s2c_error[] = {
     {ERR_NONICKNAMEGIVEN, "No nickname provided to /nick command", NULL},
     {ERR_ERRONEUSNICKNAME, "Invalid character in nickname '%s'", NULL},
     {ERR_UNRECOGNIZED_COMMAND, "Unrecognized command '%s'", NULL},
+    {ERR_NOT_CONNECTED,
+     "You need to be logged in before any command. Use "
+     "/connect [server] ?[port]",
+     NULL},
     {0, NULL, NULL},
 };
 
