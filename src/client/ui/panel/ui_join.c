@@ -82,14 +82,9 @@ int ui_join(t_ui_panel *ui, const char *channel)
 {
     int index;
 
-    logdebug("ui::ui_join:: %s", channel);
-
     ui_set_channel_name(ui, channel);
 
     index = ui_join_channels_index_of(ui, channel, strlen(channel));
-
-    logdebug("index: %d", index);
-    logdebug("ui->channel_index: %d", ui->channel_index);
 
     // When it already exists, just set the index to the selected one
     if (index != -1)

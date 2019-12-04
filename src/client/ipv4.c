@@ -16,11 +16,6 @@ int client_ipv4(t_env *e)
     struct protoent *  pe;
     struct hostent *   hostnm;
 
-    //     int                reuseaddr;
-    // #ifdef __APPLE__
-    //     int reuseport;
-    // #endif  // __APPLE__
-
     logdebug("Connecting to %s:%d through ipv4\n", e->options.host,
              e->options.port);
 
@@ -37,21 +32,6 @@ int client_ipv4(t_env *e)
     /********************************************************************/
     if ((cs = socket(AF_INET, SOCK_STREAM, pe->p_proto)) < 0)
         return (logerrno("ipv4::socket\n"));
-
-    //     /********************************************************************/
-    //     /* The setsockopt() function is used to allow the local address to */
-    //     /* be reused when the server is restarted before the required wait */
-    //     /* time expires. */
-    //     /********************************************************************/
-    //     reuseaddr = 1;
-    //     setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &reuseaddr,
-    //     sizeof(reuseaddr));
-
-    // #ifdef __APPLE__
-    //     reuseport = 1;
-    //     setsockopt(sock, SOL_SOCKET, SO_REUSEPORT, &reuseport,
-    //     sizeof(reuseport));
-    // #endif  // __APPLE__
 
     /*********************************************************************/
     /* After the socket descriptor is created, a bind() function gets a  */

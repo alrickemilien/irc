@@ -1,8 +1,7 @@
-#include <client/irc.h>
-#include <ctype.h>
 #include <netdb.h>
 #include <pwd.h>
 #include <sys/types.h>
+#include <client/irc.h>
 
 static int c2s_connect_check_command(t_env *e, const t_token *tokens)
 {
@@ -16,8 +15,8 @@ static int c2s_connect_check_command(t_env *e, const t_token *tokens)
     if (host_len > NI_MAXHOST || !host_len)
         return (logerror("c2s_connect_check_command:: INVALID HOSTNAME\n"));
 
-    memset(e->options.host, 0, sizeof(e->options.host));
-    memcpy(e->options.host, tokens[1].addr, tokens[1].len);
+    memrpl(e->options.host, sizeof(e->options.host), tokens[1].addr,
+           tokens[1].len);
 
     if (!tokens[2].addr)
         return (0);
@@ -58,6 +57,7 @@ int _c2s_connect(t_env *     e,
 
     cs = e->sock;
     fd = &e->fds[cs];
+    e->self = &e->fds[cs];
 
     cbuffer_putcmd(&fd->buf_write, "USER %s %s %s %s\x0D\x0A",
                    name ? name : p->pw_name,
@@ -75,23 +75,20 @@ int _c2s_connect(t_env *     e,
     memrpl(fd->username, USERNAMESTRSIZE, name ? name : p->pw_name,
            strlen(name ? name : p->pw_name));
 
-    logdebug("_c2s_connect::e->nick:: %s",e->nick );
+    logdebug("_c2s_connect::e->nick:: %s", e->nick);
 
     // Send nickname if local one has been set
     if (e->nick[0])
     {
         cbuffer_putcmd(&fd->buf_write, "NICK %s\x0D\x0A", e->nick);
-
         memrpl(fd->nickname, NICKNAMESTRSIZE, e->nick, strlen(e->nick));
     }
 
     return (0);
 }
 
-int c2s_connect(t_env *e, int cs, t_token *tokens)
+int c2s_connect(t_env *e, t_token *tokens)
 {
-    (void)cs;
-
     // Leave when socket already set
     // @TODO reset whole file descriptor
     if (e->sock != -1)

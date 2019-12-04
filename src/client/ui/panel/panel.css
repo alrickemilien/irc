@@ -1,5 +1,5 @@
 #left-pane {
-    background-color: transparent;
+    /* background-color: transparent; */
 }
 
 #channel_label {
@@ -11,6 +11,11 @@
     color: #fdfdfd;
     font-size: 18px;
     font-weight: bold;
+}
+
+#nickname_label {
+    color: #fdfdfd;
+    font-size: 14px;
 }
 
 /***
@@ -115,12 +120,11 @@
  */
 
  #right-pane {
-    background-color: #ffffff;
+    background-color: #eeeeee;
 }
 
 .chat-message {
     margin-left: 12px;
-    border-radius: 5px;
     padding: 3px;
 }
 
@@ -133,15 +137,15 @@
 */
 
 .topic-message-container {
-    border-radius: 5px;
-    border-color: rgb(201, 176, 94);
+    border-radius: 3px;
+    border-color: rgb(226, 201, 119);
     border-style: solid;
     border-width: 2px;
     background-image: -gtk-gradient (linear,
     left top,
     left bottom,
-    from(rgb(235, 209, 126)),
-    to (rgb(207, 182, 99)));
+    from(rgba(235, 209, 126, 20)),
+    to (rgba(207, 182, 99, 20)));
 }
 
 .topic-message {
@@ -153,7 +157,7 @@
 */
 
 .error-message-container {
-    border-radius: 5px;
+    border-radius: 3px;
     border-color: rgb(194, 40, 13);
     border-style: solid;
     border-width: 2px;
@@ -173,15 +177,20 @@
 */
 
 .info-message-container {
-    border-radius: 5px;
-    border-color: rgb(10, 124, 58);
+    border-radius: 3px;
+    border-color: rgb(35, 148, 82);
     border-style: solid;
     border-width: 2px;
     background-image: -gtk-gradient (linear,
     left top,
     left bottom,
-    from(rgb(16, 173, 81)),
-    to (rgb(10, 124, 58)));
+    from(rgb(41, 165, 93)),
+    to (rgb(39, 139, 81)));
+}
+
+.info-message-container GtkLabel {
+    color: #eeeeee;
+    margin: 1px 1px 1px 1px;
 }
 
 .info-message {
@@ -201,21 +210,14 @@ scrollbar,
 .scrollbar {
     background-color: transparent;
     transition: all 600ms ease-out;
-    /* -GtkScrollbar-has-backward-stepper: false; */
-    /* -GtkScrollbar-has-forward-stepper: false; */
+    -GtkRange-slider-width: 6;
 }
-
-/* trough {
-}
-
-slider {
-} */
 
 scrollbar:hover,
 .scrollbar:hover {
     transition: all 200ms ease-in-out;
-    /* -GtkRange-slider-width: 10; */
 }
+
 
 scrollbar button,
 .scrollbar.button,
@@ -225,20 +227,16 @@ scrollbar button,
 .scrollbar.button:active:hover:backdrop {
     border: none;
     background-image: none;
-    background-color: transparent;
+    background-color: rgb(147, 13, 173);
 }
 
-/* scrollbar.overlay-indicator slider,
-.slider {
-    border: 1px solid alpha (@bg_highlight_color, 0.25);
-    background-color: alpha (@text_color, 0.6);
-    border-radius: 10px;
-} */
-
+ 
 scrollbar.overlay-indicator slider:hover,
 .slider:hover {
     border-radius: 20px;
+    background-color: rgba(146, 13, 173, 0.198);
 }
+
 
 scrollbar trough,
 .scrollbar.trough {
@@ -252,7 +250,7 @@ scrollbar.overlay-indicator trough,
 
 scrollbar.overlay-indicator:hover trough,
 .scrollbar.overlay-indicator.trough:hover {
-    background-color: alpha (#000, 0.1);
+    background-color: rgba(146, 13, 173, 0.198);
 }
 
 scrollbar:hover trough,
@@ -260,3 +258,4 @@ scrollbar:hover trough,
     background-color: transparent;
     border-radius: 0;
 }
+

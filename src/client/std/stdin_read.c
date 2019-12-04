@@ -1,8 +1,4 @@
 #include <client/irc.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <unistd.h>
 
 int stdin_read(t_env *e, size_t cs)
 {
@@ -13,13 +9,6 @@ int stdin_read(t_env *e, size_t cs)
     // Receiving data from the client cs
     r = cbuffer_read(&e->fds[cs].buf_read, cs);
 
-    //     logdebug("stdin_read::%ld\n", cs);
-    //     logdebug("stdin_read::r : %ld\n", r);
-
-    //     logdebug("stdin_read cbuffer_size(&e->fds[cs].buf_read): %ld\n",
-    //            cbuffer_size(&e->fds[cs].buf_read));
-
-    // Shoudl never happen
     if (r <= 0)
         return (r);
 
@@ -45,7 +34,7 @@ int stdin_read(t_env *e, size_t cs)
                    e->fds[cs].buf_read.buffer, index);
         }
 
-        c2s(e, e->sock, command);
+        c2s(e, command);
 
         // Drop command
         // +1 because of "\x0A" skipping

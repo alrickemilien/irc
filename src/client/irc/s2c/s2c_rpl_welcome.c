@@ -2,12 +2,11 @@
 #include <client/ui/login.h>
 #include <client/ui/panel.h>
 
-int s2c_rpl_welcome(t_env *e, int cs, t_token *tokens)
+int s2c_rpl_welcome(t_env *e, t_token *tokens)
 {
     void *tmp;
 
     (void)e;
-    (void)cs;
     (void)tmp;
 
     if (!tokens[1].addr)
@@ -24,13 +23,11 @@ int s2c_rpl_welcome(t_env *e, int cs, t_token *tokens)
         if (e->ui == NULL || ui_init_panel(e, e->ui) < 0)
             return (-1);
 
-        ui_set_nick(e->ui, e->fds[cs].nickname);
-        ui_set_username(e->ui, e->fds[cs].username);
+        ui_set_nick(e->ui, e->self->nickname);
+        ui_set_username(e->ui, e->self->username);
         ui_set_status(e->ui, 0);
 
-        // ui_clear_login_window(tmp);
-
-        free(tmp);
+        ui_clear_login_window(tmp);
     }
 
     return (IRC_S2C_RPL_WELCOME);

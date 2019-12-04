@@ -79,8 +79,6 @@ CLIENT_SRC+=src/utils/log.c \
 # irc utils
 CLIENT_SRC+=src/utils/irc/is_valid_channel.c
 
-CLIENT_OBJ=$(CLIENT_SRC:.c=.o)
-
 # ui
 CLIENT_SRC+=src/client/ui/gtk_builder_load.c \
 			src/client/ui/gtk_set_transparent_window.c \
@@ -88,6 +86,7 @@ CLIENT_SRC+=src/client/ui/gtk_builder_load.c \
 			src/client/ui/gtk_provider_load_css.c \
 			src/client/ui/gtk_set_class.c \
 			src/client/ui/gtk_new_rgba.c \
+			src/client/ui/ui_utils.c \
 			src/client/ui/gtk_get_assets.c
 
 # ui login
@@ -105,27 +104,20 @@ CLIENT_SRC+=src/client/ui/panel/panel.c	\
 			src/client/ui/panel/ui_leave.c \
 			src/client/ui/panel/ui_chat.c
 
+CLIENT_OBJ=$(CLIENT_SRC:.c=.o)
+
 %.o: %.c
 	@gcc $(DEBUG) -o $@ -c $< $(INCLUDE) $(OPENSSL_CFLAGS) $(GTK_DPKG_CFLAGS) $(CFLAGS)
 
-# glade files
-CLIENT_SRC_GLADE_PREFIX=src/client/ui/
-CLIENT_BUILD_GLADE_PREFIX=build/ui/
-CLIENT_SRC_GLADE=login/login.glade login/login.css \
-				panel/panel.glade panel/panel.css
-CLIENT_UI_COPY_FILES=$(addprefix $(CLIENT_BUILD_GLADE_PREFIX), $(CLIENT_SRC_GLADE))
+# glade files + css
+GLADE_SRC_PREFIX=src/client/ui/
+GLADE_BUILD_PREFIX=build/ui/
+GLADE_SRC=login/login.glade \
+				login/login.css \
+				panel/panel.glade \
+				panel/panel.css
+GLADE=$(patsubst %, $(GLADE_BUILD_PREFIX)%, $(GLADE_SRC))
 
-$(CLIENT_BUILD_GLADE_PREFIX)%: $(CLIENT_SRC_GLADE_PREFIX)%
+$(GLADE_BUILD_PREFIX)%: $(GLADE_SRC_PREFIX)%
 	@mkdir -p $(dir $@)
-	@cp -f $< $@
-
-# assets files
-CLIENT_SRC_ASSETS_PREFIX=assets/
-CLIENT_BUILD_ASSETS_PREFIX=build/ui/assets/
-CLIENT_SRC_ASSETS=icons8-annuler-16.png icons8-ok-16.png icons8-mode-veille-16.png \
-				icons8-grand-hashtag-40.png icons8-haute-priorité-100.png icons8-info-carré-16.png icons8-dormir-16.png
-ASSETS_COPY_FILES=$(addprefix $(CLIENT_BUILD_ASSETS_PREFIX), $(CLIENT_SRC_ASSETS))
-
-$(CLIENT_BUILD_ASSETS_PREFIX)%: $(CLIENT_SRC_ASSETS_PREFIX)%
-	@mkdir -p $(CLIENT_BUILD_ASSETS_PREFIX)
 	@cp -f $< $@

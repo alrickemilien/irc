@@ -40,7 +40,6 @@ int server_write(t_env *e, size_t cs)
                               : index + CBUFFSIZE - fd->buf_write.tail) +
                              2,
                          0);
-
         index = cbuffer_indexof(&fd->buf_write, "\x0D\x0A");
     }
 

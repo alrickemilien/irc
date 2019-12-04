@@ -64,8 +64,6 @@ int ui_leave(t_ui_panel *ui, const char *channel)
 {
     int index;
 
-    logdebug("ui::ui_leave:: %s\n", channel);
-
     if (ui->channels_count == 1)
     {
         ui_new_message(ui, "You can't leave primary channel", UI_ERROR_MSG);
