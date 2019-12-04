@@ -22,6 +22,7 @@ OPENSSL_LIBS=$(shell pkg-config --libs openssl)
 include make/server.mk
 include make/client.mk
 include make/po.mk
+include make/assets.mk
 
 INCLUDE=-I include -I libft
 
@@ -32,7 +33,7 @@ $(BUILD_DIR)$(SERVER): $(SERVER_OBJ)
 	@mkdir -p $(BUILD_DIR)
 	@gcc $(DEBUG) $^ -o $@ $(LINK_LIBFT) $(OPENSSL_LIBS) $(CFLAGS)
 
-$(CLIENT): $(BUILD_DIR)$(CLIENT) $(CLIENT_UI_COPY_FILES) $(ASSETS_COPY_FILES) $(MO)
+$(CLIENT): $(BUILD_DIR)$(CLIENT) $(GLADE) $(ASSETS) $(MO)
 $(BUILD_DIR)$(CLIENT): $(CLIENT_OBJ)
 	@mkdir -p $(BUILD_DIR)
 	@gcc $(DEBUG) $^ -o $@ $(LINK_LIBFT) $(GTK_DPKG_LIBS) $(OPENSSL_LIBS) $(CFLAGS)
