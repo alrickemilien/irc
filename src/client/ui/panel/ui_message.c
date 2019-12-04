@@ -1,5 +1,24 @@
 #include <client/ui/panel.h>
 
+void handle_i18n_direction(GtkWidget *label, GtkWidget *hour, const char *msg)
+{
+    const int is_rtl =
+        (pango_find_base_dir(msg, strlen(msg)) == PANGO_DIRECTION_RTL);
+
+    if (is_rtl)
+    {
+        gtk_widget_set_direction(label, GTK_TEXT_DIR_RTL);
+        gtk_label_set_xalign(GTK_LABEL(label), 0);
+        gtk_label_set_xalign(GTK_LABEL(hour), 1);
+    }
+    else
+    {
+        gtk_widget_set_direction(label, GTK_TEXT_DIR_LTR);
+        gtk_label_set_xalign(GTK_LABEL(label), 0);
+        gtk_label_set_xalign(GTK_LABEL(hour), 0);
+    }
+}
+
 void ui_push_chat_message(t_ui_panel *        ui,
                           t_ui_chat_msg_bloc *bloc,
                           const char *        msg)
@@ -7,7 +26,6 @@ void ui_push_chat_message(t_ui_panel *        ui,
     GtkWidget *container;
     GtkWidget *label;
     GtkWidget *hour;
-    const int is_rtl = (pango_find_base_dir(msg, strlen(msg)) == PANGO_DIRECTION_RTL);
 
     (void)ui;
 
@@ -22,18 +40,7 @@ void ui_push_chat_message(t_ui_panel *        ui,
     // Message content
     label = ui_util_new_chat_label(msg, "chat-message");
 
-    if (is_rtl)
-    {
-        gtk_widget_set_direction(label, GTK_TEXT_DIR_RTL);
-        gtk_label_set_xalign(GTK_LABEL(label), 0);
-        gtk_label_set_xalign(GTK_LABEL(hour), 1);
-    }
-    else
-    {
-        gtk_widget_set_direction(label, GTK_TEXT_DIR_LTR);
-        gtk_label_set_xalign(GTK_LABEL(label), 0);
-        gtk_label_set_xalign(GTK_LABEL(hour), 0);
-    }
+    handle_i18n_direction(label, hour, msg);
 
     // Fill container
     gtk_box_pack_start(GTK_BOX(container), hour, FALSE, FALSE, 0);

@@ -13,31 +13,37 @@ gboolean ui_chat_scroll_to_bottom(gpointer w)
 void ui_chat_empty_chat_box(t_ui_panel *ui)
 {
     (void)ui;
-    // GList *children;
-    // GList *item;
+    // t_channel *ch;
+    // GList *    children;
+    // GList *    sub_children;
+    // GList *    item;
+    // GList *    sub_item;
 
     // logdebug("ui::ui_chat_empty_chat_box\n");
 
-    // ui->chat_box = GTK_WIDGET(gtk_builder_get_object(ui->builder,
-    // "chat_box"));
+    // ch = &ui->channels[ui->channel_index];
 
-    // if (ui->chat_box == NULL)
+    // if (w == NULL)
     //     return;
 
     // // Delete first element
-    // children = gtk_container_get_children(GTK_CONTAINER(ui->chat_box));
+    // children = gtk_container_get_children(GTK_CONTAINER(ch->chat_box));
     // item = children;
     // while (item)
     // {
-    //     gtk_widget_destroy(GTK_WIDGET(item->data));
-    //     item = g_list_next(item);
+    //     children = gtk_container_get_children(GTK_CONTAINER(ch->chat_box));
+    //     item = children;
+    //     while (item)
+    //     {
+    //         gtk_widget_destroy(GTK_WIDGET(item->data));
+    //         item = g_list_next(item);
+    //     }
     // }
 
-    // memset(ui->chat_msg_bloc_list, 0, sizeof(ui->chat_msg_bloc_list));
-    // ui->msg_count = 0;
+    // ui->channels[ui->channel_index].msg_count = 0;
 
     // g_list_free(children);
-    // gtk_widget_show_all(ui->chat_box);
+    // gtk_widget_show_all(w);
 
     // logdebug("ui::ui_chat_empty_chat_box::leave\n");
 }

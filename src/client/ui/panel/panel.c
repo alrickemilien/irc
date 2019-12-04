@@ -46,7 +46,7 @@ static int ui_init_panel_window(t_ui_panel *ui)
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "window_panel"));
     gtk_widget_add_events(ui->window, GDK_KEY_PRESS_MASK);
     g_signal_connect(ui->window, "key_press_event", G_CALLBACK(on_keypress),
-                     NULL);
+                     ui);
     g_signal_connect(ui->window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
     ui->window_color =
         gtk_new_rgba(163.0f / 255.0f, 88.0f / 255.0f, 136.0f / 255.0f, 0.96);
