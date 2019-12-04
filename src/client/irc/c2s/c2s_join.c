@@ -8,13 +8,10 @@
 ** separator by the protocol)
 */
 
-static int c2s_join_check_command(t_env *e, int cs, const t_token *tokens)
+static int c2s_join_check_command(t_env *e, const t_token *tokens)
 {
     const char *channel;
     size_t      channel_len;
-
-    (void)cs;
-    (void)e;
 
     if (!tokens[1].addr || tokens[2].addr)
         return (irc_error(e, ERR_NEEDMOREPARAMS, tokens[0].addr));
@@ -43,17 +40,17 @@ int _c2s_join(t_fd *fd, const char *channel_name, size_t channel_name_len)
                            channel_name_len, channel_name));
 }
 
-int c2s_join(t_env *e, int cs, t_token *tokens)
+int c2s_join(t_env *e, t_token *tokens)
 {
     if (e->sock == -1)
         return logerror(
             "You need to be logged in before any command. Use "
             "/connect [server] ?[port]");
 
-    if ((c2s_join_check_command(e, cs, tokens)) != 0)
+    if ((c2s_join_check_command(e, tokens)) != 0)
         return (-1);
 
-    _c2s_join(&e->fds[cs], tokens[1].addr, tokens[1].len);
+    _c2s_join(e->self, tokens[1].addr, tokens[1].len);
 
     return (IRC_JOIN);
 }

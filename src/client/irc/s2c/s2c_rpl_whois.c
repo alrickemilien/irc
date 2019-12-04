@@ -4,10 +4,8 @@
 static int  s2c_rpl_whois_state = 0;
 static char s2c_rpl_whois_buffer[512];
 
-int s2c_rpl_whoisuser(t_env *e, int cs, t_token *tokens)
+int s2c_rpl_whoisuser(t_env *e, t_token *tokens)
 {
-    (void)cs;
-
     if (s2c_rpl_whois_state == 0)
     {
         memset(s2c_rpl_whois_buffer, 0, sizeof(s2c_rpl_whois_buffer));
@@ -33,10 +31,8 @@ int s2c_rpl_whoisuser(t_env *e, int cs, t_token *tokens)
     return (IRC_S2C_RPL_WHOISUSER);
 }
 
-int s2c_rpl_whoischannels(t_env *e, int cs, t_token *tokens)
+int s2c_rpl_whoischannels(t_env *e, t_token *tokens)
 {
-    (void)cs;
-
     logdebug("s2c_rpl_whoischannels:: %s", tokens[0].addr);
 
     if (s2c_rpl_whois_state == 0)
@@ -58,9 +54,8 @@ int s2c_rpl_whoischannels(t_env *e, int cs, t_token *tokens)
     return (IRC_S2C_RPL_WHOISCHANNELS);
 }
 
-int s2c_rpl_endofwhois(t_env *e, int cs, t_token *tokens)
+int s2c_rpl_endofwhois(t_env *e, t_token *tokens)
 {
-    (void)cs;
     (void)tokens;
 
     if (s2c_rpl_whois_state == 0)

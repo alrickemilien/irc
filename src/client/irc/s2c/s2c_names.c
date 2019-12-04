@@ -4,11 +4,8 @@
 static int  s2c_rpl_namreply_state = 0;
 static char s2c_rpl_namreply_buffer[512];
 
-int s2c_rpl_namreply(t_env *e, int cs, t_token *tokens)
+int s2c_rpl_namreply(t_env *e, t_token *tokens)
 {
-    (void)e;
-    (void)cs;
-
     if (s2c_rpl_namreply_state == 0)
     {
         memset(s2c_rpl_namreply_buffer, 0, sizeof(s2c_rpl_namreply_buffer));
@@ -33,10 +30,8 @@ int s2c_rpl_namreply(t_env *e, int cs, t_token *tokens)
     return (IRC_S2C_RPL_NAMREPLY);
 }
 
-int s2c_rpl_endofnames(t_env *e, int cs, t_token *tokens)
+int s2c_rpl_endofnames(t_env *e, t_token *tokens)
 {
-    (void)e;
-    (void)cs;
     (void)tokens;
 
     if (s2c_rpl_namreply_state == 0)

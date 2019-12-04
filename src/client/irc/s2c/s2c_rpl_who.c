@@ -4,10 +4,8 @@
 static int  s2c_rpl_who_state = 0;
 static char s2c_rpl_who_buffer[512];
 
-int s2c_rpl_whoreply(t_env *e, int cs, t_token *tokens)
+int s2c_rpl_whoreply(t_env *e, t_token *tokens)
 {
-    (void)cs;
-
     logdebug("s2c_rpl_whoreply:: %s", tokens[0].addr);
 
     if (s2c_rpl_who_state == 0)
@@ -35,9 +33,8 @@ int s2c_rpl_whoreply(t_env *e, int cs, t_token *tokens)
     return (IRC_S2C_RPL_WHOREPLY);
 }
 
-int s2c_rpl_endofwho(t_env *e, int cs, t_token *tokens)
+int s2c_rpl_endofwho(t_env *e, t_token *tokens)
 {
-    (void)cs;
     (void)tokens;
 
     if (s2c_rpl_who_state == 0)

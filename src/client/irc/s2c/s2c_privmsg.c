@@ -1,21 +1,18 @@
 #include <client/irc.h>
 #include <client/ui/panel.h>
 
-static int s2c_privmsg_check_command(t_env *e, int cs, const t_token *tokens)
+static int s2c_privmsg_check_command(t_env *e, const t_token *tokens)
 {
-    (void)cs;
-    (void)e;
-
     if (!tokens[1].addr || !tokens[2].addr)
         return (irc_error(e, ERR_NEEDMOREPARAMS));
     return (0);
 }
 
-int s2c_privmsg(t_env *e, int cs, t_token *tokens)
+int s2c_privmsg(t_env *e, t_token *tokens)
 {
     char msg[512];
 
-    if (s2c_privmsg_check_command(e, cs, tokens) < 0)
+    if (s2c_privmsg_check_command(e, tokens) < 0)
         return (-1);
 
     memset(msg, 0, sizeof(msg));

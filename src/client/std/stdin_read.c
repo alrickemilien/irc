@@ -38,7 +38,7 @@ int stdin_read(t_env *e, size_t cs)
                    e->fds[cs].buf_read.buffer, index);
         }
 
-        c2s(e, e->sock, command);
+        c2s(e, command);
 
         // Drop command
         // +1 because of "\x0A" skipping

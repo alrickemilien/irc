@@ -56,7 +56,7 @@ int server_read(t_env *e, size_t cs)
                    index);
         }
 
-        s2c(e, cs, command);
+        s2c(e, command);
 
         // Drop command
         // +2 because of "\x0D\x0A" skipping

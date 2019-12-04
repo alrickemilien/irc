@@ -34,7 +34,7 @@ void cbuffer_reset(t_cbuffer* cbuf);
 
 void cbuffer_put(t_cbuffer *cbuf, const uint8_t *data, size_t n);
 
-void cbuffer_putstr(t_cbuffer *cbuf, const char *str);
+int cbuffer_putstr(t_cbuffer *cbuf, const char *str);
 
 /*
 ** Rejects new data if the buffer is full
@@ -55,9 +55,8 @@ bool cbuffer_isempty(t_cbuffer* cbuf);
 /*
 ** Check the number of elements stored in the buffer
 ** Requires: cbuf is valid and created by circular_buf_init
-** Returns the current number of elements in the buffer
+** Returns the current n
 */
-
 size_t cbuffer_size(const t_cbuffer* cbuf);
 
 /*

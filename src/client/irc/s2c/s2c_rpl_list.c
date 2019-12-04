@@ -4,10 +4,9 @@
 static int  s2c_rpl_listrply_state = 0;
 static char s2c_rpl_listrply_buffer[512];
 
-int s2c_rpl_liststart(t_env *e, int cs, t_token *tokens)
+int s2c_rpl_liststart(t_env *e, t_token *tokens)
 {
     (void)e;
-    (void)cs;
     (void)tokens;
 
     if (s2c_rpl_listrply_state == 0)
@@ -19,10 +18,9 @@ int s2c_rpl_liststart(t_env *e, int cs, t_token *tokens)
     return (IRC_S2C_RPL_LISTSTART);
 }
 
-int s2c_rpl_list(t_env *e, int cs, t_token *tokens)
+int s2c_rpl_list(t_env *e, t_token *tokens)
 {
     (void)e;
-    (void)cs;
 
     if (s2c_rpl_listrply_state == 0 || !tokens[1].addr)
         return (-1);
@@ -45,9 +43,8 @@ int s2c_rpl_list(t_env *e, int cs, t_token *tokens)
     return (IRC_S2C_RPL_LIST);
 }
 
-int s2c_rpl_listend(t_env *e, int cs, t_token *tokens)
+int s2c_rpl_listend(t_env *e, t_token *tokens)
 {
-    (void)cs;
     (void)tokens;
 
     if (s2c_rpl_listrply_state == 0)

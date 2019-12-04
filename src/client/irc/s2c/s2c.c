@@ -22,7 +22,7 @@ static const t_irc_cmd g_s2c_replys[IRC_S2C_COMMANDS_NUMBER] = {
     [IRC_S2C_RPL_LIST] = {"RPL_LIST", &s2c_rpl_list},
 };
 
-int s2c(t_env *e, int cs, char *buffer)
+int s2c(t_env *e, char *buffer)
 {
     size_t i;
     // size_t  j;
@@ -49,13 +49,13 @@ int s2c(t_env *e, int cs, char *buffer)
         if (tokens[1].addr && strncmp(tokens[1].addr, g_s2c_replys[i].command,
                                       strlen(g_s2c_replys[i].command)) == 0)
         {
-            return g_s2c_replys[i].f(e, cs, tokens);
+            return g_s2c_replys[i].f(e, tokens);
         }
 
         if (strncmp(tokens[0].addr, g_s2c_replys[i].command,
                     strlen(g_s2c_replys[i].command)) == 0)
         {
-            return g_s2c_replys[i].f(e, cs, tokens);
+            return g_s2c_replys[i].f(e, tokens);
         }
         i++;
     }

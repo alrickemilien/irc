@@ -76,7 +76,7 @@ static void execute_precommands(t_env *e)
     ptr = e->options.command;
     while (ptr && *ptr)
     {
-        c2s(e, e->sock, ptr);
+        c2s(e, ptr);
 
         ptr = strstr(ptr, "\x0D\x0A");
 

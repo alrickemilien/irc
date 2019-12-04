@@ -11,7 +11,7 @@
 
 #include <locale.h>
 #include <libintl.h>
-#define LOCALE_DIR "/home/alricko/Projects/irc/build/locale/"
+#define LOCALE_DIR "./build/locale/"
 #define GETTEXT_PACKAGE "irc"
 
 #include <irc.h>
@@ -20,6 +20,7 @@
 typedef struct  s_env
 {
     t_fd        *fds;
+    t_fd        *self;
     int         port;
     size_t      maxfd;
     size_t      max;
@@ -81,10 +82,15 @@ typedef enum    e_irc_s2c {
     IRC_S2C_COMMANDS_NUMBER,
 }               t_irc_s2c;
 
+// Custom one for internal purpose
+typedef enum    e_irc_reply_client {
+    ERR_UNRECOGNIZED_COMMAND = 42,
+}               t_irc_reply_client;
+
 typedef struct  s_irc_cmd
 {
     char        *command;
-    int         (*f)(t_env *e, int cs, t_token *tokens);
+    int         (*f)(t_env *e, t_token *tokens);
 }               t_irc_cmd;
 
 typedef struct  s_s2c_error
@@ -99,18 +105,18 @@ typedef struct  s_s2c_error
 
 int             gui(t_env *e, int argc, char **argv);
 
-int             c2s(t_env *e, int cs, char *buffer);
-int             c2s_join(t_env *e, int cs, t_token *tokens);
-int             c2s_msg(t_env *e, int cs, t_token *tokens);
-int             c2s_connect(t_env *e, int cs, t_token *tokens);
-int             c2s_nick(t_env *e, int cs, t_token *tokens);
-int             c2s_who(t_env *e, int cs, t_token *tokens);
-int             c2s_pass(t_env *e, int cs, t_token *tokens);
-int             c2s_away(t_env *e, int cs, t_token *tokens);
-int             c2s_unaway(t_env *e, int cs, t_token *tokens);
-int             c2s_leave(t_env *e, int cs, t_token *tokens);
-int             c2s_whois(t_env *e, int cs, t_token *tokens);
-int             c2s_list(t_env *e, int cs, t_token *tokens);
+int             c2s(t_env *e, char *buffer);
+int             c2s_join(t_env *e, t_token *tokens);
+int             c2s_msg(t_env *e, t_token *tokens);
+int             c2s_connect(t_env *e, t_token *tokens);
+int             c2s_nick(t_env *e, t_token *tokens);
+int             c2s_who(t_env *e, t_token *tokens);
+int             c2s_pass(t_env *e, t_token *tokens);
+int             c2s_away(t_env *e, t_token *tokens);
+int             c2s_unaway(t_env *e, t_token *tokens);
+int             c2s_leave(t_env *e, t_token *tokens);
+int             c2s_whois(t_env *e, t_token *tokens);
+int             c2s_list(t_env *e, t_token *tokens);
 
 int             _c2s_nick(t_env *e, const char *nick, size_t nick_length);
 int             _c2s_pass(t_env *e, const char *password, size_t password_length);
@@ -125,25 +131,25 @@ int             _c2s_join(t_fd *fd, const char *channel_name, size_t channel_nam
 int             _c2s_whois(t_fd *fd, const char *nick, size_t nick_len);
 int             _c2s_msg(t_fd *fd, const char *dest, size_t dest_len, const char *msg);
 
-int             s2c(t_env *e, int cs, char *buffer);
-int             s2c_rpl_welcome(t_env *e, int cs, t_token *tokens);
-int             s2c_rpl_namreply(t_env *e, int cs, t_token *tokens);
-int             s2c_rpl_endofnames(t_env *e, int cs, t_token *tokens);
-int             s2c_privmsg(t_env *e, int cs, t_token *tokens);
-int             s2c_join(t_env *e, int cs, t_token *tokens);
-int             s2c_nick(t_env *e, int cs, t_token *tokens);
-int             s2c_rpl_nowaway(t_env *e, int cs, t_token *tokens);
-int             s2c_rpl_unaway(t_env *e, int cs, t_token *tokens);
-int             s2c_rpl_away(t_env *e, int cs, t_token *tokens);
-int             s2c_rpl_topic(t_env *e, int cs, t_token *tokens);
-int             s2c_rpl_whoisuser(t_env *e, int cs, t_token *tokens);
-int             s2c_rpl_whoischannels(t_env *e, int cs, t_token *tokens);
-int             s2c_rpl_endofwhois(t_env *e, int cs, t_token *tokens);
-int             s2c_rpl_whoreply(t_env *e, int cs, t_token *tokens);
-int             s2c_rpl_endofwho(t_env *e, int cs, t_token *tokens);
-int             s2c_rpl_liststart(t_env *e, int cs, t_token *tokens);
-int             s2c_rpl_listend(t_env *e, int cs, t_token *tokens);
-int             s2c_rpl_list(t_env *e, int cs, t_token *tokens);
+int             s2c(t_env *e, char *buffer);
+int             s2c_rpl_welcome(t_env *e, t_token *tokens);
+int             s2c_rpl_namreply(t_env *e, t_token *tokens);
+int             s2c_rpl_endofnames(t_env *e, t_token *tokens);
+int             s2c_privmsg(t_env *e, t_token *tokens);
+int             s2c_join(t_env *e, t_token *tokens);
+int             s2c_nick(t_env *e, t_token *tokens);
+int             s2c_rpl_nowaway(t_env *e, t_token *tokens);
+int             s2c_rpl_unaway(t_env *e, t_token *tokens);
+int             s2c_rpl_away(t_env *e, t_token *tokens);
+int             s2c_rpl_topic(t_env *e, t_token *tokens);
+int             s2c_rpl_whoisuser(t_env *e, t_token *tokens);
+int             s2c_rpl_whoischannels(t_env *e, t_token *tokens);
+int             s2c_rpl_endofwhois(t_env *e, t_token *tokens);
+int             s2c_rpl_whoreply(t_env *e, t_token *tokens);
+int             s2c_rpl_endofwho(t_env *e, t_token *tokens);
+int             s2c_rpl_liststart(t_env *e, t_token *tokens);
+int             s2c_rpl_listend(t_env *e, t_token *tokens);
+int             s2c_rpl_list(t_env *e, t_token *tokens);
 
 int             irc_error(t_env *e, int err_code, ...);
 

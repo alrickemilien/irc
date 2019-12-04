@@ -1,6 +1,6 @@
 #include <client/irc.h>
 
-int c2s_list(t_env *e, int cs, t_token *tokens)
+int c2s_list(t_env *e, t_token *tokens)
 {
     (void)tokens;
 
@@ -10,9 +10,9 @@ int c2s_list(t_env *e, int cs, t_token *tokens)
             "?[port]");
 
     if (!tokens[1].addr)
-        cbuffer_putcmd(&e->fds[cs].buf_write, "LIST\x0D\x0A");
+        cbuffer_putcmd(&e->self->buf_write, "LIST\x0D\x0A");
     else
-        cbuffer_putcmd(&e->fds[cs].buf_write, "LIST %s\x0D\x0A",
+        cbuffer_putcmd(&e->self->buf_write, "LIST %s\x0D\x0A",
                        tokens[1].addr);
     return (IRC_LIST);
 }

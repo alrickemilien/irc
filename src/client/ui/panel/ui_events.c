@@ -21,7 +21,7 @@ void on_entry(GtkWidget *widget, gpointer data)
     e = (t_env *)data;
     text = gtk_entry_get_text(GTK_ENTRY(widget));
     tmp = strdup(text);
-    c2s(e, e->sock, tmp);
+    c2s(e, tmp);
     free(tmp);
     gtk_entry_set_text(GTK_ENTRY(widget), "");
 }
