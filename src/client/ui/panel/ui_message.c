@@ -24,13 +24,13 @@ void ui_push_chat_message(t_ui_panel *        ui,
 
     if (is_rtl)
     {
-        gtk_widget_set_direction(label, GTK_TEXT_DIR_LTR);
-        gtk_label_set_xalign(GTK_LABEL(label), 1);
+        gtk_widget_set_direction(label, GTK_TEXT_DIR_RTL);
+        gtk_label_set_xalign(GTK_LABEL(label), 0);
         gtk_label_set_xalign(GTK_LABEL(hour), 1);
     }
     else
     {
-        gtk_widget_set_direction(label, GTK_TEXT_DIR_RTL);
+        gtk_widget_set_direction(label, GTK_TEXT_DIR_LTR);
         gtk_label_set_xalign(GTK_LABEL(label), 0);
         gtk_label_set_xalign(GTK_LABEL(hour), 0);
     }
