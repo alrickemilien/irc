@@ -20,7 +20,7 @@ msgstr ""
 
 #: src/client/ui/panel/panel.glade:112
 msgid "Channels"
-msgstr "Chenal"
+msgstr "Chenals"
 
 #: src/client/ui/panel/panel.glade:9
 msgid "IRC"

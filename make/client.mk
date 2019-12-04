@@ -107,7 +107,7 @@ CLIENT_SRC+=src/client/ui/panel/panel.c	\
 CLIENT_OBJ=$(CLIENT_SRC:.c=.o)
 
 %.o: %.c
-	gcc $(DEBUG) -o $@ -c $< $(INCLUDE) $(OPENSSL_CFLAGS) $(GTK_DPKG_CFLAGS) $(CFLAGS)
+	@gcc $(DEBUG) -o $@ -c $< $(INCLUDE) $(OPENSSL_CFLAGS) $(GTK_DPKG_CFLAGS) $(CFLAGS)
 
 # glade files
 CLIENT_SRC_GLADE_PREFIX=src/client/ui/

@@ -14,7 +14,7 @@ endif
 
 IS_OPENSSL_DEV_INSTALLED=$(shell dpkg --status openssl 2>/dev/null 1>&2 ; echo $$?)
 ifneq ($(IS_OPENSSL_DEV_INSTALLED), 0)
-$(error openssl dev ibrary required for build)
+$(error openssl dev library required for build)
 endif
 OPENSSL_CFLAGS=$(shell pkg-config --cflags openssl)
 OPENSSL_LIBS=$(shell pkg-config --libs openssl)
@@ -30,7 +30,7 @@ all: $(SERVER) $(CLIENT)
 $(SERVER): $(BUILD_DIR)$(SERVER)
 $(BUILD_DIR)$(SERVER): $(SERVER_OBJ)
 	@mkdir -p $(BUILD_DIR)
-	@gcc $(DEBUG) $^ -o $(BUILD_DIR)$@ $(LINK_LIBFT) $(OPENSSL_LIBS) $(CFLAGS)
+	@gcc $(DEBUG) $^ -o $@ $(LINK_LIBFT) $(OPENSSL_LIBS) $(CFLAGS)
 
 $(CLIENT): $(BUILD_DIR)$(CLIENT) $(CLIENT_UI_COPY_FILES) $(ASSETS_COPY_FILES) $(PO)
 $(BUILD_DIR)$(CLIENT): $(CLIENT_OBJ)

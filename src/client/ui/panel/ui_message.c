@@ -7,6 +7,7 @@ void ui_push_chat_message(t_ui_panel *        ui,
     GtkWidget *container;
     GtkWidget *label;
     GtkWidget *hour;
+    const int is_rtl = (pango_find_base_dir(msg, strlen(msg)) == PANGO_DIRECTION_RTL);
 
     (void)ui;
 
@@ -20,7 +21,19 @@ void ui_push_chat_message(t_ui_panel *        ui,
 
     // Message content
     label = ui_util_new_chat_label(msg, "chat-message");
-    gtk_label_set_xalign(GTK_LABEL(label), 0);
+
+    if (is_rtl)
+    {
+        gtk_widget_set_direction(label, GTK_TEXT_DIR_LTR);
+        gtk_label_set_xalign(GTK_LABEL(label), 1);
+        gtk_label_set_xalign(GTK_LABEL(hour), 1);
+    }
+    else
+    {
+        gtk_widget_set_direction(label, GTK_TEXT_DIR_RTL);
+        gtk_label_set_xalign(GTK_LABEL(label), 0);
+        gtk_label_set_xalign(GTK_LABEL(hour), 0);
+    }
 
     // Fill container
     gtk_box_pack_start(GTK_BOX(container), hour, FALSE, FALSE, 0);
