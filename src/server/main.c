@@ -35,7 +35,7 @@ int init_env(t_env *e)
     }
 
     // clear channels
-    memset(e->channels, 0, sizeof(t_channel) * e->maxchannels);
+    memset(e->channels, 0, sizeof(t_channel) * e->maxfd);
     memcpy(e->channels[0].channel, DEFAULT_CHANNEL, sizeof(DEFAULT_CHANNEL));
 
     return (0);

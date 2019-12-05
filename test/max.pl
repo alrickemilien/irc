@@ -9,7 +9,7 @@ use lib dirname(__FILE__);
 use ircunittest;
 
 # ############################################# #
-# Test connections on server with many clients  #
+# Test maximum number of socket clients         #
 # ############################################# #
 
 # Start server
@@ -21,8 +21,7 @@ use ircunittest;
 
 my $HOST = '127.0.0.1';
 my $PORT = '5555';
-my $CLIENTS_NUMBER = 3;
-my $POOLS_NUMBER = 3;
+my $CLIENTS_NUMBER = 512;
 
 my @s;
 
@@ -36,41 +35,24 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
     );
     die "Couldn't connect to $HOST:$PORT : $!\n" unless $tmp_s;
     
-    $tmp_s->setsockopt(SOL_SOCKET, SO_RCVTIMEO, pack('l!l!', 10, 0));
+    $tmp_s->setsockopt(SOL_SOCKET, SO_RCVTIMEO, pack('l!l!', 20, 0));
 
     # All clients joining specific channel
-    $tmp_s->send("NICK client_attack_$i\x0D\x0AUSER client_attack$i microsoft.com :Client Attack $i\x0D\x0A");
+    $tmp_s->send("USER client_$i microsoft.com :Client $i\x0D\x0ANICK client$i\x0D\x0A");
 
     push @s, $tmp_s
 }
-
-my $response;
 
 #
 # Send continus garbage data
 #
 
-# Wait 1 sec between each pool in order to let server empty the buffer
-for (my $k = 0; $k <= $POOLS_NUMBER; $k++) {
-    my $buf_size = int(rand(1024));
-    my $buf = '';
-
-    for (my $bytes = 0; $bytes < $buf_size; $bytes += 4) {
-        my $rand = int(rand(254 ** 4));
-        my $string = '';
-        for (1..4) {
-            $buf .= chr($rand % 254);
-            $rand = int($rand / 254);
-        }
-    }
-
-    print "Sending data\n";
-    for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
-        $s[$i]->send($buf);
-    }
-
-    sleep(1); 
-}
+$s[$CLIENTS_NUMBER]->send("NAMES\x0D\x0A");
+my $response = '';
+do {
+    $s[$CLIENTS_NUMBER]->recv($response, 2048);
+    print $response;
+} while(length $response > 0);
 
 #
 # Terminate clients

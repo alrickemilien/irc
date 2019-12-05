@@ -1,5 +1,14 @@
 #include <server/irc.h>
 
+/*
+** Check if buffer is full for new name
+*/
+
+static int is_names_buf_full(const char *buf, size_t buf_size, const char *name)
+{
+    return ((buf_size - strlen(buf)) < (strlen(name) + 1));
+}
+
 int irc_names(t_env *e, int cs, t_token *tokens)
 {
     size_t i;
@@ -20,12 +29,17 @@ int irc_names(t_env *e, int cs, t_token *tokens)
                 j = 0;
                 while (j <= e->max)
                 {
+                    if (is_names_buf_full(concat, sizeof(concat),
+                                          e->fds[j].nickname))
+                        break;
+
                     if (e->fds[j].type == FD_CLIENT && e->fds[j].registered &&
                         e->fds[j].channel == i)
                     {
                         strcat(concat, e->fds[j].nickname);
                         strcat(concat, " ");
                     }
+
                     j++;
                 }
 
@@ -54,6 +68,10 @@ int irc_names(t_env *e, int cs, t_token *tokens)
                 j = 0;
                 while (j <= e->max)
                 {
+                    if (is_names_buf_full(concat, sizeof(concat),
+                                          e->fds[j].nickname))
+                        break;
+
                     if (e->fds[j].type == FD_CLIENT && e->fds[j].channel == i &&
                         e->fds[j].registered == 1)
                     {
