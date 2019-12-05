@@ -5,9 +5,12 @@
 
 #include <cbuffer/cbuffer_ssl.h>
 #include <client/irc.h>
+#include <client/ui/panel.h>
 
 void disconnect(t_env *e, int cs)
 {
+    if (e->options.gui)
+        ui_set_status(e->ui, 1);
     close(cs);
     clear_fd(&e->fds[cs]);
     logerror("Connection between client and server has been lost");
@@ -47,7 +50,7 @@ int server_read(t_env *e, size_t cs)
     if (index == (size_t)-1)
     {
         // The buffer is full without any end of command, flush it
-        if (cbuffer_size(&e->fds[cs].buf_read) >= CBUFFSIZE)
+        if (cbuffer_size(&fd->buf_read) >= CBUFFSIZE)
         {
             logerror("[!] Buffer is reset because it is full without command");
             cbuffer_reset(&fd->buf_read);
@@ -77,13 +80,7 @@ int server_read(t_env *e, size_t cs)
 
         s2c(e, command);
 
-        // Drop command
-        // +2 because of "\x0D\x0A" skipping
-        cbuffer_dropn(&fd->buf_read,
-                      (fd->buf_read.tail < index
-                           ? index - fd->buf_read.tail
-                           : index + CBUFFSIZE - fd->buf_read.tail) +
-                          2);
+        cbuffer_drop_until(&fd->buf_read, "\x0D\x0A");
 
         // logdebug("server_read:: after cbuffer_dropn ::");
         // cbuffer_debug(&fd->buf_read);

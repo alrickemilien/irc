@@ -59,13 +59,8 @@ int client_read(t_env *e, size_t cs)
             return (0);
         }
 
-        // Drop command
-        // +2 because of "\x0D\x0A" skipping
-        cbuffer_dropn(&fd->buf_read,
-                      (fd->buf_read.tail < index
-                           ? index - fd->buf_read.tail
-                           : index + CBUFFSIZE - fd->buf_read.tail) +
-                          2);
+        cbuffer_drop_until(&fd->buf_read, "\x0D\x0A");
+
         index = cbuffer_indexof(&fd->buf_read, "\x0D\x0A");
     }
 

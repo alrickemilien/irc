@@ -93,3 +93,15 @@ size_t cbuffer_indexof(t_cbuffer *cbuf, const char *str)
 
     return ((size_t)-1);
 }
+
+// Drop n bytes of the buffer from tail
+void cbuffer_drop_until(t_cbuffer *cbuf, const char *str)
+{
+    size_t index;
+    size_t n;
+
+    index = cbuffer_indexof(cbuf, str);
+    n = cbuf->tail < index ? index - cbuf->tail
+                           : index + CBUFFSIZE - cbuf->tail;
+    return cbuffer_dropn(cbuf, n + strlen(str));
+}
