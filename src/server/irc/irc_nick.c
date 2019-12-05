@@ -12,7 +12,7 @@ static int irc_nick_check_command(t_env *e, int cs, const t_token *tokens)
     nick = tokens[1].addr;
     nick_len = tokens[1].len;
 
-    if (nick_len > 9 || !nick_len || nick[0] == '#' || nick[0] == '&')
+    if (nick_len > 9 || !nick_len || !is_valid_nick(nick))
         return (irc_err(e, cs, ERR_ERRONEUSNICKNAME, nick));
 
     i = 0;

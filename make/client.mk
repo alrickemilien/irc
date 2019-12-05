@@ -80,7 +80,8 @@ CLIENT_SRC+=src/utils/log.c \
 			src/utils/time2iso.c
 
 # irc utils
-CLIENT_SRC+=src/utils/irc/is_valid_channel.c
+CLIENT_SRC+=src/utils/irc/is_valid_channel.c \
+			src/utils/irc/is_valid_nick.c
 
 # ui
 CLIENT_SRC+=src/client/ui/gtk_builder_load.c \
