@@ -73,6 +73,9 @@ int server_read(t_env *e, size_t cs)
                            : index + CBUFFSIZE - fd->buf_read.tail) +
                           2);
 
+        logdebug("After cbuffer_dropn::");
+        cbuffer_debug(&fd->buf_read);
+
         index = cbuffer_indexof(&fd->buf_read, "\x0D\x0A");
     }
     return (0);

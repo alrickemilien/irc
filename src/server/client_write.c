@@ -15,7 +15,7 @@ int client_write(t_env *e, size_t cs)
     index = cbuffer_indexof(&fd->buf_write, "\x0D\x0A");
 
     // logdebug("client_write::cbuffer_debug\n");
-    // cbuffer_debug(&fd->buf_write);
+    cbuffer_debug(&fd->buf_write);
 
     // The buffer is full without any end of command, flush it
     if ((index = cbuffer_indexof(&fd->buf_write, "\x0D\x0A")) == (size_t)-1)
@@ -47,6 +47,9 @@ int client_write(t_env *e, size_t cs)
                           : index + CBUFFSIZE - fd->buf_write.tail) +
                          2) <= 0)
             return (-1);
+
+        logdebug("After cbuffer_send::");
+        cbuffer_debug(&fd->buf_write);
 
         index = cbuffer_indexof(&fd->buf_write, "\x0D\x0A");
     }

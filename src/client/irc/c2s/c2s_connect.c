@@ -64,7 +64,7 @@ int _c2s_connect(t_env *     e,
                    hostname ? hostname : local_hostname, servername,
                    name ? name : p->pw_name);
 
-    loginfo("Connecting to %s\n", servername);
+    loginfo("Connecting to %s", servername);
 
     memrpl(fd->host, HOSTNAMESTRSIZE, hostname ? hostname : local_hostname,
            strlen(hostname ? hostname : local_hostname));
