@@ -27,12 +27,12 @@ int s2c_privmsg(t_env *e, t_token *tokens)
     if (e->options.gui)
         ui_new_message(e->ui, msg, UI_CHAT_MSG);
 
-    return (IRC_S2C_RPL_WELCOME);
+    return (IRC_S2C_PRIVMSG);
 }
 
 int s2c_notice(t_env *e, t_token *tokens)
 {
     if (s2c_privmsg(e, tokens) < 0)
         return (-1);
-    return (IRC_S2C_RPL_NOTICE);
+    return (IRC_S2C_NOTICE);
 }

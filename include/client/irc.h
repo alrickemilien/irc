@@ -57,6 +57,7 @@ typedef enum    e_irc {
     IRC_LEAVE,
     IRC_WHOIS,
     IRC_LIST,
+    IRC_TIME,
     IRC_COMMANDS_NUMBER
 }               t_irc_enum;
 
@@ -79,11 +80,15 @@ typedef enum    e_irc_s2c {
     IRC_S2C_RPL_LISTSTART,
     IRC_S2C_RPL_LISTEND,
     IRC_S2C_RPL_LIST,
-    IRC_S2C_RPL_NOTICE,
+    IRC_S2C_NOTICE,
+    IRC_S2C_RPL_TIME,
     IRC_S2C_COMMANDS_NUMBER,
 }               t_irc_s2c;
 
-// Custom one for internal purpose
+/*
+** Custom one for internal purpose
+*/
+
 typedef enum    e_irc_reply_client {
     ERR_UNRECOGNIZED_COMMAND = 1001,
     ERR_NOT_CONNECTED = 1002,
@@ -120,6 +125,7 @@ int             c2s_unaway(t_env *e, t_token *tokens);
 int             c2s_leave(t_env *e, t_token *tokens);
 int             c2s_whois(t_env *e, t_token *tokens);
 int             c2s_list(t_env *e, t_token *tokens);
+int             c2s_time(t_env *e, t_token *tokens);
 
 int             _c2s_nick(t_env *e, const char *nick, size_t nick_length);
 int             _c2s_pass(t_env *e, const char *password, size_t password_length);
@@ -154,6 +160,7 @@ int             s2c_rpl_liststart(t_env *e, t_token *tokens);
 int             s2c_rpl_listend(t_env *e, t_token *tokens);
 int             s2c_rpl_list(t_env *e, t_token *tokens);
 int             s2c_notice(t_env *e, t_token *tokens);
+int             s2c_rpl_time(t_env *e, t_token *tokens);
 
 int             irc_error(t_env *e, int err_code, ...);
 

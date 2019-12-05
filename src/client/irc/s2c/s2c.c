@@ -20,6 +20,8 @@ static const t_irc_cmd g_s2c_replys[IRC_S2C_COMMANDS_NUMBER] = {
     [IRC_S2C_RPL_LISTSTART] = {"RPL_LISTSTART", &s2c_rpl_liststart},
     [IRC_S2C_RPL_LISTEND] = {"RPL_LISTEND", &s2c_rpl_listend},
     [IRC_S2C_RPL_LIST] = {"RPL_LIST", &s2c_rpl_list},
+    [IRC_S2C_NOTICE] = {"NOTICE", &s2c_notice},
+    [IRC_S2C_RPL_TIME] = {"RPL_TIME", &s2c_rpl_time},
 };
 
 int s2c(t_env *e, char *buffer)

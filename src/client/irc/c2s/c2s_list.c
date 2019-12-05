@@ -2,8 +2,6 @@
 
 int c2s_list(t_env *e, t_token *tokens)
 {
-    (void)tokens;
-
     if (e->sock == -1)
         return (irc_error(e, ERR_NOT_CONNECTED));
 
