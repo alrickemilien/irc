@@ -11,6 +11,9 @@ int init_env(t_env *e)
     size_t        i;
     struct rlimit rlp;
 
+    if (init_i18n(e->argv_0) < 0)
+        return (-1);
+
     // RLIMIT_NOFILE:
     // This specifies a value one greater than the maximum file
     // descriptor number that can be opened by this process.
@@ -40,16 +43,6 @@ int init_env(t_env *e)
     return (0);
 }
 
-static void init_i18n(void)
-{
-    // LC_ALL decided by environment
-    setlocale(LC_ALL, "");
-    
-    bindtextdomain(GETTEXT_PACKAGE, LOCALE_DIR);
-    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-    textdomain(GETTEXT_PACKAGE);
-}
-
 static void init_options(t_options *options)
 {
     if (options->port == 0)
@@ -77,7 +70,7 @@ static void execute_precommands(t_env *e)
     {
         c2s(e, ptr);
 
-        ptr = strstr(ptr, "\x0D\x0A");
+        ptr = strstr(ptr, "\x0A");
 
         if (ptr)
             ptr += 2;
@@ -90,8 +83,6 @@ int main(int argc, char **argv)
     t_env e;
 
     memset(&e, 0, sizeof(t_env));
-
-    init_i18n();
 
     exit_code = read_options(argc, (const char **)argv, &e.options);
     if (exit_code != 0)

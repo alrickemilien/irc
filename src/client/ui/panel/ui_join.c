@@ -97,6 +97,7 @@ int ui_join(t_ui_panel *ui, const char *channel)
         gtk_container_add(GTK_CONTAINER(ui->chat_box_viewport),
                           ui->channels[ui->channel_index].chat_box);
         g_object_ref(ui->channels[ui->channel_index].chat_box);
+        g_timeout_add(50, ui_chat_scroll_to_bottom, ui->scrollwin);
         return (0);
     }
 
@@ -105,7 +106,7 @@ int ui_join(t_ui_panel *ui, const char *channel)
 
     insert_channel_left_panel(ui, channel);
 
-    // create the chatbox
+    // create the chatbox viewport
     if (ui->channel_index != -1)
         gtk_container_remove(GTK_CONTAINER(ui->chat_box_viewport),
                              ui->channels[ui->channel_index].chat_box);

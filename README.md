@@ -52,3 +52,36 @@ Use the following command to check packets
 ```
 tcpdump -vv -A -i <network interface of binding ip server> port <running port of irc server>
 ```
+
+## POT
+
+To generate template :
+
+```
+# For glade files
+xgettext \
+    --sort-output \
+    --keyword=N_ \
+    --keyword=_ \
+    --keyword=translatable     \
+    --no-wrap \
+    --escape     \
+    --copyright-holder="Your Company" \
+    --language=Glade     \
+    -o po/msg.pot \
+    /path/to/glade/file.glade
+
+xgettext \
+    --sort-output \
+    --keyword=N_ \
+    --keyword=_ \
+    --keyword=translatable     \
+    --no-wrap \
+    --escape     \
+    --copyright-holder="Your Company" \
+    -o po/msg.pot \
+    /path/to/c/file.c
+
+# Merge two templates
+msgcat a.pot b.pot > all.pot
+```

@@ -23,7 +23,7 @@ int server_read(t_env *e, size_t cs)
     char   command[512];
     t_fd * fd;
 
-    fd = &e->fds[cs];
+    fd = e->self;
 
     // cbuffer_debug(&fd->buf_read);
 
@@ -39,9 +39,11 @@ int server_read(t_env *e, size_t cs)
         return (r);
     }
 
-    // cbuffer_debug(&fd->buf_read);
+    cbuffer_debug(&fd->buf_read);
 
     index = cbuffer_indexof(&fd->buf_read, "\x0D\x0A");
+
+    logdebug("index: %ld", index);
 
     while (index != (size_t)-1)
     {

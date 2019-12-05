@@ -1,5 +1,5 @@
-#include <client/irc.h>
 #include <cbuffer/cbuffer_ssl.h>
+#include <client/irc.h>
 
 int server_write(t_env *e, size_t cs)
 {

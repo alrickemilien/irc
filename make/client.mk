@@ -11,6 +11,7 @@ CLIENT_SRC=src/client/main.c \
 			src/client/gui.c \
 			src/client/ipv4.c \
 			src/client/ipv6.c \
+			src/client/i18n.c \
 			src/client/irc/tokenize.c \
 			src/client/server_read.c \
 			src/client/server_write.c \
