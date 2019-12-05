@@ -29,3 +29,10 @@ int s2c_privmsg(t_env *e, t_token *tokens)
 
     return (IRC_S2C_RPL_WELCOME);
 }
+
+int s2c_notice(t_env *e, t_token *tokens)
+{
+    if (s2c_privmsg(e, tokens) < 0)
+        return (-1);
+    return (IRC_S2C_RPL_NOTICE);
+}
