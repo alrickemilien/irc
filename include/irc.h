@@ -69,6 +69,7 @@ int logdebug(const char *fmt, ...);
 #define USERNAMESTRSIZE 20
 #define PASSWDTRSIZE 512
 #define MAXMSGSIZE 512
+#define IRC_DEFAULT_SERVER_PORT 5555
 
 /*
 ** Tokenize

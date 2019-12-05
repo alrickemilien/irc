@@ -22,6 +22,33 @@ static t_options_map	g_options_map[] = {
 	{ NULL, 0, NULL },
 };
 
+static const t_args_map	g_arguments_map[] = {
+	{ CLIENT_HOST, &read_host_option },
+	{ CLIENT_PORT, &read_port_option },
+	{ 0, NULL },
+};
+
+static int				handle_argument(
+	t_options *options,
+	const char *value)
+{
+	size_t	j;
+
+	j = 0;
+	while (g_arguments_map[j].waiting_for_value != NULL)
+	{
+		// When value has not already been set
+		if (((int*)options)[g_arguments_map[j].offset] == 0)
+		{
+			((int*)options)[g_arguments_map[j].offset] = 1;
+			g_arguments_map[j].waiting_for_value(options, value);
+			return (0);
+		}
+		j++;
+	}
+	return (fprintf(stderr, "Unexpected argument '%s'\n", value));
+}
+
 static int				handle_option(
 		t_options *options,
 		t_options_map **last,
@@ -49,6 +76,7 @@ static int				handle_option(
 				*last = &g_options_map[j];
 			return (0);
 		}
+
 		j++;
 	}
 	return (fprintf(stderr, "Unknown command line argument '%s'\n", name));
@@ -72,7 +100,7 @@ void					read_one_options_argument(
 		ret = handle_option(options, &waiting, arg + 1);
 	else if (is_a_multi_option(arg))
 		ret = handle_option(options, &waiting, arg + 2);
-	else
+	else if (handle_argument(options, arg) < 0)
 		ret = 1;
 	if (ret != 0)
 		*error = ret;

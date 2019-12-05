@@ -64,7 +64,7 @@ int _c2s_connect(t_env *     e,
                    hostname ? hostname : local_hostname, servername,
                    name ? name : p->pw_name);
 
-    loginfo("Connecting to %s", servername);
+    loginfo("Connecting to %s", e->options.host);
 
     memrpl(fd->host, HOSTNAMESTRSIZE, hostname ? hostname : local_hostname,
            strlen(hostname ? hostname : local_hostname));
@@ -74,8 +74,6 @@ int _c2s_connect(t_env *     e,
 
     memrpl(fd->username, USERNAMESTRSIZE, name ? name : p->pw_name,
            strlen(name ? name : p->pw_name));
-
-    logdebug("_c2s_connect::e->nick:: %s", e->nick);
 
     // Send nickname if local one has been set
     if (e->nick[0])

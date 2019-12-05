@@ -43,15 +43,6 @@ int init_env(t_env *e)
     return (0);
 }
 
-static void init_options(t_options *options)
-{
-    if (options->port == 0)
-        options->port = 5555;
-
-    if (options->ipv6)
-        loginfo("Running server ipv6");
-}
-
 static void init_std(t_env *e)
 {
     t_fd *stdin_fd;
@@ -59,6 +50,14 @@ static void init_std(t_env *e)
     stdin_fd = &e->fds[0];
     stdin_fd->type = FD_CLIENT;
     stdin_fd->read = stdin_read;
+}
+
+static void init_connection(t_env *e)
+{
+    if (e->options.port == 0)
+        e->options.port = IRC_DEFAULT_SERVER_PORT;
+    if (e->options.host[0] != 0)
+        _c2s_connect(e, NULL, NULL, NULL);
 }
 
 static void execute_precommands(t_env *e)
@@ -88,13 +87,13 @@ int main(int argc, char **argv)
     if (exit_code != 0)
         return (exit_code);
 
-    init_options(&e.options);
-
     e.argv_0 = argv[0];
     init_env(&e);
 
     if (e.options.ipv6 == 1)
         e.ipv6 = 1;
+
+    init_connection(&e);
 
     if (e.options.gui)
         return (gui(&e, argc, argv));

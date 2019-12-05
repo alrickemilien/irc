@@ -53,6 +53,18 @@ Use the following command to check packets
 tcpdump -vv -A -i <network interface of binding ip server> port <running port of irc server>
 ```
 
+## nc
+
+Sending `ctrl+D` into `nc` stdin causes the `nc` software to flush it's buffer.
+!!! It does not mean that sending `ctrl+D` to server flush or cut buffer.
+`ctrl+D` is interprated by the recieving server as a regular byte.
+
+For testing, use:
+
+```
+cat <(echo -n -e "USER client_x 42.fr :Client X\x0D\x0ANICK clientx") - | nc 127.0.0.1 5555
+```
+
 ## POT
 
 To generate template :

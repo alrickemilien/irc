@@ -41,11 +41,11 @@ int init_env(t_env *e)
     return (0);
 }
 
-static void init_options(t_options *options)
+static void init_default_options(t_options *options)
 {
     // Set default port
     if (options->port == 0)
-        options->port = 5555;
+        options->port = IRC_DEFAULT_SERVER_PORT;
 
     // Set default backlog
     if (options->backlog == 0)
@@ -78,7 +78,7 @@ int main(int argc, const char **argv)
     if (exit_code != 0)
         return (exit_code);
 
-    init_options(&options);
+    init_default_options(&options);
 
     loginfo("Running at %s:%d", options.bind, options.port);
 
