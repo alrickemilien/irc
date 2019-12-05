@@ -3,8 +3,8 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include <client/irc.h>
 #include <cbuffer/cbuffer_ssl.h>
+#include <client/irc.h>
 
 void disconnect(t_env *e, int cs)
 {
@@ -39,9 +39,21 @@ int server_read(t_env *e, size_t cs)
         return (r);
     }
 
+    logdebug("server_read:: cbuffer_debug ::");
     cbuffer_debug(&fd->buf_read);
 
     index = cbuffer_indexof(&fd->buf_read, "\x0D\x0A");
+
+    if (index == (size_t)-1)
+    {
+        // The buffer is full without any end of command, flush it
+        if (cbuffer_size(&e->fds[cs].buf_read) >= CBUFFSIZE)
+        {
+            logerror("[!] Buffer is reset because it is full without command");
+            cbuffer_reset(&fd->buf_read);
+        }
+        return (0);
+    }
 
     logdebug("index: %ld", index);
 
@@ -73,7 +85,7 @@ int server_read(t_env *e, size_t cs)
                            : index + CBUFFSIZE - fd->buf_read.tail) +
                           2);
 
-        logdebug("After cbuffer_dropn::");
+        logdebug("server_read:: after cbuffer_dropn ::");
         cbuffer_debug(&fd->buf_read);
 
         index = cbuffer_indexof(&fd->buf_read, "\x0D\x0A");

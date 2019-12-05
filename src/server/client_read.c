@@ -13,7 +13,6 @@ int client_read(t_env *e, size_t cs)
 
     fd = &e->fds[cs];
 
-
     index = -1;
     if (cbuffer_size(&fd->buf_read) != CBUFFSIZE &&
         (cbuffer_isempty(&fd->buf_read) ||

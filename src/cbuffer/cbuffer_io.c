@@ -68,6 +68,10 @@ int cbuffer_send(int cs, t_cbuffer *cbuf, size_t n, int flags)
     if (cbuf->tail + n >= CBUFFSIZE &&
         (cbuf->tail + n) % CBUFFSIZE > cbuf->head)
         cbuf->head = (cbuf->tail + n) % CBUFFSIZE;
+
+    if (cbuf->tail + n >= CBUFFSIZE && cbuf->head == CBUFFSIZE)
+        cbuf->head = (cbuf->tail + n) % CBUFFSIZE;
+    
     cbuf->tail = (cbuf->tail + n) % CBUFFSIZE;
 
     return (r);
