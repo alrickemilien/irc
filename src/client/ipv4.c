@@ -16,7 +16,7 @@ int client_ipv4(t_env *e)
     struct protoent *  pe;
     struct hostent *   hostnm;
 
-    logdebug("Connecting to %s:%d through ipv4\n", e->options.host,
+    logdebug("Connecting to %s:%d through ipv4", e->options.host,
              e->options.port);
 
     if ((hostnm = gethostbyname(e->options.host)) == NULL)

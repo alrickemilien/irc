@@ -7,5 +7,5 @@ PO_SRC=ar.po \
 MO=$(patsubst %.po, $(PO_BUILD_PREFIX)/%/LC_MESSAGES/irc.mo, $(PO_SRC))
 
 $(PO_BUILD_PREFIX)%/LC_MESSAGES/irc.mo: $(PO_SRC_PREFIX)%.po
-	@mkdir -p $(basename  $@)
+	@mkdir -p $(dir  $@)
 	@msgfmt $< -o $@

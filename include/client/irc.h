@@ -104,6 +104,7 @@ typedef struct  s_s2c_error
         t_token *tokens);
 }               t_s2c_error;
 
+int             init_i18n(const char *bin_path);
 int             gui(t_env *e, int argc, char **argv);
 
 int             c2s(t_env *e, char *buffer);

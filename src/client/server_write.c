@@ -1,5 +1,5 @@
-#include <client/irc.h>
 #include <cbuffer/cbuffer_ssl.h>
+#include <client/irc.h>
 
 int server_write(t_env *e, size_t cs)
 {
@@ -27,19 +27,17 @@ int server_write(t_env *e, size_t cs)
     // Reading each output of the buffer
     while (index != (size_t)-1)
     {
-        if (e->options.ssl)
+        if (!e->options.ssl &&
+            cbuffer_send_until_str(cs, &fd->buf_write, "\x0D\x0A",
+                                   MSG_NOSIGNAL) <= 0)
+            return (-1);
+        if (e->options.ssl &&
             cbuffer_write_ssl(fd->ssl, &fd->buf_write,
                               (fd->buf_write.tail < index
                                    ? index - fd->buf_write.tail
                                    : index + CBUFFSIZE - fd->buf_write.tail) +
-                                  2);
-        else
-            cbuffer_send(cs, &fd->buf_write,
-                         (fd->buf_write.tail < index
-                              ? index - fd->buf_write.tail
-                              : index + CBUFFSIZE - fd->buf_write.tail) +
-                             2,
-                         0);
+                                  2) <= 0)
+            return (-1);
         index = cbuffer_indexof(&fd->buf_write, "\x0D\x0A");
     }
 

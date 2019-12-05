@@ -11,6 +11,9 @@ int init_env(t_env *e)
     size_t        i;
     struct rlimit rlp;
 
+    if (init_i18n(e->argv_0) < 0)
+        return (-1);
+
     // RLIMIT_NOFILE:
     // This specifies a value one greater than the maximum file
     // descriptor number that can be opened by this process.
@@ -40,25 +43,6 @@ int init_env(t_env *e)
     return (0);
 }
 
-static void init_i18n(void)
-{
-    // LC_ALL decided by environment
-    setlocale(LC_ALL, "");
-    
-    bindtextdomain(GETTEXT_PACKAGE, LOCALE_DIR);
-    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-    textdomain(GETTEXT_PACKAGE);
-}
-
-static void init_options(t_options *options)
-{
-    if (options->port == 0)
-        options->port = 5555;
-
-    if (options->ipv6)
-        loginfo("Running server ipv6");
-}
-
 static void init_std(t_env *e)
 {
     t_fd *stdin_fd;
@@ -66,6 +50,14 @@ static void init_std(t_env *e)
     stdin_fd = &e->fds[0];
     stdin_fd->type = FD_CLIENT;
     stdin_fd->read = stdin_read;
+}
+
+static void init_connection(t_env *e)
+{
+    if (e->options.port == 0)
+        e->options.port = IRC_DEFAULT_SERVER_PORT;
+    if (e->options.host[0] != 0)
+        _c2s_connect(e, NULL, NULL, NULL);
 }
 
 static void execute_precommands(t_env *e)
@@ -77,10 +69,10 @@ static void execute_precommands(t_env *e)
     {
         c2s(e, ptr);
 
-        ptr = strstr(ptr, "\x0D\x0A");
+        ptr = strstr(ptr, "\x0A");
 
         if (ptr)
-            ptr += 2;
+            ptr += 1;
     }
 }
 
@@ -91,19 +83,17 @@ int main(int argc, char **argv)
 
     memset(&e, 0, sizeof(t_env));
 
-    init_i18n();
-
     exit_code = read_options(argc, (const char **)argv, &e.options);
     if (exit_code != 0)
         return (exit_code);
-
-    init_options(&e.options);
 
     e.argv_0 = argv[0];
     init_env(&e);
 
     if (e.options.ipv6 == 1)
         e.ipv6 = 1;
+
+    init_connection(&e);
 
     if (e.options.gui)
         return (gui(&e, argc, argv));

@@ -20,8 +20,6 @@ int s2c_rpl_liststart(t_env *e, t_token *tokens)
 
 int s2c_rpl_list(t_env *e, t_token *tokens)
 {
-    (void)e;
-
     if (s2c_rpl_listrply_state == 0 || !tokens[1].addr)
         return (-1);
 

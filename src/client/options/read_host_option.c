@@ -48,7 +48,5 @@ int read_host_option(t_options *options, const char *value)
 
     strcpy(options->host, value);
 
-    printf("Connecting to %s\n", options->host);
-
     return (0);
 }

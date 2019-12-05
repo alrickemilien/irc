@@ -80,6 +80,7 @@ int ui_leave(t_ui_panel *ui, const char *channel)
     index = ui_join_channels_index_of(ui, channel, strlen(channel));
 
     ui_leave_from_channel_list_box(ui, index);
-
+    g_timeout_add(50, ui_chat_scroll_to_bottom, ui->scrollwin);
+    
     return (0);
 }

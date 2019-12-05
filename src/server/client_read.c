@@ -13,9 +13,6 @@ int client_read(t_env *e, size_t cs)
 
     fd = &e->fds[cs];
 
-    // logdebug("client_read::cbuffer_debug\n");
-    // cbuffer_debug(&fd->buf_read);
-
     index = -1;
     if (cbuffer_size(&fd->buf_read) != CBUFFSIZE &&
         (cbuffer_isempty(&fd->buf_read) ||
@@ -34,8 +31,13 @@ int client_read(t_env *e, size_t cs)
         }
     }
 
+    // logdebug("client_read::cbuffer_debug\n");
+    // cbuffer_debug(&fd->buf_read);
+
     if (index == (size_t)-1)
         index = cbuffer_indexof(&fd->buf_read, "\x0D\x0A");
+
+    // logdebug("index: %ld", index);
 
     if (index == (size_t)-1)
     {
@@ -57,13 +59,8 @@ int client_read(t_env *e, size_t cs)
             return (0);
         }
 
-        // Drop command
-        // +2 because of "\x0D\x0A" skipping
-        cbuffer_dropn(&fd->buf_read,
-                      (fd->buf_read.tail < index
-                           ? index - fd->buf_read.tail
-                           : index + CBUFFSIZE - fd->buf_read.tail) +
-                          2);
+        cbuffer_drop_until(&fd->buf_read, "\x0D\x0A");
+
         index = cbuffer_indexof(&fd->buf_read, "\x0D\x0A");
     }
 

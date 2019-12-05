@@ -70,6 +70,13 @@ typedef struct	s_options_map {
 				const char *value);
 }				t_options_map;
 
+typedef struct	s_args_map {
+	int			offset;
+	int			(*waiting_for_value)(
+				t_options *options,
+				const char *value);
+}				t_args_map;
+
 /*
 ** Options utils
 */
