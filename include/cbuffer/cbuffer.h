@@ -64,6 +64,7 @@ size_t cbuffer_size(const t_cbuffer* cbuf);
 */
 
 int cbuffer_send(int cs, t_cbuffer *cbuf, size_t n, int flags);
+int cbuffer_send_until_str(int cs, t_cbuffer *cbuf, const char *str, int flags);
 
 /*
 ** Fill buffer as much as possible using with recv 

@@ -14,8 +14,11 @@ int client_write(t_env *e, size_t cs)
 
     index = cbuffer_indexof(&fd->buf_write, "\x0D\x0A");
 
-    // logdebug("client_write::cbuffer_debug\n");
+    logdebug("client_write::cbuffer_debug");
     cbuffer_debug(&fd->buf_write);
+
+    if (index == (size_t)-1)
+        exit(1);
 
     // The buffer is full without any end of command, flush it
     if ((index = cbuffer_indexof(&fd->buf_write, "\x0D\x0A")) == (size_t)-1)
@@ -32,20 +35,15 @@ int client_write(t_env *e, size_t cs)
     while (index != (size_t)-1)
     {
         if (!e->ssl_ctx &&
-            cbuffer_send(cs, &fd->buf_write,
-                         (fd->buf_write.tail <= index
-                              ? index - fd->buf_write.tail
-                              : index + CBUFFSIZE - fd->buf_write.tail) +
-                             2,
-                         MSG_NOSIGNAL) <= 0)
+            cbuffer_send_until_str(cs, &fd->buf_write, "\x0D\x0A",
+                                   MSG_NOSIGNAL) <= 0)
             return (-1);
-        else if (e->ssl_ctx &&
-                 cbuffer_write_ssl(
-                     fd->ssl, &fd->buf_write,
-                     (fd->buf_write.tail <= index
-                          ? index - fd->buf_write.tail
-                          : index + CBUFFSIZE - fd->buf_write.tail) +
-                         2) <= 0)
+        if (e->ssl_ctx &&
+            cbuffer_write_ssl(fd->ssl, &fd->buf_write,
+                              (fd->buf_write.tail <= index
+                                   ? index - fd->buf_write.tail
+                                   : index + CBUFFSIZE - fd->buf_write.tail) +
+                                  2) <= 0)
             return (-1);
 
         logdebug("After cbuffer_send::");

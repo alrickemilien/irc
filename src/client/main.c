@@ -73,7 +73,7 @@ static void execute_precommands(t_env *e)
         ptr = strstr(ptr, "\x0A");
 
         if (ptr)
-            ptr += 2;
+            ptr += 1;
     }
 }
 

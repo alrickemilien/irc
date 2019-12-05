@@ -64,11 +64,22 @@ int cbuffer_send(int cs, t_cbuffer *cbuf, size_t n, int flags)
     if (r < 0)
         return (r);
 
-    // cbuf->tail = (cbuf->tail + n) % CBUFFSIZE;
-
-    if (cbuf->tail + n >= CBUFFSIZE)
+    // When send over than cbuf->head
+    if (cbuf->tail + n >= CBUFFSIZE &&
+        (cbuf->tail + n) % CBUFFSIZE > cbuf->head)
         cbuf->head = (cbuf->tail + n) % CBUFFSIZE;
     cbuf->tail = (cbuf->tail + n) % CBUFFSIZE;
 
     return (r);
+}
+
+int cbuffer_send_until_str(int cs, t_cbuffer *cbuf, const char *str, int flags)
+{
+    size_t index;
+    size_t n;
+
+    index = cbuffer_indexof(cbuf, str);
+    n = cbuf->tail <= index ? index - cbuf->tail
+                            : index + CBUFFSIZE - cbuf->tail;
+    return cbuffer_send(cs, cbuf, n + strlen(str), flags);
 }
