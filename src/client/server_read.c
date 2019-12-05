@@ -39,8 +39,8 @@ int server_read(t_env *e, size_t cs)
         return (r);
     }
 
-    logdebug("server_read:: cbuffer_debug ::");
-    cbuffer_debug(&fd->buf_read);
+    // logdebug("server_read:: cbuffer_debug ::");
+    // cbuffer_debug(&fd->buf_read);
 
     index = cbuffer_indexof(&fd->buf_read, "\x0D\x0A");
 
@@ -55,7 +55,7 @@ int server_read(t_env *e, size_t cs)
         return (0);
     }
 
-    logdebug("index: %ld", index);
+    // logdebug("index: %ld", index);
 
     while (index != (size_t)-1)
     {
@@ -85,8 +85,8 @@ int server_read(t_env *e, size_t cs)
                            : index + CBUFFSIZE - fd->buf_read.tail) +
                           2);
 
-        logdebug("server_read:: after cbuffer_dropn ::");
-        cbuffer_debug(&fd->buf_read);
+        // logdebug("server_read:: after cbuffer_dropn ::");
+        // cbuffer_debug(&fd->buf_read);
 
         index = cbuffer_indexof(&fd->buf_read, "\x0D\x0A");
     }

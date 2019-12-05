@@ -35,8 +35,8 @@ int irc_part(t_env *e, int cs, t_token *tokens)
     char   concat[CHANNELSTRSIZE + NICKNAMESTRSIZE + 11];
     size_t i;
 
-    logdebug("irc_part:: %s\n", tokens[0].addr);
-    logdebug("irc_part:: leaving %s\n", tokens[1].addr);
+    logdebug("irc_part:: %s", tokens[0].addr);
+    logdebug("irc_part:: leaving %s", tokens[1].addr);
 
     if ((irc_part_check_command(e, cs, tokens)) < 0)
         return (-1);

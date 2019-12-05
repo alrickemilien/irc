@@ -57,8 +57,6 @@ int cbuffer_send(int cs, t_cbuffer *cbuf, size_t n, int flags)
     if (count < n)
         memcpy(to_send + count, cbuf->buffer, n - count);
 
-    // printf("to_send: %s\n", to_send);
-
     r = send(cs, to_send, n, flags);
 
     if (r < 0)
