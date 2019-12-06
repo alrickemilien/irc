@@ -17,7 +17,7 @@ int c2s_away(t_env *e, t_token *tokens)
 
     _c2s_away(e->self, tokens[1].addr, strlen(tokens[1].addr));
 
-    return (IRC_AWAY);
+    return (IRC_C2S_AWAY);
 }
 
 int _c2s_unaway(t_fd *fd)
@@ -34,5 +34,5 @@ int c2s_unaway(t_env *e, t_token *tokens)
 
     _c2s_unaway(e->self);
 
-    return (IRC_UNAWAY);
+    return (IRC_C2S_UNAWAY);
 }

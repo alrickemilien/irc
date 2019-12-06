@@ -46,22 +46,22 @@ typedef struct  s_env
 */
 
 typedef enum    e_irc {
-    IRC_JOIN = 0UL,
-    IRC_NICK,
-    IRC_MSG,
-    IRC_CONNECT,
-    IRC_WHO,
-    IRC_PASS,
-    IRC_AWAY,
-    IRC_UNAWAY,
-    IRC_LEAVE,
-    IRC_WHOIS,
-    IRC_LIST,
-    IRC_TIME,
-    IRC_VERSION,
-    IRC_INVITE,
-    IRC_TOPIC,
-    IRC_COMMANDS_NUMBER
+    IRC_C2S_JOIN = 0UL,
+    IRC_C2S_NICK,
+    IRC_C2S_MSG,
+    IRC_C2S_CONNECT,
+    IRC_C2S_WHO,
+    IRC_C2S_PASS,
+    IRC_C2S_AWAY,
+    IRC_C2S_UNAWAY,
+    IRC_C2S_LEAVE,
+    IRC_C2S_WHOIS,
+    IRC_C2S_LIST,
+    IRC_C2S_TIME,
+    IRC_C2S_VERSION,
+    IRC_C2S_INVITE,
+    IRC_C2S_TOPIC,
+    IRC_C2S_COMMANDS_NUMBER
 }               t_irc_enum;
 
 typedef enum    e_irc_s2c {

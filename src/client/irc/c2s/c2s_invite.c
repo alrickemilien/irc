@@ -27,5 +27,5 @@ int c2s_invite(t_env *e, t_token *tokens)
 
     _c2s_invite(e->self, tokens[1].addr, tokens[1].len, tokens[2].addr);
 
-    return (IRC_INVITE);
+    return (IRC_C2S_INVITE);
 }

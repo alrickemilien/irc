@@ -43,5 +43,5 @@ int c2s_topic(t_env *e, t_token *tokens)
                tokens[1].len ? tokens[1].len : strlen(e->self->channelname),
                tokens[2].addr ? tokens[2].addr : NULL);
 
-    return (IRC_TOPIC);
+    return (IRC_C2S_TOPIC);
 }

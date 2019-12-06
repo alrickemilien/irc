@@ -1,22 +1,22 @@
 #include <client/irc.h>
 #include <client/ui/panel.h>
 
-static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
-        [IRC_JOIN] = {"/join", &c2s_join},
-        [IRC_NICK] = {"/nick", &c2s_nick},
-        [IRC_MSG] = {"/msg", &c2s_msg},
-        [IRC_CONNECT] = {"/connect", &c2s_connect},
-        [IRC_WHO] = {"/who", &c2s_who},
-        [IRC_PASS] = {"/pass", &c2s_pass},
-        [IRC_AWAY] = {"/away", &c2s_away},
-        [IRC_UNAWAY] = {"/unaway", &c2s_unaway},
-        [IRC_LEAVE] = {"/leave", &c2s_leave},
-        [IRC_WHOIS] = {"/whois", &c2s_whois},
-        [IRC_LIST] = {"/list", &c2s_list},
-        [IRC_TIME] = {"/time", &c2s_time},
-        [IRC_VERSION] = {"/version", &c2s_version},
-        [IRC_INVITE] = {"/invite", &c2s_invite},
-        [IRC_TOPIC] = {"/topic", &c2s_topic},
+static const t_irc_cmd g_irc_commands[IRC_C2S_COMMANDS_NUMBER] = {
+        [IRC_C2S_JOIN] = {"/join", &c2s_join},
+        [IRC_C2S_NICK] = {"/nick", &c2s_nick},
+        [IRC_C2S_MSG] = {"/msg", &c2s_msg},
+        [IRC_C2S_CONNECT] = {"/connect", &c2s_connect},
+        [IRC_C2S_WHO] = {"/who", &c2s_who},
+        [IRC_C2S_PASS] = {"/pass", &c2s_pass},
+        [IRC_C2S_AWAY] = {"/away", &c2s_away},
+        [IRC_C2S_UNAWAY] = {"/unaway", &c2s_unaway},
+        [IRC_C2S_LEAVE] = {"/leave", &c2s_leave},
+        [IRC_C2S_WHOIS] = {"/whois", &c2s_whois},
+        [IRC_C2S_LIST] = {"/list", &c2s_list},
+        [IRC_C2S_TIME] = {"/time", &c2s_time},
+        [IRC_C2S_VERSION] = {"/version", &c2s_version},
+        [IRC_C2S_INVITE] = {"/invite", &c2s_invite},
+        [IRC_C2S_TOPIC] = {"/topic", &c2s_topic},
 };
 
 /*
@@ -41,7 +41,7 @@ int c2s(t_env *e, char *buffer)
         return (0);
 
     i = 0;
-    while (i < IRC_COMMANDS_NUMBER)
+    while (i < IRC_C2S_COMMANDS_NUMBER)
     {
         if (strncmp(buffer, g_irc_commands[i].command,
                     strlen(g_irc_commands[i].command)) == 0 &&

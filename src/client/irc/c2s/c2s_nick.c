@@ -46,5 +46,5 @@ int c2s_nick(t_env *e, t_token *tokens)
     if (e->options.gui)
         ui_set_nick(e->ui, tokens[1].addr);
 
-    return (IRC_NICK);
+    return (IRC_C2S_NICK);
 }

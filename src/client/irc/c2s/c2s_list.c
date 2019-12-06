@@ -10,5 +10,5 @@ int c2s_list(t_env *e, t_token *tokens)
     else
         cbuffer_putcmd(&e->self->buf_write, "LIST %s\x0D\x0A",
                        tokens[1].addr);
-    return (IRC_LIST);
+    return (IRC_C2S_LIST);
 }

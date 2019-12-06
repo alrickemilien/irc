@@ -33,5 +33,5 @@ int c2s_whois(t_env *e, t_token *tokens)
     if (_c2s_whois(e->self, tokens[1].addr, tokens[1].len) < 0)
         return (-1);
 
-    return (IRC_WHO);
+    return (IRC_C2S_WHOIS);
 }

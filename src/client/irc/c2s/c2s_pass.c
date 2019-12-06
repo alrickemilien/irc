@@ -35,5 +35,5 @@ int c2s_pass(t_env *e, t_token *tokens)
 
     loginfo("_c2s_pass::You changed password");
 
-    return (IRC_PASS);
+    return (IRC_C2S_PASS);
 }

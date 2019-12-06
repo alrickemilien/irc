@@ -49,5 +49,5 @@ int c2s_join(t_env *e, t_token *tokens)
 
     _c2s_join(e->self, tokens[1].addr, tokens[1].len);
 
-    return (IRC_JOIN);
+    return (IRC_C2S_JOIN);
 }

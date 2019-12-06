@@ -54,5 +54,5 @@ int c2s_leave(t_env *e, t_token *tokens)
                  tokens[1].addr ? tokens[1].addr : e->self->channelname) < 0)
         return (-1);
 
-    return (IRC_LEAVE);
+    return (IRC_C2S_LEAVE);
 }
