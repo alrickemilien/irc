@@ -12,7 +12,7 @@ static int irc_nick_check_command(t_env *e, int cs, const t_token *tokens)
     nick = tokens[1].addr;
     nick_len = tokens[1].len;
 
-    if (nick_len > 9 || !nick_len || nick[0] == '#' || nick[0] == '&')
+    if (nick_len > 9 || !nick_len || !is_valid_nick(nick))
         return (irc_err(e, cs, ERR_ERRONEUSNICKNAME, nick));
 
     i = 0;
@@ -43,9 +43,8 @@ int irc_nick(t_env *e, int cs, t_token *tokens)
     {
         logdebug("irc_nick::registered");
 
-        sprintf(concat, "%s changed nickname to %s", e->fds[cs].nickname,
-                tokens[1].addr);
-        broadcast(e, concat, IRC_NOTICE, cs);
+        sprintf(concat, ":%s NICK %s", e->fds[cs].nickname, tokens[1].addr);
+        broadcast_all(e, concat, IRC_NOTICE, cs);
 
         logdebug("%s\n", concat);
 
@@ -56,10 +55,10 @@ int irc_nick(t_env *e, int cs, t_token *tokens)
 
     memrpl(e->fds[cs].nickname, NICKNAMESTRSIZE, tokens[1].addr, tokens[1].len);
 
-    // When nickname is not set
+    // When username is not set
     if (e->fds[cs].username[0] == 0)
     {
-        logdebug("irc_nick::When nickname is not set");
+        logdebug("irc_nick::When username is not set");
 
         return (IRC_NICK);
     }

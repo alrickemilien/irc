@@ -25,8 +25,7 @@ static int c2s_leave_check_command(t_env *e, const t_token *tokens)
         return (irc_error(e, ERR_NOSUCHCHANNEL, channel));
     else if (channel_len - 1 > CHANNELSTRSIZE)
         return (irc_error(e, ERR_NOSUCHCHANNEL, channel));
-    else if ((channel[0] != '#' && channel[0] != '&') ||
-             !is_valid_chan_name(channel))
+    else if (!is_valid_chan_name(channel, channel_len))
         return (irc_error(e, ERR_NOSUCHCHANNEL, channel));
     else if (channel_len < 1)
         return (irc_error(e, ERR_NOSUCHCHANNEL, channel));
@@ -55,5 +54,5 @@ int c2s_leave(t_env *e, t_token *tokens)
                  tokens[1].addr ? tokens[1].addr : e->self->channelname) < 0)
         return (-1);
 
-    return (IRC_LEAVE);
+    return (IRC_C2S_LEAVE);
 }

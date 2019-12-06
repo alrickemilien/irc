@@ -104,6 +104,36 @@ void ui_push_error_message(t_ui_panel *        ui,
     bloc->count++;
 }
 
+void ui_push_invite_message(t_ui_panel *        ui,
+                           t_ui_chat_msg_bloc *bloc,
+                           const char *        msg)
+{
+    GtkWidget *container;
+    GtkWidget *label;
+
+    logdebug("ui::ui_push_invite_message\n");
+
+    // Container
+    container = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
+    gtk_set_class(container, "invite-message-container");
+    gtk_box_set_homogeneous(GTK_BOX(container), FALSE);
+
+    // Message content
+    label = ui_util_new_chat_label(msg, "invite-message");
+
+    // Fill container
+    gtk_box_pack_start(GTK_BOX(container),
+                       ui_util_new_logo(ui->invite_image, "invite-logo"), FALSE,
+                       FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(container), label, FALSE, FALSE, 0);
+
+    // Finally insert
+    gtk_list_box_insert(GTK_LIST_BOX(bloc->box), container, -1);
+
+    bloc->count++;
+}
+
+
 void ui_push_info_message(t_ui_panel *        ui,
                           t_ui_chat_msg_bloc *bloc,
                           const char *        msg)

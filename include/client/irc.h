@@ -46,18 +46,22 @@ typedef struct  s_env
 */
 
 typedef enum    e_irc {
-    IRC_JOIN = 0UL,
-    IRC_NICK,
-    IRC_MSG,
-    IRC_CONNECT,
-    IRC_WHO,
-    IRC_PASS,
-    IRC_AWAY,
-    IRC_UNAWAY,
-    IRC_LEAVE,
-    IRC_WHOIS,
-    IRC_LIST,
-    IRC_COMMANDS_NUMBER
+    IRC_C2S_JOIN = 0UL,
+    IRC_C2S_NICK,
+    IRC_C2S_MSG,
+    IRC_C2S_CONNECT,
+    IRC_C2S_WHO,
+    IRC_C2S_PASS,
+    IRC_C2S_AWAY,
+    IRC_C2S_UNAWAY,
+    IRC_C2S_LEAVE,
+    IRC_C2S_WHOIS,
+    IRC_C2S_LIST,
+    IRC_C2S_TIME,
+    IRC_C2S_VERSION,
+    IRC_C2S_INVITE,
+    IRC_C2S_TOPIC,
+    IRC_C2S_COMMANDS_NUMBER
 }               t_irc_enum;
 
 typedef enum    e_irc_s2c {
@@ -79,10 +83,20 @@ typedef enum    e_irc_s2c {
     IRC_S2C_RPL_LISTSTART,
     IRC_S2C_RPL_LISTEND,
     IRC_S2C_RPL_LIST,
+    IRC_S2C_NOTICE,
+    IRC_S2C_RPL_TIME,
+    IRC_S2C_PING,
+    IRC_S2C_RPL_VERSION,
+    IRC_S2C_RPL_INVITING,
+    IRC_S2C_INVITE,
+    IRC_S2C_RPL_NOTOPIC,
     IRC_S2C_COMMANDS_NUMBER,
 }               t_irc_s2c;
 
-// Custom one for internal purpose
+/*
+** Custom one for internal purpose
+*/
+
 typedef enum    e_irc_reply_client {
     ERR_UNRECOGNIZED_COMMAND = 1001,
     ERR_NOT_CONNECTED = 1002,
@@ -119,6 +133,10 @@ int             c2s_unaway(t_env *e, t_token *tokens);
 int             c2s_leave(t_env *e, t_token *tokens);
 int             c2s_whois(t_env *e, t_token *tokens);
 int             c2s_list(t_env *e, t_token *tokens);
+int             c2s_time(t_env *e, t_token *tokens);
+int             c2s_version(t_env *e, t_token *tokens);
+int             c2s_invite(t_env *e, t_token *tokens);
+int             c2s_topic(t_env *e, t_token *tokens);
 
 int             _c2s_nick(t_env *e, const char *nick, size_t nick_length);
 int             _c2s_pass(t_env *e, const char *password, size_t password_length);
@@ -132,6 +150,8 @@ int             _c2s_leave(t_fd *fd, const char *channel_name, size_t channel_na
 int             _c2s_join(t_fd *fd, const char *channel_name, size_t channel_name_len);
 int             _c2s_whois(t_fd *fd, const char *nick, size_t nick_len);
 int             _c2s_msg(t_fd *fd, const char *dest, size_t dest_len, const char *msg);
+int             _c2s_invite(t_fd *fd, const char *nick, size_t nick_len, const char *channel);
+int             _c2s_topic(t_fd *fd, const char *chan, size_t chan_len, const char *msg);
 
 int             s2c(t_env *e, char *buffer);
 int             s2c_rpl_welcome(t_env *e, t_token *tokens);
@@ -152,6 +172,13 @@ int             s2c_rpl_endofwho(t_env *e, t_token *tokens);
 int             s2c_rpl_liststart(t_env *e, t_token *tokens);
 int             s2c_rpl_listend(t_env *e, t_token *tokens);
 int             s2c_rpl_list(t_env *e, t_token *tokens);
+int             s2c_notice(t_env *e, t_token *tokens);
+int             s2c_rpl_time(t_env *e, t_token *tokens);
+int             s2c_ping(t_env *e, t_token *tokens);
+int             s2c_rpl_version(t_env *e, t_token *tokens);
+int             s2c_rpl_inviting(t_env *e, t_token *tokens);
+int             s2c_invite(t_env *e, t_token *tokens);
+int             s2c_rpl_notopic(t_env *e, t_token *tokens);
 
 int             irc_error(t_env *e, int err_code, ...);
 

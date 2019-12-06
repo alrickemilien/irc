@@ -115,7 +115,7 @@
  *     ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
  */
 
- #right-pane {
+#right-pane {
     background-color: #eeeeee;
 }
 
@@ -144,10 +144,10 @@
     border-style: solid;
     border-width: 2px;
     background-image: -gtk-gradient (linear,
-    left top,
-    left bottom,
-    from(rgba(235, 209, 126, 20)),
-    to (rgba(207, 182, 99, 20)));
+            left top,
+            left bottom,
+            from(rgba(235, 209, 126, 20)),
+            to (rgba(207, 182, 99, 20)));
 }
 
 .topic-message {
@@ -169,10 +169,10 @@
     border-style: solid;
     border-width: 2px;
     background-image: -gtk-gradient (linear,
-    left top,
-    left bottom,
-    from(rgb(228, 47, 15)),
-    to (rgb(194, 40, 13)));
+            left top,
+            left bottom,
+            from(rgb(228, 47, 15)),
+            to (rgb(194, 40, 13)));
 }
 
 .error-message {
@@ -194,10 +194,10 @@
     border-style: solid;
     border-width: 2px;
     background-image: -gtk-gradient (linear,
-    left top,
-    left bottom,
-    from(rgb(41, 165, 93)),
-    to (rgb(39, 139, 81)));
+            left top,
+            left bottom,
+            from(rgb(41, 165, 93)),
+            to (rgb(39, 139, 81)));
 }
 
 .info-message-container GtkLabel {
@@ -206,6 +206,36 @@
 }
 
 .info-message {
+    font-size: 14px;
+}
+
+/**
+ *    ██╗███╗   ██╗██╗   ██╗██╗████████╗███████╗
+ *    ██║████╗  ██║██║   ██║██║╚══██╔══╝██╔════╝
+ *    ██║██╔██╗ ██║██║   ██║██║   ██║   █████╗  
+ *    ██║██║╚██╗██║╚██╗ ██╔╝██║   ██║   ██╔══╝  
+ *    ██║██║ ╚████║ ╚████╔╝ ██║   ██║   ███████╗
+ *    ╚═╝╚═╝  ╚═══╝  ╚═══╝  ╚═╝   ╚═╝   ╚══════╝
+ */
+
+.invite-message-container {
+    border-radius: 3px;
+    border-color: rgb(135, 66, 182);
+    border-style: solid;
+    border-width: 2px;
+    background-image: -gtk-gradient (linear,
+            left top,
+            left bottom,
+            from(rgb(169, 106, 211)),
+            to (rgb(135, 66, 182)));
+}
+
+.invite-message-container GtkLabel {
+    color: #eeeeee;
+    margin: 1px 1px 1px 1px;
+}
+
+.invite-message {
     font-size: 14px;
 }
 
@@ -242,7 +272,7 @@ scrollbar button,
     background-color: rgba(146, 13, 173, 0.28);
 }
 
- 
+
 scrollbar.overlay-indicator slider:hover,
 .slider:hover {
     border-radius: 20px;
@@ -270,4 +300,3 @@ scrollbar:hover trough,
     background-color: transparent;
     border-radius: 0;
 }
-

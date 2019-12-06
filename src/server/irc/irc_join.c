@@ -23,8 +23,7 @@ static int irc_join_check_command(t_env *e, int cs, const t_token *tokens)
         return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
     else if (channel_len - 1 > CHANNELSTRSIZE)
         return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
-    else if ((channel[0] != '#' && channel[0] != '&') ||
-             !is_valid_chan_name(channel))
+    else if (!is_valid_chan_name(channel, channel_len))
         return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
     else if (channel_len < 1)
         return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
@@ -81,8 +80,15 @@ int irc_join(t_env *e, int cs, t_token *tokens)
     loginfo("%s!%s@%s JOIN %s\n", e->fds[cs].nickname, e->fds[cs].nickname,
             e->fds[cs].host, e->channels[e->fds[cs].channel].channel);
 
-    irc_reply(e, cs, RPL_TOPIC, e->channels[e->fds[cs].channel].channel,
-              e->fds[cs].nickname);
+    if (e->channels[e->fds[cs].channel].topic[0])
+        irc_reply(e, cs, RPL_TOPIC, e->channels[e->fds[cs].channel].channel,
+                  e->channels[e->fds[cs].channel].topic);
+    else
+        irc_reply(e, cs, RPL_NOTOPIC, e->channels[e->fds[cs].channel].channel);
+
+    // When the user is the first on the channel, set the user an chop
+    if (e->channels[i].clients == 0)
+        e->channels[i].chop = cs;
 
     e->channels[i].clients++;
 

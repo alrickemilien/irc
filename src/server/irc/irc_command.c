@@ -14,6 +14,12 @@ static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
     [IRC_WHOIS] = {"WHOIS", &irc_whois},
     [IRC_WHO] = {"WHO", &irc_who},
     [IRC_LIST] = {"LIST", &irc_list},
+    [IRC_TIME] = {"TIME", &irc_time},
+    [IRC_PING] = {"PING", &irc_ping},
+    [IRC_PONG] = {"PONG", &irc_pong},
+    [IRC_VERSION] = {"VERSION", &irc_version},
+    [IRC_INVITE] = {"INVITE", &irc_invite},
+    [IRC_TOPIC] = {"TOPIC", &irc_topic},
 };
 
 int irc_command(t_env *e, int cs, size_t end_command_index)

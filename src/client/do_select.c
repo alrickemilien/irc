@@ -39,15 +39,9 @@ void check_fd(t_env *e)
     while ((i < e->maxfd) && (e->r > 0))
     {
         if (FD_ISSET(i, &e->fd_read))
-        {
-            // logdebug("check_fd::#%ld:: available data for read\n", i);
             e->fds[i].read(e, i);
-        }
         if (FD_ISSET(i, &e->fd_write))
-        {
-            // logdebug("check_fd::#%ld:: available data for write\n", i);
             e->fds[i].write(e, i);
-        }
         if (FD_ISSET(i, &e->fd_read) || FD_ISSET(i, &e->fd_write))
             e->r--;
         i++;

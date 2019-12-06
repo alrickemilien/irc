@@ -12,6 +12,7 @@ static const t_s2c_error g_s2c_error[] = {
      "You need to be logged in before any command. Use "
      "/connect [server] ?[port]",
      NULL},
+     {ERR_NOORIGIN, ":No origin specified", NULL},
     {0, NULL, NULL},
 };
 

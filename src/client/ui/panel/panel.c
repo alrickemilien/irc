@@ -37,6 +37,9 @@ static int ui_init_panel_assets(t_env *e, t_ui_panel *ui)
         gtk_get_assets(e->argv_0, "/ui/assets/icons8-info-carré-16.png");
     ui->rpl_away_image =
         gtk_get_assets(e->argv_0, "/ui/assets/icons8-dormir-16.png");
+    ui->invite_image =
+        gtk_get_assets(e->argv_0, "/ui/assets/icons8-importer-24.png");
+
     return (0);
 }
 
@@ -95,6 +98,7 @@ int ui_init_panel(t_env *e, t_ui_panel *ui)
     gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
                                               GTK_STYLE_PROVIDER(css),
                                               GTK_STYLE_PROVIDER_PRIORITY_USER);
+ 
     g_object_unref(G_OBJECT(css));
 
     ui_init_panel_window(ui);

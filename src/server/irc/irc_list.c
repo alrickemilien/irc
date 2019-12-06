@@ -7,8 +7,6 @@ int irc_list(t_env *e, int cs, t_token *tokens)
     size_t  subtoken_count;
     t_token subtokens[30];
 
-    logdebug("irc_list::");
-
     irc_reply(e, cs, RPL_LISTSTART, NULL);
 
     // When no channel provided
@@ -17,8 +15,9 @@ int irc_list(t_env *e, int cs, t_token *tokens)
         i = 0;
         while (i < e->maxchannels)
         {
-            if (i == 0 || (e->channels[i].channel[0] && e->channels[i].clients > 0))
-                irc_reply(e, cs, RPL_LIST, e->channels[i].channel);
+            if (i == 0 ||
+                (e->channels[i].channel[0] && e->channels[i].clients > 0))
+                irc_reply(e, cs, RPL_LIST, e->channels[i].channel, e->channels[i].topic);
             i++;
         }
         irc_reply(e, cs, RPL_LISTEND, NULL);
@@ -35,11 +34,13 @@ int irc_list(t_env *e, int cs, t_token *tokens)
         {
             if (strncmp(e->channels[e->fds[i].channel].channel,
                         subtokens[j].addr, subtokens[j].len) == 0)
-                irc_reply(e, cs, RPL_LIST, e->channels[i].channel);
+                irc_reply(e, cs, RPL_LIST, e->channels[i].channel,
+                          e->channels[i].topic);
             j++;
         }
 
-        irc_reply(e, cs, RPL_LIST, e->channels[i].channel);
+        irc_reply(e, cs, RPL_LIST, e->channels[i].channel,
+                  e->channels[i].topic);
         i++;
     }
 

@@ -18,12 +18,9 @@ static int irc_part_check_command(t_env *e, int cs, const t_token *tokens)
     channel = tokens[1].addr;
     channel_len = tokens[1].len;
 
-    if (strpbrk(channel, "\x07\x2C"))
+    if (channel_len - 1 > CHANNELSTRSIZE)
         return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
-    else if (channel_len - 1 > CHANNELSTRSIZE)
-        return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
-    else if ((channel[0] != '#' && channel[0] != '&') ||
-             !is_valid_chan_name(channel))
+    else if (!is_valid_chan_name(channel, channel_len))
         return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
     else if (channel_len < 1)
         return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));

@@ -44,7 +44,9 @@ const char *strtrim(const char *str);
 /*
 ** irc utils
 */
-bool is_valid_chan_name(const char *channel);
+
+bool is_valid_chan_name(const char *channel, size_t len);
+bool is_valid_nick(const char *nick);
 
 /*
 ** log
@@ -62,14 +64,17 @@ int logdebug(const char *fmt, ...);
 ** IRC specific
 */
 
-#define BUF_SIZE 4096
+// #define BUF_SIZE 4096
+#define PORTSTRSIZE 5
 #define CHANNELSTRSIZE 200
 #define NICKNAMESTRSIZE 9
 #define HOSTNAMESTRSIZE NI_MAXHOST
 #define USERNAMESTRSIZE 20
 #define PASSWDTRSIZE 512
 #define MAXMSGSIZE 512
+#define TOPICSTRSIZE 504
 #define IRC_DEFAULT_SERVER_PORT 5555
+#define AWAYMSGSIZE 505
 
 /*
 ** Tokenize
@@ -125,10 +130,12 @@ typedef struct s_fd
     char   username[USERNAMESTRSIZE + 1];
     char   realname[USERNAMESTRSIZE + 1];
     char   passwd[PASSWDTRSIZE + 1];
-    char   awaymessage[BUF_SIZE + 1];
+    char   awaymessage[AWAYMSGSIZE + 1];
     char   channelname[CHANNELSTRSIZE + 1];
     int    registered;
     int    away;
+    long   last_activity;
+    long   last_ping_activity;
     void * ssl;
 } t_fd;
 
@@ -139,6 +146,7 @@ typedef struct s_fd
 typedef struct s_channel
 {
     char   channel[CHANNELSTRSIZE + 1];
+    char   topic[TOPICSTRSIZE + 1];
     int    chop;
     size_t clients;
 } t_channel;
@@ -160,20 +168,27 @@ enum e_irc_reply
     RPL_LISTSTART = 321,
     RPL_LIST = 322,
     RPL_LISTEND = 323,
+    RPL_NOTOPIC = 331,
     RPL_TOPIC = 332,
+    RPL_INVITING = 341,
+    RPL_VERSION = 351,
     RPL_WHOREPLY = 352,
     RPL_NAMREPLY = 353,
     RPL_ENDOFNAMES = 366,
+    RPL_TIME = 391,
     ERR_NOSUCHNICK = 401,
     ERR_NOSUCHSERVER = 402,
     ERR_NOSUCHCHANNEL = 403,
+    ERR_NOORIGIN = 409,
     ERR_NOTEXTTOSEND = 412,
     ERR_NONICKNAMEGIVEN = 431,
     ERR_ERRONEUSNICKNAME = 432,
     ERR_NICKNAMEINUSE = 433,
     ERR_NOTONCHANNEL = 442,
+    ERR_USERONCHANNEL = 443,
     ERR_NEEDMOREPARAMS = 461,
     ERR_ALREADYREGISTRED = 462,
+    ERR_CHANOPRIVSNEEDED = 482,
 };
 
 typedef struct s_irc_reply

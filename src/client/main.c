@@ -93,13 +93,10 @@ int main(int argc, char **argv)
     if (e.options.ipv6 == 1)
         e.ipv6 = 1;
 
-    init_connection(&e);
-
     if (e.options.gui)
         return (gui(&e, argc, argv));
 
-    if (e.options.command[0])
-        loginfo("options.command: %s", e.options.command);
+    init_connection(&e);
 
     init_std(&e);
 
