@@ -16,6 +16,7 @@ static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
         [IRC_TIME] = {"/time", &c2s_time},
         [IRC_VERSION] = {"/version", &c2s_version},
         [IRC_INVITE] = {"/invite", &c2s_invite},
+        [IRC_TOPIC] = {"/topic", &c2s_topic},
 };
 
 /*

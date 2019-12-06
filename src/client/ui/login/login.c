@@ -59,7 +59,29 @@ static int ui_init_login_window_credentials_entrys(t_env *e, t_ui_login *ui)
     return (0);
 }
 
-int ui_init_login_window(t_env *e, t_ui_login *ui)
+static int ui_init_login_window(t_ui_login *ui)
+{
+    ui->window =
+        GTK_WIDGET(gtk_builder_get_object(ui->builder, "window_login"));
+
+    gtk_widget_add_events(ui->window, GDK_KEY_PRESS_MASK);
+    g_signal_connect(ui->window, "key_press_event", G_CALLBACK(close_login),
+                     ui);
+    g_signal_connect(ui->window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+
+    ui->window_color = gtk_new_rgba(1, 1, 1, 0.96);
+    gtk_set_transparent_window(ui->window, ui->window_color);
+
+    // Set login button event
+    ui->button_go =
+        GTK_WIDGET(gtk_builder_get_object(ui->builder, "button_go"));
+    g_signal_connect(ui->button_go, "clicked", G_CALLBACK(ui_login_connect),
+                     ui);
+
+    return (0);
+}
+
+int ui_init_login(t_env *e, t_ui_login *ui)
 {
     GtkCssProvider *css;
 
@@ -70,19 +92,7 @@ int ui_init_login_window(t_env *e, t_ui_login *ui)
         return (-1);
 
     // Init window and close events
-    ui->window =
-        GTK_WIDGET(gtk_builder_get_object(ui->builder, "window_login"));
-
-    gtk_widget_add_events(ui->window, GDK_KEY_PRESS_MASK);
-    g_signal_connect(ui->window, "key_press_event", G_CALLBACK(close_login),
-                     ui);
-    g_signal_connect(ui->window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
-
-    // Set login button event
-    ui->button_go =
-        GTK_WIDGET(gtk_builder_get_object(ui->builder, "button_go"));
-    g_signal_connect(ui->button_go, "clicked", G_CALLBACK(ui_login_connect),
-                     ui);
+    ui_init_login_window(ui);
 
     // Apply style to window
     css = gtk_css_provider_new();
@@ -93,8 +103,6 @@ int ui_init_login_window(t_env *e, t_ui_login *ui)
                                               GTK_STYLE_PROVIDER_PRIORITY_USER);
     g_object_unref(G_OBJECT(css));
 
-    ui->window_color = gtk_new_rgba(1, 1, 1, 0.96);
-    gtk_set_transparent_window(ui->window, ui->window_color);
 
     ui_login_connect_fetch_entrys(ui);
 

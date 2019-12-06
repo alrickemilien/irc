@@ -31,6 +31,7 @@ static const t_irc_reply g_replys[] = {
     {RPL_VERSION, "RPL_VERSION", "%s.%s %s :%s"},
     {ERR_USERONCHANNEL, "ERR_USERONCHANNEL", "%s %s :is already on channel"},
     {RPL_INVITING, "RPL_INVITING", "%s %s"},
+    {RPL_NOTOPIC, "RPL_NOTOPIC", "%s :No topic is set"},
 };
 
 int irc_reply(t_env *e, int cs, int code, ...)

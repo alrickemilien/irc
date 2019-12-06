@@ -19,3 +19,11 @@ int s2c_rpl_topic(t_env *e, t_token *tokens)
 
     return (IRC_S2C_RPL_TOPIC);
 }
+
+int s2c_rpl_notopic(t_env *e, t_token *tokens)
+{
+    (void)e;
+    (void)tokens;
+
+    return (IRC_S2C_RPL_NOTOPIC);
+}

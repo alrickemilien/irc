@@ -60,6 +60,7 @@ typedef enum    e_irc {
     IRC_TIME,
     IRC_VERSION,
     IRC_INVITE,
+    IRC_TOPIC,
     IRC_COMMANDS_NUMBER
 }               t_irc_enum;
 
@@ -88,6 +89,7 @@ typedef enum    e_irc_s2c {
     IRC_S2C_RPL_VERSION,
     IRC_S2C_RPL_INVITING,
     IRC_S2C_INVITE,
+    IRC_S2C_RPL_NOTOPIC,
     IRC_S2C_COMMANDS_NUMBER,
 }               t_irc_s2c;
 
@@ -134,6 +136,7 @@ int             c2s_list(t_env *e, t_token *tokens);
 int             c2s_time(t_env *e, t_token *tokens);
 int             c2s_version(t_env *e, t_token *tokens);
 int             c2s_invite(t_env *e, t_token *tokens);
+int             c2s_topic(t_env *e, t_token *tokens);
 
 int             _c2s_nick(t_env *e, const char *nick, size_t nick_length);
 int             _c2s_pass(t_env *e, const char *password, size_t password_length);
@@ -148,6 +151,7 @@ int             _c2s_join(t_fd *fd, const char *channel_name, size_t channel_nam
 int             _c2s_whois(t_fd *fd, const char *nick, size_t nick_len);
 int             _c2s_msg(t_fd *fd, const char *dest, size_t dest_len, const char *msg);
 int             _c2s_invite(t_fd *fd, const char *nick, size_t nick_len, const char *channel);
+int             _c2s_topic(t_fd *fd, const char *chan, size_t chan_len, const char *msg);
 
 int             s2c(t_env *e, char *buffer);
 int             s2c_rpl_welcome(t_env *e, t_token *tokens);
@@ -174,6 +178,7 @@ int             s2c_ping(t_env *e, t_token *tokens);
 int             s2c_rpl_version(t_env *e, t_token *tokens);
 int             s2c_rpl_inviting(t_env *e, t_token *tokens);
 int             s2c_invite(t_env *e, t_token *tokens);
+int             s2c_rpl_notopic(t_env *e, t_token *tokens);
 
 int             irc_error(t_env *e, int err_code, ...);
 

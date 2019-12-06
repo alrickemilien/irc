@@ -72,6 +72,7 @@ int logdebug(const char *fmt, ...);
 #define USERNAMESTRSIZE 20
 #define PASSWDTRSIZE 512
 #define MAXMSGSIZE 512
+#define TOPICSTRSIZE 504
 #define IRC_DEFAULT_SERVER_PORT 5555
 
 #define PING_INTERVAL_S 1
@@ -148,6 +149,7 @@ typedef struct s_fd
 typedef struct s_channel
 {
     char   channel[CHANNELSTRSIZE + 1];
+    char   topic[TOPICSTRSIZE + 1];
     int    chop;
     size_t clients;
 } t_channel;
@@ -169,6 +171,7 @@ enum e_irc_reply
     RPL_LISTSTART = 321,
     RPL_LIST = 322,
     RPL_LISTEND = 323,
+    RPL_NOTOPIC = 331,
     RPL_TOPIC = 332,
     RPL_INVITING = 341,
     RPL_VERSION = 351,

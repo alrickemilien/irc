@@ -37,6 +37,7 @@ CLIENT_SRC+=src/client/irc/c2s/c2s.c \
 			src/client/irc/c2s/c2s_whois.c \
 			src/client/irc/c2s/c2s_list.c \
 			src/client/irc/c2s/c2s_time.c \
+			src/client/irc/c2s/c2s_topic.c \
 			src/client/irc/c2s/c2s_version.c \
 			src/client/irc/c2s/c2s_invite.c \
 			src/client/irc/c2s/c2s_connect.c
