@@ -98,6 +98,7 @@ int ui_init_panel(t_env *e, t_ui_panel *ui)
     gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
                                               GTK_STYLE_PROVIDER(css),
                                               GTK_STYLE_PROVIDER_PRIORITY_USER);
+ 
     g_object_unref(G_OBJECT(css));
 
     ui_init_panel_window(ui);

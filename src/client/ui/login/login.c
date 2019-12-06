@@ -92,6 +92,7 @@ int ui_init_login_window(t_env *e, t_ui_login *ui)
                                               GTK_STYLE_PROVIDER(css),
                                               GTK_STYLE_PROVIDER_PRIORITY_USER);
     g_object_unref(G_OBJECT(css));
+
     ui->window_color = gtk_new_rgba(1, 1, 1, 0.96);
     gtk_set_transparent_window(ui->window, ui->window_color);
 

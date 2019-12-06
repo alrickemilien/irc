@@ -43,8 +43,7 @@ int irc_nick(t_env *e, int cs, t_token *tokens)
     {
         logdebug("irc_nick::registered");
 
-        sprintf(concat, "%s changed nickname to %s", e->fds[cs].nickname,
-                tokens[1].addr);
+        sprintf(concat, ":%s NICK %s", e->fds[cs].nickname, tokens[1].addr);
         broadcast(e, concat, IRC_NOTICE, cs);
 
         logdebug("%s\n", concat);
