@@ -44,6 +44,7 @@ const char *strtrim(const char *str);
 /*
 ** irc utils
 */
+
 bool is_valid_chan_name(const char *channel);
 bool is_valid_nick(const char *nick);
 
@@ -71,6 +72,7 @@ int logdebug(const char *fmt, ...);
 #define PASSWDTRSIZE 512
 #define MAXMSGSIZE 512
 #define IRC_DEFAULT_SERVER_PORT 5555
+#define MAX_TOLERATED_INACTIVITY_TIME_MS 7200
 
 /*
 ** Tokenize
@@ -130,6 +132,7 @@ typedef struct s_fd
     char   channelname[CHANNELSTRSIZE + 1];
     int    registered;
     int    away;
+    long   last_activity;
     void * ssl;
 } t_fd;
 
