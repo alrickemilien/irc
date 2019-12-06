@@ -45,7 +45,7 @@ const char *strtrim(const char *str);
 ** irc utils
 */
 
-bool is_valid_chan_name(const char *channel);
+bool is_valid_chan_name(const char *channel, size_t len);
 bool is_valid_nick(const char *nick);
 
 /*

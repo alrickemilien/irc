@@ -5,7 +5,9 @@ int s2c_rpl_topic(t_env *e, t_token *tokens)
 {
     (void)e;
 
-    if (!tokens[1].addr)
+    logdebug("s2c_rpl_topic:: %s", tokens[0].addr);
+
+    if (!tokens[1].addr || !tokens[2].addr)
         return (-1);
 
     loginfo("TOPIC: %s",
@@ -24,6 +26,8 @@ int s2c_rpl_notopic(t_env *e, t_token *tokens)
 {
     (void)e;
     (void)tokens;
+
+    logdebug("s2c_rpl_notopic::");
 
     return (IRC_S2C_RPL_NOTOPIC);
 }

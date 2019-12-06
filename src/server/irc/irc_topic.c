@@ -16,15 +16,15 @@ static int irc_topic_check_command(t_env *e, int cs, const t_token *tokens)
         return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
     else if (channel_len - 1 > CHANNELSTRSIZE)
         return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
-    else if (!is_valid_chan_name(channel))
+    else if (!is_valid_chan_name(channel, channel_len))
         return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
     else if (channel_len < 1)
         return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
 
     // When cs is not into channel
-    if (strncmp(e->channels[e->fds[cs].channel].channel, channel,
-                channel_len) != 0 ||
-        e->channels[e->fds[cs].channel].channel[channel_len] != ' ')
+    else if (strncmp(e->channels[e->fds[cs].channel].channel, channel,
+                     channel_len) != 0 ||
+             e->channels[e->fds[cs].channel].channel[channel_len] != 0)
         return (irc_err(e, cs, ERR_NOTONCHANNEL, channel));
 
     return (0);
@@ -32,23 +32,24 @@ static int irc_topic_check_command(t_env *e, int cs, const t_token *tokens)
 
 int irc_topic(t_env *e, int cs, t_token *tokens)
 {
-    loginfo("irc_topic::");
+    loginfo("irc_topic:: %s", tokens[0].addr);
 
     if (irc_topic_check_command(e, cs, tokens) < 0)
         return (-1);
 
-    if (e->channels[e->fds[cs].channel].topic[0] == 0)
+    if (e->channels[e->fds[cs].channel].topic[0] == 0 && !tokens[2].addr)
     {
         irc_reply(e, cs, RPL_NOTOPIC, e->channels[e->fds[cs].channel].channel);
-
         return (IRC_TOPIC);
     }
 
     if (tokens[2].addr)
         memrpl(e->channels[e->fds[cs].channel].topic, TOPICSTRSIZE + 1,
-           tokens[2].addr, tokens[1].len);
+               tokens[2].addr[0] == ':' ? tokens[2].addr + 1 : tokens[2].addr,
+               tokens[2].addr[0] == ':' ? tokens[2].len - 1 : tokens[2].len);
 
-    irc_reply(e, cs, RPL_TOPIC, e->channels[e->fds[cs].channel].topic);
+    irc_reply(e, cs, RPL_TOPIC, e->channels[e->fds[cs].channel].channel,
+              e->channels[e->fds[cs].channel].topic);
 
     return (IRC_TOPIC);
 }
