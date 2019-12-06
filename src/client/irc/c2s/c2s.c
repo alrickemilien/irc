@@ -14,6 +14,7 @@ static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
         [IRC_WHOIS] = {"/whois", &c2s_whois},
         [IRC_LIST] = {"/list", &c2s_list},
         [IRC_TIME] = {"/time", &c2s_time},
+        [IRC_VERSION] = {"/version", &c2s_version},
 };
 
 /*

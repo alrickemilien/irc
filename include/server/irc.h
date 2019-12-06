@@ -11,6 +11,9 @@
 #include <irc.h>
 #include <server/options.h>
 
+#define IRC_SERVER_VERSION "1.0.0"
+#define IRC_SERVER_VERSION_COMMENT "Basic version IRC server @ 42"
+
 #define PIDFILE "./ircserver.pid"
 
 #define FD_FREE 0
@@ -64,6 +67,7 @@ typedef enum e_irc {
     IRC_TIME,
     IRC_PING,
     IRC_PONG,
+    IRC_VERSION,
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
 
@@ -90,6 +94,7 @@ int irc_list(t_env *e, int cs, t_token *tokens);
 int irc_time(t_env *e, int cs, t_token *tokens);
 int irc_ping(t_env *e, int cs, t_token *tokens);
 int irc_pong(t_env *e, int cs, t_token *tokens);
+int irc_version(t_env *e, int cs, t_token *tokens);
 int irc_reply(t_env *e, int cs, int code, ...);
 int irc_err(t_env *e, int cs, int code, ...);
 

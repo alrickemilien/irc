@@ -28,6 +28,7 @@ static const t_irc_reply g_replys[] = {
     {RPL_LIST, "RPL_LIST", "%s" /*"<channel> <# visible> :<topic>"*/},
     {RPL_LISTEND, "RPL_LISTEND", ":End of /LIST"},
     {RPL_TIME, "RPL_TIME", "%s: %s"},
+    {RPL_VERSION, "RPL_VERSION", "%s.%s %s :%s"},
 };
 
 int irc_reply(t_env *e, int cs, int code, ...)

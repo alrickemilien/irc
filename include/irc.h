@@ -170,6 +170,7 @@ enum e_irc_reply
     RPL_LIST = 322,
     RPL_LISTEND = 323,
     RPL_TOPIC = 332,
+    RPL_VERSION = 351,
     RPL_WHOREPLY = 352,
     RPL_NAMREPLY = 353,
     RPL_ENDOFNAMES = 366,

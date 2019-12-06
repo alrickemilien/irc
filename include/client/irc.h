@@ -58,6 +58,7 @@ typedef enum    e_irc {
     IRC_WHOIS,
     IRC_LIST,
     IRC_TIME,
+    IRC_VERSION,
     IRC_COMMANDS_NUMBER
 }               t_irc_enum;
 
@@ -83,6 +84,7 @@ typedef enum    e_irc_s2c {
     IRC_S2C_NOTICE,
     IRC_S2C_RPL_TIME,
     IRC_S2C_PING,
+    IRC_S2C_RPL_VERSION,
     IRC_S2C_COMMANDS_NUMBER,
 }               t_irc_s2c;
 
@@ -127,6 +129,7 @@ int             c2s_leave(t_env *e, t_token *tokens);
 int             c2s_whois(t_env *e, t_token *tokens);
 int             c2s_list(t_env *e, t_token *tokens);
 int             c2s_time(t_env *e, t_token *tokens);
+int             c2s_version(t_env *e, t_token *tokens);
 
 int             _c2s_nick(t_env *e, const char *nick, size_t nick_length);
 int             _c2s_pass(t_env *e, const char *password, size_t password_length);
@@ -163,6 +166,7 @@ int             s2c_rpl_list(t_env *e, t_token *tokens);
 int             s2c_notice(t_env *e, t_token *tokens);
 int             s2c_rpl_time(t_env *e, t_token *tokens);
 int             s2c_ping(t_env *e, t_token *tokens);
+int             s2c_rpl_version(t_env *e, t_token *tokens);
 
 int             irc_error(t_env *e, int err_code, ...);
 
