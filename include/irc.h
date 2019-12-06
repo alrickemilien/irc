@@ -65,6 +65,7 @@ int logdebug(const char *fmt, ...);
 */
 
 #define BUF_SIZE 4096
+#define PORTSTRSIZE 5
 #define CHANNELSTRSIZE 200
 #define NICKNAMESTRSIZE 9
 #define HOSTNAMESTRSIZE NI_MAXHOST

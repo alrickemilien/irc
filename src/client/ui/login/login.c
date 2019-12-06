@@ -24,6 +24,41 @@ int ui_clear_login_window(t_ui_login *ui)
     return (0);
 }
 
+static void ui_login_connect_fetch_entrys(t_ui_login *ui)
+{
+    // Set entrys
+    ui->host_entry =
+        GTK_WIDGET(gtk_builder_get_object(ui->builder, "entry_host"));
+    ui->port_entry =
+        GTK_WIDGET(gtk_builder_get_object(ui->builder, "entry_port"));
+    ui->username_entry =
+        GTK_WIDGET(gtk_builder_get_object(ui->builder, "entry_name"));
+    ui->pass_entry =
+        GTK_WIDGET(gtk_builder_get_object(ui->builder, "entry_pass"));
+    ui->nick_entry =
+        GTK_WIDGET(gtk_builder_get_object(ui->builder, "entry_nick"));
+}
+
+static int ui_init_login_window_credentials_entrys(t_env *e, t_ui_login *ui)
+{
+    char   portstr[PORTSTRSIZE];
+    size_t port_len;
+
+    if (e->options.port != 0)
+    {
+        if ((port_len = i64toa(e->options.port, portstr, PORTSTRSIZE, 10)) ==
+            (size_t)-1)
+            (logerror("ui_init_login_window_credentials::i64toa"));
+        else
+            gtk_entry_set_text(GTK_ENTRY(ui->port_entry), portstr);
+    }
+
+    if (e->options.host[0] != 0)
+        gtk_entry_set_text(GTK_ENTRY(ui->host_entry), e->options.host);
+
+    return (0);
+}
+
 int ui_init_login_window(t_env *e, t_ui_login *ui)
 {
     GtkCssProvider *css;
@@ -59,6 +94,10 @@ int ui_init_login_window(t_env *e, t_ui_login *ui)
     g_object_unref(G_OBJECT(css));
     ui->window_color = gtk_new_rgba(1, 1, 1, 0.96);
     gtk_set_transparent_window(ui->window, ui->window_color);
+
+    ui_login_connect_fetch_entrys(ui);
+
+    ui_init_login_window_credentials_entrys(e, ui);
 
     gtk_widget_show_all(ui->window);
 
