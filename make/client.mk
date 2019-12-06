@@ -52,6 +52,7 @@ CLIENT_SRC+=src/client/irc/s2c/s2c.c \
 			src/client/irc/s2c/s2c_rpl_away.c \
 			src/client/irc/s2c/s2c_rpl_list.c \
 			src/client/irc/s2c/s2c_rpl_time.c \
+			src/client/irc/s2c/s2c_ping.c \
 			src/client/irc/s2c/s2c_rpl_welcome.c
 
 # irc error

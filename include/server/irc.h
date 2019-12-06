@@ -62,6 +62,8 @@ typedef enum e_irc {
     IRC_NOTICE,
     IRC_LIST,
     IRC_TIME,
+    IRC_PING,
+    IRC_PONG,
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
 
@@ -86,6 +88,8 @@ int irc_whois(t_env *e, int cs, t_token *tokens);
 int irc_who(t_env *e, int cs, t_token *tokens);
 int irc_list(t_env *e, int cs, t_token *tokens);
 int irc_time(t_env *e, int cs, t_token *tokens);
+int irc_ping(t_env *e, int cs, t_token *tokens);
+int irc_pong(t_env *e, int cs, t_token *tokens);
 int irc_reply(t_env *e, int cs, int code, ...);
 int irc_err(t_env *e, int cs, int code, ...);
 
@@ -95,6 +99,7 @@ void irc_privmsg_nomatch_nick(t_env *  e,
                               t_token *subtokens,
                               size_t   subtoken_count);
 
+int ping(t_env *e, int cs);
 void broadcast(t_env *e, const char *msg, int type, size_t cs);
 void broadcast_all_in_channel(t_env *     e,
                               const char *msg,

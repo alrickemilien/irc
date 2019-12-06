@@ -72,7 +72,10 @@ int logdebug(const char *fmt, ...);
 #define PASSWDTRSIZE 512
 #define MAXMSGSIZE 512
 #define IRC_DEFAULT_SERVER_PORT 5555
-#define MAX_TOLERATED_INACTIVITY_TIME_MS 7200
+
+#define PING_INTERVAL_S 1
+#define TOLERATED_INACTIVITY_TIME_S 1800
+#define MAX_TOLERATED_INACTIVITY_TIME_S 7200
 
 /*
 ** Tokenize
@@ -133,6 +136,7 @@ typedef struct s_fd
     int    registered;
     int    away;
     long   last_activity;
+    long   last_ping_activity;
     void * ssl;
 } t_fd;
 
@@ -172,6 +176,7 @@ enum e_irc_reply
     ERR_NOSUCHNICK = 401,
     ERR_NOSUCHSERVER = 402,
     ERR_NOSUCHCHANNEL = 403,
+    ERR_NOORIGIN = 409,
     ERR_NOTEXTTOSEND = 412,
     ERR_NONICKNAMEGIVEN = 431,
     ERR_ERRONEUSNICKNAME = 432,
