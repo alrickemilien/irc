@@ -21,7 +21,11 @@
 #define FD_CLIENT 2
 
 #define DEFAULT_CHANNEL "&hub"
-#define DEFAULT_NICKNAME "Ben_AFK"
+
+#define PING_INTERVAL_S 1
+#define TOLERATED_INACTIVITY_TIME_S 1800
+#define MAX_TOLERATED_INACTIVITY_TIME_S 7200
+
 
 typedef struct s_env
 {
@@ -111,6 +115,7 @@ void irc_privmsg_nomatch_nick(t_env *  e,
 
 int ping(t_env *e, int cs);
 void broadcast(t_env *e, const char *msg, int type, size_t cs);
+void broadcast_all(t_env *e, const char *msg, int msg_type, size_t cs);
 void broadcast_all_in_channel(t_env *     e,
                               const char *msg,
                               int         msg_type,

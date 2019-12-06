@@ -32,9 +32,7 @@ int _c2s_topic(t_fd *fd, const char *chan, size_t chan_len, const char *msg)
 int c2s_topic(t_env *e, t_token *tokens)
 {
     if (e->sock == -1)
-        return logerror(
-            "You need to be logged in before any command. Use "
-            "/connect [server] ?[port]");
+         return (irc_error(e, ERR_NOT_CONNECTED));
 
     if (c2s_topic_check_command(e, tokens) < 0)
         return (-1);

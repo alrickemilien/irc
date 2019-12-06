@@ -64,7 +64,7 @@ int logdebug(const char *fmt, ...);
 ** IRC specific
 */
 
-#define BUF_SIZE 4096
+// #define BUF_SIZE 4096
 #define PORTSTRSIZE 5
 #define CHANNELSTRSIZE 200
 #define NICKNAMESTRSIZE 9
@@ -74,10 +74,7 @@ int logdebug(const char *fmt, ...);
 #define MAXMSGSIZE 512
 #define TOPICSTRSIZE 504
 #define IRC_DEFAULT_SERVER_PORT 5555
-
-#define PING_INTERVAL_S 1
-#define TOLERATED_INACTIVITY_TIME_S 1800
-#define MAX_TOLERATED_INACTIVITY_TIME_S 7200
+#define AWAYMSGSIZE 505
 
 /*
 ** Tokenize
@@ -133,7 +130,7 @@ typedef struct s_fd
     char   username[USERNAMESTRSIZE + 1];
     char   realname[USERNAMESTRSIZE + 1];
     char   passwd[PASSWDTRSIZE + 1];
-    char   awaymessage[BUF_SIZE + 1];
+    char   awaymessage[AWAYMSGSIZE + 1];
     char   channelname[CHANNELSTRSIZE + 1];
     int    registered;
     int    away;
