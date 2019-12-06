@@ -48,6 +48,7 @@ typedef struct          s_ui_panel {
     char                *error_image;
     char                *info_image;
     char                *rpl_away_image;
+    char                *invite_image;
 
     int                 msg_count;
 
@@ -60,6 +61,7 @@ typedef enum            e_ui_msg_type {
     UI_ERROR_MSG,
     UI_INFO_MSG,
     UI_AWAY_MSG,
+    UI_INVITE_MSG,
 }                       t_ui_msg_type;
 
 int                     ui_init_panel(t_env *e, t_ui_panel *ui);
@@ -85,19 +87,22 @@ int                     ui_names(t_ui_panel *ui, const char *msg);
 
 void                    ui_push_chat_message(t_ui_panel *ui,
                           t_ui_chat_msg_bloc *bloc,
-                          const char *        msg);
+                          const char *msg);
 void                    ui_push_topic_message(t_ui_panel *ui,
                            t_ui_chat_msg_bloc *bloc,
-                           const char *        msg);
+                           const char *msg);
 void                    ui_push_error_message(t_ui_panel *ui,
                            t_ui_chat_msg_bloc *bloc,
-                           const char *        msg);
+                           const char *msg);
 void                    ui_push_info_message(t_ui_panel *ui,
                           t_ui_chat_msg_bloc *bloc,
-                          const char *        msg);
+                          const char *msg);
 void                    ui_push_away_message(t_ui_panel *ui,
                           t_ui_chat_msg_bloc *bloc,
-                          const char *        msg);
+                          const char *msg);
+void                    ui_push_invite_message(t_ui_panel *ui,
+                           t_ui_chat_msg_bloc *bloc,
+                           const char *msg);
 
 /*
 * utils

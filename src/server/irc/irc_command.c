@@ -18,6 +18,7 @@ static const t_irc_cmd g_irc_commands[IRC_COMMANDS_NUMBER] = {
     [IRC_PING] = {"PING", &irc_ping},
     [IRC_PONG] = {"PONG", &irc_pong},
     [IRC_VERSION] = {"VERSION", &irc_version},
+    [IRC_INVITE] = {"INVITE", &irc_invite},
 };
 
 int irc_command(t_env *e, int cs, size_t end_command_index)

@@ -51,6 +51,7 @@ SERVER_SRC+=src/server/irc/irc_command.c \
 			src/server/irc/irc_ping.c \
 			src/server/irc/ping.c \
 			src/server/irc/irc_pong.c \
+			src/server/irc/irc_invite.c \
 			src/server/irc/irc_version.c \
 			src/server/irc/irc_privmsg.c
 

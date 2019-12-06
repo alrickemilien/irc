@@ -24,6 +24,8 @@ static const t_irc_cmd g_s2c_replys[IRC_S2C_COMMANDS_NUMBER] = {
     [IRC_S2C_RPL_TIME] = {"RPL_TIME", &s2c_rpl_time},
     [IRC_S2C_PING] = {"PING", &s2c_ping},
     [IRC_S2C_RPL_VERSION] = {"RPL_VERSION", &s2c_rpl_version},
+    [IRC_S2C_RPL_INVITING] = {"RPL_INVITING", &s2c_rpl_inviting},
+    [IRC_S2C_INVITE] = {"INVITE", &s2c_invite},
 };
 
 int s2c(t_env *e, char *buffer)

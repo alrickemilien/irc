@@ -37,6 +37,9 @@ static int ui_init_panel_assets(t_env *e, t_ui_panel *ui)
         gtk_get_assets(e->argv_0, "/ui/assets/icons8-info-carré-16.png");
     ui->rpl_away_image =
         gtk_get_assets(e->argv_0, "/ui/assets/icons8-dormir-16.png");
+    ui->invite_image =
+        gtk_get_assets(e->argv_0, "/ui/assets/icons8-importer-24.png");
+
     return (0);
 }
 

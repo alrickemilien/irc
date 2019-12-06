@@ -68,6 +68,7 @@ typedef enum e_irc {
     IRC_PING,
     IRC_PONG,
     IRC_VERSION,
+    IRC_INVITE,
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
 
@@ -95,6 +96,7 @@ int irc_time(t_env *e, int cs, t_token *tokens);
 int irc_ping(t_env *e, int cs, t_token *tokens);
 int irc_pong(t_env *e, int cs, t_token *tokens);
 int irc_version(t_env *e, int cs, t_token *tokens);
+int irc_invite(t_env *e, int cs, t_token *tokens);
 int irc_reply(t_env *e, int cs, int code, ...);
 int irc_err(t_env *e, int cs, int code, ...);
 

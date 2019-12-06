@@ -53,6 +53,9 @@ static void ui_message_dispatch(t_ui_panel *        ui,
         case UI_AWAY_MSG:
             ui_push_away_message(ui, bloc, msg);
             break;
+        case UI_INVITE_MSG:
+            ui_push_invite_message(ui, bloc, msg);
+            break;
         default:
             break;
     }
