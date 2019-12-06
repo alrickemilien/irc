@@ -86,6 +86,10 @@ int irc_join(t_env *e, int cs, t_token *tokens)
     else
         irc_reply(e, cs, RPL_NOTOPIC, e->channels[e->fds[cs].channel].channel);
 
+    // When the user is the first on the channel, set the user an chop
+    if (e->channels[i].clients == 0)
+        e->channels[i].chop = cs;
+
     e->channels[i].clients++;
 
     return (IRC_JOIN);

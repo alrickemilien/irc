@@ -2,20 +2,26 @@
 
 static int irc_invite_check_command(t_env *e, int cs, const t_token *tokens)
 {
+    const char *cs_channel;
+
     // Check all parameters are available
     if (!tokens[1].addr || !tokens[2].addr)
         return (irc_err(e, cs, ERR_NEEDMOREPARAMS, NULL));
+
+    cs_channel = e->channels[e->fds[cs].channel].channel;
 
     // Check valid nickname
     if (!tokens[1].len)
         return (irc_err(e, cs, ERR_NOSUCHNICK, NULL));
 
     // Check valid channel and channel match user one
-    if (strncmp(e->channels[e->fds[cs].channel].channel, tokens[2].addr,
-                tokens[2].len) != 0 ||
-        e->channels[e->fds[cs].channel].channel[tokens[2].len] != 0)
-        return (irc_err(e, cs, ERR_NOSUCHCHANNEL,
-                        e->channels[e->fds[cs].channel].channel));
+    if (strncmp(cs_channel, tokens[2].addr, tokens[2].len) != 0 ||
+        cs_channel[tokens[2].len] != 0)
+        return (irc_err(e, cs, ERR_NOSUCHCHANNEL, cs_channel));
+
+    // Wheck channel operator
+    else if (e->channels[e->fds[cs].channel].chop != cs)
+        return (irc_err(e, cs, ERR_CHANOPRIVSNEEDED, cs_channel));
     return (0);
 }
 

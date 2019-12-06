@@ -17,11 +17,6 @@ void broadcast(t_env *e, const char *msg, int msg_type, size_t cs)
     }
 }
 
-void broadcast_others(t_env *e, const char *msg, int msg_type, size_t cs)
-{
-    broadcast(e, msg, msg_type, cs);
-}
-
 void broadcast_all_in_channel(t_env *     e,
                               const char *msg,
                               int         msg_type,

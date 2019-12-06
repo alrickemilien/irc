@@ -55,10 +55,10 @@ int irc_nick(t_env *e, int cs, t_token *tokens)
 
     memrpl(e->fds[cs].nickname, NICKNAMESTRSIZE, tokens[1].addr, tokens[1].len);
 
-    // When nickname is not set
+    // When username is not set
     if (e->fds[cs].username[0] == 0)
     {
-        logdebug("irc_nick::When nickname is not set");
+        logdebug("irc_nick::When username is not set");
 
         return (IRC_NICK);
     }

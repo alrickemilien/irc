@@ -32,6 +32,8 @@ static const t_irc_reply g_replys[] = {
     {ERR_USERONCHANNEL, "ERR_USERONCHANNEL", "%s %s :is already on channel"},
     {RPL_INVITING, "RPL_INVITING", "%s %s"},
     {RPL_NOTOPIC, "RPL_NOTOPIC", "%s :No topic is set"},
+    {ERR_CHANOPRIVSNEEDED, "ERR_CHANOPRIVSNEEDED",
+     "%s :You're not channel operator"},
 };
 
 int irc_reply(t_env *e, int cs, int code, ...)
@@ -53,6 +55,41 @@ int irc_reply(t_env *e, int cs, int code, ...)
         }
         i++;
     }
+
+    return (-1);
+}
+
+int irc_reply_all_in_channel(t_env *e, int cs, int code, ...)
+{
+    size_t  i;
+    char    msg[512];
+    va_list ap;
+
+    i = 0;
+    while (i < sizeof(g_replys) / sizeof(t_irc_reply))
+    {
+        if (g_replys[i].code == code)
+        {
+            sprintf(msg, "%s %s\x0D\x0A", g_replys[i].name, g_replys[i].fmt);
+            va_start(ap, code);
+            break;
+        }
+        i++;
+    }
+
+    if (i == sizeof(g_replys) / sizeof(t_irc_reply))
+        return (-1);
+
+    i = 0;
+    while (i <= e->max)
+    {
+        if (e->fds[i].type == FD_CLIENT &&
+            e->fds[i].channel == e->fds[cs].channel)
+            cbuffer_putvcmd(&e->fds[cs].buf_write, msg, ap);
+        i++;
+    }
+
+    va_end(ap);
 
     return (-1);
 }

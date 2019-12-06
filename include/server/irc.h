@@ -100,6 +100,7 @@ int irc_version(t_env *e, int cs, t_token *tokens);
 int irc_invite(t_env *e, int cs, t_token *tokens);
 int irc_topic(t_env *e, int cs, t_token *tokens);
 int irc_reply(t_env *e, int cs, int code, ...);
+int irc_reply_all_in_channel(t_env *e, int cs, int code, ...);
 int irc_err(t_env *e, int cs, int code, ...);
 
 void irc_user_join_default_channel(t_env *e, int cs);

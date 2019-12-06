@@ -12,9 +12,7 @@ static int irc_topic_check_command(t_env *e, int cs, const t_token *tokens)
     channel_len = tokens[1].len;
 
     // When invalid channel
-    if (strpbrk(channel, "\x07\x2C"))
-        return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
-    else if (channel_len - 1 > CHANNELSTRSIZE)
+    if (channel_len - 1 > CHANNELSTRSIZE)
         return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
     else if (!is_valid_chan_name(channel, channel_len))
         return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
@@ -27,13 +25,14 @@ static int irc_topic_check_command(t_env *e, int cs, const t_token *tokens)
              e->channels[e->fds[cs].channel].channel[channel_len] != 0)
         return (irc_err(e, cs, ERR_NOTONCHANNEL, channel));
 
+    else if (e->channels[e->fds[cs].channel].chop != cs)
+        return (irc_err(e, cs, ERR_CHANOPRIVSNEEDED, channel));
+
     return (0);
 }
 
 int irc_topic(t_env *e, int cs, t_token *tokens)
 {
-    loginfo("irc_topic:: %s", tokens[0].addr);
-
     if (irc_topic_check_command(e, cs, tokens) < 0)
         return (-1);
 
@@ -48,8 +47,9 @@ int irc_topic(t_env *e, int cs, t_token *tokens)
                tokens[2].addr[0] == ':' ? tokens[2].addr + 1 : tokens[2].addr,
                tokens[2].addr[0] == ':' ? tokens[2].len - 1 : tokens[2].len);
 
-    irc_reply(e, cs, RPL_TOPIC, e->channels[e->fds[cs].channel].channel,
-              e->channels[e->fds[cs].channel].topic);
+    irc_reply_all_in_channel(e, cs, RPL_TOPIC,
+                             e->channels[e->fds[cs].channel].channel,
+                             e->channels[e->fds[cs].channel].topic);
 
     return (IRC_TOPIC);
 }

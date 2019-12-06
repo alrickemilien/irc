@@ -191,6 +191,7 @@ enum e_irc_reply
     ERR_USERONCHANNEL = 443,
     ERR_NEEDMOREPARAMS = 461,
     ERR_ALREADYREGISTRED = 462,
+    ERR_CHANOPRIVSNEEDED = 482,
 };
 
 typedef struct s_irc_reply

@@ -7,8 +7,6 @@ int irc_list(t_env *e, int cs, t_token *tokens)
     size_t  subtoken_count;
     t_token subtokens[30];
 
-    logdebug("irc_list::");
-
     irc_reply(e, cs, RPL_LISTSTART, NULL);
 
     // When no channel provided
