@@ -62,7 +62,11 @@ static void ui_message_dispatch(t_ui_panel *        ui,
             break;
     }
 
+    logdebug("ici");
+
     gtk_list_box_insert(GTK_LIST_BOX(bloc->box), w, -1);
+    logdebug("la");
+
     bloc->count++;
 }
 
@@ -88,6 +92,7 @@ void ui_new_message(t_ui_panel *ui, const char *msg, int type)
     // When bloc msg list is full
     if (i < UI_CHAT_BOX_BLOC_MAX && ch->chat_msg_bloc_list[i].box == NULL)
     {
+        logdebug("ui_new_message :: A");
         ch->chat_msg_bloc_list[i].box = gtk_list_box_new();
         gtk_set_class(ch->chat_msg_bloc_list[i].box, "chat-message-box");
         ch->chat_msg_bloc_list[i].count = 0;
@@ -98,6 +103,7 @@ void ui_new_message(t_ui_panel *ui, const char *msg, int type)
     }
     else if (i == UI_CHAT_BOX_BLOC_MAX)
     {
+        logdebug("ui_new_message :: B");
         // Delete first element
         children = gtk_container_get_children(GTK_CONTAINER(ch->chat_box));
         gtk_widget_destroy(GTK_WIDGET(children->data));
@@ -122,6 +128,8 @@ void ui_new_message(t_ui_panel *ui, const char *msg, int type)
     }
     else
     {
+        logdebug("ui_new_message :: C");
+
         bloc = &ch->chat_msg_bloc_list[i];
     }
 

@@ -83,6 +83,9 @@ int ui_join(t_ui_panel *ui, const char *channel)
 {
     int index;
 
+    logdebug("ui_join :: ui->channel_index :: before :: %ld",
+             ui->channel_index);
+
     ui_set_channel_name(ui, channel);
 
     index = ui_join_channels_index_of(ui, channel, strlen(channel));
@@ -90,6 +93,9 @@ int ui_join(t_ui_panel *ui, const char *channel)
     // When it already exists, just set the index to the selected one
     if (index != -1)
     {
+        logdebug("ui_join :: index :: %ld", index);
+        logdebug("ui_join :: channel :: %s", channel);
+
         if (ui->channel_index == index)
             return (0);
         gtk_container_remove(GTK_CONTAINER(ui->chat_box_viewport),
@@ -107,7 +113,7 @@ int ui_join(t_ui_panel *ui, const char *channel)
 
     insert_channel_left_panel(ui, channel);
 
-    // create the chatbox viewport
+    // remove previous the chatbox viewport
     if (ui->channel_index != -1)
         gtk_container_remove(GTK_CONTAINER(ui->chat_box_viewport),
                              ui->channels[ui->channel_index].chat_box);
@@ -118,8 +124,12 @@ int ui_join(t_ui_panel *ui, const char *channel)
                       ui->channels[ui->channel_index].chat_box);
     g_object_ref(ui->channels[ui->channel_index].chat_box);
     strcpy(ui->channels[ui->channel_index].label, channel);
+    memset(ui->channels[ui->channel_index].chat_msg_bloc_list, 0,
+           sizeof(ui->channels[ui->channel_index].chat_msg_bloc_list));
 
     ui->channels_count++;
+
+    logdebug("ui_join :: ui->channel_index :: after :: %ld", ui->channel_index);
 
     return (0);
 }
