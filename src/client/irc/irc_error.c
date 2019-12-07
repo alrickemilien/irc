@@ -37,12 +37,13 @@ static int prefix_error(char *error_msg)
 int irc_error(t_env *e, int err_code, ...)
 {
     size_t  i;
+    size_t  prefix_length;
     char    error_msg[LOGSIZE + 1];
     va_list ap;
 
     memset(error_msg, 0, sizeof(error_msg));
 
-    prefix_error(error_msg);
+    prefix_length = prefix_error(error_msg);
 
     i = 0;
     while (g_s2c_error[i].id)
@@ -51,10 +52,11 @@ int irc_error(t_env *e, int err_code, ...)
         {
             va_start(ap, err_code);
 
-            vsprintf(error_msg + strlen(error_msg), g_s2c_error[i].fmt, ap);
+            vsprintf(error_msg + prefix_length, g_s2c_error[i].fmt, ap);
 
             if (e->options.gui)
-                ui_new_message(e->ui, error_msg, UI_ERROR_MSG);
+                ui_new_message(e->ui, error_msg + prefix_length, UI_ERROR_MSG);
+
 
             printf("%s\n", error_msg);
 

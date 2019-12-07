@@ -50,6 +50,9 @@ int s2c_rpl_listend(t_env *e, t_token *tokens)
 
     s2c_rpl_listrply_state = 0;
 
+    if (strlen(s2c_rpl_listrply_buffer) == 0)
+        return (IRC_S2C_RPL_LISTEND);
+
     loginfo(s2c_rpl_listrply_buffer);
 
     if (e->options.gui)
