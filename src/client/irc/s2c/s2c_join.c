@@ -12,9 +12,7 @@ static int s2c_join_check_command(t_env *e, const t_token *tokens)
     channel = tokens[2].addr;
     channel_len = tokens[2].len;
 
-    if (strpbrk(channel, "\x07\x2C"))
-        return (irc_error(e, ERR_NOSUCHCHANNEL, channel));
-    else if (channel_len - 1 > CHANNELSTRSIZE)
+    if (channel_len - 1 > CHANNELSTRSIZE)
         return (irc_error(e, ERR_NOSUCHCHANNEL, channel));
     else if (!is_valid_chan_name(channel, channel_len))
         return (irc_error(e, ERR_NOSUCHCHANNEL, channel));

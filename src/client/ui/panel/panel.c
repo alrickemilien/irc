@@ -53,7 +53,8 @@ static int ui_init_panel_window(t_ui_panel *ui)
     g_signal_connect(ui->window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
     ui->window_color =
         gtk_new_rgba(163.0f / 255.0f, 88.0f / 255.0f, 136.0f / 255.0f, 0.96);
-    gtk_set_transparent_window(ui->window, ui->window_color);
+    if (ui->window_color != NULL)
+        gtk_set_transparent_window(ui->window, ui->window_color);
     return (0);
 }
 

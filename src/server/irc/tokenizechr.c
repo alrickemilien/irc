@@ -1,5 +1,5 @@
 #include <irc.h>
-#include <string.h>
+#include <server/irc.h>
 
 size_t tokenizechr(char *str, t_token *tokens, size_t len, int c)
 {

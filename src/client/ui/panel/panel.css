@@ -11,7 +11,7 @@
 
 #nickname_label {
     color: #fdfdfd;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 /***
@@ -22,6 +22,12 @@
  *    ╚██████╗██║  ██║██║  ██║██║ ╚████║██║ ╚████║███████╗███████╗███████║
  *     ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝╚══════╝╚══════╝
  */
+
+#channels_list_title {
+    color: #fdfdfd;
+    font-size: 14px;
+    padding-left: 15px;
+}
 
 #channels_box {
     background-color: transparent;
@@ -40,7 +46,7 @@
 .channels-box-item GtkLabel {
     font-weight: bold;
     color: #fdfdfd;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .channels-box-item:hover {

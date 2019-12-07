@@ -70,7 +70,8 @@ static int ui_init_login_window(t_ui_login *ui)
     g_signal_connect(ui->window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
     ui->window_color = gtk_new_rgba(1, 1, 1, 0.96);
-    gtk_set_transparent_window(ui->window, ui->window_color);
+    if (ui->window_color != NULL)
+        gtk_set_transparent_window(ui->window, ui->window_color);
 
     // Set login button event
     ui->button_go =

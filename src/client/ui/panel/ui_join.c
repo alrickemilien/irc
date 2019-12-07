@@ -76,6 +76,7 @@ void insert_channel_left_panel(t_ui_panel *ui, const char *channel)
     g_signal_connect(w, "clicked", G_CALLBACK(ui_join_from_side_channel), ui);
     gtk_list_box_insert(GTK_LIST_BOX(ui->channels_box), w, -1);
     gtk_widget_show_all(ui->channels_box);
+    gtk_set_cursor_style(w, "pointer");
 }
 
 int ui_join(t_ui_panel *ui, const char *channel)

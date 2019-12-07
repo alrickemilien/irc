@@ -28,7 +28,7 @@ static int is_eow(const char *buffer, size_t len)
     return (buffer[len] == ' ' || buffer[len] == '\n' || buffer[len] == 0);
 }
 
-int c2s(t_env *e, char *buffer)
+int c2s(t_env *e, const char *buffer)
 {
     size_t  i;
     t_token tokens[30];

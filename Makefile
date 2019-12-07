@@ -19,6 +19,10 @@ endif
 OPENSSL_CFLAGS=$(shell pkg-config --cflags openssl)
 OPENSSL_LIBS=$(shell pkg-config --libs openssl)
 
+ifeq ($(DEBUG),false)
+DEBUG=-D DEBUG=0
+endif
+
 include make/server.mk
 include make/client.mk
 include make/po.mk

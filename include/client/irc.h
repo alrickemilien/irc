@@ -42,6 +42,19 @@ typedef struct  s_env
 }               t_env;
 
 /*
+** Tokenize
+*/
+
+typedef struct s_token
+{
+    const char  *addr;
+    size_t      len;
+} t_token;
+
+size_t tokenize(const char *str, t_token *tokens, size_t len);
+size_t tokenizechr(const char *str, t_token *tokens, size_t len, int c);
+
+/*
 ** irc sepcific to server
 */
 
@@ -99,7 +112,8 @@ typedef enum    e_irc_s2c {
 
 typedef enum    e_irc_reply_client {
     ERR_UNRECOGNIZED_COMMAND = 1001,
-    ERR_NOT_CONNECTED = 1002,
+    ERR_NOT_CONNECTED,
+    ERR_NICK_BAD_FORMAT,
 }               t_irc_reply_client;
 
 typedef struct  s_irc_cmd
@@ -121,7 +135,7 @@ typedef struct  s_s2c_error
 int             init_i18n(const char *bin_path);
 int             gui(t_env *e, int argc, char **argv);
 
-int             c2s(t_env *e, char *buffer);
+int             c2s(t_env *e, const char *buffer);
 int             c2s_join(t_env *e, t_token *tokens);
 int             c2s_msg(t_env *e, t_token *tokens);
 int             c2s_connect(t_env *e, t_token *tokens);

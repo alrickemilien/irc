@@ -78,7 +78,6 @@ CLIENT_SRC+=src/cbuffer/cbuffer.c \
 CLIENT_SRC+=src/utils/log.c \
 			src/utils/ato32.c \
 			src/utils/extract_folder_from_path.c \
-			src/utils/merge_and_extract_folder_from_path.c \
 			src/utils/strjoin.c \
 			src/utils/i64toa.c \
 			src/utils/memrpl.c \
@@ -97,6 +96,7 @@ CLIENT_SRC+=src/client/ui/gtk_builder_load.c \
 			src/client/ui/gtk_provider_load_css.c \
 			src/client/ui/gtk_set_class.c \
 			src/client/ui/gtk_new_rgba.c \
+			src/client/ui/gtk_set_cursor_style.c \
 			src/client/ui/ui_utils.c \
 			src/client/ui/gtk_get_assets.c
 
