@@ -85,24 +85,12 @@ int                     ui_names(t_ui_panel *ui, const char *msg);
 * Chat messages
 */
 
-void                    ui_push_chat_message(t_ui_panel *ui,
-                          t_ui_chat_msg_bloc *bloc,
-                          const char *msg);
-void                    ui_push_topic_message(t_ui_panel *ui,
-                           t_ui_chat_msg_bloc *bloc,
-                           const char *msg);
-void                    ui_push_error_message(t_ui_panel *ui,
-                           t_ui_chat_msg_bloc *bloc,
-                           const char *msg);
-void                    ui_push_info_message(t_ui_panel *ui,
-                          t_ui_chat_msg_bloc *bloc,
-                          const char *msg);
-void                    ui_push_away_message(t_ui_panel *ui,
-                          t_ui_chat_msg_bloc *bloc,
-                          const char *msg);
-void                    ui_push_invite_message(t_ui_panel *ui,
-                           t_ui_chat_msg_bloc *bloc,
-                           const char *msg);
+GtkWidget                *ui_new_chat_message(t_ui_panel *ui, const char *msg);
+GtkWidget                *ui_new_topic_message(t_ui_panel *ui, const char *msg);
+GtkWidget                *ui_new_error_message(t_ui_panel *ui, const char *msg);
+GtkWidget                *ui_new_info_message(t_ui_panel *ui, const char *msg);
+GtkWidget                *ui_new_away_message(t_ui_panel *ui, const char *msg);
+GtkWidget                *ui_new_invite_message(t_ui_panel *ui, const char *msg);
 
 /*
 * utils

@@ -36,29 +36,34 @@ static void ui_message_dispatch(t_ui_panel *        ui,
                                 const char *        msg,
                                 int                 type)
 {
+    GtkWidget *w;
+
     switch (type)
     {
         case UI_CHAT_MSG:
-            ui_push_chat_message(ui, bloc, msg);
+            w = ui_new_chat_message(ui, msg);
             break;
         case UI_TOPIC_MSG:
-            ui_push_topic_message(ui, bloc, msg);
+            w = ui_new_topic_message(ui, msg);
             break;
         case UI_ERROR_MSG:
-            ui_push_error_message(ui, bloc, msg);
+            w = ui_new_error_message(ui, msg);
             break;
         case UI_INFO_MSG:
-            ui_push_info_message(ui, bloc, msg);
+            w = ui_new_info_message(ui, msg);
             break;
         case UI_AWAY_MSG:
-            ui_push_away_message(ui, bloc, msg);
+            w = ui_new_away_message(ui, msg);
             break;
         case UI_INVITE_MSG:
-            ui_push_invite_message(ui, bloc, msg);
+            w = ui_new_invite_message(ui, msg);
             break;
         default:
             break;
     }
+
+    gtk_list_box_insert(GTK_LIST_BOX(bloc->box), w, -1);
+    bloc->count++;
 }
 
 void ui_new_message(t_ui_panel *ui, const char *msg, int type)
