@@ -62,7 +62,7 @@ CLIENT_SRC+=src/client/irc/s2c/s2c.c \
 			src/client/irc/s2c/s2c_rpl_welcome.c
 
 # irc error
-CLIENT_SRC+=src/client/irc/error/irc_error.c
+CLIENT_SRC+=src/client/irc/irc_error.c
 
 # ssl
 CLIENT_SRC+=src/client/ssl.c

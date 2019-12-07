@@ -13,7 +13,8 @@ int s2c_rpl_welcome(t_env *e, t_token *tokens)
 
     e->self->registered = 1;
 
-    loginfo(tokens[1].addr[0] == ':' ? tokens[1].addr + 1 : tokens[1].addr);
+    loginfo("%s",
+            tokens[1].addr[0] == ':' ? tokens[1].addr + 1 : tokens[1].addr);
 
     if (e->options.gui)
     {

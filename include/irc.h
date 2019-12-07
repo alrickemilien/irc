@@ -58,7 +58,7 @@ bool is_valid_nick(const char *nick);
 #include <stdarg.h>
 #include <time.h>
 
-#define LOGSIZE 512
+#define LOGSIZE 1024
 
 int loginfo(const char *fmt, ...);
 int logerror(const char *fmt, ...);

@@ -39,7 +39,7 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
     $tmp_s->setsockopt(SOL_SOCKET, SO_RCVTIMEO, pack('l!l!', 10, 0));
 
     # All clients joining specific channel
-    $tmp_s->send("USER client_attack$i microsoft.com :Client Attack $i\x0D\x0ANICK client_attack_$i\x0D\x0A");
+    $tmp_s->send("USER client_attack$i microsoft.com :Client Attack $i\x0D\x0ANICK client_attack$i\x0D\x0A");
 
     push @s, $tmp_s
 }

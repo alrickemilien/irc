@@ -41,7 +41,7 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
 #
 
 for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
-    $s[$i]->send("NICK client_$i\x0D\x0AUSER e0r2p$i 42.fr :Client $i\x0D\x0AJOIN #meeting\x0D\x0A");
+    $s[$i]->send("NICK client$i\x0D\x0AUSER e0r2p$i 42.fr :Client $i\x0D\x0AJOIN #meeting\x0D\x0A");
 }
 sleep(2);
 

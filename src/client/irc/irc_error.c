@@ -11,17 +11,38 @@ static const t_s2c_error g_s2c_error[] = {
      "You need to be logged in before any command. Use "
      "/connect [server] ?[port]",
      NULL},
-     {ERR_NOORIGIN, ":No origin specified", NULL},
-    {ERR_NICK_BAD_FORMAT, "/nick command bad formatted" , NULL},
+    {ERR_NOORIGIN, ":No origin specified", NULL},
+    {ERR_NICK_BAD_FORMAT, "/nick command bad formatted", NULL},
     {ERR_UNRECOGNIZED_COMMAND, "Unrecognized command '%s'", NULL},
     {0, NULL, NULL},
 };
 
+static int prefix_error(char *error_msg)
+{
+    char       t[ISOTIMESTRSIZE];
+    static int is_tty = -1;
+
+    if (is_tty == -1)
+        is_tty = isatty(1);
+
+    time2iso(t);
+    return (sprintf(error_msg, is_tty ? "[%s] "
+                                        "\x1b[31m"
+                                        "ERROR: "
+                                        "\x1b[0m"
+                                      : "[%s] ERROR: ",
+                    t));
+}
+
 int irc_error(t_env *e, int err_code, ...)
 {
     size_t  i;
-    char    error_msg[512];
+    char    error_msg[LOGSIZE + 1];
     va_list ap;
+
+    memset(error_msg, 0, sizeof(error_msg));
+
+    prefix_error(error_msg);
 
     i = 0;
     while (g_s2c_error[i].id)
@@ -30,22 +51,14 @@ int irc_error(t_env *e, int err_code, ...)
         {
             va_start(ap, err_code);
 
-            printf("a\n");
-
-            vsprintf(error_msg, g_s2c_error[i].fmt, ap);
-            printf("b\n");
+            vsprintf(error_msg + strlen(error_msg), g_s2c_error[i].fmt, ap);
 
             if (e->options.gui)
                 ui_new_message(e->ui, error_msg, UI_ERROR_MSG);
-            printf("c\n");
 
-            printf("error_msg: %s\n", error_msg);
-            
-            logerror(error_msg);
-            printf("d\n");
+            printf("%s\n", error_msg);
 
             va_end(ap);
-            printf("e\n");
 
             return (-1);
         }
