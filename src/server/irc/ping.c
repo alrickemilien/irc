@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ping.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/08 16:17:18 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/08 16:17:19 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <server/irc.h>
 
-int ping(t_env *e, int cs)
+int	ping(t_env *e, int cs)
 {
-    return (cbuffer_putcmd(&e->fds[cs].buf_write , "PING %s\x0D\x0A", e->fds[cs].nickname));
+	return (cbuffer_putcmd(&e->fds[cs].buf_write,
+			"PING %s\x0D\x0A", e->fds[cs].nickname));
 }

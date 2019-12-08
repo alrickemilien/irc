@@ -6,7 +6,7 @@
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 15:56:13 by aemilien          #+#    #+#             */
-/*   Updated: 2019/12/08 15:56:17 by aemilien         ###   ########.fr       */
+/*   Updated: 2019/12/08 16:16:46 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	irc_pong(t_env *e, int cs, t_token *tokens)
 {
-    (void)e;
-    (void)tokens;
-    (void)cs;
-    return (IRC_PONG);
+	(void)e;
+	(void)tokens;
+	(void)cs;
+	return (IRC_PONG);
 }
