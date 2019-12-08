@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ssl.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/08 14:15:36 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/08 14:38:04 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <netinet/in.h>
@@ -6,109 +18,57 @@
 #include <string.h>
 #include <sys/socket.h>
 
-// #define CACERT HOME "/ca.crt"
-
-static int ssl_server_error(void)
+static int	ssl_server_error(void)
 {
-    ERR_print_errors_fp(stderr);
-    return (-1);
+	ERR_print_errors_fp(stderr);
+	return (-1);
 }
 
-int ssl_init(t_env *e, const char *ssl_key_file, const char *ssl_crt_file)
+int			ssl_init(
+		t_env *e,
+		const char *ssl_key_file,
+		const char *ssl_crt_file)
 {
-    SSL_CTX *         ctx;
-    const SSL_METHOD *method;
+	SSL_CTX				*ctx;
+	const SSL_METHOD	*method;
 
-    logdebug("load_ssl::ssl_key_file:: %s",
-            ssl_key_file[0] ? ssl_key_file : KEYF);
-    logdebug("load_ssl::ssl_crt_file:: %s",
-            ssl_crt_file[0] ? ssl_crt_file : CERTF);
-
-    SSL_load_error_strings();
-
-    SSLeay_add_ssl_algorithms();
-
-    method = SSLv23_server_method();
-
-    ctx = SSL_CTX_new(method);
-
-    if (!ctx)
-        return (ssl_server_error());
-
-    // SSL_CTX_set_ecdh_auto(ctx, 1);
-    // SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
-    // SSL_CTX_load_verify_locations(ctx, CACERT, NULL);
-
-    if (SSL_CTX_use_certificate_file(
-            ctx, ssl_crt_file[0] ? ssl_crt_file : CERTF, SSL_FILETYPE_PEM) <= 0)
-        return (ssl_server_error());
-
-    if (SSL_CTX_use_PrivateKey_file(ctx, ssl_key_file[0] ? ssl_key_file : KEYF,
-                                    SSL_FILETYPE_PEM) <= 0)
-        return (ssl_server_error());
-
-    if (!SSL_CTX_check_private_key(ctx))
-        return logerror(
-            "Private key does not match the certificate public key");
-
-    e->ssl_ctx = ctx;
-
-    return (0);
+	logdebug("load_ssl::ssl_key_file:: %s",
+			ssl_key_file[0] ? ssl_key_file : KEYF);
+	logdebug("load_ssl::ssl_crt_file:: %s",
+			ssl_crt_file[0] ? ssl_crt_file : CERTF);
+	SSL_load_error_strings();
+	SSLeay_add_ssl_algorithms();
+	method = SSLv23_server_method();
+	ctx = SSL_CTX_new(method);
+	if (!ctx)
+		return (ssl_server_error());
+	if (SSL_CTX_use_certificate_file(
+		ctx, ssl_crt_file[0] ? ssl_crt_file : CERTF, SSL_FILETYPE_PEM) <= 0)
+		return (ssl_server_error());
+	if (SSL_CTX_use_PrivateKey_file(ctx, ssl_key_file[0] ? ssl_key_file : KEYF,
+				SSL_FILETYPE_PEM) <= 0)
+		return (ssl_server_error());
+	if (!SSL_CTX_check_private_key(ctx))
+		return (logerror("Private key not match crt public key"));
+	e->ssl_ctx = ctx;
+	return (0);
 }
 
-int ssl_on_connect(SSL_CTX *ctx, t_fd *fd, int cs)
+int			ssl_on_connect(
+		SSL_CTX *ctx,
+		t_fd *fd,
+		int cs)
 {
-    int   err;
-    X509 *client_cert;
-    char *str;
+	int		err;
+	X509	*crt;
 
-    /* ----------------------------------------------- */
-    /* TCP connection is ready. Do server side SSL. */
-    if ((fd->ssl = SSL_new(ctx)) == (void *)0)
-        return (ssl_server_error());
-
-    SSL_set_fd(fd->ssl, cs);
-
-    if ((err = SSL_accept(fd->ssl)) < 0)
-        return (ssl_server_error());
-
-    // Get the cipher - opt
-    logdebug("SSL connection using %s", SSL_get_cipher(fd->ssl));
-
-    // Get client's certificate (note: beware of dynamic allocation) - opt
-    client_cert = SSL_get_peer_certificate(fd->ssl);
-    if (client_cert != NULL)
-    {
-        logdebug("Client certificate:");
-
-        if ((str = X509_NAME_oneline(X509_get_subject_name(client_cert), 0,
-                                     0)) == (void *)0)
-        {
-            X509_free(client_cert);
-            return ssl_server_error();
-        }
-
-        logdebug("Subject: %s", str);
-        OPENSSL_free(str);
-
-        if ((str = X509_NAME_oneline(X509_get_issuer_name(client_cert), 0,
-                                     0)) == (void *)0)
-        {
-            X509_free(client_cert);
-            return ssl_server_error();
-        }
-        logdebug("Issuer: %s", str);
-        OPENSSL_free(str);
-
-        /* 
-        ** We could do all sorts of certificate verification stuff here before
-        ** deallocating the certificate.
-        */
-
-        X509_free(client_cert);
-    }
-    else
-        logdebug("Client does not have certificate.");
-
-    return (0);
+	if ((fd->ssl = SSL_new(ctx)) == (void *)0)
+		return (ssl_server_error());
+	SSL_set_fd(fd->ssl, cs);
+	if ((err = SSL_accept(fd->ssl)) < 0)
+		return (ssl_server_error());
+	if ((crt = SSL_get_peer_certificate(fd->ssl)) == NULL)
+		return (0);
+	X509_free(crt);
+	return (0);
 }
