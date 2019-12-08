@@ -20,21 +20,16 @@ int	server_ipv4(const t_options *options, t_env *e)
 	int					sock;
 	struct sockaddr_in	sin;
 	struct protoent		*pe;
-	int					reuseaddr;
-#ifdef __APPLE__
-	int					reuseport;
-#endif  // __APPLE__
+	const int			reuseaddr = 1;
+	const int			reuseport = 1;
 
 	if ((pe = (struct protoent *)getprotobyname("tcp")) == (void *)0)
 		return (logerrno("server_ipv4::getprotobyname"));
 	if ((sock = socket(PF_INET, SOCK_STREAM, pe->p_proto)) == -1)
 		return (logerrno("server_ipv4::socket"));
-	reuseaddr = 1;
 	setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &reuseaddr, sizeof(reuseaddr));
-#ifdef __APPLE__
-	reuseport = 1;
-	setsockopt(sock, SOL_SOCKET, SO_REUSEPORT, &reuseport, sizeof(reuseport));
-#endif  // __APPLE__
+	if (TARGET_OS_MAC)
+		setsockopt(sock, SOL_SOCKET, SO_REUSEPORT, &reuseport, sizeof(reuseport));
 	memset(&sin, 0, sizeof(struct sockaddr_in));
 	sin.sin_family = AF_INET;
 	sin.sin_addr.s_addr = INADDR_ANY;

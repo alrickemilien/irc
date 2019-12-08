@@ -18,23 +18,18 @@
 int	server_ipv6(const t_options *options, t_env *e)
 {
 	int					sock;
-	int					reuseaddr;
 	struct sockaddr_in6	sin;
 	struct protoent		*pe;
-#ifdef __APPLE__
-	int					reuseport;
-#endif  // __APPLE__
+	const int			reuseaddr = 1;
+	const int			reuseport = 1;
 
 	if ((pe = (struct protoent *)getprotobyname("tcp")) == (void *)0)
 		return (logerrno("server_ipv6::getprotobyname"));
 	if ((sock = socket(AF_INET6, SOCK_STREAM, pe->p_proto)) == -1)
 		return (logerrno("server_ipv6::socket"));
-	reuseaddr = 1;
 	setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &reuseaddr, sizeof(reuseaddr));
-#ifdef __APPLE__
-	reuseport = 1;
-	setsockopt(sock, SOL_SOCKET, SO_REUSEPORT, &reuseport, sizeof(reuseport));
-#endif  // __APPLE__
+	if (TARGET_OS_MAC)
+		setsockopt(sock, SOL_SOCKET, SO_REUSEPORT, &reuseport, sizeof(reuseport));
 	memset(&sin, 0, sizeof(sin));
 	sin.sin6_family = AF_INET6;
 	sin.sin6_addr = in6addr_any;

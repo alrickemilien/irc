@@ -35,6 +35,9 @@
 
 # ifdef __APPLE__
 #  define MSG_NOSIGNAL 0
+#  define TARGET_OS_MAC 1
+# else
+#  define TARGET_OS_MAC 0
 # endif
 
 # ifndef DEBUG
