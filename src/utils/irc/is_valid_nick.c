@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   is_valid_nick.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/08 13:21:06 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/08 13:21:07 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <ctype.h>
 #include <irc.h>
 
@@ -7,18 +19,18 @@
 ** <special>    ::= '-' | '[' | ']' | '\' | '`' | '^' | '{' | '}'
 */
 
-static const char *g_valid_nick_char = "-[]\x5C\x60^{}";
+static const char	*g_valid_nick_char = "-[]\x5C\x60^{}";
 
-bool is_valid_nick(const char *nick)
+bool				is_valid_nick(const char *nick)
 {
-    size_t i;
+	size_t	i;
 
-    i = 0;
-    while (nick[i] && nick[i] != '\x0D')
-    {
-        if (!isalnum(nick[i]) && !strchr(g_valid_nick_char, nick[i]))
-            return (false);
-        i++;
-    }
-    return (true);
+	i = 0;
+	while (nick[i] && nick[i] != '\x0D')
+	{
+		if (!isalnum(nick[i]) && !strchr(g_valid_nick_char, nick[i]))
+			return (false);
+		i++;
+	}
+	return (true);
 }

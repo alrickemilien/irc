@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   extract_folder_from_path.c                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/08 13:20:54 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/08 13:20:57 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "irc.h"
 #include <stdio.h>
 #include <string.h>
@@ -49,7 +61,7 @@ static const char	*loc_dirname(const char *path)
 	return (buffer);
 }
 
-char			*extract_folder_from_path(
+char				*extract_folder_from_path(
 		const char *path)
 {
 	return (strdup(loc_dirname(path)));

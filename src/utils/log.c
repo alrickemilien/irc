@@ -1,21 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   log.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/08 13:17:59 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/08 13:18:00 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <errno.h>
 #include <irc.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
 
-static int is_tty = -1;
+static int	g_is_tty = -1;
 
-int		loginfo(const char *fmt, ...)
+int			loginfo(const char *fmt, ...)
 {
 	va_list	ap;
 	char	final_fmt[LOGSIZE + 1];
 	char	t[ISOTIMESTRSIZE];
 
-	if (is_tty == -1)
-		is_tty = isatty(1);
+	if (g_is_tty == -1)
+		g_is_tty = isatty(1);
 	time2iso(t);
-	sprintf(final_fmt, is_tty ? "[%s] "
+	sprintf(final_fmt, g_is_tty ? "[%s] "
 			"\x1b[92m"
 			"INFO:"
 			"\x1b[0m"
@@ -28,16 +40,16 @@ int		loginfo(const char *fmt, ...)
 	return (0);
 }
 
-int		logerror(const char *fmt, ...)
+int			logerror(const char *fmt, ...)
 {
 	va_list	ap;
 	char	final_fmt[LOGSIZE + 1];
 	char	t[ISOTIMESTRSIZE];
 
-	if (is_tty == -1)
-		is_tty = isatty(1);
+	if (g_is_tty == -1)
+		g_is_tty = isatty(1);
 	time2iso(t);
-	sprintf(final_fmt, is_tty ? "[%s] "
+	sprintf(final_fmt, g_is_tty ? "[%s] "
 			"\x1b[31m"
 			"ERROR:"
 			"\x1b[0m"
@@ -50,41 +62,38 @@ int		logerror(const char *fmt, ...)
 	return (-1);
 }
 
-int		logdebug(const char *fmt, ...)
+int			logdebug(const char *fmt, ...)
 {
-    va_list ap;
-    char    final_fmt[LOGSIZE + 1];
-    char    t[ISOTIMESTRSIZE];
+	va_list	ap;
+	char	final_fmt[LOGSIZE + 1];
+	char	t[ISOTIMESTRSIZE];
 
-    if (!DEBUG)
-        return (0);
-
-    if (is_tty == -1)
-        is_tty = isatty(1);
-
-    time2iso(t);
-    sprintf(final_fmt, is_tty ? "[%s] "
-                                "\x1b[33m"
-                                "DEBUG:"
-                                "\x1b[0m"
-                                " %s\n"
-                              : "[%s] DEBUG: %s\n",
-            t, fmt);
-    va_start(ap, fmt);
-    vprintf(final_fmt, ap);
-    va_end(ap);
-
-    return (0);
+	if (!DEBUG)
+		return (0);
+	if (g_is_tty == -1)
+		g_is_tty = isatty(1);
+	time2iso(t);
+	sprintf(final_fmt, g_is_tty ? "[%s] "
+			"\x1b[33m"
+			"DEBUG:"
+			"\x1b[0m"
+			" %s\n"
+			: "[%s] DEBUG: %s\n",
+			t, fmt);
+	va_start(ap, fmt);
+	vprintf(final_fmt, ap);
+	va_end(ap);
+	return (0);
 }
 
-int		logerrno(const char *str)
+int			logerrno(const char *str)
 {
 	char	t[ISOTIMESTRSIZE];
 
-	if (is_tty == -1)
-		is_tty = isatty(1);
+	if (g_is_tty == -1)
+		g_is_tty = isatty(1);
 	time2iso(t);
-	printf(is_tty ? "[%s] "
+	printf(g_is_tty ? "[%s] "
 			"\x1b[31m"
 			"ERROR:"
 			"\x1b[0m"
