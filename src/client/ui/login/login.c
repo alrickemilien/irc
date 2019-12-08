@@ -1,12 +1,11 @@
 #include <client/irc.h>
 #include <client/ui/login.h>
 
-static gboolean close_login(GtkWidget *  widget,
+static gboolean	close_login(GtkWidget *widget,
                             GdkEventKey *event,
-                            gpointer     data)
+                            gpointer data)
 {
     (void)widget;
-
     if (event->keyval == GDK_KEY_Escape)
     {
         ui_clear_login_window(data);
@@ -15,7 +14,8 @@ static gboolean close_login(GtkWidget *  widget,
     return FALSE;
 }
 
-int ui_clear_login_window(t_ui_login *ui)
+int				ui_clear_login_window(
+	t_ui_login *ui)
 {
     gtk_widget_hide(ui->window);
     free(ui->window_color);
@@ -24,9 +24,9 @@ int ui_clear_login_window(t_ui_login *ui)
     return (0);
 }
 
-static void ui_login_connect_fetch_entrys(t_ui_login *ui)
+static void		ui_login_connect_fetch_entrys(
+	t_ui_login *ui)
 {
-    // Set entrys
     ui->host_entry =
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "entry_host"));
     ui->port_entry =
@@ -39,10 +39,11 @@ static void ui_login_connect_fetch_entrys(t_ui_login *ui)
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "entry_nick"));
 }
 
-static int ui_init_login_window_credentials_entrys(t_env *e, t_ui_login *ui)
+static int		ui_init_login_window_credentials_entrys(
+	t_env *e, t_ui_login *ui)
 {
-    char   portstr[PORTSTRSIZE];
-    size_t port_len;
+    char	portstr[PORTSTRSIZE];
+    size_t	port_len;
 
     if (e->options.port != 0)
     {
@@ -52,64 +53,49 @@ static int ui_init_login_window_credentials_entrys(t_env *e, t_ui_login *ui)
         else
             gtk_entry_set_text(GTK_ENTRY(ui->port_entry), portstr);
     }
-
     if (e->options.host[0] != 0)
         gtk_entry_set_text(GTK_ENTRY(ui->host_entry), e->options.host);
-
     return (0);
 }
 
-static int ui_init_login_window(t_ui_login *ui)
+static int		ui_init_login_window(
+	t_ui_login *ui)
 {
     ui->window =
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "window_login"));
-
     gtk_widget_add_events(ui->window, GDK_KEY_PRESS_MASK);
     g_signal_connect(ui->window, "key_press_event", G_CALLBACK(close_login),
                      ui);
     g_signal_connect(ui->window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
-
     ui->window_color = gtk_new_rgba(1, 1, 1, 0.96);
     if (ui->window_color != NULL)
         gtk_set_transparent_window(ui->window, ui->window_color);
-
-    // Set login button event
     ui->button_go =
         GTK_WIDGET(gtk_builder_get_object(ui->builder, "button_go"));
     g_signal_connect(ui->button_go, "clicked", G_CALLBACK(ui_login_connect),
                      ui);
-
     return (0);
 }
 
-int ui_init_login(t_env *e, t_ui_login *ui)
+int				ui_init_login(
+	t_env *e, t_ui_login *ui)
 {
-    GtkCssProvider *css;
+    GtkCssProvider	*css;
 
     ui->e = e;
-
     ui->builder = gtk_builder_new();
     if (gtk_builder_load(ui->builder, e->argv_0, "/ui/login/login.glade") < 0)
         return (-1);
-
-    // Init window and close events
     ui_init_login_window(ui);
-
-    // Apply style to window
     css = gtk_css_provider_new();
     if (gtk_provider_load_css(css, e->argv_0, "/ui/login/login.css") < 0)
         return (-1);
     gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
-                                              GTK_STYLE_PROVIDER(css),
-                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
+		GTK_STYLE_PROVIDER(css),
+		GTK_STYLE_PROVIDER_PRIORITY_USER);
     g_object_unref(G_OBJECT(css));
-
-
     ui_login_connect_fetch_entrys(ui);
-
     ui_init_login_window_credentials_entrys(e, ui);
-
     gtk_widget_show_all(ui->window);
-
     return (0);
 }
