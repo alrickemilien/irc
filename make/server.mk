@@ -58,6 +58,7 @@ SERVER_SRC+=src/server/irc/irc_command.c \
 
 #cbuffer
 SERVER_SRC+=src/cbuffer/cbuffer.c \
+			src/cbuffer/cbuffer_indexof.c \
 			src/cbuffer/cbuffer_io.c \
 			src/cbuffer/cbuffer_utils.c \
 			src/cbuffer/cbuffer_debug.c \
