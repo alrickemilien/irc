@@ -6,7 +6,7 @@
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 14:52:58 by aemilien          #+#    #+#             */
-/*   Updated: 2019/09/15 17:20:35 by aemilien         ###   ########.fr       */
+/*   Updated: 2019/12/08 17:52:23 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@ int				read_port_option(
 {
 	if (value[0] == 0)
 		return (-1);
-	if (ato32(value, (uint32_t*)&options->port) != 0 || options->port < 1000 || options->port > 99999)
-		return (fprintf(stderr,
-			"for the --port option: port must be a value between 1000 an 99999'%s'.\n", value));
+	if (ato32(value, (uint32_t*)&options->port) != 0
+		|| options->port < 1000
+		|| options->port > 99999)
+		return (fprintf(stderr, "--port: must be 1000-99999'%s'.\n", value));
 	memcpy(options->str_port, value, strlen(value));
-	return (0);	
+	return (0);
 }

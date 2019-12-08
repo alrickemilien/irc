@@ -6,7 +6,7 @@
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 14:55:41 by aemilien          #+#    #+#             */
-/*   Updated: 2019/09/15 14:57:06 by aemilien         ###   ########.fr       */
+/*   Updated: 2019/12/08 17:47:26 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ static int				handle_argument(
 	j = 0;
 	while (g_arguments_map[j].waiting_for_value != NULL)
 	{
-		// When value has not already been set
 		if (((int*)options)[g_arguments_map[j].offset] == 0)
 		{
 			((int*)options)[g_arguments_map[j].offset] = 1;
@@ -76,7 +75,6 @@ static int				handle_option(
 				*last = &g_options_map[j];
 			return (0);
 		}
-
 		j++;
 	}
 	return (fprintf(stderr, "Unknown command line argument '%s'\n", name));
