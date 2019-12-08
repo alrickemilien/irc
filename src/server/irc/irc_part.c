@@ -6,7 +6,7 @@
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:17:32 by aemilien          #+#    #+#             */
-/*   Updated: 2019/12/08 16:17:33 by aemilien         ###   ########.fr       */
+/*   Updated: 2019/12/08 17:12:41 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,10 @@ int			irc_part(t_env *e, int cs, t_token *tokens)
 	if ((irc_part_check_command(e, cs, tokens)) < 0)
 		return (-1);
 	i = 0;
-	while (i < e->maxchannels)
-	{
-		if (strncmp(e->channels[i].channel, tokens[1].addr, tokens[1].len) ==
-				0 &&
-				e->channels[i].channel[tokens[1].len] == 0)
-			break ;
+	while (i < e->maxchannels
+		&& strncmp(e->channels[i].channel, tokens[1].addr, tokens[1].len) == 0
+		&& e->channels[i].channel[tokens[1].len] == 0)
 		i++;
-	}
 	if (i == e->maxchannels)
 		return (irc_err(e, cs, ERR_NOSUCHCHANNEL, tokens[1].addr));
 	if (e->fds[cs].channel != i)
@@ -63,8 +59,6 @@ int			irc_part(t_env *e, int cs, t_token *tokens)
 	sprintf(concat, "%s leaved %s.\n", e->fds[cs].nickname,
 			e->channels[e->fds[cs].channel].channel);
 	broadcast(e, concat, IRC_NOTICE, cs);
-	loginfo(" %s leaved %s\n", e->fds[cs].nickname,
-			e->channels[e->fds[cs].channel].channel);
 	e->channels[e->fds[cs].channel].clients--;
 	if (e->fds[cs].channel != 0 && e->channels[e->fds[cs].channel].clients == 0)
 		memset(&e->channels[e->fds[cs].channel], 0, sizeof(t_channel));

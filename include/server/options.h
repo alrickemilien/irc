@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   options.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/08 17:27:35 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/08 17:27:36 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SERVER_OPTIONS_H
 # define SERVER_OPTIONS_H
 
-#include <stdint.h>
-#include <string.h>
+# include <stdint.h>
+# include <string.h>
 
 /*
 ** All parameter
@@ -42,14 +54,12 @@ enum {
 typedef struct	s_options {
 	int			port;
 	int			backlog;
-	int			_bind;
+	int			skip_bind;
 	int			ipv6;
 	int			daemon;
 	int			ssl;
-	int			_ssl_key_file;
-	int			_ssl_crt_file;
-
-	// Metata data related to options
+	int			skip_ssl_key_file;
+	int			skip_ssl_crt_file;
 	char		bind[MAX_ALLOWED_VALUE_SIZE];
 	char		ssl_key_file[MAX_ALLOWED_VALUE_SIZE];
 	char		ssl_crt_file[MAX_ALLOWED_VALUE_SIZE];
@@ -81,7 +91,7 @@ bool			is_a_single_option(const char *name);
 bool			is_an_option(const char *name);
 bool			is_a_waiting_value_option(const char *name);
 int				read_options_arguments(
-	                int ac, const char **av, t_options *opt);
+		int ac, const char **av, t_options *opt);
 
 /*
 ** Options with specifc values to handle

@@ -6,7 +6,7 @@
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:04:40 by aemilien          #+#    #+#             */
-/*   Updated: 2019/12/08 16:04:45 by aemilien         ###   ########.fr       */
+/*   Updated: 2019/12/08 17:08:31 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** "<version>.<debuglevel> <server> :<comments>"
 */
 
-int irc_version(t_env *e, int cs, t_token *tokens)
+int	irc_version(t_env *e, int cs, t_token *tokens)
 {
 	char local_hostname[NI_MAXHOST + 1];
 

@@ -6,7 +6,7 @@
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 14:27:02 by aemilien          #+#    #+#             */
-/*   Updated: 2019/12/08 14:27:25 by aemilien         ###   ########.fr       */
+/*   Updated: 2019/12/08 17:26:00 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,21 @@ static int	write_pidfile(pid_t pid)
 	return (0);
 }
 
+static void	daemon_props(void)
+{
+	int		x;
+
+	umask(0);
+	chdir("/");
+	x = sysconf(_SC_OPEN_MAX);
+	while (x >= 0)
+		close(x--);
+	openlog("irc_daemon", LOG_PID, LOG_DAEMON);
+}
+
 int			daemonize(void)
 {
 	pid_t	pid;
-	int		x;
 
 	if (write_pidfile(0) < 0)
 		return (-1);
@@ -61,11 +72,6 @@ int			daemonize(void)
 		write_pidfile(pid);
 		exit(0);
 	}
-	umask(0);
-	chdir("/");
-	x = sysconf(_SC_OPEN_MAX);
-	while (x >= 0)
-		close(x--);
-	openlog("irc_daemon", LOG_PID, LOG_DAEMON);
+	daemon_props();
 	return (0);
 }

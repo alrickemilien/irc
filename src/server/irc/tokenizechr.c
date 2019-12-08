@@ -6,14 +6,24 @@
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:18:03 by aemilien          #+#    #+#             */
-/*   Updated: 2019/12/08 16:18:03 by aemilien         ###   ########.fr       */
+/*   Updated: 2019/12/08 17:04:15 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <irc.h>
 #include <server/irc.h>
 
-size_t	tokenizechr(
+static char	*get_end_str(char *str)
+{
+	char	*end;
+
+	end = strstr(str, "\x0D\x0A");
+	if (end == (void *)0)
+		end = str + strlen(str);
+	return (end);
+}
+
+size_t		tokenizechr(
 		char *str, t_token *tokens, size_t len, int c)
 {
 	size_t	i;
@@ -21,10 +31,8 @@ size_t	tokenizechr(
 	char	*end;
 
 	memset(tokens, 0, sizeof(t_token) * len);
-	end = strstr(str, "\x0D\x0A");
+	end = get_end_str(str);
 	count = 0;
-	if (end == (void *)0)
-		end = str + strlen(str);
 	i = 0;
 	while (str[i] == 0x20)
 		i++;

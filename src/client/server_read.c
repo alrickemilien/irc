@@ -6,7 +6,7 @@
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:24:18 by aemilien          #+#    #+#             */
-/*   Updated: 2019/12/08 16:24:19 by aemilien         ###   ########.fr       */
+/*   Updated: 2019/12/08 17:08:02 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int		server_read(t_env *e, size_t cs)
 
 	fd = e->self;
 	r = e->options.ssl ? cbuffer_read_ssl(&fd->buf_read, fd->ssl)
-		: r = cbuffer_recv(&fd->buf_read, cs);
+		: cbuffer_recv(&fd->buf_read, cs);
 	if (r <= 0)
 	{
 		disconnect(e, cs);

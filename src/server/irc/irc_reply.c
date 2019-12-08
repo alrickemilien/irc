@@ -6,7 +6,7 @@
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:17:56 by aemilien          #+#    #+#             */
-/*   Updated: 2019/12/08 16:17:56 by aemilien         ###   ########.fr       */
+/*   Updated: 2019/12/08 17:07:24 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,18 +77,16 @@ int	irc_reply_all_in_channel(t_env *e, int cs, int code, ...)
 	va_list	ap;
 
 	i = 0;
-	while (i < sizeof(g_replys) / sizeof(t_irc_reply))
+	msg[0] = 0;
+	while (msg[0] == 0 && i < sizeof(g_replys) / sizeof(t_irc_reply))
 	{
 		if (g_replys[i].code == code)
-		{
 			sprintf(msg, "%s %s\x0D\x0A", g_replys[i].name, g_replys[i].fmt);
-			va_start(ap, code);
-			break ;
-		}
 		i++;
 	}
-	if (i == sizeof(g_replys) / sizeof(t_irc_reply))
+	if (msg[0] == 0)
 		return (-1);
+	va_start(ap, code);
 	i = 0;
 	while (i <= e->max)
 	{

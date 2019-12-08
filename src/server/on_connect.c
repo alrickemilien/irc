@@ -36,6 +36,6 @@ int	on_connect(t_env *e, size_t s)
 	e->fds[cs].type = FD_CLIENT;
 	e->fds[cs].read = client_read;
 	e->fds[cs].write = client_write;
-	e->fds[cs].last_activity = (unsigned long)time(NULL);
+	e->fds[cs].la = (unsigned long)time(NULL);
 	return (0);
 }
