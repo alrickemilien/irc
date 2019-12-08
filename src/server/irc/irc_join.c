@@ -1,4 +1,15 @@
-#include <ctype.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   irc_join.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/08 15:44:47 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/08 15:44:52 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <server/irc.h>
 
 /*
@@ -8,89 +19,80 @@
 ** separator by the protocol)
 */
 
-static int irc_join_check_command(t_env *e, int cs, const t_token *tokens)
+static int	irc_join_check_command(t_env *e, int cs, const t_token *to)
 {
-    const char *channel;
-    size_t      channel_len;
+	const char	*channel;
+	size_t		channel_len;
 
-    if (!tokens[1].addr || tokens[2].addr)
-        return (irc_err(e, cs, ERR_NEEDMOREPARAMS, NULL));
-
-    channel = tokens[1].addr;
-    channel_len = tokens[1].len;
-
-    if (strpbrk(channel, "\x07\x2C"))
-        return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
-    else if (channel_len - 1 > CHANNELSTRSIZE)
-        return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
-    else if (!is_valid_chan_name(channel, channel_len))
-        return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
-    else if (channel_len < 1)
-        return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
-    return (0);
+	if (!to[1].addr || to[2].addr)
+		return (irc_err(e, cs, ERR_NEEDMOREPARAMS, NULL));
+	channel = to[1].addr;
+	channel_len = to[1].len;
+	if (channel_len - 1 > CHANNELSTRSIZE)
+		return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
+	else if (!is_valid_chan_name(channel, channel_len))
+		return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
+	else if (channel_len < 1)
+		return (irc_err(e, cs, ERR_NOSUCHCHANNEL, channel));
+	return (0);
 }
 
-int irc_join(t_env *e, int cs, t_token *tokens)
+size_t		find_chan_index(t_env *e, t_token *to)
 {
-    char   concat[CHANNELSTRSIZE + NICKNAMESTRSIZE + 11];
-    size_t i;
-    size_t empty_channel;
+	size_t	i;
+	size_t	empty_channel;
 
-    if ((irc_join_check_command(e, cs, tokens)) != 0)
-        return (-1);
+	i = 0;
+	empty_channel = 0;
+	while (i < e->maxchannels)
+	{
+		if (strncmp(e->channels[i].channel, to[1].addr, to[1].len) == 0)
+			break ;
+		if (empty_channel == 0 && e->channels[i].channel[0] == 0)
+			empty_channel = i;
+		i++;
+	}
+	if (i == e->maxchannels)
+		i = empty_channel;
+	return (i);
+}
 
-    // Look for already existing channel or create it
-    i = 0;
-    empty_channel = 0;
-    while (i < e->maxchannels)
-    {
-        if (strncmp(e->channels[i].channel, tokens[1].addr, tokens[1].len) == 0)
-            break;
-        if (empty_channel == 0 && e->channels[i].channel[0] == 0)
-            empty_channel = i;
-        i++;
-    }
+void		irc_join_broadcast(t_env *e, int cs)
+{
+	char	concat[CHANNELSTRSIZE + NICKNAMESTRSIZE + 11];
 
-    if (i == e->maxchannels)
-        i = empty_channel;
+	memset(concat, 0, sizeof(concat));
+	sprintf(concat, "%s!%s@%s JOIN %s\x0D\x0A", e->fds[cs].nickname,
+		e->fds[cs].username,
+		e->fds[cs].host,
+		e->channels[e->fds[cs].channel].channel);
+	broadcast_all_in_channel(e, concat, IRC_NOTICE, cs);
+	loginfo("%s!%s@%s JOIN %s\n", e->fds[cs].nickname, e->fds[cs].nickname,
+			e->fds[cs].host, e->channels[e->fds[cs].channel].channel);
+}
 
-    // When channel is the same as actual one
-    if (i == e->fds[cs].channel)
-        return (IRC_JOIN);
+int			irc_join(t_env *e, int cs, t_token *to)
+{
+	size_t	i;
 
-    memset(e->channels[i].channel, 0, CHANNELSTRSIZE + 1);
-    strncpy(e->channels[i].channel, tokens[1].addr, tokens[1].len);
-
-    e->channels[e->fds[cs].channel].clients--;
-
-    // Clear the channel
-    if (e->fds[cs].channel != 0 && e->channels[e->fds[cs].channel].clients == 0)
-        memset(&e->channels[e->fds[cs].channel], 0, sizeof(t_channel));
-
-    e->fds[cs].channel = i;
-
-    memset(concat, 0, sizeof(concat));
-
-    sprintf(concat, "%s!%s@%s JOIN %s\x0D\x0A", e->fds[cs].nickname,
-            e->fds[cs].username, e->fds[cs].host,
-            e->channels[e->fds[cs].channel].channel);
-
-    broadcast_all_in_channel(e, concat, IRC_NOTICE, cs);
-
-    loginfo("%s!%s@%s JOIN %s\n", e->fds[cs].nickname, e->fds[cs].nickname,
-            e->fds[cs].host, e->channels[e->fds[cs].channel].channel);
-
-    if (e->channels[e->fds[cs].channel].topic[0])
-        irc_reply(e, cs, RPL_TOPIC, e->channels[e->fds[cs].channel].channel,
-                  e->channels[e->fds[cs].channel].topic);
-    else
-        irc_reply(e, cs, RPL_NOTOPIC, e->channels[e->fds[cs].channel].channel);
-
-    // When the user is the first on the channel, set the user an chop
-    if (e->channels[i].clients == 0)
-        e->channels[i].chop = cs;
-
-    e->channels[i].clients++;
-
-    return (IRC_JOIN);
+	if ((irc_join_check_command(e, cs, to)) != 0)
+		return (-1);
+	i = find_chan_index(e, to);
+	if (i == e->fds[cs].channel)
+		return (IRC_JOIN);
+	memrpl(e->channels[i].channel, CHANNELSTRSIZE + 1, to[1].addr, to[1].len);
+	e->channels[e->fds[cs].channel].clients--;
+	if (e->fds[cs].channel != 0 && e->channels[e->fds[cs].channel].clients == 0)
+		memset(&e->channels[e->fds[cs].channel], 0, sizeof(t_channel));
+	e->fds[cs].channel = i;
+	irc_join_broadcast(e, cs);
+	if (e->channels[e->fds[cs].channel].topic[0])
+		irc_reply(e, cs, RPL_TOPIC, e->channels[e->fds[cs].channel].channel,
+				e->channels[e->fds[cs].channel].topic);
+	else
+		irc_reply(e, cs, RPL_NOTOPIC, e->channels[e->fds[cs].channel].channel);
+	if (e->channels[i].clients == 0)
+		e->channels[i].chop = cs;
+	e->channels[i].clients++;
+	return (IRC_JOIN);
 }

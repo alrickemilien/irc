@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   irc_pong.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/08 15:56:13 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/08 15:56:17 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <server/irc.h>
 
-int irc_pong(t_env *e, int cs, t_token *tokens)
+int	irc_pong(t_env *e, int cs, t_token *tokens)
 {
     (void)e;
     (void)tokens;
