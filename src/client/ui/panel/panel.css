@@ -126,8 +126,12 @@
 }
 
 .chat-message {
-    margin-left: 12px;
-    padding: 3px;
+    padding: 1px;
+}
+
+.chat-nick {
+    padding: 1px;
+    font-weight: bold;
 }
 
 .chat-message-hour {

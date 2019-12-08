@@ -117,8 +117,7 @@ CLIENT_SRC+=src/client/ui/panel/panel.c	\
 			src/client/ui/panel/ui_chat.c
 
 # ui msg
-CLIENT_SRC+=src/client/ui/panel/ui_message/ui_chat_message.c \
-			src/client/ui/panel/ui_message/ui_handle_i18n.c
+CLIENT_SRC+=src/client/ui/panel/ui_message/ui_chat_message.c
 
 CLIENT_OBJ=$(CLIENT_SRC:.c=.o)
 
