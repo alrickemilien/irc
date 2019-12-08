@@ -91,6 +91,7 @@ GtkWidget                *ui_new_error_message(t_ui_panel *ui, const char *msg);
 GtkWidget                *ui_new_info_message(t_ui_panel *ui, const char *msg);
 GtkWidget                *ui_new_away_message(t_ui_panel *ui, const char *msg);
 GtkWidget                *ui_new_invite_message(t_ui_panel *ui, const char *msg);
+int                      ui_handle_i18n_direction(GtkWidget *label, GtkWidget *hour, const char *msg);
 
 /*
 * utils

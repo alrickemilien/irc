@@ -59,8 +59,12 @@ static void ui_message_dispatch(t_ui_panel *        ui,
             w = ui_new_invite_message(ui, msg);
             break;
         default:
+            w = NULL;
             break;
     }
+
+    if (w == NULL)
+        return;
 
     gtk_list_box_insert(GTK_LIST_BOX(bloc->box), w, -1);
 

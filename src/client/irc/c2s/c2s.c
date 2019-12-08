@@ -53,7 +53,10 @@ int c2s(t_env *e, const char *buffer)
         i++;
     }
 
-    if (e->sock == -1 || buffer[0] == '/')
+    if (e->sock == -1)
+        return (irc_error(e, ERR_NOT_CONNECTED));
+
+    if (buffer[0] == '/')
         return (irc_error(e, ERR_UNRECOGNIZED_COMMAND, buffer));
 
     _c2s_msg(e->self, e->self->channelname, strlen(e->self->channelname),

@@ -65,7 +65,41 @@ For testing, use:
 cat <(echo -n -e "USER client_x 42.fr :Client X\x0D\x0ANICK clientx") - | nc 127.0.0.1 5555
 ```
 
-## POT
+# Build on OSX
+
+Need to install follozing packages to build the project :
+
+```
+brew install gtk+-3.0 fribidi gettext
+brew link gettext --force
+```
+
+# Build Debian based
+
+Need to install follozing packages to build the project :
+
+```
+sudo apt-get install libgtk-3-dev libfribidi-dev
+```
+
+# Build CentOS
+
+Need to install follozing packages to build the project :
+
+```
+sudo yum install -y gtk3-devel fribidi-devel
+```
+
+# POT
+
+On OSX, you need to install following binaries :
+
+```
+brew install gettext
+brew link gettext --force
+```
+
+On CentOS/Deb, `gettext` binaries may be installed through Development Tools.
 
 To generate template :
 

@@ -17,6 +17,7 @@ GdkRGBA         *gtk_new_rgba(float r, float g, float b, float a);
 gboolean        gtk_do_select(void *e);
 char            *gtk_get_assets(const char *bin_path, const char *path);
 void            gtk_set_cursor_style(GtkWidget *w, const char *cursor_type);
+PangoDirection  gtk_pango_find_base_dir(const gchar *text, gint length);
 
 /*
 ** utils

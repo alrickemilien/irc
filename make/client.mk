@@ -97,6 +97,7 @@ CLIENT_SRC+=src/client/ui/gtk_builder_load.c \
 			src/client/ui/gtk_set_class.c \
 			src/client/ui/gtk_new_rgba.c \
 			src/client/ui/gtk_set_cursor_style.c \
+			src/client/ui/gtk_pango_find_base_dir.c \
 			src/client/ui/ui_utils.c \
 			src/client/ui/gtk_get_assets.c
 
@@ -114,6 +115,10 @@ CLIENT_SRC+=src/client/ui/panel/panel.c	\
 			src/client/ui/panel/ui_set.c \
 			src/client/ui/panel/ui_leave.c \
 			src/client/ui/panel/ui_chat.c
+
+# ui msg
+CLIENT_SRC+=src/client/ui/panel/ui_message/ui_chat_message.c \
+			src/client/ui/panel/ui_message/ui_handle_i18n.c
 
 CLIENT_OBJ=$(CLIENT_SRC:.c=.o)
 
