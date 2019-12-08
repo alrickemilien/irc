@@ -8,7 +8,7 @@ int gui(t_env *e, int argc, char **argv)
 
     e->ui = (t_ui_login *)malloc(sizeof(t_ui_login));
 
-    if (ui_init_login_window(e, e->ui) < 0)
+    if (e->ui == NULL || ui_init_login(e, e->ui) < 0)
         return (-1);
 
     gtk_main();

@@ -42,23 +42,48 @@ int	cbuffer_send(
 		size_t n,
 		int flags)
 {
-	int		r;
-	size_t	count;
-	char	to_send[CBUFFSIZE];
+    int    r;
+    size_t count;
+    char   to_send[CBUFFSIZE];
 
-	if (cbuffer_isempty(cbuf))
-		return (0);
-	count = CBUFFSIZE - cbuf->tail < n
-		? CBUFFSIZE - cbuf->tail : n;
-	memset(to_send, 0, sizeof(to_send));
-	memcpy(to_send, cbuf->buffer + cbuf->tail, count);
-	if (count < n)
-		memcpy(to_send + count, cbuf->buffer, n - count);
-	r = send(cs, to_send, n, flags);
-	if (r < 0)
-		return (r);
-	if (cbuf->tail + n >= CBUFFSIZE)
-		cbuf->head = (cbuf->tail + n) % CBUFFSIZE;
-	cbuf->tail = (cbuf->tail + n) % CBUFFSIZE;
-	return (r);
+    // Buffer empty
+    if (cbuffer_isempty(cbuf))
+        return (0);
+
+    count = CBUFFSIZE - cbuf->tail < n ? CBUFFSIZE - cbuf->tail : n;
+    // printf("Sending %ld bytes to #%d\n", count, cs);
+
+    memset(to_send, 0, sizeof(to_send));
+    memcpy(to_send, cbuf->buffer + cbuf->tail, count);
+
+    if (count < n)
+        memcpy(to_send + count, cbuf->buffer, n - count);
+
+    r = send(cs, to_send, n, flags);
+
+    if (r < 0)
+        return (r);
+
+    // When send over than cbuf->head
+    if (cbuf->tail + n >= CBUFFSIZE &&
+        (cbuf->tail + n) % CBUFFSIZE > cbuf->head)
+        cbuf->head = (cbuf->tail + n) % CBUFFSIZE;
+
+    if (cbuf->tail + n >= CBUFFSIZE && cbuf->head == CBUFFSIZE)
+        cbuf->head = (cbuf->tail + n) % CBUFFSIZE;
+    
+    cbuf->tail = (cbuf->tail + n) % CBUFFSIZE;
+
+    return (r);
+}
+
+int cbuffer_send_until_str(int cs, t_cbuffer *cbuf, const char *str, int flags)
+{
+    size_t index;
+    size_t n;
+
+    index = cbuffer_indexof(cbuf, str);
+    n = cbuf->tail <= index ? index - cbuf->tail
+                            : index + CBUFFSIZE - cbuf->tail;
+    return cbuffer_send(cs, cbuf, n + strlen(str), flags);
 }

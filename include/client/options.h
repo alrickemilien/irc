@@ -25,6 +25,7 @@ enum {
 */
 
 # define MAX_ALLOWED_VALUE_SIZE 215
+# define MAX_COMMAND_SIZE 512 * 4
 
 /*
 ** Structure filled with options passed to program
@@ -49,8 +50,8 @@ typedef struct	s_options {
 
 	// Metata data related to options
 	char		host[MAX_ALLOWED_VALUE_SIZE];
-	char		command[BUF_SIZE];
-	char		str_port[12];
+	char		command[MAX_COMMAND_SIZE];
+	char		str_port[9];
 }				t_options;
 
 # pragma pack(pop)
@@ -69,6 +70,13 @@ typedef struct	s_options_map {
 				t_options *options,
 				const char *value);
 }				t_options_map;
+
+typedef struct	s_args_map {
+	int			offset;
+	int			(*waiting_for_value)(
+				t_options *options,
+				const char *value);
+}				t_args_map;
 
 /*
 ** Options utils

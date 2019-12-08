@@ -1,58 +1,6 @@
 #include <client/ui/panel.h>
 
-void handle_i18n_direction(GtkWidget *label, GtkWidget *hour, const char *msg)
-{
-    const int is_rtl =
-        (pango_find_base_dir(msg, strlen(msg)) == PANGO_DIRECTION_RTL);
-
-    if (is_rtl)
-    {
-        gtk_widget_set_direction(label, GTK_TEXT_DIR_RTL);
-        gtk_label_set_xalign(GTK_LABEL(label), 0);
-        gtk_label_set_xalign(GTK_LABEL(hour), 1);
-    }
-    else
-    {
-        gtk_widget_set_direction(label, GTK_TEXT_DIR_LTR);
-        gtk_label_set_xalign(GTK_LABEL(label), 0);
-        gtk_label_set_xalign(GTK_LABEL(hour), 0);
-    }
-}
-
-void ui_push_chat_message(t_ui_panel *        ui,
-                          t_ui_chat_msg_bloc *bloc,
-                          const char *        msg)
-{
-    GtkWidget *container;
-    GtkWidget *label;
-    GtkWidget *hour;
-
-    (void)ui;
-
-    // Container
-    container = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
-    gtk_set_class(container, "chat-message-container");
-    gtk_box_set_homogeneous(GTK_BOX(container), FALSE);
-
-    // Hour
-    hour = ui_util_new_hour_label("%H:%M %p", "chat-message-hour");
-
-    // Message content
-    label = ui_util_new_chat_label(msg, "chat-message");
-
-    handle_i18n_direction(label, hour, msg);
-
-    // Fill container
-    gtk_box_pack_start(GTK_BOX(container), hour, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(container), label, FALSE, FALSE, 0);
-
-    gtk_list_box_insert(GTK_LIST_BOX(bloc->box), container, -1);
-    bloc->count++;
-}
-
-void ui_push_topic_message(t_ui_panel *        ui,
-                           t_ui_chat_msg_bloc *bloc,
-                           const char *        msg)
+GtkWidget *ui_new_topic_message(t_ui_panel *ui, const char *msg)
 {
     GtkWidget *container;
     GtkWidget *label;
@@ -73,15 +21,10 @@ void ui_push_topic_message(t_ui_panel *        ui,
                        FALSE, 0);
     gtk_box_pack_start(GTK_BOX(container), label, FALSE, FALSE, 0);
 
-    // Finally insert
-    gtk_list_box_insert(GTK_LIST_BOX(bloc->box), container, -1);
-
-    bloc->count++;
+    return (container);
 }
 
-void ui_push_error_message(t_ui_panel *        ui,
-                           t_ui_chat_msg_bloc *bloc,
-                           const char *        msg)
+GtkWidget *ui_new_error_message(t_ui_panel *ui, const char *msg)
 {
     GtkWidget *container;
     GtkWidget *logo = ui_util_new_logo(ui->error_image, "error-logo");
@@ -98,15 +41,34 @@ void ui_push_error_message(t_ui_panel *        ui,
     gtk_box_pack_start(GTK_BOX(container), logo, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(container), label, FALSE, FALSE, 0);
 
-    // Finally insert
-    gtk_list_box_insert(GTK_LIST_BOX(bloc->box), container, -1);
-
-    bloc->count++;
+    return (container);
 }
 
-void ui_push_info_message(t_ui_panel *        ui,
-                          t_ui_chat_msg_bloc *bloc,
-                          const char *        msg)
+GtkWidget *ui_new_invite_message(t_ui_panel *ui, const char *msg)
+{
+    GtkWidget *container;
+    GtkWidget *label;
+
+    logdebug("ui::ui_push_invite_message\n");
+
+    // Container
+    container = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
+    gtk_set_class(container, "invite-message-container");
+    gtk_box_set_homogeneous(GTK_BOX(container), FALSE);
+
+    // Message content
+    label = ui_util_new_chat_label(msg, "invite-message");
+
+    // Fill container
+    gtk_box_pack_start(GTK_BOX(container),
+                       ui_util_new_logo(ui->invite_image, "invite-logo"), FALSE,
+                       FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(container), label, FALSE, FALSE, 0);
+
+    return (container);
+}
+
+GtkWidget *ui_new_info_message(t_ui_panel *ui, const char *msg)
 {
     GtkWidget *container_1;
     GtkWidget *container_2;
@@ -137,15 +99,10 @@ void ui_push_info_message(t_ui_panel *        ui,
     gtk_box_pack_start(GTK_BOX(container_2), logo, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(container_2), container_1, FALSE, FALSE, 0);
 
-    // Finally insert
-    gtk_list_box_insert(GTK_LIST_BOX(bloc->box), container_2, -1);
-
-    bloc->count++;
+    return (container_2);
 }
 
-void ui_push_away_message(t_ui_panel *        ui,
-                          t_ui_chat_msg_bloc *bloc,
-                          const char *        msg)
+GtkWidget *ui_new_away_message(t_ui_panel *ui, const char *msg)
 {
     GtkWidget *container;
     GtkWidget *logo = ui_util_new_logo(ui->rpl_away_image, "away-logo");
@@ -162,8 +119,5 @@ void ui_push_away_message(t_ui_panel *        ui,
     gtk_box_pack_start(GTK_BOX(container), logo, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(container), label, FALSE, FALSE, 0);
 
-    // Finally insert
-    gtk_list_box_insert(GTK_LIST_BOX(bloc->box), container, -1);
-
-    bloc->count++;
+    return (container);
 }

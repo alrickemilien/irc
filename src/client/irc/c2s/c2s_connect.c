@@ -64,7 +64,7 @@ int _c2s_connect(t_env *     e,
                    hostname ? hostname : local_hostname, servername,
                    name ? name : p->pw_name);
 
-    loginfo("Connecting to %s\n", servername);
+    loginfo("Connecting to %s", e->options.host);
 
     memrpl(fd->host, HOSTNAMESTRSIZE, hostname ? hostname : local_hostname,
            strlen(hostname ? hostname : local_hostname));
@@ -74,8 +74,6 @@ int _c2s_connect(t_env *     e,
 
     memrpl(fd->username, USERNAMESTRSIZE, name ? name : p->pw_name,
            strlen(name ? name : p->pw_name));
-
-    logdebug("_c2s_connect::e->nick:: %s", e->nick);
 
     // Send nickname if local one has been set
     if (e->nick[0])
@@ -92,7 +90,7 @@ int c2s_connect(t_env *e, t_token *tokens)
     // Leave when socket already set
     // @TODO reset whole file descriptor
     if (e->sock != -1)
-        return logerror("Already connected");
+        return (logerror("Already connected"));
 
     if ((c2s_connect_check_command(e, tokens)) < 0)
         return (-1);
@@ -102,5 +100,5 @@ int c2s_connect(t_env *e, t_token *tokens)
     if (_c2s_connect(e, NULL, NULL, tokens[1].addr) < 0)
         return (-1);
 
-    return (IRC_CONNECT);
+    return (IRC_C2S_CONNECT);
 }

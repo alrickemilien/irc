@@ -54,7 +54,7 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
     $tmp_s->blocking(1);
 
     # All clients joining specific channel
-    print $tmp_s "NICK client_$i\x0D\x0AUSER client$i microsoft.com :Client $i\x0D\x0A";
+    print $tmp_s "NICK client$i\x0D\x0AUSER client$i microsoft.com :Client $i\x0D\x0A";
 
     push @s, $tmp_s
 }

@@ -57,12 +57,16 @@ int ui_leave_from_channel_list_box(t_ui_panel *ui, int index)
         i++;
     }
 
+    memset(&ui->channels[ui->channels_count + 1], 0, sizeof(t_ui_channel));
+
     return (0);
 }
 
 int ui_leave(t_ui_panel *ui, const char *channel)
 {
     int index;
+
+    logdebug("ui_leave :: ui->channel_index :: before :: %ld", ui->channel_index);
 
     if (ui->channels_count == 1)
     {
@@ -71,8 +75,6 @@ int ui_leave(t_ui_panel *ui, const char *channel)
     }
 
     // Remove channel from left side panel list
-    ui->channels_box =
-        GTK_WIDGET(gtk_builder_get_object(ui->builder, "channels_box"));
     if (ui_update_channel_panel_list(ui->channels_box, channel,
                                      strlen(channel)) < 0)
         return (-1);
@@ -80,6 +82,9 @@ int ui_leave(t_ui_panel *ui, const char *channel)
     index = ui_join_channels_index_of(ui, channel, strlen(channel));
 
     ui_leave_from_channel_list_box(ui, index);
+    g_timeout_add(50, ui_chat_scroll_to_bottom, ui->scrollwin);
+
+    logdebug("ui_leave :: ui->channel_index :: after :: %ld", ui->channel_index);
 
     return (0);
 }

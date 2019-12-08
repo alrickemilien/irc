@@ -1,17 +1,19 @@
 #include <irc.h>
 
-bool is_valid_chan_name(const char *channel)
+static const char *g_invalid_channel_char = "\x07\x20\x2C\x0A\x2C";
+
+bool is_valid_chan_name(const char *channel, size_t len)
 {
 	size_t	i;
 
-	i = 1;
-	while (channel[i] && channel[i] != '\x0D')
-	{
-		if (channel[i] == '\x07'
-		|| channel[i] == '\x20'
-		|| channel[i] == '\x2C')
-			return (false);
-		i++;
-	}
-	return (true);
+    if (channel[0] != '#' && channel[0] != '&')
+        return (false);
+    i = 1;
+    while (channel[i] && channel[i] != '\x0D' && i < len)
+    {
+        if (strchr(g_invalid_channel_char, channel[i]))
+            return (false);
+        i++;
+    }
+    return (true);
 }

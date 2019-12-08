@@ -1,45 +1,67 @@
 #include <server/irc.h>
 
-int irc_names(t_env *e, int cs, t_token *tokens)
+/*
+** Check if buffer is full for new name
+*/
+
+static int is_names_buf_full(const char *buf, size_t buf_size, const char *name)
 {
-    size_t i;
+    return ((buf_size - strlen(buf)) < (strlen(name) + 1));
+}
+
+static int fill_names_buffer(t_env *e, int cs, size_t chan_index)
+{
+    char concat[512];
     size_t j;
-    size_t k;
-    char   concat[512];
 
-    // When no channel provided
-    if (!tokens[1].addr)
+    memset(concat, 0, sizeof(concat));
+    j = 0;
+    while (j <= e->max)
     {
-        i = 0;
-        while (i < e->maxchannels)
+        if (is_names_buf_full(concat, sizeof(concat), e->fds[j].nickname))
+            break;
+
+        if (e->fds[j].type == FD_CLIENT && e->fds[j].registered &&
+            e->fds[j].channel == chan_index)
         {
-            if (e->channels[i].channel[0])
-            {
-                memset(concat, 0, sizeof(concat));
-
-                j = 0;
-                while (j <= e->max)
-                {
-                    if (e->fds[j].type == FD_CLIENT && e->fds[j].registered &&
-                        e->fds[j].channel == i)
-                    {
-                        strcat(concat, e->fds[j].nickname);
-                        strcat(concat, " ");
-                    }
-                    j++;
-                }
-
-                irc_reply(e, cs, RPL_NAMREPLY, e->channels[i].channel, concat);
-                irc_reply(e, cs, RPL_ENDOFNAMES, e->channels[i].channel);
-            }
-
-            i++;
+            strcat(concat, e->fds[j].nickname);
+            strcat(concat, " ");
         }
 
-        return (IRC_NAMES);
+        j++;
     }
 
+    irc_reply(e, cs, RPL_NAMREPLY, e->channels[chan_index].channel, concat);
+    irc_reply(e, cs, RPL_ENDOFNAMES, e->channels[chan_index].channel);
+
+    return (strlen(concat));
+}
+
+static int irc_names_all_channels(t_env *e, int cs, t_token *tokens)
+{
+    size_t i;
+
+    (void)tokens;
+
     i = 0;
+    while (i < e->maxchannels)
+    {
+        if (e->channels[i].channel[0])
+            fill_names_buffer(e, cs, i);
+        i++;
+    }
+
+    return (IRC_NAMES);
+}
+
+static int irc_names_one_channels(t_env *e, int cs, t_token *tokens)
+{
+    size_t i;
+    size_t k;
+    int ret;
+
+    i = 0;
+    ret = 0;
     while (i < e->maxchannels)
     {
         k = 1;
@@ -48,35 +70,29 @@ int irc_names(t_env *e, int cs, t_token *tokens)
             if (strncmp(e->channels[i].channel, tokens[k].addr,
                         tokens[k].len) == 0)
             {
-                // "<channel> :[[@|+]<nick> [[@|+]<nick> [...]]]"
-                memset(concat, 0, sizeof(concat));
-
-                j = 0;
-                while (j <= e->max)
-                {
-                    if (e->fds[j].type == FD_CLIENT && e->fds[j].channel == i &&
-                        e->fds[j].registered == 1)
-                    {
-                        strcat(concat, e->fds[j].nickname);
-                        strcat(concat, " ");
-                    }
-                    j++;
-                }
-
-                irc_reply(e, cs, RPL_NAMREPLY, e->channels[i].channel, concat);
-                irc_reply(e, cs, RPL_ENDOFNAMES, e->channels[i].channel);
-
+                if (ret == 0)
+                    ret = fill_names_buffer(e, cs, i);
+                else
+                    fill_names_buffer(e, cs, i);
                 break;
             }
             k++;
         }
-
         i++;
     }
 
-    // When concat is still zrero meaning that no channel found
-    if (concat[0] == 0)
+    // When concat is still zero meaning that no channel found
+    if (ret == 0)
         irc_reply(e, cs, RPL_ENDOFNAMES, NULL);
 
     return (IRC_NAMES);
+}
+
+int irc_names(t_env *e, int cs, t_token *tokens)
+{
+    // When no channel provided
+    if (!tokens[1].addr)
+        return (irc_names_all_channels(e, cs, tokens));
+
+    return (irc_names_one_channels(e, cs, tokens));
 }

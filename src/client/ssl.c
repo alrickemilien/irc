@@ -55,8 +55,6 @@ int ssl_connect(t_env *e, t_fd *fd, int cs)
         return (-1);
     }
 
-    logdebug("ssl_connect::D");
-
     // Get the cipher - opt
     logdebug("SSL connection using %s", SSL_get_cipher(fd->ssl));
 

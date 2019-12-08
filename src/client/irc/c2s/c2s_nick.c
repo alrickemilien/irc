@@ -3,14 +3,13 @@
 
 static int c2s_nick_check_command(t_env *e, const t_token *tokens)
 {
-    size_t nick_len;
-
-    if (!tokens[1].addr || tokens[2].addr)
+    if (!tokens[1].addr)
         return (irc_error(e, ERR_NONICKNAMEGIVEN));
 
-    nick_len = tokens[1].len;
+    if (tokens[2].addr)
+        return (irc_error(e, ERR_NICK_BAD_FORMAT));
 
-    if (nick_len > 9 || !nick_len)
+    if (tokens[1].len > 9 || !tokens[1].len || !is_valid_nick(tokens[1].addr))
         return (irc_error(e, ERR_ERRONEUSNICKNAME, tokens[1].addr));
 
     return (0);
@@ -46,5 +45,5 @@ int c2s_nick(t_env *e, t_token *tokens)
     if (e->options.gui)
         ui_set_nick(e->ui, tokens[1].addr);
 
-    return (IRC_NICK);
+    return (IRC_C2S_NICK);
 }

@@ -109,9 +109,12 @@ void	cbuffer_dropn(
 		t_cbuffer *cbuf,
 		size_t n)
 {
-	if (cbuffer_isempty(cbuf))
-		return;
-	if (cbuf->tail + n >= CBUFFSIZE)
-		cbuf->head = (cbuf->tail + n) % CBUFFSIZE;
-	cbuf->tail = (cbuf->tail + n) % CBUFFSIZE;
+    // Not enough space for data fetch
+    // Buffer still full
+    if (cbuffer_isempty(cbuf))
+        return;
+
+    if (cbuf->tail + n > CBUFFSIZE && (cbuf->tail + n) % CBUFFSIZE > cbuf->head)
+        cbuf->head = (cbuf->tail + n) % CBUFFSIZE;
+    cbuf->tail = (cbuf->tail + n) % CBUFFSIZE;
 }

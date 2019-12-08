@@ -11,6 +11,11 @@ int ui_set_status(t_ui_panel *ui, int status)
             gtk_image_set_from_file(GTK_IMAGE(ui->status_image),
                                     ui->status_ok_image);
             break;
+
+        case 1:
+            gtk_image_set_from_file(GTK_IMAGE(ui->status_image),
+                                    ui->status_not_ok_image);
+            break;
         case 2:
             gtk_image_set_from_file(GTK_IMAGE(ui->status_image),
                                     ui->status_away_image);

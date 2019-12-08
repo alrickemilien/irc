@@ -20,7 +20,7 @@ void ui_chat_empty_chat_box(t_ui_panel *ui)
         return;
     ch = &ui->channels[ui->channel_index];
     ch->msg_count = 0;
-    children = gtk_container_get_children(GTK_CONTAINER(ui->chat_box));
+    children = gtk_container_get_children(GTK_CONTAINER(ch->chat_box));
     item = children;
     while (item)
     {
@@ -29,6 +29,46 @@ void ui_chat_empty_chat_box(t_ui_panel *ui)
     }
     g_list_free(children);
     memset(&ch->chat_msg_bloc_list, 0, sizeof(ch->chat_msg_bloc_list));
+}
+
+static void ui_message_dispatch(t_ui_panel *        ui,
+                                t_ui_chat_msg_bloc *bloc,
+                                const char *        msg,
+                                int                 type)
+{
+    GtkWidget *w;
+
+    switch (type)
+    {
+        case UI_CHAT_MSG:
+            w = ui_new_chat_message(ui, msg);
+            break;
+        case UI_TOPIC_MSG:
+            w = ui_new_topic_message(ui, msg);
+            break;
+        case UI_ERROR_MSG:
+            w = ui_new_error_message(ui, msg);
+            break;
+        case UI_INFO_MSG:
+            w = ui_new_info_message(ui, msg);
+            break;
+        case UI_AWAY_MSG:
+            w = ui_new_away_message(ui, msg);
+            break;
+        case UI_INVITE_MSG:
+            w = ui_new_invite_message(ui, msg);
+            break;
+        default:
+            w = NULL;
+            break;
+    }
+
+    if (w == NULL)
+        return;
+
+    gtk_list_box_insert(GTK_LIST_BOX(bloc->box), w, -1);
+
+    bloc->count++;
 }
 
 void ui_new_message(t_ui_panel *ui, const char *msg, int type)
@@ -42,8 +82,6 @@ void ui_new_message(t_ui_panel *ui, const char *msg, int type)
         return;
 
     ch = &ui->channels[ui->channel_index];
-
-    ui->chat_box = ch->chat_box;
 
     ch->msg_count++;
 
@@ -61,12 +99,12 @@ void ui_new_message(t_ui_panel *ui, const char *msg, int type)
         bloc = &ch->chat_msg_bloc_list[i];
 
         // Insert into list of bloc message
-        gtk_list_box_insert(GTK_LIST_BOX(ui->chat_box), bloc->box, -1);
+        gtk_list_box_insert(GTK_LIST_BOX(ch->chat_box), bloc->box, -1);
     }
     else if (i == UI_CHAT_BOX_BLOC_MAX)
     {
         // Delete first element
-        children = gtk_container_get_children(GTK_CONTAINER(ui->chat_box));
+        children = gtk_container_get_children(GTK_CONTAINER(ch->chat_box));
         gtk_widget_destroy(GTK_WIDGET(children->data));
         g_list_free(children);
 
@@ -85,36 +123,16 @@ void ui_new_message(t_ui_panel *ui, const char *msg, int type)
         bloc->count = 0;
 
         // Insert into list of bloc message
-        gtk_list_box_insert(GTK_LIST_BOX(ui->chat_box), bloc->box, -1);
+        gtk_list_box_insert(GTK_LIST_BOX(ch->chat_box), bloc->box, -1);
     }
     else
     {
         bloc = &ch->chat_msg_bloc_list[i];
     }
 
-    switch (type)
-    {
-        case UI_CHAT_MSG:
-            ui_push_chat_message(ui, bloc, msg);
-            break;
-        case UI_TOPIC_MSG:
-            ui_push_topic_message(ui, bloc, msg);
-            break;
-        case UI_ERROR_MSG:
-            ui_push_error_message(ui, bloc, msg);
-            break;
-        case UI_INFO_MSG:
-            ui_push_info_message(ui, bloc, msg);
-            break;
-        case UI_AWAY_MSG:
-            ui_push_away_message(ui, bloc, msg);
-            break;
-        default:
-            break;
-    }
+    ui_message_dispatch(ui, bloc, msg, type);
 
     g_timeout_add(50, ui_chat_scroll_to_bottom, ui->scrollwin);
-
-    gtk_widget_show_all(ui->chat_box);
+    gtk_widget_show_all(ch->chat_box);
     gtk_widget_show_all(ui->scrollwin);
 }

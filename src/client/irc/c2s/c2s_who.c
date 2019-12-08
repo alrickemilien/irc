@@ -11,5 +11,5 @@ int c2s_who(t_env *e, t_token *tokens)
                        e->self->channelname) < 0)
         return (-1);
 
-    return (IRC_WHO);
+    return (IRC_C2S_WHO);
 }

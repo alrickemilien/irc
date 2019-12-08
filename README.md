@@ -52,3 +52,82 @@ Use the following command to check packets
 ```
 tcpdump -vv -A -i <network interface of binding ip server> port <running port of irc server>
 ```
+
+## nc
+
+Sending `ctrl+D` into `nc` stdin causes the `nc` software to flush it's buffer.
+!!! It does not mean that sending `ctrl+D` to server flush or cut buffer.
+`ctrl+D` is interprated by the recieving server as a regular byte.
+
+For testing, use:
+
+```
+cat <(echo -n -e "USER client_x 42.fr :Client X\x0D\x0ANICK clientx") - | nc 127.0.0.1 5555
+```
+
+# Build on OSX
+
+Need to install follozing packages to build the project :
+
+```
+brew install gtk+-3.0 fribidi gettext
+brew link gettext --force
+```
+
+# Build Debian based
+
+Need to install follozing packages to build the project :
+
+```
+sudo apt-get install libgtk-3-dev libfribidi-dev
+```
+
+# Build CentOS
+
+Need to install follozing packages to build the project :
+
+```
+sudo yum install -y gtk3-devel fribidi-devel
+```
+
+# POT
+
+On OSX, you need to install following binaries :
+
+```
+brew install gettext
+brew link gettext --force
+```
+
+On CentOS/Deb, `gettext` binaries may be installed through Development Tools.
+
+To generate template :
+
+```
+# For glade files
+xgettext \
+    --sort-output \
+    --keyword=N_ \
+    --keyword=_ \
+    --keyword=translatable     \
+    --no-wrap \
+    --escape     \
+    --copyright-holder="Your Company" \
+    --language=Glade     \
+    -o po/msg.pot \
+    /path/to/glade/file.glade
+
+xgettext \
+    --sort-output \
+    --keyword=N_ \
+    --keyword=_ \
+    --keyword=translatable     \
+    --no-wrap \
+    --escape     \
+    --copyright-holder="Your Company" \
+    -o po/msg.pot \
+    /path/to/c/file.c
+
+# Merge two templates
+msgcat a.pot b.pot > all.pot
+```

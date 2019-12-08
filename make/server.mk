@@ -23,8 +23,8 @@ SERVER_SRC+=src/utils/log.c \
 			src/utils/time2iso.c
 
 # irc utils
-SERVER_SRC+=src/utils/irc/is_valid_channel.c
-
+SERVER_SRC+=src/utils/irc/is_valid_channel.c \
+			src/utils/irc/is_valid_nick.c
 # fd
 SERVER_SRC+=src/server/fd/init_fd.c \
 			src/server/fd/check_fd.c \
@@ -47,6 +47,13 @@ SERVER_SRC+=src/server/irc/irc_command.c \
 			src/server/irc/irc_who.c \
 			src/server/irc/irc_whois.c \
 			src/server/irc/irc_list.c \
+			src/server/irc/irc_time.c \
+			src/server/irc/irc_ping.c \
+			src/server/irc/ping.c \
+			src/server/irc/irc_pong.c \
+			src/server/irc/irc_invite.c \
+			src/server/irc/irc_topic.c \
+			src/server/irc/irc_version.c \
 			src/server/irc/irc_privmsg.c
 
 #cbuffer

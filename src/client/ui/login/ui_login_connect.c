@@ -6,21 +6,6 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 
-static void ui_login_connect_fetch_entrys(t_ui_login *ui)
-{
-    // Set entrys
-    ui->host_entry =
-        GTK_WIDGET(gtk_builder_get_object(ui->builder, "entry_host"));
-    ui->port_entry =
-        GTK_WIDGET(gtk_builder_get_object(ui->builder, "entry_port"));
-    ui->username_entry =
-        GTK_WIDGET(gtk_builder_get_object(ui->builder, "entry_name"));
-    ui->pass_entry =
-        GTK_WIDGET(gtk_builder_get_object(ui->builder, "entry_pass"));
-    ui->nick_entry =
-        GTK_WIDGET(gtk_builder_get_object(ui->builder, "entry_nick"));
-}
-
 static int ui_login_connect_fetch_entrys_content(t_env *           e,
                                                  t_ui_login *      ui,
                                                  t_ui_credentials *crd)
@@ -72,8 +57,6 @@ void ui_login_connect(GtkWidget *widget, gpointer data)
     e = ui->e;
 
     gtk_button_set_label(GTK_BUTTON(ui->button_go), "Connecting ...");
-
-    ui_login_connect_fetch_entrys(ui);
 
     if (ui_login_connect_fetch_entrys_content(e, ui, &crd) < 0)
         return;

@@ -6,13 +6,31 @@ int stdin_read(t_env *e, size_t cs)
     size_t index;
     char   command[512];
 
-    // Receiving data from the client cs
-    r = cbuffer_read(&e->fds[cs].buf_read, cs);
+    index = -1;
+    if (cbuffer_size(&e->fds[cs].buf_read) != CBUFFSIZE &&
+        (cbuffer_isempty(&e->fds[cs].buf_read) ||
+         (index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0A")) == (size_t)-1))
+    {
+        // Receiving data from the client cs
+        r = cbuffer_read(&e->fds[cs].buf_read, cs);
 
-    if (r <= 0)
-        return (r);
+        if (r <= 0)
+            return (r);
+    }
 
-    index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0A");
+    if (index == (size_t)-1)
+        index = cbuffer_indexof(&e->fds[cs].buf_read, "\x0A");
+
+    if (index == (size_t)-1)
+    {
+        // The buffer is full without any end of command, flush it
+        if (cbuffer_size(&e->fds[cs].buf_read) >= CBUFFSIZE)
+        {
+            logerror("[!] Buffer is reset because it is full without command");
+            cbuffer_reset(&e->fds[cs].buf_read);
+        }
+        return (0);
+    }
 
     while (index != (size_t)-1)
     {

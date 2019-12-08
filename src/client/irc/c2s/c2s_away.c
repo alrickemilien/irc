@@ -2,22 +2,21 @@
 
 int _c2s_away(t_fd *fd, const char *msg, size_t msg_len)
 {
-    return (cbuffer_putcmd(&fd->buf_write, "AWAY %.*s\x0D\x0A", msg_len, msg));
+    return (cbuffer_putcmd(&fd->buf_write, "AWAY %.*s\x0D\x0A",
+                           msg_len < AWAYMSGSIZE ? msg_len : AWAYMSGSIZE, msg));
 }
 
 int c2s_away(t_env *e, t_token *tokens)
 {
     if (e->sock == -1)
-        return logerror(
-            "You need to be logged in before any command. Use "
-            "/connect [server] ?[port]");
+       return (irc_error(e, ERR_NOT_CONNECTED));
 
     if (tokens[1].addr == (void *)0)
         return (irc_error(e, ERR_NEEDMOREPARAMS, tokens[0].addr));
 
     _c2s_away(e->self, tokens[1].addr, strlen(tokens[1].addr));
 
-    return (IRC_AWAY);
+    return (IRC_C2S_AWAY);
 }
 
 int _c2s_unaway(t_fd *fd)
@@ -34,5 +33,5 @@ int c2s_unaway(t_env *e, t_token *tokens)
 
     _c2s_unaway(e->self);
 
-    return (IRC_UNAWAY);
+    return (IRC_C2S_UNAWAY);
 }

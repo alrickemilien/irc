@@ -6,13 +6,15 @@ int s2c_rpl_welcome(t_env *e, t_token *tokens)
 {
     void *tmp;
 
-    (void)e;
     (void)tmp;
 
     if (!tokens[1].addr)
         return (-1);
 
-    loginfo(tokens[1].addr[0] == ':' ? tokens[1].addr + 1 : tokens[1].addr);
+    e->self->registered = 1;
+
+    loginfo("%s",
+            tokens[1].addr[0] == ':' ? tokens[1].addr + 1 : tokens[1].addr);
 
     if (e->options.gui)
     {

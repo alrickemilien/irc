@@ -76,6 +76,7 @@ void insert_channel_left_panel(t_ui_panel *ui, const char *channel)
     g_signal_connect(w, "clicked", G_CALLBACK(ui_join_from_side_channel), ui);
     gtk_list_box_insert(GTK_LIST_BOX(ui->channels_box), w, -1);
     gtk_widget_show_all(ui->channels_box);
+    gtk_set_cursor_style(w, "pointer");
 }
 
 int ui_join(t_ui_panel *ui, const char *channel)
@@ -97,6 +98,7 @@ int ui_join(t_ui_panel *ui, const char *channel)
         gtk_container_add(GTK_CONTAINER(ui->chat_box_viewport),
                           ui->channels[ui->channel_index].chat_box);
         g_object_ref(ui->channels[ui->channel_index].chat_box);
+        g_timeout_add(50, ui_chat_scroll_to_bottom, ui->scrollwin);
         return (0);
     }
 
@@ -105,7 +107,7 @@ int ui_join(t_ui_panel *ui, const char *channel)
 
     insert_channel_left_panel(ui, channel);
 
-    // create the chatbox
+    // remove previous the chatbox viewport
     if (ui->channel_index != -1)
         gtk_container_remove(GTK_CONTAINER(ui->chat_box_viewport),
                              ui->channels[ui->channel_index].chat_box);
@@ -116,6 +118,8 @@ int ui_join(t_ui_panel *ui, const char *channel)
                       ui->channels[ui->channel_index].chat_box);
     g_object_ref(ui->channels[ui->channel_index].chat_box);
     strcpy(ui->channels[ui->channel_index].label, channel);
+    memset(ui->channels[ui->channel_index].chat_msg_bloc_list, 0,
+           sizeof(ui->channels[ui->channel_index].chat_msg_bloc_list));
 
     ui->channels_count++;
 

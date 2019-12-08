@@ -11,6 +11,9 @@
 #include <irc.h>
 #include <server/options.h>
 
+#define IRC_SERVER_VERSION "1.0.0"
+#define IRC_SERVER_VERSION_COMMENT "Basic version IRC server @ 42"
+
 #define PIDFILE "./ircserver.pid"
 
 #define FD_FREE 0
@@ -18,7 +21,11 @@
 #define FD_CLIENT 2
 
 #define DEFAULT_CHANNEL "&hub"
-#define DEFAULT_NICKNAME "Ben_AFK"
+
+#define PING_INTERVAL_S 1
+#define TOLERATED_INACTIVITY_TIME_S 1800
+#define MAX_TOLERATED_INACTIVITY_TIME_S 7200
+
 
 typedef struct s_env
 {
@@ -34,6 +41,19 @@ typedef struct s_env
     char       isotime[ISOTIMESTRSIZE];
     void *     ssl_ctx;
 } t_env;
+
+/*
+** Tokenize
+*/
+
+typedef struct s_token
+{
+    char * addr;
+    size_t len;
+} t_token;
+
+size_t tokenize(char *str, t_token *tokens, size_t len);
+size_t tokenizechr(char *str, t_token *tokens, size_t len, int c);
 
 /*
 ** fd
@@ -61,6 +81,12 @@ typedef enum e_irc {
     IRC_WHO,
     IRC_NOTICE,
     IRC_LIST,
+    IRC_TIME,
+    IRC_PING,
+    IRC_PONG,
+    IRC_VERSION,
+    IRC_INVITE,
+    IRC_TOPIC,
     IRC_COMMANDS_NUMBER
 } t_irc_enum;
 
@@ -84,7 +110,14 @@ int irc_part(t_env *e, int cs, t_token *tokens);
 int irc_whois(t_env *e, int cs, t_token *tokens);
 int irc_who(t_env *e, int cs, t_token *tokens);
 int irc_list(t_env *e, int cs, t_token *tokens);
+int irc_time(t_env *e, int cs, t_token *tokens);
+int irc_ping(t_env *e, int cs, t_token *tokens);
+int irc_pong(t_env *e, int cs, t_token *tokens);
+int irc_version(t_env *e, int cs, t_token *tokens);
+int irc_invite(t_env *e, int cs, t_token *tokens);
+int irc_topic(t_env *e, int cs, t_token *tokens);
 int irc_reply(t_env *e, int cs, int code, ...);
+int irc_reply_all_in_channel(t_env *e, int cs, int code, ...);
 int irc_err(t_env *e, int cs, int code, ...);
 
 void irc_user_join_default_channel(t_env *e, int cs);
@@ -93,7 +126,9 @@ void irc_privmsg_nomatch_nick(t_env *  e,
                               t_token *subtokens,
                               size_t   subtoken_count);
 
+int ping(t_env *e, int cs);
 void broadcast(t_env *e, const char *msg, int type, size_t cs);
+void broadcast_all(t_env *e, const char *msg, int msg_type, size_t cs);
 void broadcast_all_in_channel(t_env *     e,
                               const char *msg,
                               int         msg_type,

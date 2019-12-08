@@ -19,18 +19,13 @@ static int c2s_join_check_command(t_env *e, const t_token *tokens)
     channel = tokens[1].addr;
     channel_len = tokens[1].len;
 
-    if (strpbrk(channel, "\x07\x2C"))
+    if (channel_len - 1 > CHANNELSTRSIZE)
         return (irc_error(e, ERR_NOSUCHCHANNEL, tokens[1].addr));
-    else if (channel_len - 1 > CHANNELSTRSIZE)
-        return (irc_error(e, ERR_NOSUCHCHANNEL, tokens[1].addr));
-    else if ((channel[0] != '#' && channel[0] != '&') ||
-             !is_valid_chan_name(channel))
+    else if (!is_valid_chan_name(channel, channel_len))
         return (irc_error(e, ERR_NOSUCHCHANNEL, tokens[1].addr));
     else if (channel_len < 1)
         return (irc_error(e, ERR_NOSUCHCHANNEL, ""));
-    else
-        return (0);
-    return (-1);
+    return (0);
 }
 
 int _c2s_join(t_fd *fd, const char *channel_name, size_t channel_name_len)
@@ -50,5 +45,5 @@ int c2s_join(t_env *e, t_token *tokens)
 
     _c2s_join(e->self, tokens[1].addr, tokens[1].len);
 
-    return (IRC_JOIN);
+    return (IRC_C2S_JOIN);
 }

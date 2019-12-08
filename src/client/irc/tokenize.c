@@ -1,6 +1,6 @@
 #include <client/irc.h>
 
-size_t tokenize(char *str, t_token *tokens, size_t len)
+size_t tokenize(const char *str, t_token *tokens, size_t len)
 {
     size_t i;
     size_t count;

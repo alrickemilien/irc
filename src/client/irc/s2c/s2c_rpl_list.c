@@ -20,13 +20,11 @@ int s2c_rpl_liststart(t_env *e, t_token *tokens)
 
 int s2c_rpl_list(t_env *e, t_token *tokens)
 {
-    (void)e;
-
     if (s2c_rpl_listrply_state == 0 || !tokens[1].addr)
         return (-1);
 
     // When buffer is full, flush buffer
-    if (strlen(tokens[1].addr) >
+    if (tokens[1].len >
         (sizeof(s2c_rpl_listrply_buffer) - strlen(s2c_rpl_listrply_buffer)))
     {
         loginfo(s2c_rpl_listrply_buffer);
@@ -38,7 +36,7 @@ int s2c_rpl_list(t_env *e, t_token *tokens)
     if (s2c_rpl_listrply_buffer[0] != 0)
         strcat(s2c_rpl_listrply_buffer, "\n");
 
-    strcat(s2c_rpl_listrply_buffer, tokens[1].addr);
+    strncat(s2c_rpl_listrply_buffer, tokens[1].addr, tokens[1].len);
 
     return (IRC_S2C_RPL_LIST);
 }
@@ -51,6 +49,9 @@ int s2c_rpl_listend(t_env *e, t_token *tokens)
         return (-1);
 
     s2c_rpl_listrply_state = 0;
+
+    if (strlen(s2c_rpl_listrply_buffer) == 0)
+        return (IRC_S2C_RPL_LISTEND);
 
     loginfo(s2c_rpl_listrply_buffer);
 

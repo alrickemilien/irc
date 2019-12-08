@@ -2,22 +2,30 @@
 
 int irc_away(t_env *e, int cs, t_token *tokens)
 {
+    char * away_msg;
+    size_t away_msg_len;
+
     if (!tokens[1].addr)
     {
-        memset(e->fds[cs].awaymessage, 0, sizeof(e->fds[cs].awaymessage));
+        memset(e->fds[cs].awaymessage, 0, sizeof(AWAYMSGSIZE + 1));
         e->fds[cs].away = 0;
         irc_reply(e, cs, RPL_UNAWAY, NULL);
-        loginfo("%s marked as not away\n", e->fds[cs].nickname);
+        loginfo("%s marked as not away", e->fds[cs].nickname);
         return (IRC_AWAY);
     }
 
-    memrpl(e->fds[cs].awaymessage, sizeof(e->fds[cs].awaymessage),
-           tokens[1].addr[0] == ':' ? tokens[1].addr + 1 : tokens[1].addr,
-           tokens[1].addr[0] == ':' ? strlen(tokens[1].addr) - 1
-                                    : strlen(tokens[1].addr));
+    away_msg_len = tokens[1].addr[0] == ':' ? tokens[1].len - 1 : tokens[1].len;
+
+    if (away_msg_len > AWAYMSGSIZE)
+        away_msg_len = AWAYMSGSIZE;
+
+    away_msg = tokens[1].addr[0] == ':' ? tokens[1].addr + 1 : tokens[1].addr;
+
+    memrpl(e->fds[cs].awaymessage, sizeof(AWAYMSGSIZE + 1), away_msg, away_msg_len);
+   
     e->fds[cs].away = 1;
     irc_reply(e, cs, RPL_NOWAWAY, NULL);
-    loginfo("%s marked as away\n", e->fds[cs].nickname);
+    loginfo("%s marked as away", e->fds[cs].nickname);
 
     return (IRC_AWAY);
 }

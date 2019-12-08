@@ -3,14 +3,10 @@
 
 static int s2c_nick_check_command(t_env *e, const t_token *tokens)
 {
-    size_t nick_len;
-
-    if (!tokens[0].addr || !tokens[1].addr || tokens[2].addr)
+    if (!tokens[0].addr || !tokens[1].addr || !tokens[2].addr)
         return (irc_error(e, ERR_NONICKNAMEGIVEN));
 
-    nick_len = tokens[2].len;
-
-    if (nick_len > 9 || !nick_len)
+    if (tokens[2].len > 9 || !tokens[2].len)
         return (irc_error(e, ERR_ERRONEUSNICKNAME, tokens[2].addr));
 
     return (0);
@@ -42,7 +38,13 @@ int s2c_nick(t_env *e, t_token *tokens)
                 e->fds[e->sock].channelname);
         if (e->options.gui)
             ui_set_nick(e->ui, tokens[2].addr);
+        return (IRC_S2C_NICK);
     }
+
+    loginfo("%.*s changed nickname to %s",
+            tokens[0].addr[0] == ':' ? tokens[0].len - 1 : tokens[0].len,
+            tokens[0].addr[0] == ':' ? tokens[0].addr + 1 : tokens[0].addr,
+            tokens[2].addr);
 
     return (IRC_S2C_NICK);
 }
