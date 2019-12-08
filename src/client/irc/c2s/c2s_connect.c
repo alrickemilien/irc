@@ -90,7 +90,7 @@ int c2s_connect(t_env *e, t_token *tokens)
     // Leave when socket already set
     // @TODO reset whole file descriptor
     if (e->sock != -1)
-        return logerror("Already connected");
+        return (logerror("Already connected"));
 
     if ((c2s_connect_check_command(e, tokens)) < 0)
         return (-1);

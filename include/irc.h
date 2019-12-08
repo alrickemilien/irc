@@ -19,6 +19,10 @@
 #define MSG_NOSIGNAL 0
 #endif
 
+#ifndef DEBUG
+#define DEBUG 1
+#endif
+
 /*
 ** Utils
 */
@@ -34,7 +38,6 @@ int    time2iso(char *str);
 int    ato32(const char *str, uint32_t *nbr);
 int    i64toa(uint64_t nbr, char *buffer, size_t buffer_size, uint64_t base);
 char * extract_folder_from_path(const char *path);
-char * merge_and_extract_folder_from_path(const char *a, const char *b);
 char * strjoin(char const *s1, char const *s2);
 void * memrpl(char *dest, size_t dest_size, const char *src, size_t src_size);
 int    fmttime(char *str, const char *fmt);
@@ -54,6 +57,8 @@ bool is_valid_nick(const char *nick);
 
 #include <stdarg.h>
 #include <time.h>
+
+#define LOGSIZE 1024
 
 int loginfo(const char *fmt, ...);
 int logerror(const char *fmt, ...);
@@ -75,19 +80,6 @@ int logdebug(const char *fmt, ...);
 #define TOPICSTRSIZE 504
 #define IRC_DEFAULT_SERVER_PORT 5555
 #define AWAYMSGSIZE 505
-
-/*
-** Tokenize
-*/
-
-typedef struct s_token
-{
-    char * addr;
-    size_t len;
-} t_token;
-
-size_t tokenize(char *str, t_token *tokens, size_t len);
-size_t tokenizechr(char *str, t_token *tokens, size_t len, int c);
 
 /*
 ** CBuffer

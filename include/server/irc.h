@@ -43,6 +43,19 @@ typedef struct s_env
 } t_env;
 
 /*
+** Tokenize
+*/
+
+typedef struct s_token
+{
+    char * addr;
+    size_t len;
+} t_token;
+
+size_t tokenize(char *str, t_token *tokens, size_t len);
+size_t tokenizechr(char *str, t_token *tokens, size_t len, int c);
+
+/*
 ** fd
 */
 

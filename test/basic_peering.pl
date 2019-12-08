@@ -52,19 +52,19 @@ $s2->setsockopt(SOL_SOCKET, SO_RCVTIMEO, pack('l!l!', 10, 0));
 $s1->send("PASS dummy_password\x0D\x0A");
 $s2->send("PASS dummy_password\x0D\x0A");
 
-$s1->send("NICK client_1\x0D\x0AUSER client1 microsoft.com :Client One\x0D\x0A");
-$s2->send("NICK client_2\x0D\x0AUSER client2 aws.com :Client Two\x0D\x0A");
+$s1->send("NICK client1\x0D\x0AUSER client1 microsoft.com :Client One\x0D\x0A");
+$s2->send("NICK client2\x0D\x0AUSER client2 aws.com :Client Two\x0D\x0A");
 
-ok(ircunittest::recv_eq $s1, "RPL_WELCOME");
-ok(ircunittest::recv_eq $s2, "RPL_WELCOME");
+ok(ircunittest::recv_eq $s1, "001");
+ok(ircunittest::recv_eq $s2, "001");
 
 #
 # Test basic peering
 #
 
 # Data to send to a server
-$s1->send("PRIVMSG client_2 Hi\x0D\x0A");
-ok(ircunittest::recv_eq $s2, ":client_1 PRIVMSG :Hi");
+$s1->send("PRIVMSG client2 Hi\x0D\x0A");
+ok(ircunittest::recv_eq $s2, ":client1 PRIVMSG :Hi");
 
 
 #
@@ -75,10 +75,10 @@ my $msg = "PRIVMSG ";
 for (my $i = 0; $i <= 10000; $i++) {
     $msg .= "X";
 }
-$msg .= "\x0D\x0A PRIVMSG client_2 non \x0D\x0A";
+$msg .= "\x0D\x0A PRIVMSG client2 non \x0D\x0A";
 $s1->send($msg);
 
-ok(ircunittest::recv_eq $s2, ":client_1 PRIVMSG :non");
+ok(ircunittest::recv_eq $s2, ":client1 PRIVMSG :non");
 
 #
 # Test utf8
@@ -92,7 +92,7 @@ my $s3 = new IO::Socket::INET (
 );
 die "Couldn't connect to $HOST:$PORT : $!\n" unless $s3;
 $s3->setsockopt(SOL_SOCKET, SO_RCVTIMEO, pack('l!l!', 5, 0));
-$s3->send("NICK לקוח3\x0D\x0AUSER לקוח3 aws.com :Three לקוח\x0D\x0A");
+$s3->send("NICK client3\x0D\x0AUSER לקוח3 aws.com :Three לקוח\x0D\x0A");
 ircunittest::recv_ne $s3, "";
 
 diag "Connecting client 4 dummy\n";
@@ -104,7 +104,7 @@ my $s4 = new IO::Socket::INET (
 );
 die "Couldn't connect to $HOST:$PORT : $!\n" unless $s4;
 $s4->setsockopt(SOL_SOCKET, SO_RCVTIMEO, pack('l!l!', 5, 0));
-$s4->send("NICK לקוח4\x0D\x0AUSER לקוח4 aws.com :Four לקוח\x0D\x0A");
+$s4->send("NICK client4\x0D\x0AUSER לקוח4 aws.com :Four לקוח\x0D\x0A");
 ircunittest::recv_ne $s4, "";
 
 # data to send to a server
@@ -117,11 +117,11 @@ ok(ircunittest::recv_eq $s3, "JOIN #ערוץ1");
 ok(ircunittest::recv_eq $s2, "JOIN #ערוץ1");
 ok(ircunittest::recv_eq $s1, "JOIN #ערוץ1");
 
-$s3->send("PRIVMSG client_2,client_1 :איפה הביבליוטקה\x0D\x0A");
+$s3->send("PRIVMSG client2,client1 :איפה הביבליוטקה\x0D\x0A");
 
-ok(ircunittest::recv_eq $s1, "לקוח3 PRIVMSG :איפה הביבליוטקה");
-ok(ircunittest::recv_eq $s2, "לקוח3 PRIVMSG :איפה הביבליוטקה");
-ok(ircunittest::recv_ne $s3, "לקוח3 PRIVMSG :איפה הביבליוטקה");
+ok(ircunittest::recv_eq $s1, "client3 PRIVMSG :איפה הביבליוטקה");
+ok(ircunittest::recv_eq $s2, "client3 PRIVMSG :איפה הביבליוטקה");
+ok(ircunittest::recv_ne $s3, "client3 PRIVMSG :איפה הביבליוטקה");
 
 #
 # Test PRIVMSG to all clients in the channel
@@ -131,9 +131,10 @@ $s3->send("PRIVMSG #ערוץ1 :Wake up\x0D\x0A");
 
 diag "PRIVMSG #ערוץ1 :Wake up";
 
-ok(ircunittest::recv_eq $s1, "לקוח3 PRIVMSG :Wake up");
-ok(ircunittest::recv_eq $s2, "לקוח3 PRIVMSG :Wake up");
-ok(ircunittest::recv_ne $s4, "לקוח3 PRIVMSG :Wake up");
+ok(ircunittest::recv_eq $s1, "client3 PRIVMSG :Wake up");
+ok(ircunittest::recv_eq $s2, "client3 PRIVMSG :Wake up");
+ok(ircunittest::recv_eq $s3, "client3 PRIVMSG :Wake up");
+ok(ircunittest::recv_ne $s4, "client3 PRIVMSG :Wake up");
 
 #
 # Test away
@@ -142,12 +143,12 @@ ok(ircunittest::recv_ne $s4, "לקוח3 PRIVMSG :Wake up");
 $s2->send("AWAY :משם\x0D\x0A");
 $s3->send("AWAY :Available between 00AM and 07AM\x0D\x0A");
 
-ok(ircunittest::recv_eq $s2, "RPL_NOWAWAY :You have been marked as being away");
-ok(ircunittest::recv_eq $s3, "RPL_NOWAWAY :You have been marked as being away");
+ok(ircunittest::recv_eq $s2, "306 :You have been marked as being away");
+ok(ircunittest::recv_eq $s3, "306 :You have been marked as being away");
 
-$s1->send("PRIVMSG לקוח3,client_2 :איפה הביבליוטקה\x0D\x0A");
+$s1->send("PRIVMSG client3,client2 :איפה הביבליוטקה\x0D\x0A");
 
-ok(ircunittest::recv_eq $s1, "RPL_AWAY client_2 :משם\x0D\x0ARPL_AWAY לקוח3 :Available between 00AM and 07AM\x0D\x0A");
+ok(ircunittest::recv_eq $s1, "301 client2 :משם\x0D\x0A301 client3 :Available between 00AM and 07AM\x0D\x0A");
 
 #
 # Terminate clients
@@ -155,8 +156,8 @@ ok(ircunittest::recv_eq $s1, "RPL_AWAY client_2 :משם\x0D\x0ARPL_AWAY לקוח
 
 $s1->send("QUIT :bye\x0D\x0A");
 
-ok(ircunittest::recv_eq $s2, "client_1 QUIT :bye");
-ok(ircunittest::recv_eq $s3, "client_1 QUIT :bye");
+ok(ircunittest::recv_eq $s2, "client1 QUIT :bye");
+ok(ircunittest::recv_eq $s3, "client1 QUIT :bye");
 
 diag "Closing clients ...";
 $s1->close();

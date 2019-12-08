@@ -32,7 +32,7 @@ for (my $i = 0; $i <= $CLIENTS_NUMBER; $i++) {
     
     $tmp_s->setsockopt(SOL_SOCKET, SO_RCVTIMEO, pack('l!l!', 10, 0));
 
-    $tmp_s->send("USER client$i microsoft.com :Client $i\x0D\x0ANICK client_$i\x0D\x0A");
+    $tmp_s->send("USER client$i microsoft.com :Client $i\x0D\x0ANICK client$i\x0D\x0A");
 
     push @s, $tmp_s
 }

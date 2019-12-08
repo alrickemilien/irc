@@ -62,7 +62,7 @@ CLIENT_SRC+=src/client/irc/s2c/s2c.c \
 			src/client/irc/s2c/s2c_rpl_welcome.c
 
 # irc error
-CLIENT_SRC+=src/client/irc/error/irc_error.c
+CLIENT_SRC+=src/client/irc/irc_error.c
 
 # ssl
 CLIENT_SRC+=src/client/ssl.c
@@ -78,7 +78,6 @@ CLIENT_SRC+=src/cbuffer/cbuffer.c \
 CLIENT_SRC+=src/utils/log.c \
 			src/utils/ato32.c \
 			src/utils/extract_folder_from_path.c \
-			src/utils/merge_and_extract_folder_from_path.c \
 			src/utils/strjoin.c \
 			src/utils/i64toa.c \
 			src/utils/memrpl.c \
@@ -97,6 +96,8 @@ CLIENT_SRC+=src/client/ui/gtk_builder_load.c \
 			src/client/ui/gtk_provider_load_css.c \
 			src/client/ui/gtk_set_class.c \
 			src/client/ui/gtk_new_rgba.c \
+			src/client/ui/gtk_set_cursor_style.c \
+			src/client/ui/gtk_pango_find_base_dir.c \
 			src/client/ui/ui_utils.c \
 			src/client/ui/gtk_get_assets.c
 
@@ -114,6 +115,9 @@ CLIENT_SRC+=src/client/ui/panel/panel.c	\
 			src/client/ui/panel/ui_set.c \
 			src/client/ui/panel/ui_leave.c \
 			src/client/ui/panel/ui_chat.c
+
+# ui msg
+CLIENT_SRC+=src/client/ui/panel/ui_message/ui_chat_message.c
 
 CLIENT_OBJ=$(CLIENT_SRC:.c=.o)
 

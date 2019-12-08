@@ -25,9 +25,19 @@ int s2c_rpl_topic(t_env *e, t_token *tokens)
 int s2c_rpl_notopic(t_env *e, t_token *tokens)
 {
     (void)e;
-    (void)tokens;
+
+
+    if (!tokens[1].addr)
+        return (-1);
 
     logdebug("s2c_rpl_notopic::");
+
+    loginfo("%s", tokens[1].addr);
+    if (e->options.gui)
+        ui_new_message(
+            e->ui,
+            tokens[1].addr,
+            UI_TOPIC_MSG);
 
     return (IRC_S2C_RPL_NOTOPIC);
 }

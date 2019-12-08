@@ -14,14 +14,6 @@ gboolean on_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data)
 
 void on_entry(GtkWidget *widget, gpointer data)
 {
-    const char *text;
-    char *      tmp;
-    t_env *     e;
-
-    e = (t_env *)data;
-    text = gtk_entry_get_text(GTK_ENTRY(widget));
-    tmp = strdup(text);
-    c2s(e, tmp);
-    free(tmp);
+    c2s(data, gtk_entry_get_text(GTK_ENTRY(widget)));
     gtk_entry_set_text(GTK_ENTRY(widget), "");
 }

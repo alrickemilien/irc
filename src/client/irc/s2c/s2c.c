@@ -41,6 +41,9 @@ int s2c(t_env *e, char *buffer)
 
     tokenize(buffer, tokens, 30);
 
+    logdebug("s2c :: buffer :: %s", buffer);
+
+
     // logdebug("ret:%ld\n", tokenize(buffer, tokens, 30));
     // j = 0;
     // while (j < 30 && tokens[j].addr)
@@ -69,7 +72,7 @@ int s2c(t_env *e, char *buffer)
 
     logerror("Unknow command %s", buffer);
 
-    if (e->options.gui)
+    if (e->options.gui && e->self->registered)
         ui_new_message(e->ui, buffer, UI_ERROR_MSG);
 
     return (-1);

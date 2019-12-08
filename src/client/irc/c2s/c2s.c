@@ -28,7 +28,7 @@ static int is_eow(const char *buffer, size_t len)
     return (buffer[len] == ' ' || buffer[len] == '\n' || buffer[len] == 0);
 }
 
-int c2s(t_env *e, char *buffer)
+int c2s(t_env *e, const char *buffer)
 {
     size_t  i;
     t_token tokens[30];
@@ -53,7 +53,10 @@ int c2s(t_env *e, char *buffer)
         i++;
     }
 
-    if (e->sock == -1 || buffer[0] == '/')
+    if (e->sock == -1)
+        return (irc_error(e, ERR_NOT_CONNECTED));
+
+    if (buffer[0] == '/')
         return (irc_error(e, ERR_UNRECOGNIZED_COMMAND, buffer));
 
     _c2s_msg(e->self, e->self->channelname, strlen(e->self->channelname),

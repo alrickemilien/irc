@@ -11,7 +11,7 @@
 
 #nickname_label {
     color: #fdfdfd;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 /***
@@ -22,6 +22,12 @@
  *    ╚██████╗██║  ██║██║  ██║██║ ╚████║██║ ╚████║███████╗███████╗███████║
  *     ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝╚══════╝╚══════╝
  */
+
+#channels_list_title {
+    color: #fdfdfd;
+    font-size: 14px;
+    padding-left: 15px;
+}
 
 #channels_box {
     background-color: transparent;
@@ -40,7 +46,7 @@
 .channels-box-item GtkLabel {
     font-weight: bold;
     color: #fdfdfd;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .channels-box-item:hover {
@@ -120,8 +126,12 @@
 }
 
 .chat-message {
-    margin-left: 12px;
-    padding: 3px;
+    padding: 1px;
+}
+
+.chat-nick {
+    padding: 1px;
+    font-weight: bold;
 }
 
 .chat-message-hour {
@@ -248,18 +258,13 @@
  *    ╚══════╝ ╚═════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚══════╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
  */
 
-scrollbar,
-.scrollbar {
-    background-color: transparent;
-    transition: all 600ms ease-out;
-    -GtkRange-slider-width: 6;
+scrollbar.vertical,
+.scrollbar.vertical {
+    margin-left: 0px;
+    margin-right: 0px;
+    -GtkRange-slider-width: 4;
+    -GtkRange-stepper-size: 5;
 }
-
-scrollbar:hover,
-.scrollbar:hover {
-    transition: all 200ms ease-in-out;
-}
-
 
 scrollbar button,
 .scrollbar.button,
@@ -268,31 +273,33 @@ scrollbar button,
 .scrollbar.button:hover:backdrop,
 .scrollbar.button:active:hover:backdrop {
     border: none;
-    background-image: none;
     background-color: rgba(146, 13, 173, 0.28);
 }
 
+scrollbar.overlay-indicator slider,
+.slider {
+    border-radius: 20px;
+    background-color: rgba(145, 35, 167, 0.664);
+}
 
 scrollbar.overlay-indicator slider:hover,
 .slider:hover {
     border-radius: 20px;
-    background-color: rgba(146, 13, 173, 0.28);
-}
-
-
-scrollbar trough,
-.scrollbar.trough {
-    padding: 0;
+    background-color: rgba(135, 30, 156, 0.37);
 }
 
 scrollbar.overlay-indicator trough,
 .scrollbar.overlay-indicator.trough {
-    background-color: transparent;
 }
 
 scrollbar.overlay-indicator:hover trough,
 .scrollbar.overlay-indicator.trough:hover {
     background-color: rgba(146, 13, 173, 0.28);
+}
+
+scrollbar trough,
+.scrollbar.trough {
+    background-color: transparent;
 }
 
 scrollbar:hover trough,

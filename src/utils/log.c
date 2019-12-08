@@ -4,8 +4,6 @@
 #include <unistd.h>
 #include <string.h>
 
-#define LOGSIZE 512
-
 static int is_tty = -1;
 
 int loginfo(const char *fmt, ...)
@@ -61,6 +59,9 @@ int logdebug(const char *fmt, ...)
     va_list ap;
     char    final_fmt[LOGSIZE + 1];
     char    t[ISOTIMESTRSIZE];
+
+    if (!DEBUG)
+        return (0);
 
     if (is_tty == -1)
         is_tty = isatty(1);
