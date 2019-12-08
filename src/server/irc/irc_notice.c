@@ -14,13 +14,16 @@ static int	irc_notice_check_command(
 	return (0);
 }
 
-static int	is_nick_or_chan_matching(const char *channel,
-		const char *nick,
-		const char *src,
-		size_t src_len)
+static int	matchin(t_env *e,
+	size_t i,
+	const char *src,
+	size_t src_len)
 {
-	if (src == NULL)
-		return (0);
+	const char *nick;
+	const char *channel;
+
+	nick = e->fds[i].nickname;
+	channel = e->channels[e->fds[i].channel].channel;
 	return (src && (strncmp(nick, src, src_len) == 0 ||
 				strncmp(channel, src, src_len) == 0));
 }
@@ -49,16 +52,12 @@ int			irc_notice(t_env *e, int cs, t_token *tokens)
 	i = 0;
 	while (i <= e->max)
 	{
-		if (i != (size_t)cs && e->fds[i].type == FD_CLIENT &&
-				e->fds[i].registered == 1)
+		if (i != (size_t)cs && e->fds[i].type == FD_CLIENT && e->fds[i].registered == 1)
 		{
 			j = 0;
 			while (j < subtoken_count)
 			{
-				if (is_nick_or_chan_matching(
-					e->channels[e->fds[i].channel].channel,
-					e->fds[i].nickname, sub[j].addr, sub[j].len) &&
-					!e->fds[i].away)
+				if (matchin(e, i, sub[j].addr, sub[j].len) && !e->fds[i].away)
 				{
 					irc_privmsg_to_client(&e->fds[cs], &e->fds[i],
 							tokens[2].addr);

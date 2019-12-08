@@ -61,11 +61,11 @@ void ui_login_connect(GtkWidget *widget, gpointer data)
     if (ui_login_connect_fetch_entrys_content(e, ui, &crd) < 0)
         return;
 
-    _c2s_pass(e, strtrim(crd.pass), strlentrim(crd.pass));
+    do_c2s_pass(e, strtrim(crd.pass), strlentrim(crd.pass));
 
-    _c2s_nick(e, strtrim(crd.nick), strlentrim(crd.nick));
+    do_c2s_nick(e, strtrim(crd.nick), strlentrim(crd.nick));
 
-    _c2s_connect(e, crd.username[0] ? crd.username : NULL, NULL,
+    do_c2s_connect(e, crd.username[0] ? crd.username : NULL, NULL,
                  e->options.host);
 
     if (e->sock != -1)

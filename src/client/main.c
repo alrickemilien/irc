@@ -57,7 +57,7 @@ static void	init_connection(t_env *e)
 	if (e->options.port == 0)
 		e->options.port = IRC_DEFAULT_SERVER_PORT;
 	if (e->options.host[0] != 0)
-		_c2s_connect(e, NULL, NULL, NULL);
+		do_c2s_connect(e, NULL, NULL, NULL);
 }
 
 static void	execute_precommands(t_env *e)

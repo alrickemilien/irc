@@ -152,20 +152,20 @@ int             c2s_version(t_env *e, t_token *tokens);
 int             c2s_invite(t_env *e, t_token *tokens);
 int             c2s_topic(t_env *e, t_token *tokens);
 
-int             _c2s_nick(t_env *e, const char *nick, size_t nick_length);
-int             _c2s_pass(t_env *e, const char *password, size_t password_length);
-int             _c2s_connect(t_env *e,
+int             do_c2s_nick(t_env *e, const char *nick, size_t nick_length);
+int             do_c2s_pass(t_env *e, const char *password, size_t password_length);
+int             do_c2s_connect(t_env *e,
                         const char *name,
                         const char *hostname,
                         const char *servername);
-int             _c2s_away(t_fd *fd, const char *msg, size_t msg_len);
-int             _c2s_unaway(t_fd *fd);
-int             _c2s_leave(t_fd *fd, const char *channel_name, size_t channel_name_len);
-int             _c2s_join(t_fd *fd, const char *channel_name, size_t channel_name_len);
-int             _c2s_whois(t_fd *fd, const char *nick, size_t nick_len);
-int             _c2s_msg(t_fd *fd, const char *dest, size_t dest_len, const char *msg);
-int             _c2s_invite(t_fd *fd, const char *nick, size_t nick_len, const char *channel);
-int             _c2s_topic(t_fd *fd, const char *chan, size_t chan_len, const char *msg);
+int             do_c2s_away(t_fd *fd, const char *msg, size_t msg_len);
+int             do_c2s_unaway(t_fd *fd);
+int             do_c2s_leave(t_fd *fd, const char *channel_name, size_t channel_name_len);
+int             do_c2s_join(t_fd *fd, const char *channel_name, size_t channel_name_len);
+int             do_c2s_whois(t_fd *fd, const char *nick, size_t nick_len);
+int             do_c2s_msg(t_fd *fd, const char *dest, size_t dest_len, const char *msg);
+int             do_c2s_invite(t_fd *fd, const char *nick, size_t nick_len, const char *channel);
+int             do_c2s_topic(t_fd *fd, const char *chan, size_t chan_len, const char *msg);
 
 int             s2c(t_env *e, char *buffer);
 int             s2c_rpl_welcome(t_env *e, t_token *tokens);

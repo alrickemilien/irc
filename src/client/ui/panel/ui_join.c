@@ -33,7 +33,7 @@ void ui_join_from_side_channel(GtkWidget *widget, gpointer data)
     if (strcmp(ui->e->fds[ui->e->sock].channelname, channel) == 0)
         return;
 
-    _c2s_join(&ui->e->fds[ui->e->sock], channel, strlen(channel));
+    do_c2s_join(&ui->e->fds[ui->e->sock], channel, strlen(channel));
 }
 
 int ui_join_channel_list_index_of(GtkWidget * list,
