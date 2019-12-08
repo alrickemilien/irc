@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cbuffer.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/08 14:03:52 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/08 14:04:34 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <cbuffer/cbuffer.h>
 #include <stdio.h>
 
@@ -18,9 +30,9 @@
 */
 
 void	cbuffer_put(
-		t_cbuffer *cbuf,
-		const uint8_t *data,
-		size_t n)
+	t_cbuffer *cbuf,
+	const uint8_t *data,
+	size_t n)
 {
 	size_t	count;
 
@@ -29,7 +41,7 @@ void	cbuffer_put(
 	if (count >= n)
 	{
 		cbuf->head += n;
-		return;
+		return ;
 	}
 	if ((cbuf->head + n) % CBUFFSIZE >= cbuf->tail)
 	{
@@ -109,12 +121,9 @@ void	cbuffer_dropn(
 		t_cbuffer *cbuf,
 		size_t n)
 {
-    // Not enough space for data fetch
-    // Buffer still full
-    if (cbuffer_isempty(cbuf))
-        return;
-
-    if (cbuf->tail + n > CBUFFSIZE && (cbuf->tail + n) % CBUFFSIZE > cbuf->head)
-        cbuf->head = (cbuf->tail + n) % CBUFFSIZE;
-    cbuf->tail = (cbuf->tail + n) % CBUFFSIZE;
+	if (cbuffer_isempty(cbuf))
+		return ;
+	if (cbuf->tail + n > CBUFFSIZE && (cbuf->tail + n) % CBUFFSIZE > cbuf->head)
+		cbuf->head = (cbuf->tail + n) % CBUFFSIZE;
+	cbuf->tail = (cbuf->tail + n) % CBUFFSIZE;
 }

@@ -1,12 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cbuffer_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/08 13:59:28 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/08 13:59:29 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <cbuffer/cbuffer.h>
 
-bool		cbuffer_isempty(
+bool	cbuffer_isempty(
 		t_cbuffer *cbuf)
 {
 	return (!cbuf->full && (cbuf->head == cbuf->tail));
 }
 
-void		cbuffer_reset(
+void	cbuffer_reset(
 		t_cbuffer *cbuf)
 {
 	cbuf->head = 0;
@@ -15,7 +27,7 @@ void		cbuffer_reset(
 	memset(cbuf->buffer, 0, CBUFFSIZE);
 }
 
-size_t		cbuffer_size(
+size_t	cbuffer_size(
 		const t_cbuffer *cbuf)
 {
 	size_t	size;
@@ -31,53 +43,7 @@ size_t		cbuffer_size(
 	return (size);
 }
 
-size_t		cbuffer_indexof(
-			t_cbuffer *cbuf,
-			const char *str)
-{
-	size_t	i;
-	size_t	j;
-	size_t	count;
-
-	if (str[0] == 0)
-		return (-1);
-	i = cbuf->tail;
-	while (i < CBUFFSIZE && i != cbuf->head)
-	{
-		count = 0;
-		while (i + count < CBUFFSIZE && i + count != cbuf->head &&
-				str[count] != 0 && str[count] == cbuf->buffer[i + count])
-			count++;
-		if (str[count] != 0 && i + count == CBUFFSIZE &&
-				str[count - 1] == cbuf->buffer[i + count - 1])
-		{
-			j = 0;
-			while (j != cbuf->head && str[count] != 0 &&
-					str[count] == cbuf->buffer[j])
-			{
-				count++;
-				j++;
-			}
-		}
-		if (str[count] == 0)
-			return (i);
-		i++;
-	}
-	i = 0;
-	while (cbuf->tail > cbuf->head && i != cbuf->head)
-	{
-		count = 0;
-		while (i + count != cbuf->head && str[count] != 0 &&
-				str[count] == cbuf->buffer[i + count])
-			count++;
-		if (str[count] == 0)
-			return (i);
-		i++;
-	}
-	return ((size_t)-1);
-}
-
-void		cbuffer_drop_until(
+void	cbuffer_drop_until(
 		t_cbuffer *cbuf,
 		const char *str)
 {
