@@ -46,9 +46,8 @@ endif
 # Fribidi
 #
 
-ifeq ($(OS),Darwin)
 FRIBIDI_DPKG_LIBS=$(shell pkg-config --libs fribidi)
-endif
+FRIBIDI_DPKG_CFLAGS=$(shell pkg-config --cflags fribidi)
 
 include make/server.mk
 include make/client.mk

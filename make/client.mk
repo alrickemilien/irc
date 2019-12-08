@@ -123,7 +123,7 @@ CLIENT_SRC+=src/client/ui/panel/ui_message/ui_chat_message.c
 CLIENT_OBJ=$(CLIENT_SRC:.c=.o)
 
 %.o: %.c
-	@gcc $(DEBUG) -o $@ -c $< $(INCLUDE) $(OPENSSL_CFLAGS) $(GTK_DPKG_CFLAGS) $(CFLAGS)
+	@gcc $(DEBUG) -o $@ -c $< $(INCLUDE) $(OPENSSL_CFLAGS) $(GTK_DPKG_CFLAGS) $(FRIBIDI_DPKG_CFLAGS) $(CFLAGS)
 
 # glade files + css
 GLADE_SRC_PREFIX=src/client/ui/

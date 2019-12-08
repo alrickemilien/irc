@@ -55,13 +55,36 @@ void		irc_privmsg_nomatch_nick(
 	}
 }
 
-static int	is_nick_or_chan_matching(const char *channel,
-		const char *nick,
-		const char *src,
-		size_t src_len)
+static int	is_nick_or_chan_matching(t_env *e,
+	size_t i,
+	const char *src,
+	size_t src_len)
 {
+	const char *nick;
+	const char *channel;
+
+	nick = e->fds[i].nickname;
+	channel = e->channels[e->fds[i].channel].channel;
 	return (src && (strncmp(nick, src, src_len) == 0 ||
 				strncmp(channel, src, src_len) == 0));
+}
+
+/*
+** index[0] => i
+** index[1] => j
+** t[0] => tokens
+** t[1] => subtokens
+*/
+
+static int	norme_42_sucks(t_env *e, int cs, size_t *index, t_token **t)
+{
+	if (e->fds[index[0]].away && t[1][index[1]].addr[0] != '&' && t[1][index[1]].addr[0] != '#')
+		irc_reply(e, cs, RPL_AWAY, e->fds[index[0]].nickname, e->fds[index[0]].awaymessage);
+	else
+		irc_privmsg_to_client(&e->fds[cs], &e->fds[index[0]], t[0][2].addr);
+	if (t[1][index[1]].addr[0] != '&' && t[1][index[1]].addr[0] != '#')
+		t[1][index[1]].addr = (void *)0;
+	return (0);
 }
 
 int			irc_privmsg(t_env *e, int cs, t_token *tokens)
@@ -78,24 +101,11 @@ int			irc_privmsg(t_env *e, int cs, t_token *tokens)
 	while (i <= e->max)
 	{
 		j = 0;
-		while (e->fds[i].type == FD_CLIENT && e->fds[i].registered == 1 &&
-				j < subtoken_count)
+		while (e->fds[i].type == FD_CLIENT && e->fds[i].registered == 1 && j < subtoken_count)
 		{
-			if (is_nick_or_chan_matching(e->channels[e->fds[i].channel].channel,
-						e->fds[i].nickname, sub[j].addr,
-						sub[j].len))
-			{
-				if (e->fds[i].away && sub[j].addr[0] != '&' &&
-						sub[j].addr[0] != '#')
-					irc_reply(e, cs, RPL_AWAY, e->fds[i].nickname,
-							e->fds[i].awaymessage);
-				else
-					irc_privmsg_to_client(&e->fds[cs], &e->fds[i],
-							tokens[2].addr);
-				if (sub[j].addr[0] != '&' && sub[j].addr[0] != '#')
-					sub[j].addr = (void *)0;
+			if (is_nick_or_chan_matching(e, i, sub[j].addr, sub[j].len)
+				&& !norme_42_sucks(e, cs, (size_t[]){i, j}, (t_token*[]){tokens, sub}))
 				break ;
-			}
 			j++;
 		}
 		i++;
