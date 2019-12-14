@@ -14,7 +14,6 @@ enum {
 	CLIENT_PORT = 0U,
 	CLIENT_HOST,
 	CLIENT_IPV6,
-	CLIENT_COMMAND,
 	CLIENT_GUI,
 	CLIENT_SSL,
 	OPTIONS_NUMBER,
@@ -44,13 +43,11 @@ typedef struct	s_options {
 	int			port;
 	int			_host;
 	int			ipv6;
-	int			_command;
 	int			gui;
 	int			ssl;
 
 	// Metata data related to options
 	char		host[MAX_ALLOWED_VALUE_SIZE];
-	char		command[MAX_COMMAND_SIZE];
 	char		str_port[9];
 }				t_options;
 
@@ -96,7 +93,5 @@ int				read_options(
 int				read_port_option(
 	t_options *options, const char *value);
 int				read_host_option(
-	t_options *options, const char *value);
-int				read_command_option(
 	t_options *options, const char *value);
 #endif

@@ -21,7 +21,6 @@ CLIENT_SRC=src/client/main.c \
 # options
 CLIENT_SRC+=src/client/options/utils.c \
 			src/client/options/read_options.c \
-			src/client/options/read_command_option.c \
 			src/client/options/read_port_option.c \
 			src/client/options/read_host_option.c
 
@@ -105,6 +104,7 @@ CLIENT_SRC+=src/client/ui/gtk_builder_load.c \
 # ui login
 CLIENT_SRC+=src/client/ui/login/login.c	\
 			src/client/ui/login/ui_login_connect.c	\
+			src/client/ui/login/login_events.c
 
 # ui panel
 CLIENT_SRC+=src/client/ui/panel/panel.c	\
@@ -112,8 +112,10 @@ CLIENT_SRC+=src/client/ui/panel/panel.c	\
 			src/client/ui/panel/ui_status.c \
 			src/client/ui/panel/ui_who.c \
 			src/client/ui/panel/ui_message.c \
+			src/client/ui/panel/ui_join_channels_index_of.c \
 			src/client/ui/panel/ui_events.c \
 			src/client/ui/panel/ui_set.c \
+			src/client/ui/panel/ui_chat_scroll_to_bottom.c \
 			src/client/ui/panel/ui_leave.c \
 			src/client/ui/panel/ui_chat.c
 

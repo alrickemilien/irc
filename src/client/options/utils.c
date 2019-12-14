@@ -15,7 +15,6 @@
 static t_options_map	g_waiting_value_options[] = {
 	{ "port", CLIENT_PORT, &read_port_option, },
 	{ "host", CLIENT_HOST, &read_host_option, },
-	{ "command", CLIENT_COMMAND, &read_command_option, },
 	{ NULL, 0, NULL },
 };
 

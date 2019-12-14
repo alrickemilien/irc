@@ -60,20 +60,6 @@ static void	init_connection(t_env *e)
 		do_c2s_connect(e, NULL, NULL, NULL);
 }
 
-static void	execute_precommands(t_env *e)
-{
-	char	*ptr;
-
-	ptr = e->options.command;
-	while (ptr && *ptr)
-	{
-		c2s(e, ptr);
-		ptr = strstr(ptr, "\x0A");
-		if (ptr)
-			ptr += 1;
-	}
-}
-
 int			main(int argc, char **argv)
 {
 	int		exit_code;
@@ -91,7 +77,6 @@ int			main(int argc, char **argv)
 		return (gui(&e, argc, argv));
 	init_connection(&e);
 	init_std(&e);
-	execute_precommands(&e);
 	while (1)
 		do_select(&e);
 	return (exit_code);

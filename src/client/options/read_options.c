@@ -16,7 +16,6 @@ static t_options_map	g_options_map[] = {
 	{ "port", CLIENT_PORT, &read_port_option, },
 	{ "host", CLIENT_HOST, &read_host_option, },
 	{ "ipv6", CLIENT_IPV6, NULL, },
-	{ "command", CLIENT_IPV6, &read_command_option, },
 	{ "gui", CLIENT_GUI, NULL, },
 	{ "ssl", CLIENT_SSL, NULL, },
 	{ NULL, 0, NULL },

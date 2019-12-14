@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_command_option.c                              :+:      :+:    :+:   */
+/*   login_events.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/14 12:32:45 by aemilien          #+#    #+#             */
-/*   Updated: 2019/12/14 12:32:55 by aemilien         ###   ########.fr       */
+/*   Created: 2019/12/14 13:58:51 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/14 13:58:52 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <netdb.h>
-#include <errno.h>
-#include <arpa/inet.h>
 #include <client/irc.h>
+#include <client/ui/login.h>
 
-int	read_command_option(t_options *options, const char *value)
+gboolean	close_login(GtkWidget *widget,
+		GdkEventKey *event,
+		gpointer data)
 {
-	if (value[0] == 0)
+	(void)widget;
+	if (event->keyval == GDK_KEY_Escape)
 	{
-		return (fprintf(stderr,
-			"for the --command option: command must be a valid command: '%s'.\n",
-			value));
+		ui_clear_login_window(data);
+		gtk_main_quit();
 	}
-	strcat(options->command, value);
-	strcat(options->command, "\x0A");
-	return (0);
+	return (FALSE);
 }
