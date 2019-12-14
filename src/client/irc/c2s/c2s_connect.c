@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   c2s_connect.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/14 14:16:06 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/14 14:16:07 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <netdb.h>
 #include <pwd.h>
 #include <sys/types.h>
@@ -26,45 +38,46 @@ static int	c2s_connect_check_command(
 	return (0);
 }
 
-int			do_c2s_connect(t_env *e,
-		const char *name,
-		const char *hostname,
-		const char *servername)
+static int	connect_socket(t_env *e)
 {
-	char			local_hostname[NI_MAXHOST + 1];
-	int				cs;
-	t_fd			*fd;
-	struct passwd	*p;
-
-	if ((p = getpwuid(getuid())) == NULL)
-		return (logerrno("do_c2s_connect::getpwuid"));
-	if (gethostname(local_hostname, sizeof(local_hostname)) == -1)
-		return (logerrno("do_c2s_connect::gethostname"));
 	if (e->ipv6 == 1)
 		client_ipv6(e);
 	else
 		client_ipv4(e);
 	if (e->sock == -1)
 		return (-1);
-	cs = e->sock;
-	fd = &e->fds[cs];
-	e->self = &e->fds[cs];
-	cbuffer_putcmd(&fd->buf_write, "USER %s %s %s %s\x0D\x0A",
-		name ? name : p->pw_name,
-		hostname ? hostname : local_hostname, servername,
-		name ? name : p->pw_name);
+	return (0);
+}
+
+int			do_c2s_connect(t_env *e,
+		const char *n,
+		const char *h,
+		const char *servername)
+{
+	char			lh[NI_MAXHOST + 1];
+	struct passwd	*p;
+
+	if ((p = getpwuid(getuid())) == NULL)
+		return (logerrno("do_c2s_connect::getpwuid"));
+	if (gethostname(lh, sizeof(lh)) == -1)
+		return (logerrno("do_c2s_connect::gethostname"));
+	if (connect_socket(e) == -1)
+		return (-1);
+	e->self = &e->fds[e->sock];
+	cbuffer_putcmd(&e->self->buf_write, "USER %s %s %s %s\x0D\x0A",
+		n ? n : p->pw_name, h ? h : lh, servername,
+		n ? n : p->pw_name);
 	loginfo("Connecting to %s", e->options.host);
-	memrpl(fd->host, HOSTNAMESTRSIZE, hostname ? hostname : local_hostname,
-			strlen(hostname ? hostname : local_hostname));
-	memrpl(fd->realname, USERNAMESTRSIZE, name ? name : p->pw_name,
-			strlen(name ? name : p->pw_name));
-	memrpl(fd->username, USERNAMESTRSIZE, name ? name : p->pw_name,
-			strlen(name ? name : p->pw_name));
-	if (e->nick[0])
-	{
-		cbuffer_putcmd(&fd->buf_write, "NICK %s\x0D\x0A", e->nick);
-		memrpl(fd->nickname, NICKNAMESTRSIZE, e->nick, strlen(e->nick));
-	}
+	memrpl(e->self->host, HOSTNAMESTRSIZE, h ? h : lh,
+			strlen(h ? h : lh));
+	memrpl(e->self->realname, USERNAMESTRSIZE, n ? n : p->pw_name,
+			strlen(n ? n : p->pw_name));
+	memrpl(e->self->username, USERNAMESTRSIZE, n ? n : p->pw_name,
+			strlen(n ? n : p->pw_name));
+	if (!e->nick[0])
+		return (0);
+	cbuffer_putcmd(&e->self->buf_write, "NICK %s\x0D\x0A", e->nick);
+	memrpl(e->self->nickname, NICKNAMESTRSIZE, e->nick, strlen(e->nick));
 	return (0);
 }
 
