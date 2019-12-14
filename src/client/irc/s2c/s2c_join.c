@@ -63,7 +63,7 @@ int s2c_join(t_env *e, t_token *tokens)
     }
 
     if (e->options.gui)
-        ui_new_message(e->ui, msg, UI_CHAT_MSG);
+        ui_new_message(e->ui, msg, UI_INFO_MSG);
 
     return (IRC_S2C_JOIN);
 }
