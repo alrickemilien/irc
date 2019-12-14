@@ -6,7 +6,7 @@
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 15:50:03 by aemilien          #+#    #+#             */
-/*   Updated: 2019/12/08 15:50:04 by aemilien         ###   ########.fr       */
+/*   Updated: 2019/12/14 12:18:13 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	is_names_buf_full(
 	return ((buf_size - strlen(buf)) < (strlen(name) + 1));
 }
 
-static int	fill_names_buffer(t_env *e, int cs, size_t chan_index)
+static int	fill_names_buffer(t_env *e, int cs, size_t chan_index, int ret)
 {
 	char	concat[512];
 	size_t	j;
@@ -43,7 +43,9 @@ static int	fill_names_buffer(t_env *e, int cs, size_t chan_index)
 	}
 	irc_reply(e, cs, RPL_NAMREPLY, e->channels[chan_index].channel, concat);
 	irc_reply(e, cs, RPL_ENDOFNAMES, e->channels[chan_index].channel);
-	return (strlen(concat));
+	if (ret == 0)
+		return (strlen(concat));
+	return (ret);
 }
 
 static int	irc_names_all_channels(t_env *e, int cs, t_token *tokens)
@@ -55,7 +57,7 @@ static int	irc_names_all_channels(t_env *e, int cs, t_token *tokens)
 	while (i < e->maxchannels)
 	{
 		if (e->channels[i].channel[0])
-			fill_names_buffer(e, cs, i);
+			fill_names_buffer(e, cs, i, 0);
 		i++;
 	}
 	return (IRC_NAMES);
@@ -77,10 +79,7 @@ static int	irc_names_one_channels(t_env *e, int cs, t_token *tokens)
 			if (strncmp(e->channels[i].channel, tokens[k].addr,
 						tokens[k].len) == 0)
 			{
-				if (ret == 0)
-					ret = fill_names_buffer(e, cs, i);
-				else
-					fill_names_buffer(e, cs, i);
+				ret = fill_names_buffer(e, cs, i, ret);
 				break ;
 			}
 			k++;

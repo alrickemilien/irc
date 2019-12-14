@@ -6,7 +6,7 @@
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 16:17:40 by aemilien          #+#    #+#             */
-/*   Updated: 2019/12/08 16:17:41 by aemilien         ###   ########.fr       */
+/*   Updated: 2019/12/14 12:02:04 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,24 +37,6 @@ static int	irc_privmsg_to_client(
 	return (0);
 }
 
-void		irc_privmsg_nomatch_nick(
-		t_env *e,
-		int cs,
-		t_token *subtokens,
-		size_t subtoken_count)
-{
-	size_t j;
-
-	j = 0;
-	while (j < subtoken_count)
-	{
-		if (subtokens[j].addr != NULL && subtokens[j].addr[0] != '&' &&
-				subtokens[j].addr[0] != '#')
-			irc_err(e, cs, ERR_NOSUCHNICK, subtokens[j].addr);
-		j++;
-	}
-}
-
 static int	is_nick_or_chan_matching(t_env *e,
 	size_t i,
 	const char *src,
@@ -76,10 +58,15 @@ static int	is_nick_or_chan_matching(t_env *e,
 ** t[1] => subtokens
 */
 
-static int	norme_42_sucks(t_env *e, int cs, size_t *index, t_token **t)
+static int	sucks(t_env *e, int cs, size_t *index, t_token **t)
 {
-	if (e->fds[index[0]].away && t[1][index[1]].addr[0] != '&' && t[1][index[1]].addr[0] != '#')
-		irc_reply(e, cs, RPL_AWAY, e->fds[index[0]].nickname, e->fds[index[0]].awaymessage);
+	if (e->fds[index[0]].away
+			&& t[1][index[1]].addr[0] != '&'
+			&& t[1][index[1]].addr[0] != '#')
+	{
+		irc_reply(e, cs, RPL_AWAY,
+			e->fds[index[0]].nickname, e->fds[index[0]].awaymessage);
+	}
 	else
 		irc_privmsg_to_client(&e->fds[cs], &e->fds[index[0]], t[0][2].addr);
 	if (t[1][index[1]].addr[0] != '&' && t[1][index[1]].addr[0] != '#')
@@ -101,10 +88,11 @@ int			irc_privmsg(t_env *e, int cs, t_token *tokens)
 	while (i <= e->max)
 	{
 		j = 0;
-		while (e->fds[i].type == FD_CLIENT && e->fds[i].registered == 1 && j < subtoken_count)
+		while (e->fds[i].type == FD_CLIENT
+			&& e->fds[i].registered == 1 && j < subtoken_count)
 		{
 			if (is_nick_or_chan_matching(e, i, sub[j].addr, sub[j].len)
-				&& !norme_42_sucks(e, cs, (size_t[]){i, j}, (t_token*[]){tokens, sub}))
+				&& !sucks(e, cs, (size_t[]){i, j}, (t_token*[]){tokens, sub}))
 				break ;
 			j++;
 		}
