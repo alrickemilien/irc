@@ -55,8 +55,7 @@ int		ui_leave_from_channel_list_box(t_ui_panel *ui, int index)
 				ui->channels[0].chat_box);
 		g_object_ref(ui->channels[0].chat_box);
 	}
-	if (ui->channel_index >= index && ui->channel_index != 0)
-		ui->channel_index--;
+	ui->channel_index = 0;
 	ui->channels_count--;
 	i = index;
 	while (i < ui->channels_count)
