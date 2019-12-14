@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   options.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/14 15:04:33 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/14 15:04:34 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CLIENT_OPTIONS_H
 # define CLIENT_OPTIONS_H
 
-#include <stdint.h>
-#include <string.h>
-#include <stdbool.h>
-#include <stdio.h>
+# include <stdint.h>
+# include <string.h>
+# include <stdbool.h>
+# include <stdio.h>
 
 /*
 ** All parameter
@@ -24,7 +36,7 @@ enum {
 */
 
 # define MAX_ALLOWED_VALUE_SIZE 215
-# define MAX_COMMAND_SIZE 512 * 4
+# define MAX_COMMAND_SIZE 2048
 
 /*
 ** Structure filled with options passed to program
@@ -41,12 +53,10 @@ enum {
 
 typedef struct	s_options {
 	int			port;
-	int			_host;
+	int			l_host;
 	int			ipv6;
 	int			gui;
 	int			ssl;
-
-	// Metata data related to options
 	char		host[MAX_ALLOWED_VALUE_SIZE];
 	char		str_port[9];
 }				t_options;
@@ -84,7 +94,7 @@ bool			is_a_single_option(const char *name);
 bool			is_an_option(const char *name);
 bool			is_a_waiting_value_option(const char *name);
 int				read_options(
-	                int ac, const char **av, t_options *opt);
+		int ac, const char **av, t_options *opt);
 
 /*
 ** Options with specifc values to handle

@@ -6,7 +6,7 @@
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 17:40:35 by aemilien          #+#    #+#             */
-/*   Updated: 2019/12/08 17:40:38 by aemilien         ###   ########.fr       */
+/*   Updated: 2019/12/14 15:07:11 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,6 @@
 /*
 ** Utils
 */
-
-# ifndef MAX
-#  define MAX(a, b) ((a > b) ? a : b)
-# endif
 
 # define ISOTIMESTRSIZE 25
 
