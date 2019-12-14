@@ -2,7 +2,7 @@
 
 gboolean	ui_chat_scroll_to_bottom(gpointer w)
 {
-	GtkAdjustment *adjust;
+	GtkAdjustment	*adjust;
 
 	adjust = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(w));
 	gtk_adjustment_set_value(adjust, gtk_adjustment_get_upper(adjust));
@@ -38,30 +38,19 @@ static void	ui_message_dispatch(t_ui_panel *ui,
 {
 	GtkWidget	*w;
 
-	switch (type)
-	{
-		case UI_CHAT_MSG:
-			w = ui_new_chat_message(ui, msg);
-			break;
-		case UI_TOPIC_MSG:
-			w = ui_new_topic_message(ui, msg);
-			break;
-		case UI_ERROR_MSG:
-			w = ui_new_error_message(ui, msg);
-			break;
-		case UI_INFO_MSG:
-			w = ui_new_info_message(ui, msg);
-			break;
-		case UI_AWAY_MSG:
-			w = ui_new_away_message(ui, msg);
-			break;
-		case UI_INVITE_MSG:
-			w = ui_new_invite_message(ui, msg);
-			break;
-		default:
-			w = NULL;
-			break;
-	}
+	w = NULL;
+	if (type == UI_CHAT_MSG)
+		w = ui_new_chat_message(ui, msg);
+	else if (type == UI_TOPIC_MSG)
+		w = ui_new_topic_message(ui, msg);
+	else if (type == UI_ERROR_MSG)
+		w = ui_new_error_message(ui, msg);
+	else if (type == UI_INFO_MSG)
+		w = ui_new_info_message(ui, msg);
+	else if (type == UI_AWAY_MSG)
+		w = ui_new_away_message(ui, msg);
+	else if (type == UI_INVITE_MSG)
+		w = ui_new_invite_message(ui, msg);
 	if (w == NULL)
 		return;
 	gtk_list_box_insert(GTK_LIST_BOX(bloc->box), w, -1);

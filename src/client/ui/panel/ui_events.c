@@ -6,7 +6,7 @@
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 12:30:05 by aemilien          #+#    #+#             */
-/*   Updated: 2019/12/14 12:30:06 by aemilien         ###   ########.fr       */
+/*   Updated: 2019/12/14 13:33:53 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ gboolean	on_keypress(
 		gtk_main_quit();
 	else if (event->keyval == GDK_KEY_l && (event->state & GDK_CONTROL_MASK))
 		ui_chat_empty_chat_box(data);
-	return FALSE;
+	return (FALSE);
 }
 
 void		on_entry(GtkWidget *widget, gpointer data)

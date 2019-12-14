@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   gtk_provider_load_css.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/14 13:25:54 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/14 13:27:28 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <client/irc.h>
 #include <client/ui/ui.h>
 
-int gtk_provider_load_css(GtkCssProvider *provider,
+int	gtk_provider_load_css(GtkCssProvider *provider,
 		const char *bin_path,
 		const char *ui_path)
 {

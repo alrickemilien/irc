@@ -1,14 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   gtk_set_transparent_window.c                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/14 13:25:33 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/14 13:25:34 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <client/ui/ui.h>
 
 static gboolean	g_supports_alpha = FALSE;
 
 static void		screen_changed(GtkWidget *widget,
 		GdkScreen *old_screen,
-		gpointer   userdata)
+		gpointer userdata)
 {
-	GdkScreen *screen;
-	GdkVisual *visual;
-	
+	GdkScreen	*screen;
+	GdkVisual	*visual;
+
 	(void)old_screen;
 	(void)userdata;
 	screen = gtk_widget_get_screen(widget);
@@ -30,10 +42,9 @@ static gboolean	draw(
 		cairo_t *cr,
 		gpointer userdata)
 {
-	(void)widget;
-
 	GdkRGBA	*c;
 
+	(void)widget;
 	c = (GdkRGBA *)userdata;
 	cairo_save(cr);
 	if (g_supports_alpha)
@@ -45,13 +56,11 @@ static gboolean	draw(
 				c->alpha);
 	}
 	else
-	{
 		cairo_set_source_rgb(cr, c->red, c->green, c->blue);
-	}
 	cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
 	cairo_paint(cr);
 	cairo_restore(cr);
-	return FALSE;
+	return (FALSE);
 }
 
 void			gtk_set_transparent_window(
