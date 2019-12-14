@@ -6,7 +6,7 @@
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 14:19:13 by aemilien          #+#    #+#             */
-/*   Updated: 2019/12/08 14:19:14 by aemilien         ###   ########.fr       */
+/*   Updated: 2019/12/14 11:37:51 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,23 @@
 #include <server/irc.h>
 #include <server/ssl.h>
 
-int	server_ipv6(const t_options *options, t_env *e)
+const int	g_reuseaddr = 1;
+const int	g_reuseport = 1;
+
+int			server_ipv6(
+		const t_options *options, t_env *e)
 {
 	int					sock;
 	struct sockaddr_in6	sin;
 	struct protoent		*pe;
-	const int			reuseaddr = 1;
-	const int			reuseport = 1;
 
 	if ((pe = (struct protoent *)getprotobyname("tcp")) == (void *)0)
 		return (logerrno("server_ipv6::getprotobyname"));
 	if ((sock = socket(AF_INET6, SOCK_STREAM, pe->p_proto)) == -1)
 		return (logerrno("server_ipv6::socket"));
-	setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &reuseaddr, sizeof(reuseaddr));
+	setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &g_reuseaddr, sizeof(int));
 	if (TARGET_OS_MAC)
-		setsockopt(sock, SOL_SOCKET, SO_REUSEPORT, &reuseport, sizeof(reuseport));
+		setsockopt(sock, SOL_SOCKET, SO_REUSEPORT, &g_reuseport, sizeof(int));
 	memset(&sin, 0, sizeof(sin));
 	sin.sin6_family = AF_INET6;
 	sin.sin6_addr = in6addr_any;

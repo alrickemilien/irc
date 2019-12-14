@@ -16,11 +16,11 @@ static void		screen_changed(GtkWidget *widget,
 	if (!visual)
 	{
 		visual = gdk_screen_get_system_visual(screen);
-		supports_alpha = FALSE;
+		g_supports_alpha = FALSE;
 	}
 	else
 	{
-		supports_alpha = TRUE;
+		g_supports_alpha = TRUE;
 	}
 	gtk_widget_set_visual(widget, visual);
 }
@@ -36,7 +36,7 @@ static gboolean	draw(
 
 	c = (GdkRGBA *)userdata;
 	cairo_save(cr);
-	if (supports_alpha)
+	if (g_supports_alpha)
 	{
 		cairo_set_source_rgba(cr,
 				c->red,
