@@ -19,8 +19,10 @@ static int	c2s_connect_check_command(
 		return (0);
 	if (ato32(tokens[2].addr, (uint32_t *)&e->options.port) != 0 ||
 			e->options.port < 1000 || e->options.port > 99999)
+	{
 		return (logerror("c2s_connect:: port be 1000-99999: '%s'.\n",
 			tokens[2].addr));
+	}
 	return (0);
 }
 
