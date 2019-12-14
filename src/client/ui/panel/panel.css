@@ -262,8 +262,6 @@ scrollbar.vertical,
 .scrollbar.vertical {
     margin-left: 0px;
     margin-right: 0px;
-    -GtkRange-slider-width: 4;
-    -GtkRange-stepper-size: 5;
 }
 
 scrollbar button,

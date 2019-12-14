@@ -35,7 +35,7 @@ void	init_fd(t_env *e)
 			FD_SET(i, &e->fd_read);
 			if (cbuffer_size(&e->fds[i].buf_write) > 0)
 				FD_SET(i, &e->fd_write);
-			e->max = MAX(e->maxfd, i);
+			e->max = e->maxfd > i ? e->maxfd : i;
 		}
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 14:51:28 by aemilien          #+#    #+#             */
-/*   Updated: 2019/12/08 14:51:29 by aemilien         ###   ########.fr       */
+/*   Updated: 2019/12/14 15:14:06 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	init_fd(t_env *e)
 			FD_SET(i, &e->fd_read);
 			if (cbuffer_size(&e->fds[i].buf_write) != 0)
 				FD_SET(i, &e->fd_write);
-			e->max = MAX(e->max, i);
+			e->max = e->max > i ? e->max : i;
 		}
 		i++;
 	}

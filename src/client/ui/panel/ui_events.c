@@ -17,10 +17,9 @@ gboolean	on_keypress(
 		GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	(void)widget;
+	(void)data;
 	if (event->keyval == GDK_KEY_Escape)
 		gtk_main_quit();
-	else if (event->keyval == GDK_KEY_l && (event->state & GDK_CONTROL_MASK))
-		ui_chat_empty_chat_box(data);
 	return (FALSE);
 }
 
