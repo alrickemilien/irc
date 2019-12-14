@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   c2s_leave.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/14 12:41:57 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/14 12:41:58 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <client/irc.h>
 #include <client/ui/panel.h>
 
@@ -15,7 +27,6 @@ static int	c2s_leave_check_command(
 	size_t		channel_len;
 
 	(void)e;
-
 	if (!tokens[1].addr)
 		return (0);
 	channel = tokens[1].addr;

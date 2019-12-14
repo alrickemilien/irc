@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ui_join.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/14 12:21:35 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/14 12:27:32 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <client/ui/panel.h>
 
 int		ui_join_channels_index_of(t_ui_panel *ui,
 		const char *needle,
-		size_t      needle_size)
+		size_t needle_size)
 {
 	int i;
 
@@ -10,8 +22,8 @@ int		ui_join_channels_index_of(t_ui_panel *ui,
 	while (i < ui->channels_count)
 	{
 		if (memcmp(ui->channels[i].label, needle, needle_size) == 0 &&
-				(ui->channels[i].label[needle_size] == ' ' ||
-				 ui->channels[i].label[needle_size] == 0))
+			(ui->channels[i].label[needle_size] == ' ' ||
+			ui->channels[i].label[needle_size] == 0))
 			return (i);
 		i++;
 	}
@@ -27,13 +39,13 @@ void	ui_join_from_side_channel(
 	ui = (t_ui_panel *)data;
 	channel = gtk_button_get_label(GTK_BUTTON(widget));
 	if (strcmp(ui->e->fds[ui->e->sock].channelname, channel) == 0)
-		return;
+		return ;
 	do_c2s_join(&ui->e->fds[ui->e->sock], channel, strlen(channel));
 }
 
-int 	ui_join_channel_list_index_of(GtkWidget * list,
+int		ui_join_channel_list_index_of(GtkWidget *list,
 		const char *needle,
-		size_t      needle_size)
+		size_t needle_size)
 {
 	GList		*children;
 	GList		*iter;
@@ -61,7 +73,7 @@ int 	ui_join_channel_list_index_of(GtkWidget * list,
 }
 
 void	insert_channel_left_panel(
-	t_ui_panel *ui, const char *channel)
+		t_ui_panel *ui, const char *channel)
 {
 	GtkWidget	*w;
 

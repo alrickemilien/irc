@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   c2s_topic.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/14 12:44:58 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/14 12:44:59 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <client/irc.h>
 
 static int	c2s_topic_check_command(
 		t_env *e, const t_token *tokens)
 {
-	const char *channel;
-	size_t      channel_len;
+	const char	*channel;
+	size_t		channel_len;
 
 	if (!tokens[1].addr)
 		return (0);
@@ -24,11 +36,11 @@ int			do_c2s_topic(
 		size_t chan_len, const char *msg)
 {
 	if (msg)
+	{
 		return (cbuffer_putcmd(&fd->buf_write,
-					"TOPIC %.*s :%s\x0D\x0A",
-					chan_len, chan, msg));
-	return (cbuffer_putcmd(&fd->buf_write,
-				"TOPIC %.*s\x0D\x0A",
+				"TOPIC %.*s :%s\x0D\x0A", chan_len, chan, msg));
+	}
+	return (cbuffer_putcmd(&fd->buf_write, "TOPIC %.*s\x0D\x0A",
 				chan_len, chan));
 }
 

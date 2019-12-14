@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   c2s_away.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/14 12:43:15 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/14 12:43:16 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <client/irc.h>
 
 int	do_c2s_away(
@@ -19,7 +31,7 @@ int	c2s_away(t_env *e, t_token *tokens)
 
 int	do_c2s_unaway(t_fd *fd)
 {
-	return cbuffer_putstr(&fd->buf_write, "AWAY\x0D\x0A");
+	return (cbuffer_putstr(&fd->buf_write, "AWAY\x0D\x0A"));
 }
 
 int	c2s_unaway(t_env *e, t_token *tokens)

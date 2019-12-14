@@ -78,15 +78,12 @@ void		ui_new_message(
 
 	if (ui->channel_index == -1)
 		return;
-
 	ch = &ui->channels[ui->channel_index];
 	ch->msg_count++;
-
 	i = 0;
 	while (i < UI_CHAT_BOX_BLOC_MAX && ch->chat_msg_bloc_list[i].box &&
 			ch->chat_msg_bloc_list[i].count == UI_CHAT_BOX_MSG_COUNT_MAX)
 		i++;
-
 	if (i < UI_CHAT_BOX_BLOC_MAX && ch->chat_msg_bloc_list[i].box == NULL)
 	{
 		ch->chat_msg_bloc_list[i].box = gtk_list_box_new();

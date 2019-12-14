@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   c2s_join.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/14 12:42:47 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/14 12:42:48 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <client/irc.h>
 
 /*
@@ -8,38 +20,38 @@
 */
 
 static int	c2s_join_check_command(
-	t_env *e, const t_token *tokens)
+		t_env *e, const t_token *tokens)
 {
-    const char	*channel;
-    size_t		channel_len;
+	const char	*channel;
+	size_t		channel_len;
 
-    if (!tokens[1].addr || tokens[2].addr)
-        return (irc_error(e, ERR_NEEDMOREPARAMS, tokens[0].addr));
-    channel = tokens[1].addr;
-    channel_len = tokens[1].len;
-    if (channel_len - 1 > CHANNELSTRSIZE)
-        return (irc_error(e, ERR_NOSUCHCHANNEL, tokens[1].addr));
-    else if (!is_valid_chan_name(channel, channel_len))
-        return (irc_error(e, ERR_NOSUCHCHANNEL, tokens[1].addr));
-    else if (channel_len < 1)
-        return (irc_error(e, ERR_NOSUCHCHANNEL, ""));
-    return (0);
+	if (!tokens[1].addr || tokens[2].addr)
+		return (irc_error(e, ERR_NEEDMOREPARAMS, tokens[0].addr));
+	channel = tokens[1].addr;
+	channel_len = tokens[1].len;
+	if (channel_len - 1 > CHANNELSTRSIZE)
+		return (irc_error(e, ERR_NOSUCHCHANNEL, tokens[1].addr));
+	else if (!is_valid_chan_name(channel, channel_len))
+		return (irc_error(e, ERR_NOSUCHCHANNEL, tokens[1].addr));
+	else if (channel_len < 1)
+		return (irc_error(e, ERR_NOSUCHCHANNEL, ""));
+	return (0);
 }
 
 int			do_c2s_join(
-	t_fd *fd, const char *channel_name,
-	size_t channel_name_len)
+		t_fd *fd, const char *channel_name,
+		size_t channel_name_len)
 {
-    return (cbuffer_putcmd(&fd->buf_write, "JOIN %.*s\x0D\x0A",
-			channel_name_len, channel_name));
+	return (cbuffer_putcmd(&fd->buf_write, "JOIN %.*s\x0D\x0A",
+				channel_name_len, channel_name));
 }
 
 int			c2s_join(t_env *e, t_token *tokens)
 {
-    if (e->sock == -1)
-        return (irc_error(e, ERR_NOT_CONNECTED));
-    if ((c2s_join_check_command(e, tokens)) != 0)
-        return (-1);
-    do_c2s_join(e->self, tokens[1].addr, tokens[1].len);
-    return (IRC_C2S_JOIN);
+	if (e->sock == -1)
+		return (irc_error(e, ERR_NOT_CONNECTED));
+	if ((c2s_join_check_command(e, tokens)) != 0)
+		return (-1);
+	do_c2s_join(e->self, tokens[1].addr, tokens[1].len);
+	return (IRC_C2S_JOIN);
 }

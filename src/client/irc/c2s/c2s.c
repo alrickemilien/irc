@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   c2s.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/14 12:43:30 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/14 12:43:31 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <client/irc.h>
 #include <client/ui/panel.h>
 
@@ -20,8 +32,8 @@ static const t_irc_cmd	g_irc_commands[IRC_C2S_COMMANDS_NUMBER] = {
 };
 
 /*
- ** eow stands for end of word
- */
+** eow stands for end of word
+*/
 
 static int				is_eow(
 		const char *buffer, size_t len)

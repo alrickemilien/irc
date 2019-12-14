@@ -1,28 +1,40 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   c2s_msg.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/14 12:42:12 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/14 12:42:15 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <client/irc.h>
 
 static int	c2s_msg_check_command(
-	t_env *e, const t_token *tokens)
+		t_env *e, const t_token *tokens)
 {
-    if (!tokens[1].addr || !tokens[2].addr)
-        return (irc_error(e, ERR_NEEDMOREPARAMS, tokens[0].addr));
-    return (0);
+	if (!tokens[1].addr || !tokens[2].addr)
+		return (irc_error(e, ERR_NEEDMOREPARAMS, tokens[0].addr));
+	return (0);
 }
 
 int			do_c2s_msg(
-	t_fd *fd, const char *dest,
-	size_t dest_len, const char *msg)
+		t_fd *fd, const char *dest,
+		size_t dest_len, const char *msg)
 {
-    return (cbuffer_putcmd(&fd->buf_write,
-		"PRIVMSG %.*s :%s\x0D\x0A", dest_len,
-		dest, msg));
+	return (cbuffer_putcmd(&fd->buf_write,
+				"PRIVMSG %.*s :%s\x0D\x0A", dest_len,
+				dest, msg));
 }
 
 int			c2s_msg(t_env *e, t_token *tokens)
 {
-    if (e->sock == -1)
-        return (irc_error(e, ERR_NOT_CONNECTED));
-    if ((c2s_msg_check_command(e, tokens)) < 0)
-        return (-1);
-    do_c2s_msg(e->self, tokens[1].addr, tokens[1].len, tokens[2].addr);
-    return (IRC_C2S_MSG);
+	if (e->sock == -1)
+		return (irc_error(e, ERR_NOT_CONNECTED));
+	if ((c2s_msg_check_command(e, tokens)) < 0)
+		return (-1);
+	do_c2s_msg(e->self, tokens[1].addr, tokens[1].len, tokens[2].addr);
+	return (IRC_C2S_MSG);
 }

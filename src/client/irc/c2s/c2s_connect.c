@@ -20,7 +20,7 @@ static int	c2s_connect_check_command(
 	if (ato32(tokens[2].addr, (uint32_t *)&e->options.port) != 0 ||
 			e->options.port < 1000 || e->options.port > 99999)
 		return (logerror("c2s_connect:: port be 1000-99999: '%s'.\n",
-					tokens[2].addr));
+			tokens[2].addr));
 	return (0);
 }
 
@@ -48,9 +48,9 @@ int			do_c2s_connect(t_env *e,
 	fd = &e->fds[cs];
 	e->self = &e->fds[cs];
 	cbuffer_putcmd(&fd->buf_write, "USER %s %s %s %s\x0D\x0A",
-			name ? name : p->pw_name,
-			hostname ? hostname : local_hostname, servername,
-			name ? name : p->pw_name);
+		name ? name : p->pw_name,
+		hostname ? hostname : local_hostname, servername,
+		name ? name : p->pw_name);
 	loginfo("Connecting to %s", e->options.host);
 	memrpl(fd->host, HOSTNAMESTRSIZE, hostname ? hostname : local_hostname,
 			strlen(hostname ? hostname : local_hostname));

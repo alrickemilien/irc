@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ui_leave.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/12/14 12:28:40 by aemilien          #+#    #+#             */
+/*   Updated: 2019/12/14 12:28:41 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <client/ui/panel.h>
 
-int		ui_update_channel_panel_list(GtkWidget * list,
+int		ui_update_channel_panel_list(GtkWidget *list,
 		const char *needle,
-		size_t      needle_size)
+		size_t needle_size)
 {
 	GList		*children;
 	GList		*iter;
@@ -16,7 +28,6 @@ int		ui_update_channel_panel_list(GtkWidget * list,
 	{
 		label = gtk_button_get_label(
 				GTK_BUTTON(gtk_bin_get_child(GTK_BIN(iter->data))));
-
 		if (memcmp(label, needle, needle_size) == 0 &&
 				(label[needle_size] == ' ' || label[needle_size] == 0))
 		{
