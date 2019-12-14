@@ -117,7 +117,7 @@ ok(ircunittest::recv_eq $s3, "JOIN #ערוץ1");
 ok(ircunittest::recv_eq $s2, "JOIN #ערוץ1");
 ok(ircunittest::recv_eq $s1, "JOIN #ערוץ1");
 
-$s3->send("PRIVMSG client2,client1 :איפה הביבליוטקה\x0D\x0A");
+$s3->send("PRIVMSG #ערוץ1 :איפה הביבליוטקה\x0D\x0A");
 
 ok(ircunittest::recv_eq $s1, "client3 PRIVMSG :איפה הביבליוטקה");
 ok(ircunittest::recv_eq $s2, "client3 PRIVMSG :איפה הביבליוטקה");
