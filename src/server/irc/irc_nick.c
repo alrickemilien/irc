@@ -38,15 +38,13 @@ int irc_nick(t_env *e, int cs, t_token *tokens)
     if ((irc_nick_check_command(e, cs, tokens)) != 0)
         return (-1);
 
-    logdebug("irc_nick:: %s", tokens[0].addr);
-
     memset(concat, 0, sizeof(concat));
 
     if (e->fds[cs].registered)
     {
         logdebug("irc_nick::registered");
 
-        sprintf(concat, ":%s NICK %s", e->fds[cs].nickname, tokens[1].addr);
+        sprintf(concat, ":%s NICK %s\x0D\x0A", e->fds[cs].nickname, tokens[1].addr);
         broadcast_all(e, concat, IRC_NOTICE, cs);
 
         logdebug("%s\n", concat);
