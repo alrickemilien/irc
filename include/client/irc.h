@@ -103,6 +103,7 @@ typedef enum    e_irc_s2c {
     IRC_S2C_RPL_INVITING,
     IRC_S2C_INVITE,
     IRC_S2C_RPL_NOTOPIC,
+    IRC_S2C_ERR_ALREADYREGISTERED,
     IRC_S2C_COMMANDS_NUMBER,
 }               t_irc_s2c;
 
@@ -193,6 +194,7 @@ int             s2c_rpl_version(t_env *e, t_token *tokens);
 int             s2c_rpl_inviting(t_env *e, t_token *tokens);
 int             s2c_invite(t_env *e, t_token *tokens);
 int             s2c_rpl_notopic(t_env *e, t_token *tokens);
+int             s2c_err_alreadyregistered(t_env *e, t_token *tokens);
 
 int             irc_error(t_env *e, int err_code, ...);
 

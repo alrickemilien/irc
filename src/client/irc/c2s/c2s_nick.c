@@ -17,12 +17,11 @@ static int c2s_nick_check_command(t_env *e, const t_token *tokens)
 
 int _c2s_nick(t_env *e, const char *nick, size_t nick_length)
 {
+    memrpl(e->nick, NICKNAMESTRSIZE, nick, nick_length);
+
     // Set only local nickname
     if (e->sock == -1)
-    {
-        memrpl(e->nick, NICKNAMESTRSIZE, nick, nick_length);
         return (0);
-    }
 
     if (cbuffer_putcmd(&e->self->buf_write, "NICK %.*s\x0D\x0A",
                        nick_length, nick) < 0)

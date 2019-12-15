@@ -24,20 +24,14 @@ static int ui_login_connect_fetch_entrys_content(t_env *           e,
     // printf("len(nick_data): %ld\n", strlentrim(crd.nick));
 
     if (!crd->nick || crd->nick[0] == 0)
-    {
-        logerror("Nickname must be provided\n");
-        return (-1);
-    }
+        return (logerror("Nickname must be provided\n"));
 
     // Default port
     if (ato32(crd->port[0] ? crd->port : "5555",
               (uint32_t *)&e->options.port) != 0 ||
         e->options.port < 3 || e->options.port > 99999)
-    {
-        logerror("port must be a vakue between 1000 an 99999'%s'.\n",
-                 crd->port ? crd->port : "5555");
-        return (-1);
-    }
+        return (logerror("port must be a vakue between 1000 an 99999'%s'.\n",
+                 crd->port ? crd->port : "5555"));
 
     // Default ip adress
     memcpy(e->options.host, crd->host && crd->host[0] ? crd->host : "127.0.0.1",
@@ -68,8 +62,8 @@ void ui_login_connect(GtkWidget *widget, gpointer data)
     _c2s_connect(e, crd.username[0] ? crd.username : NULL, NULL,
                  e->options.host);
 
+    // Load loop select
     if (e->sock != -1)
-        // Load loop select
         g_idle_add((GSourceFunc)gtk_do_select, e);
     else
     {

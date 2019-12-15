@@ -20,7 +20,10 @@ static int irc_nick_check_command(t_env *e, int cs, const t_token *tokens)
     {
         if (i != (size_t)cs && e->fds[i].type == FD_CLIENT &&
             strcmp(e->fds[i].nickname, nick) == 0)
+            {
+                logdebug("irc_nick_check_command :: %s", tokens[0].addr);
             return (irc_err(e, cs, ERR_NICKNAMEINUSE, nick));
+            }
 
         i++;
     }

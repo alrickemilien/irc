@@ -47,9 +47,9 @@ int _c2s_connect(t_env *     e,
     if (gethostname(local_hostname, sizeof(local_hostname)) == -1)
         return (logerrno("_c2s_connect::gethostname"));
 
-    if (e->ipv6 == 1)
+    if (e->sock == -1 && e->ipv6 == 1)
         client_ipv6(e);
-    else
+    else if (e->sock == -1)
         client_ipv4(e);
 
     if (e->sock == -1)

@@ -59,6 +59,7 @@ CLIENT_SRC+=src/client/irc/s2c/s2c.c \
 			src/client/irc/s2c/s2c_rpl_inviting.c \
 			src/client/irc/s2c/s2c_invite.c \
 			src/client/irc/s2c/s2c_ping.c \
+			src/client/irc/s2c/s2c_err_alreadyregistered.c \
 			src/client/irc/s2c/s2c_rpl_welcome.c
 
 # irc error
