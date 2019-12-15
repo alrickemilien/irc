@@ -1,6 +1,8 @@
 # irc
 
-IRC server RFC1459 complient for the feature it implements, with tls data encryption.
+IRC server/client RFC1459 complient for the feature it implements, with tls data encryption.
+
+![IRC Client](/misc/screenshot.png)
 
 ## Good doc for startup
 
