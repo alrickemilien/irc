@@ -27,6 +27,7 @@ static const t_irc_cmd g_s2c_replys[IRC_S2C_COMMANDS_NUMBER] = {
     [IRC_S2C_RPL_INVITING] = {"341", &s2c_rpl_inviting},
     [IRC_S2C_INVITE] = {"INVITE", &s2c_invite},
     [IRC_S2C_RPL_NOTOPIC] = {"331", &s2c_rpl_notopic},
+    [IRC_S2C_ERR_ALREADYREGISTERED] = {"462", &s2c_err_alreadyregistered},
 };
 
 int s2c(t_env *e, char *buffer)

@@ -5,9 +5,32 @@
 ** (users who aren't invisible (user mode +i) and who don't have a
 ** common channel with the requesting client) are listed.
 ** The same result can be achieved by using a <name> of "0" or any wildcard
-*which
+** which
 ** will end up matching every entry possible.
 */
+
+int irc_who_all(t_env *e, int cs, t_token *tokens)
+{
+    size_t i;
+
+    i = 0;
+    while (i <= e->max)
+    {
+        if (e->fds[i].type == FD_CLIENT && e->fds[i].registered == 1 &&
+            strcmp(e->channels[e->fds[cs].channel].channel,
+                   e->channels[e->fds[i].channel].channel) != 0)
+        {
+            irc_reply(e, cs, RPL_WHOREPLY,
+                      e->channels[e->fds[i].channel].channel,
+                      e->fds[i].username, "server", e->fds[i].host,
+                      e->fds[i].nickname, e->fds[i].realname);
+
+            irc_reply(e, cs, RPL_ENDOFWHO, tokens[1].addr);
+        }
+        i++;
+    }
+    return (IRC_WHO);
+}
 
 int irc_who(t_env *e, int cs, t_token *tokens)
 {
@@ -16,25 +39,7 @@ int irc_who(t_env *e, int cs, t_token *tokens)
     if (!tokens[1].addr ||
         (tokens[1].len == 1 && strncmp(tokens[1].addr, "*", 1)) ||
         (tokens[1].len == 1 && strncmp(tokens[1].addr, "0", 1)))
-    {
-        i = 0;
-        while (i <= e->max)
-        {
-            if (e->fds[i].type == FD_CLIENT && e->fds[i].registered == 1 &&
-                strcmp(e->channels[e->fds[cs].channel].channel,
-                       e->channels[e->fds[i].channel].channel) != 0)
-            {
-                irc_reply(e, cs, RPL_WHOREPLY,
-                          e->channels[e->fds[i].channel].channel,
-                          e->fds[i].username, "server", e->fds[i].host,
-                          e->fds[i].nickname, e->fds[i].realname);
-
-                irc_reply(e, cs, RPL_ENDOFWHO, tokens[1].addr);
-            }
-            i++;
-        }
-        return (IRC_WHO);
-    }
+        irc_who_all(e, cs, tokens);
 
     i = 0;
     while (i <= e->max)

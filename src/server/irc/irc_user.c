@@ -72,6 +72,8 @@ void irc_user_join_default_channel(t_env *e, int cs)
 
 int irc_user(t_env *e, int cs, t_token *tokens)
 {
+    logdebug("irc_user:: %s", tokens[0].addr);
+
     if ((irc_user_check_command(e, cs, tokens)) < 0)
         return (-1);
 

@@ -26,6 +26,15 @@ endif
 OPENSSL_CFLAGS=$(shell pkg-config --cflags openssl)
 OPENSSL_LIBS=$(shell pkg-config --libs openssl)
 else
+#
+# dpkg
+#
+
+IS_DPKG_DEV_INSTALLED=$(shell dpkg --help 2>/dev/null 1>&2 ; echo $$?)
+ifneq ($(IS_DPKG_DEV_INSTALLED), 0)
+$(error dpkg required for build checks)
+endif
+
 IS_OPENSSL_DEV_INSTALLED=$(shell dpkg --status openssl 2>/dev/null 1>&2 ; echo $$?)
 ifneq ($(IS_OPENSSL_DEV_INSTALLED), 0)
 $(error openssl dev library required for build)
@@ -46,9 +55,7 @@ endif
 # Fribidi
 #
 
-ifeq ($(OS),Darwin)
 FRIBIDI_DPKG_LIBS=$(shell pkg-config --libs fribidi)
-endif
 
 include make/server.mk
 include make/client.mk

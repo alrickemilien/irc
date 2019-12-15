@@ -9,7 +9,7 @@
 
 void disconnect(t_env *e, int cs)
 {
-    if (e->options.gui)
+    if (e->options.gui && e->registered)
         ui_set_status(e->ui, 1);
     close(cs);
     clear_fd(&e->fds[cs]);

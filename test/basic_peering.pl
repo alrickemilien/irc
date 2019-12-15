@@ -123,6 +123,8 @@ ok(ircunittest::recv_eq $s1, "client3 PRIVMSG :איפה הביבליוטקה");
 ok(ircunittest::recv_eq $s2, "client3 PRIVMSG :איפה הביבליוטקה");
 ok(ircunittest::recv_ne $s3, "client3 PRIVMSG :איפה הביבליוטקה");
 
+$s3->send("PRIVMSG #ערוץ1 :איפה הביבליוטקה\x0D\x0A");
+
 #
 # Test PRIVMSG to all clients in the channel
 #

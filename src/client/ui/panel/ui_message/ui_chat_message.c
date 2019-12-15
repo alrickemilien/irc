@@ -84,8 +84,7 @@ GtkWidget *ui_new_chat_message(t_ui_panel *ui, const char *msg)
 
     (void)ui;
 
-    is_rtl =
-        (gtk_pango_find_base_dir(strchr(msg, ':'), strlen(strchr(msg, ':'))) ==
+    is_rtl = (gtk_pango_find_base_dir(strchr(msg, ':'), strlen(strchr(msg, ':'))) ==
          PANGO_DIRECTION_RTL);
 
     nick_msg_pair = ui_build_nick_msg_pair(msg, is_rtl);

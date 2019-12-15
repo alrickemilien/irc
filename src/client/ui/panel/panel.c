@@ -32,7 +32,7 @@ static int ui_init_panel_assets(t_env *e, t_ui_panel *ui)
     ui->topic_image =
         gtk_get_assets(e->argv_0, "/ui/assets/icons8-grand-hashtag-40.png");
     ui->error_image =
-        gtk_get_assets(e->argv_0, "/ui/assets/icons8-haute-priorité-100.png");
+        gtk_get_assets(e->argv_0, "/ui/assets/icons8-haute-priority-100.png");
     ui->info_image =
         gtk_get_assets(e->argv_0, "/ui/assets/icons8-info-carré-16.png");
     ui->rpl_away_image =
